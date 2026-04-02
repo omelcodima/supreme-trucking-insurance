@@ -8,10 +8,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        'deep-navy': '#0f2044',
-        'orange-accent': '#f97316',
-      },
+
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
