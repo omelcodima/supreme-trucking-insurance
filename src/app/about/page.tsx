@@ -15,7 +15,7 @@ export default function AboutPage() {
       </p>
 
       <p className="text-lg text-gray-700 mb-8 font-semibold">
-        Based in California, we are licensed across the US, ready to serve truckers nationwide.
+        Licensed in 48 states (all except Hawaii and Alaska), we serve owner operators, small fleets, and new ventures nationwide.
         Our expertise ensures that you receive tailored advice and policies that truly meet your operational requirements.
       </p>
 

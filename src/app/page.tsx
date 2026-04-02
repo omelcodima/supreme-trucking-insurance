@@ -13,7 +13,7 @@ export default function Home() {
       {/* Trust Bar */}
       <section className="bg-gray-100 py-8 px-4">
         <div className="container mx-auto flex flex-wrap justify-around items-center text-center text-gray-700">
-          <p className="text-lg font-semibold m-2">Licensed in multiple states</p>
+          <p className="text-lg font-semibold m-2">Licensed in 48 states (excl. HI & AK)</p>
           <p className="text-lg font-semibold m-2">10+ carriers</p>
           <p className="text-lg font-semibold m-2">Fast turnaround</p>
         </div>

@@ -64,8 +64,8 @@ export default function ContactPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-lg shadow-md">
         <div>
           <h2 className="text-2xl font-bold text-deep-navy mb-4">Get in Touch</h2>
-          <p className="text-lg text-gray-700 mb-2"><strong>Phone:</strong> (555) 000-0000</p>
-          <p className="text-lg text-gray-700 mb-6"><strong>Email:</strong> info@supremetruckinginsurance.com</p>
+          <p className="text-lg text-gray-700 mb-2"><strong>Phone:</strong> (360) 936-7196</p>
+          <p className="text-lg text-gray-700 mb-6"><strong>Email:</strong> domelco@aicinsagency.com</p>
           <p className="text-gray-600">Our team is ready to assist you with all your trucking insurance needs.</p>
         </div>
 

@@ -41,8 +41,8 @@ export default function RootLayout({
         <main>{children}</main>
         <footer className="bg-[#0f2044] text-white p-8 text-center">
           <div className="container mx-auto">
-            <p>Phone: (555) 000-0000 | Email: info@supremetruckinginsurance.com</p>
-            <p className="mt-2">© 2025 Supreme Trucking Insurance</p>
+            <p>Phone: (360) 936-7196 | Email: domelco@aicinsagency.com</p>
+            <p className="mt-2">© 2026 Supreme Trucking Insurance</p>
           </div>
         </footer>
       </body>
