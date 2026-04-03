@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import BrandLogo from "../components/BrandLogo";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,20 +21,7 @@ export default function RootLayout({
         {/* STICKY NAV */}
         <header className="sticky top-0 z-50 bg-[#0f2044] shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            {/* LOGO */}
-            <Link href="/" className="flex items-center gap-3">
-              <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 2L4 10V24C4 33.4 12.1 41.4 22 43C31.9 41.4 40 33.4 40 24V10L22 2Z" fill="#f97316"/>
-                <path d="M10 28V22H14V20H22V18H28L32 22V28H10Z" fill="white"/>
-                <circle cx="14" cy="29" r="2" fill="white"/>
-                <circle cx="28" cy="29" r="2" fill="white"/>
-                <rect x="8" y="24" width="6" height="4" rx="1" fill="white"/>
-              </svg>
-              <div className="flex flex-col leading-tight">
-                <span className="text-[#f97316] font-black text-lg tracking-wide">SUPREME</span>
-                <span className="text-white text-xs font-medium tracking-widest">TRUCKING INSURANCE</span>
-              </div>
-            </Link>
+            <BrandLogo compact />
 
             {/* NAV LINKS */}
             <div className="hidden md:flex items-center gap-8">
@@ -72,17 +60,8 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* About */}
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <svg width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22 2L4 10V24C4 33.4 12.1 41.4 22 43C31.9 41.4 40 33.4 40 24V10L22 2Z" fill="#f97316"/>
-                  <path d="M10 28V22H14V20H22V18H28L32 22V28H10Z" fill="white"/>
-                  <circle cx="14" cy="29" r="2" fill="white"/>
-                  <circle cx="28" cy="29" r="2" fill="white"/>
-                </svg>
-                <div>
-                  <div className="text-[#f97316] font-black text-base">SUPREME</div>
-                  <div className="text-white text-xs tracking-widest">TRUCKING INSURANCE</div>
-                </div>
+              <div className="mb-4">
+                <BrandLogo />
               </div>
               <p className="text-white/70 text-sm leading-relaxed">
                 Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in 48 states.
