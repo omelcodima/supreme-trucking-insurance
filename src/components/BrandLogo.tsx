@@ -6,56 +6,54 @@ type Props = {
 };
 
 export default function BrandLogo({ compact = false, href = "/" }: Props) {
-  const icon = (
-    <svg
-      width={compact ? 42 : 52}
-      height={compact ? 42 : 52}
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className="shrink-0"
-    >
-      <path
-        d="M32 3L10 11.5V28.5C10 42.2 19.3 54.2 32 58C44.7 54.2 54 42.2 54 28.5V11.5L32 3Z"
-        fill="#0f2044"
-      />
-      <path
-        d="M32 8L14.5 14.8V28C14.5 39.1 21.9 48.4 32 51.6C42.1 48.4 49.5 39.1 49.5 28V14.8L32 8Z"
-        stroke="#f97316"
-        strokeWidth="2.5"
-      />
-      <path
-        d="M37.5 17C32.8 17 28.8 19.1 26.8 22.6C24.9 25.8 25.1 29 28.6 31.4L34.5 35.4C36.3 36.6 36.2 38.5 35.2 40C34.2 41.4 32.4 42.3 30.2 42.3C27.2 42.3 24.6 40.9 22.8 38.7"
-        stroke="white"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-      <path
-        d="M36 18.4C33.6 23.9 32.4 29.7 31.9 45"
-        stroke="#f97316"
-        strokeWidth="2.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-
-  const text = compact ? (
-    <div className="flex flex-col leading-[0.95]">
-      <span className="text-[#f97316] font-black text-lg tracking-[0.22em]">SUPREME</span>
-      <span className="text-white text-[10px] font-semibold tracking-[0.32em]">TRUCKING INSURANCE</span>
-    </div>
-  ) : (
-    <div className="flex flex-col leading-[0.95]">
-      <span className="text-[#f97316] font-black text-xl tracking-[0.24em]">SUPREME</span>
-      <span className="text-white text-[11px] font-semibold tracking-[0.34em]">TRUCKING INSURANCE</span>
-    </div>
-  );
+  const iconSize = compact ? 54 : 64;
+  const titleSize = compact ? "text-xl" : "text-2xl";
+  const subtitleSize = compact ? "text-[10px]" : "text-xs";
 
   return (
     <Link href={href} className="flex items-center gap-3">
-      {icon}
-      {text}
+      <svg
+        width={iconSize}
+        height={iconSize}
+        viewBox="0 0 72 72"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        className="shrink-0 drop-shadow-[0_2px_6px_rgba(0,0,0,0.18)]"
+      >
+        <path
+          d="M36 4L12 13.5V31.5C12 46.4 22 59.1 36 63C50 59.1 60 46.4 60 31.5V13.5L36 4Z"
+          fill="#0f2044"
+        />
+        <path
+          d="M36 9L16.8 16.7V31C16.8 43.1 24.9 53.1 36 56.6C47.1 53.1 55.2 43.1 55.2 31V16.7L36 9Z"
+          stroke="#f97316"
+          strokeWidth="3.6"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M43.5 18C38 18 33.5 20.7 31 24.8C28.8 28.4 29.1 31.8 33.2 34.6L39.2 38.7C41.3 40.1 41.2 42.2 40 44.1C38.8 45.9 36.6 47.1 33.8 47.1C30.2 47.1 27.1 45.5 24.9 42.8"
+          stroke="white"
+          strokeWidth="5.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M41.5 18.7C38.8 24.8 37.4 31.1 36.8 50.4"
+          stroke="#f97316"
+          strokeWidth="3.4"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      <div className="flex flex-col leading-[0.92]">
+        <span className={`text-[#f97316] font-black ${titleSize} tracking-[0.18em]`}>
+          SUPREME
+        </span>
+        <span className={`text-white ${subtitleSize} font-semibold tracking-[0.28em]`}>
+          TRUCKING INSURANCE
+        </span>
+      </div>
     </Link>
   );
 }
