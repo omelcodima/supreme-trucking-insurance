@@ -174,7 +174,7 @@ export default function Home() {
                   Get Your Free Quote
                 </Link>
                 <Link
-                  href="/upload-docs"
+                  href="/quote"
                   className="border border-[#DED3C4] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center bg-[#FFFDF9]"
                 >
                   Upload Docs for Faster Quote
@@ -251,10 +251,10 @@ export default function Home() {
                         Start your quote →
                       </Link>
                       <Link
-                        href="/upload-docs"
+                        href="/quote"
                         className="inline-flex items-center justify-center rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-5 py-3 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
                       >
-                        Upload docs instead
+                        Upload docs for faster quote
                       </Link>
                     </div>
                   </div>
@@ -364,7 +364,7 @@ export default function Home() {
               Upload your declarations page, loss runs, driver list, vehicle schedule, prior quote, or supporting docs so the agency can review a cleaner file from the start.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link href="/upload-docs" className="bg-[#f97316] text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors shadow-lg text-center">
+              <Link href="/quote" className="bg-[#f97316] text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors shadow-lg text-center">
                 Upload Docs for Faster Quote
               </Link>
               <Link href="/loss-runs" className="border border-[#DED3C4] bg-[#FFFDF9] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center">

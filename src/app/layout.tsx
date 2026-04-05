@@ -36,7 +36,6 @@ export default function RootLayout({
                       <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Small Fleets</Link>
                       <Link href="/new-venture" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">New Authority</Link>
                       <Link href="/cargo" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Cargo Insurance</Link>
-                      <Link href="/upload-docs" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Upload Docs</Link>
                     </div>
                   </div>
                 </div>
@@ -58,12 +57,6 @@ export default function RootLayout({
 
               <div className="hidden md:flex flex-col items-end gap-1">
                 <div className="flex items-center gap-4">
-                  <Link
-                    href="/upload-docs"
-                    className="hidden xl:inline-flex border border-[#DED3C4] bg-[#FFFDF9] text-[#2F261C] px-4 py-2 rounded-lg font-bold hover:border-[#f97316] hover:text-[#f97316] transition-colors whitespace-nowrap"
-                  >
-                    Upload Docs
-                  </Link>
                   <Link
                     href="/quote"
                     className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
@@ -90,12 +83,6 @@ export default function RootLayout({
                   Call
                 </a>
                 <Link
-                  href="/upload-docs"
-                  className="rounded-lg border border-[#DED3C4] bg-[#FFFDF9] px-3 py-2 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
-                >
-                  Upload
-                </Link>
-                <Link
                   href="/quote"
                   className="rounded-lg bg-[#f97316] px-3 py-2 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
                 >
@@ -117,7 +104,6 @@ export default function RootLayout({
                     <Link href="/fleet" className="hover:text-[#f97316] transition-colors">Small Fleets</Link>
                     <Link href="/new-venture" className="hover:text-[#f97316] transition-colors">New Authority</Link>
                     <Link href="/cargo" className="hover:text-[#f97316] transition-colors">Cargo Insurance</Link>
-                    <Link href="/upload-docs" className="hover:text-[#f97316] transition-colors">Upload Docs</Link>
                   </div>
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
@@ -163,7 +149,6 @@ export default function RootLayout({
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
                 <li><Link href="/loss-runs" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Loss Run Assistance</Link></li>
-                <li><Link href="/upload-docs" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Upload Docs for Faster Quote</Link></li>
               </ul>
             </div>
 
