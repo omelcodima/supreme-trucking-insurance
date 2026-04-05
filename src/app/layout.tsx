@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* STICKY NAV */}
-        <header className="sticky top-0 z-50 bg-[#0f2044] shadow-lg">
+        <header className="sticky top-0 z-50 bg-[#163a6b] shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <BrandLogo compact />
 
@@ -30,7 +30,7 @@ export default function RootLayout({
                   Services
                 </span>
                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
-                  <div className="bg-[#0f2044] border border-white/10 rounded-lg shadow-xl p-2 min-w-48">
+                  <div className="bg-[#163a6b] border border-white/10 rounded-lg shadow-xl p-2 min-w-48">
                     <Link href="/owner-operator" className="block px-4 py-2 text-white hover:text-[#f97316] hover:bg-white/5 rounded transition-colors text-sm">Owner Operators</Link>
                     <Link href="/fleet" className="block px-4 py-2 text-white hover:text-[#f97316] hover:bg-white/5 rounded transition-colors text-sm">Small Fleets</Link>
                     <Link href="/new-venture" className="block px-4 py-2 text-white hover:text-[#f97316] hover:bg-white/5 rounded transition-colors text-sm">New Authority</Link>
@@ -56,7 +56,7 @@ export default function RootLayout({
         <main>{children}</main>
 
         {/* FOOTER */}
-        <footer className="bg-[#0f2044] text-white py-12">
+        <footer className="bg-[#163a6b] text-white py-12">
           <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* About */}
             <div>
