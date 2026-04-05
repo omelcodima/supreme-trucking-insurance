@@ -206,7 +206,7 @@ export default function Home() {
             <div className="hero-image-shell p-3 md:p-4">
               <div className="relative min-h-[460px] overflow-hidden rounded-[1.75rem]">
                 <Image
-                  src="/images/hero-truck.png"
+                  src="/images/hero-epic-american.png"
                   alt="American semi truck driving on the highway"
                   fill
                   priority
