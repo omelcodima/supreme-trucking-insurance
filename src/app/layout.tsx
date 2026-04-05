@@ -44,13 +44,20 @@ export default function RootLayout({
               <Link href="/privacy-policy" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Privacy</Link>
             </div>
 
-            {/* CTA BUTTON */}
-            <Link
-              href="/quote"
-              className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md"
-            >
-              Get a Free Quote
-            </Link>
+            <div className="flex items-center gap-4">
+              <a
+                href="tel:+13607504394"
+                className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
+              >
+                Call Dmitri: 360-750-4394
+              </a>
+              <Link
+                href="/quote"
+                className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
+              >
+                Get a Free Quote
+              </Link>
+            </div>
           </nav>
         </header>
 
