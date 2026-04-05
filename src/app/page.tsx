@@ -14,21 +14,21 @@ const coverageCards = [
     description:
       "Fast liability, cargo, and physical damage options built for solo truckers who need speed and clarity.",
     href: "/owner-operator",
-    image: "https://images.unsplash.com/photo-1706032309996-e2f0f3067468?w=900&q=80&fit=crop",
+    image: "/images/ownerop-truck.png",
   },
   {
     title: "Small fleets",
     description:
       "One policy, cleaner renewals, and competitive pricing for growing fleets that need structure.",
     href: "/fleet",
-    image: "https://images.unsplash.com/photo-1706032309257-95dd72a1bf9c?w=900&q=80&fit=crop",
+    image: "/images/fleet-truck.png",
   },
   {
     title: "New authority",
     description:
       "Guidance for new ventures that need filings handled quickly and coverage placed without the usual delay.",
     href: "/new-venture",
-    image: "https://images.unsplash.com/photo-1706032309996-e2f0f3067468?w=900&q=80&fit=crop",
+    image: "/images/ownerop-truck.png",
   },
 ];
 
@@ -130,7 +130,7 @@ export default function Home() {
             <div className="hero-image-shell p-4 md:p-5">
               <div className="relative h-[420px] md:h-[560px] rounded-[1.6rem] overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1706032309996-e2f0f3067468?w=1400&q=80&fit=crop"
+                  src="/images/hero-truck.png"
                   alt="Big rig truck on highway"
                   fill
                   priority
