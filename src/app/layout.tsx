@@ -31,10 +31,10 @@ export default function RootLayout({
                 </span>
                 <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                   <div className="bg-[#163a6b] border border-white/10 rounded-lg shadow-xl p-2 min-w-48">
-                    <Link href="/owner-operator" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-slate-50 rounded transition-colors text-sm">Owner Operators</Link>
-                    <Link href="/fleet" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-slate-50 rounded transition-colors text-sm">Small Fleets</Link>
-                    <Link href="/new-venture" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-slate-50 rounded transition-colors text-sm">New Authority</Link>
-                    <Link href="/cargo" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-slate-50 rounded transition-colors text-sm">Cargo Insurance</Link>
+                    <Link href="/owner-operator" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-white/70 rounded transition-colors text-sm">Owner Operators</Link>
+                    <Link href="/fleet" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-white/70 rounded transition-colors text-sm">Small Fleets</Link>
+                    <Link href="/new-venture" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-white/70 rounded transition-colors text-sm">New Authority</Link>
+                    <Link href="/cargo" className="block px-4 py-2 text-[#17324d] hover:text-[#f97316] hover:bg-white/70 rounded transition-colors text-sm">Cargo Insurance</Link>
                   </div>
                 </div>
               </div>
