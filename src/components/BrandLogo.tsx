@@ -6,13 +6,18 @@ type Props = {
 };
 
 export default function BrandLogo({ compact = false, href = "/" }: Props) {
+  const boxClass = compact ? "h-[104px] w-[430px] overflow-hidden" : "h-[118px] w-[500px] overflow-hidden";
+  const imgClass = compact ? "h-[150px] w-auto object-contain -mt-[8px]" : "h-[170px] w-auto object-contain -mt-[10px]";
+
   return (
     <Link href={href} className="flex items-center">
-      <img
-        src="/logo.svg"
-        alt="Supreme Trucking Insurance"
-        className={compact ? "h-[150px] w-auto object-contain" : "h-[170px] w-auto object-contain"}
-      />
+      <div className={boxClass}>
+        <img
+          src="/logo.svg"
+          alt="Supreme Trucking Insurance"
+          className={imgClass}
+        />
+      </div>
     </Link>
   );
 }
