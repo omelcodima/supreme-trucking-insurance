@@ -45,18 +45,18 @@ export default function RootLayout({
             </div>
 
             <div className="flex items-center gap-4">
-              <a
-                href="tel:+13607504394"
-                className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
-              >
-                Call Dmitri: 360-750-4394
-              </a>
               <Link
                 href="/quote"
                 className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
               >
                 Get a Free Quote
               </Link>
+              <a
+                href="tel:+13607504394"
+                className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
+              >
+                360-750-4394
+              </a>
             </div>
           </nav>
         </header>
