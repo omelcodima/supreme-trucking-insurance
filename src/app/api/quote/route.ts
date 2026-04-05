@@ -14,8 +14,8 @@ export async function POST(request: Request) {
     try {
       const fileContents = await fs.readFile(filePath, 'utf8');
       quotes = JSON.parse(fileContents);
-    } catch (readError: any) {
-      if (readError.code === 'ENOENT') {
+    } catch (readError: unknown) {
+      if ((readError as NodeJS.ErrnoException).code === 'ENOENT') {
         // File doesn't exist, start with an empty array
         console.log('quotes.json not found, creating new file.');
       } else {
