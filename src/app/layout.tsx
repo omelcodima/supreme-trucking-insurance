@@ -41,6 +41,7 @@ export default function RootLayout({
               <Link href="/loss-runs" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</Link>
               <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
               <Link href="/contact" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Contact</Link>
+              <Link href="/privacy-policy" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Privacy</Link>
             </div>
 
             {/* CTA BUTTON */}
@@ -93,6 +94,7 @@ export default function RootLayout({
                   <a href="mailto:domelco@aicinsagency.com" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">domelco@aicinsagency.com</a>
                 </div>
                 <div className="pt-2">
+                  <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Privacy Policy</Link>
                   <Link href="/quote" className="inline-block bg-[#f97316] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 transition-colors">
                     Get a Free Quote →
                   </Link>
