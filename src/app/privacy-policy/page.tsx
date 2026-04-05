@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Supreme Trucking Insurance",
@@ -34,6 +35,20 @@ export default function PrivacyPolicyPage() {
 
       <section className="py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-6">
+          <div className="mb-8 rounded-[1.5rem] border border-[#DED3C4] bg-[#FFF8EF] px-5 py-5 shadow-[0_12px_32px_rgba(47,38,28,0.05)] md:flex md:items-center md:justify-between md:gap-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Questions about privacy or document handling?</p>
+              <p className="mt-2 text-lg font-bold text-[#2F261C]">Call <a href="tel:+13609367196" className="text-[#f97316] hover:underline">(360) 936-7196</a> or use the quote/contact pages.</p>
+            </div>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row md:mt-0">
+              <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-[#DED3C4] bg-white px-5 py-3 font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors">
+                Contact us
+              </Link>
+              <Link href="/quote" className="inline-flex items-center justify-center rounded-xl bg-[#f97316] px-5 py-3 font-bold text-white hover:bg-orange-600 transition-colors shadow-md">
+                Get a quote
+              </Link>
+            </div>
+          </div>
           <div className="rounded-[28px] border border-[#E7DED2] bg-white/80 shadow-[0_10px_30px_rgba(47,38,28,0.05)]">
             <div className="max-w-4xl px-6 md:px-10 py-8 md:py-10 space-y-10">
               <p className="text-[#5A4B3B] leading-8">

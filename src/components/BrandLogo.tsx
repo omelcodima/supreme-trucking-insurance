@@ -7,8 +7,10 @@ type Props = {
 };
 
 export default function BrandLogo({ compact = false, href = "/" }: Props) {
-  const boxClass = compact ? "relative h-[104px] w-[430px] overflow-hidden" : "relative h-[118px] w-[500px] overflow-hidden";
-  const imageClass = compact ? "object-contain object-left -mt-[8px]" : "object-contain object-left -mt-[10px]";
+  const boxClass = compact
+    ? "relative h-[74px] w-[220px] overflow-hidden sm:h-[86px] sm:w-[280px] lg:h-[104px] lg:w-[430px]"
+    : "relative h-[90px] w-[260px] overflow-hidden sm:h-[104px] sm:w-[360px] lg:h-[118px] lg:w-[500px]";
+  const imageClass = compact ? "object-contain object-left -mt-[6px] sm:-mt-[8px]" : "object-contain object-left -mt-[8px] sm:-mt-[10px]";
 
   return (
     <Link href={href} className="flex items-center">

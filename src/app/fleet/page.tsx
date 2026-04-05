@@ -11,7 +11,7 @@ export default function FleetPage() {
       eyebrow="Small fleets"
       title="Small Fleet Insurance"
       description="Protecting 2 to 20 trucks with a lighter premium presentation and a simpler path to better fleet pricing."
-      image="/images/fleet-truck.png"
+      image="/images/hero-premium.jpg"
       sectionTitle="Simplify your fleet insurance"
       intro={[
         "Managing a fleet is already complex. Your insurance should not add another layer of chaos.",

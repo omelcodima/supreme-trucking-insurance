@@ -11,7 +11,7 @@ export default function CargoPage() {
       eyebrow="Cargo insurance"
       title="Motor Truck Cargo Insurance"
       description="Protect the freight you haul with cargo coverage explained clearly and presented in the same light premium style as the rest of the site."
-      image="/images/fleet-truck.png"
+      image="/images/hero-premium.jpg"
       sectionTitle="Why cargo insurance matters"
       intro={[
         "Most brokers and shippers want cargo insurance before they will hand over a load. If freight is lost, damaged, or stolen, someone pays for it.",

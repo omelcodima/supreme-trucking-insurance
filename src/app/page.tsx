@@ -14,21 +14,21 @@ const coverageCards = [
     description:
       "Fast liability, cargo, and physical damage options built for solo truckers who need speed and clarity.",
     href: "/owner-operator",
-    image: "/images/ownerop-truck.png",
+    image: "/images/owner-operator-premium.jpg",
   },
   {
     title: "Small fleets",
     description:
       "One policy, cleaner renewals, and competitive pricing for growing fleets that need structure.",
     href: "/fleet",
-    image: "/images/fleet-truck.png",
+    image: "/images/hero-premium.jpg",
   },
   {
     title: "New authority",
     description:
       "Guidance for new ventures that need filings handled quickly and coverage placed without the usual delay.",
     href: "/new-venture",
-    image: "/images/ownerop-truck.png",
+    image: "/images/highway-premium.jpg",
   },
 ];
 
@@ -159,7 +159,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] items-center rounded-[2rem] border border-[#E7DED2] bg-gradient-to-br from-[#FFFDF9] via-[#FBF7F0] to-[#F2EADF] p-6 shadow-[0_24px_70px_rgba(89,63,37,0.08)] md:p-8 lg:p-10">
             <div>
               <span className="eyebrow mb-5">Independent trucking insurance agency</span>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tight text-[#2F261C] leading-[0.96]">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-[#2F261C] leading-[0.96]">
                 Faster trucking quotes. Better market access. Real people who pick up the phone.
               </h1>
               <p className="mt-6 max-w-2xl text-lg md:text-xl text-[#5A4B3B] leading-relaxed">
@@ -206,7 +206,7 @@ export default function Home() {
             <div className="hero-image-shell p-3 md:p-4">
               <div className="relative min-h-[460px] overflow-hidden rounded-[1.75rem]">
                 <Image
-                  src="/images/hero-epic-american.png"
+                  src="/images/hero-premium.jpg"
                   alt="American semi truck driving on the highway"
                   fill
                   priority

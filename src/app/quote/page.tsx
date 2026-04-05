@@ -42,12 +42,12 @@ export default function QuotePage() {
             <span className="eyebrow mb-5">Free quote</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">Get your trucking insurance quote.</h1>
             <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">
-              The quote page now matches the sitewide light theme. Fill out the form below and we&apos;ll follow up fast.
+              Tell us about your operation, current coverage, and timeline. We&apos;ll review it fast and come back with clear trucking insurance options.
             </p>
           </div>
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src="/images/hero-truck.png" alt="Truck on highway" fill priority style={{ objectFit: "cover" }} />
+              <Image src="/images/highway-premium.jpg" alt="Truck on highway" fill priority style={{ objectFit: "cover" }} />
             </div>
           </div>
         </div>

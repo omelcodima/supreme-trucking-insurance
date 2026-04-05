@@ -11,7 +11,7 @@ export default function AboutPage() {
       eyebrow="About Supreme"
       title="A trucking insurance agency that actually knows trucking."
       description="Supreme stays focused on one thing: helping trucking businesses get covered quickly, clearly, and without generic insurance fluff."
-      image="/images/fleet-truck.png"
+      image="/images/hero-premium.jpg"
       sectionTitle="Our story"
       intro={[
         "Supreme Trucking Insurance was built for truckers who need decisions fast. Not next week. Not after three follow-ups. Now.",

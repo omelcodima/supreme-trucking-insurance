@@ -11,7 +11,7 @@ export default function OwnerOperatorPage() {
       eyebrow="Owner operators"
       title="Owner Operator Insurance"
       description="Solo truckers deserve fast, affordable coverage presented in a clean, professional way. We help you get the right structure without wasting time."
-      image="/images/hero-truck.png"
+      image="/images/highway-premium.jpg"
       sectionTitle="Built for the solo trucker"
       intro={[
         "As an owner operator, your truck is your business. One bad gap in coverage can become an expensive problem fast.",

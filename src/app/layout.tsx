@@ -19,60 +19,109 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* STICKY NAV */}
-        <header className="sticky top-0 z-50 bg-[#F7F3EC] border-b border-[#E7DED2] shadow-none">
-          <nav className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            <BrandLogo compact />
+        <header className="sticky top-0 z-50 bg-[#F7F3EC]/95 border-b border-[#E7DED2] shadow-none backdrop-blur">
+          <nav className="max-w-7xl mx-auto px-4 py-2">
+            <div className="flex items-center justify-between gap-3">
+              <BrandLogo compact />
 
-            {/* NAV LINKS */}
-            <div className="hidden md:flex items-center gap-8">
-              <div className="relative group">
-                <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
-                  Services
-                </span>
-                <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
-                  <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-48">
-                    <Link href="/owner-operator" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Owner Operators</Link>
-                    <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Small Fleets</Link>
-                    <Link href="/new-venture" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">New Authority</Link>
-                    <Link href="/cargo" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Cargo Insurance</Link>
+              {/* NAV LINKS */}
+              <div className="hidden md:flex items-center gap-8">
+                <div className="relative group">
+                  <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
+                    Services
+                  </span>
+                  <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
+                    <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-48">
+                      <Link href="/owner-operator" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Owner Operators</Link>
+                      <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Small Fleets</Link>
+                      <Link href="/new-venture" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">New Authority</Link>
+                      <Link href="/cargo" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Cargo Insurance</Link>
+                    </div>
+                  </div>
+                </div>
+                <Link href="/loss-runs" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</Link>
+                <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
+                <div className="relative group">
+                  <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
+                    More
+                  </span>
+                  <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
+                    <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
+                      <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
+                      <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
+                      <Link href="/privacy-policy" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Privacy</Link>
+                    </div>
                   </div>
                 </div>
               </div>
-              <Link href="/loss-runs" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</Link>
-              <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
-              <div className="relative group">
-                <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
-                  More
-                </span>
-                <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
-                  <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
-                    <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
-                    <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
-                    <Link href="/privacy-policy" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Privacy</Link>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="flex flex-col items-end gap-1">
-              <div className="flex items-center gap-4">
-                <Link
-                  href="/quote"
-                  className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
-                >
-                  Get a Free Quote
-                </Link>
+              <div className="hidden md:flex flex-col items-end gap-1">
+                <div className="flex items-center gap-4">
+                  <Link
+                    href="/quote"
+                    className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
+                  >
+                    Get a Free Quote
+                  </Link>
+                  <a
+                    href="tel:+13609367196"
+                    className="hidden xl:block text-sm text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
+                  >
+                    Call (360) 936-7196
+                  </a>
+                </div>
+                <p className="hidden xl:block text-xs text-[#7B6B59] tracking-[0.08em] uppercase whitespace-nowrap">
+                  English • Russian • Ukrainian • Romanian
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 md:hidden">
                 <a
                   href="tel:+13609367196"
-                  className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
+                  className="rounded-lg border border-[#DED3C4] bg-[#FFFDF9] px-3 py-2 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
                 >
-                  (360) 936-7196
+                  Call
                 </a>
+                <Link
+                  href="/quote"
+                  className="rounded-lg bg-[#f97316] px-3 py-2 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
+                >
+                  Quote
+                </Link>
               </div>
-              <p className="hidden lg:block text-xs text-[#7B6B59] tracking-[0.08em] uppercase whitespace-nowrap">
-                English • Russian • Ukrainian • Romanian
-              </p>
             </div>
+
+            <details className="group mt-2 md:hidden rounded-2xl border border-[#E7DED2] bg-[#FFFDF9] open:shadow-[0_18px_45px_rgba(89,63,37,0.08)]">
+              <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-bold text-[#2F261C]">
+                Menu
+                <span className="text-[#7B6B59] transition-transform group-open:rotate-45">＋</span>
+              </summary>
+              <div className="border-t border-[#E7DED2] px-4 py-4">
+                <div className="grid gap-4 text-sm font-medium text-[#2F261C]">
+                  <div className="grid gap-2">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Services</p>
+                    <Link href="/owner-operator" className="hover:text-[#f97316] transition-colors">Owner Operators</Link>
+                    <Link href="/fleet" className="hover:text-[#f97316] transition-colors">Small Fleets</Link>
+                    <Link href="/new-venture" className="hover:text-[#f97316] transition-colors">New Authority</Link>
+                    <Link href="/cargo" className="hover:text-[#f97316] transition-colors">Cargo Insurance</Link>
+                  </div>
+                  <div className="grid gap-2">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
+                    <Link href="/loss-runs" className="hover:text-[#f97316] transition-colors">Loss Run Help</Link>
+                    <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
+                    <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
+                    <Link href="/contact" className="hover:text-[#f97316] transition-colors">Contact</Link>
+                    <Link href="/privacy-policy" className="hover:text-[#f97316] transition-colors">Privacy Policy</Link>
+                  </div>
+                  <div className="rounded-xl border border-[#E7DED2] bg-[#F7F3EC] px-4 py-3 text-[#5A4B3B]">
+                    <a href="tel:+13609367196" className="block text-lg font-black text-[#2F261C] hover:text-[#f97316] transition-colors">
+                      (360) 936-7196
+                    </a>
+                    <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#7B6B59]">English • Russian • Ukrainian • Romanian</p>
+                  </div>
+                </div>
+              </div>
+            </details>
           </nav>
         </header>
 
@@ -117,7 +166,8 @@ export default function RootLayout({
                   <a href="mailto:domelco@aicinsagency.com" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">domelco@aicinsagency.com</a>
                 </div>
                 <div className="pt-2">
-                  <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Privacy Policy</Link>
+                  <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>
+                  <Link href="/blog" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Blog</Link>
                   <Link href="/quote" className="inline-block bg-[#f97316] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 transition-colors">
                     Get a Free Quote →
                   </Link>

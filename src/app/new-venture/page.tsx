@@ -11,7 +11,7 @@ export default function NewVenturePage() {
       eyebrow="New authority"
       title="New Venture Insurance"
       description="Just got your MC number? We specialize in new authority placements and fast filings without the old dark, heavy insurance-site feel."
-      image="/images/hero-truck.png"
+      image="/images/highway-premium.jpg"
       sectionTitle="Start hauling fast"
       intro={[
         "Getting authority is exciting, but the clock starts immediately. You need the right filings and coverage in place before a single load moves.",

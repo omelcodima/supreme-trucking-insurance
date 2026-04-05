@@ -28,12 +28,12 @@ export default function ContactPage() {
             <span className="eyebrow mb-5">Contact</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">We respond fast and keep it simple.</h1>
             <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">
-              Reach out for quotes, document requests, loss run help, or general questions. The page now matches the warm light theme used across the rest of the site.
+              Reach out for quotes, document requests, loss run help, or general questions. We answer fast and keep the process simple.
             </p>
           </div>
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src="/images/hero-truck.png" alt="Truck" fill priority style={{ objectFit: "cover" }} />
+              <Image src="/images/highway-premium.jpg" alt="Truck" fill priority style={{ objectFit: "cover" }} />
             </div>
           </div>
         </div>

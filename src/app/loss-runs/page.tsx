@@ -11,7 +11,7 @@ export default function LossRunsPage() {
       eyebrow="Loss run help"
       title="Loss Run Assistance"
       description="We help you request, understand, and use loss run reports to improve how your insurance file is presented."
-      image="/images/hero-truck.png"
+      image="/images/highway-premium.jpg"
       sectionTitle="What are loss runs?"
       intro={[
         "Loss runs are reports from your current or former insurer showing claims history, paid amounts, and whether claims are open or closed.",
