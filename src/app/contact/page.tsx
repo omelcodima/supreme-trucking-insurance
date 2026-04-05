@@ -33,7 +33,7 @@ export default function ContactPage() {
           </div>
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" alt="Truck" fill priority style={{ objectFit: "cover" }} />
+              <Image src="https://images.unsplash.com/photo-1706032309996-e2f0f3067468?w=1400&q=80&fit=crop" alt="Truck" fill priority style={{ objectFit: "cover" }} />
             </div>
           </div>
         </div>
