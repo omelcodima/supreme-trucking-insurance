@@ -63,10 +63,10 @@ export default function RootLayout({
                   Get a Free Quote
                 </Link>
                 <a
-                  href="tel:+13607504394"
+                  href="tel:+13609367196"
                   className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
                 >
-                  360-750-4394
+                  (360) 936-7196
                 </a>
               </div>
               <p className="hidden lg:block text-xs text-[#7B6B59] tracking-[0.08em] uppercase whitespace-nowrap">
