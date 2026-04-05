@@ -7,18 +7,18 @@ type Props = {
 };
 
 export default function BrandLogo({ compact = false, href = "/" }: Props) {
-  const width = compact ? 320 : 380;
-  const height = compact ? 72 : 86;
+  const width = compact ? 320 : 420;
+  const height = compact ? 104 : 136;
 
   return (
     <Link href={href} className="flex items-center">
       <Image
-        src="/logo.png"
+        src="/logo.svg"
         alt="Supreme Trucking Insurance"
         width={width}
         height={height}
         priority
-        className={compact ? "h-auto w-auto max-h-[64px] object-contain" : "h-auto w-auto max-h-[78px] object-contain"}
+        className={compact ? "h-auto w-auto max-h-[72px] object-contain" : "h-auto w-auto max-h-[96px] object-contain"}
       />
     </Link>
   );
