@@ -173,6 +173,12 @@ export default function Home() {
                 >
                   Get Your Free Quote
                 </Link>
+                <Link
+                  href="/upload-docs"
+                  className="border border-[#DED3C4] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center bg-[#FFFDF9]"
+                >
+                  Upload Docs for Faster Quote
+                </Link>
                 <a
                   href="tel:+13609367196"
                   className="border border-[#DED3C4] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center bg-[#FFFDF9]"
@@ -229,7 +235,7 @@ export default function Home() {
                 </div>
 
                 <div className="absolute left-5 right-5 bottom-5 md:left-6 md:right-6 card-premium rounded-[1.5rem] p-5 md:p-6">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="flex flex-col gap-4">
                     <div>
                       <p className="text-sm uppercase tracking-[0.16em] text-[#7B6B59]">Built for</p>
                       <p className="text-2xl font-black text-[#2F261C]">Owner operators, fleets, and new authority</p>
@@ -237,12 +243,20 @@ export default function Home() {
                         Clean process. Faster answers. Premium presentation without losing the personal agency feel.
                       </p>
                     </div>
-                    <Link
-                      href="/quote"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#f97316] px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
-                    >
-                      Start your quote →
-                    </Link>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <Link
+                        href="/quote"
+                        className="inline-flex items-center justify-center rounded-xl bg-[#f97316] px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
+                      >
+                        Start your quote →
+                      </Link>
+                      <Link
+                        href="/upload-docs"
+                        className="inline-flex items-center justify-center rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-5 py-3 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
+                      >
+                        Upload docs instead
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -338,6 +352,41 @@ export default function Home() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="section-alt py-20 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] items-center">
+          <div>
+            <span className="eyebrow mb-4">Faster quote path</span>
+            <h2 className="text-4xl md:text-5xl font-black text-[#2F261C]">Already have your insurance paperwork? Skip the slow back-and-forth.</h2>
+            <p className="mt-4 text-lg text-[#5A4B3B] leading-relaxed">
+              Upload your declarations page, loss runs, driver list, vehicle schedule, prior quote, or supporting docs so the agency can review a cleaner file from the start.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <Link href="/upload-docs" className="bg-[#f97316] text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors shadow-lg text-center">
+                Upload Docs for Faster Quote
+              </Link>
+              <Link href="/loss-runs" className="border border-[#DED3C4] bg-[#FFFDF9] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center">
+                Need loss run help first?
+              </Link>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {[
+              "Current declarations page",
+              "Loss runs",
+              "Driver list",
+              "Vehicle schedule",
+              "Prior quote or application",
+              "MVRs and supporting docs",
+            ].map((item) => (
+              <div key={item} className="card-premium rounded-2xl p-5">
+                <div className="text-sm uppercase tracking-[0.16em] text-[#7B6B59] mb-2">Useful upload</div>
+                <div className="text-xl font-bold text-[#2F261C]">{item}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
