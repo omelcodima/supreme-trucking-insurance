@@ -19,8 +19,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* STICKY NAV */}
-        <header className="sticky top-0 z-50 bg-[#163a6b] shadow-lg">
-          <nav className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <header className="sticky top-0 z-50 bg-[#4f7fb8] shadow-lg">
+          <nav className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
             <BrandLogo compact />
 
             {/* NAV LINKS */}
@@ -56,7 +56,7 @@ export default function RootLayout({
         <main>{children}</main>
 
         {/* FOOTER */}
-        <footer className="bg-[#163a6b] text-white py-12">
+        <footer className="bg-[#224a78] text-white py-12">
           <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* About */}
             <div>
