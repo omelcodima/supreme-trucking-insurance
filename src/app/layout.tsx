@@ -40,8 +40,18 @@ export default function RootLayout({
               </div>
               <Link href="/loss-runs" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</Link>
               <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
-              <Link href="/contact" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Contact</Link>
-              <Link href="/privacy-policy" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Privacy</Link>
+              <div className="relative group">
+                <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
+                  More
+                </span>
+                <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
+                  <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
+                    <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
+                    <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
+                    <Link href="/privacy-policy" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Privacy</Link>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="flex items-center gap-4">
