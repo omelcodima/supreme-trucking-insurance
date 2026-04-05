@@ -54,19 +54,24 @@ export default function RootLayout({
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <Link
-                href="/quote"
-                className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
-              >
-                Get a Free Quote
-              </Link>
-              <a
-                href="tel:+13607504394"
-                className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
-              >
-                360-750-4394
-              </a>
+            <div className="flex flex-col items-end gap-1">
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/quote"
+                  className="bg-[#f97316] text-white px-5 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors shadow-md whitespace-nowrap"
+                >
+                  Get a Free Quote
+                </Link>
+                <a
+                  href="tel:+13607504394"
+                  className="hidden lg:block text-[#2F261C] font-semibold hover:text-[#f97316] transition-colors whitespace-nowrap"
+                >
+                  360-750-4394
+                </a>
+              </div>
+              <p className="hidden lg:block text-xs text-[#7B6B59] tracking-[0.08em] uppercase whitespace-nowrap">
+                English • Russian • Ukrainian • Romanian
+              </p>
             </div>
           </nav>
         </header>
@@ -102,6 +107,7 @@ export default function RootLayout({
             <div>
               <h3 className="text-lg font-bold mb-4 text-[#f97316]">Contact</h3>
               <div className="space-y-3 text-sm">
+                <p className="text-[#7B6B59] text-xs uppercase tracking-[0.12em]">English • Russian • Ukrainian • Romanian</p>
                 <div>
                   <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-1">Phone</p>
                   <a href="tel:+13609367196" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">(360) 936-7196</a>
