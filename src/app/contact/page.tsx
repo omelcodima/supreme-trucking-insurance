@@ -3,17 +3,79 @@
 import Image from "next/image";
 import { useState } from "react";
 
+type StatusState = {
+  type: "idle" | "success" | "error";
+  title: string;
+  body: string;
+};
+
 export default function ContactPage() {
-  const [sent, setSent] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<StatusState>({ type: "idle", title: "", body: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    company: "",
+    message: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.name === "name") {
+      const [firstName, ...lastNameParts] = e.target.value.split(" ");
+      setForm({ ...form, firstName: firstName || "", lastName: lastNameParts.join(" ") || "" });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setSubmitting(true);
+    setStatus({ type: "idle", title: "", body: "" });
+
+    try {
+      const payload = {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        phone: form.phone,
+        email: form.email,
+        company: form.company,
+        message: form.message,
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(result?.detail || result?.message || "We could not send your message. Please try again.");
+      }
+
+      setSubmitted(true);
+      setStatus({
+        type: "success",
+        title: "Message Sent",
+        body:
+          "Thanks! Your message was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
+      });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        title: "Could not send message",
+        body: error instanceof Error ? error.message : "Please try again or call (360) 936-7196.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inputClass =
@@ -28,7 +90,7 @@ export default function ContactPage() {
             <span className="eyebrow mb-5">Contact</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">We respond fast and keep it simple.</h1>
             <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">
-              Reach out for quotes, document requests, loss run help, or general questions. We answer fast and keep the process simple.
+              Reach out for quotes, loss run help, or general questions. We answer fast and keep the process simple.
             </p>
           </div>
           <div className="hero-image-shell p-4">
@@ -60,11 +122,13 @@ export default function ContactPage() {
           </div>
 
           <div className="card-premium rounded-[1.75rem] p-8">
-            {sent ? (
+            {submitted ? (
               <div className="text-center py-8">
                 <div className="text-5xl mb-4">✅</div>
                 <h3 className="text-2xl font-black text-[#2F261C] mb-2">Message Sent</h3>
-                <p className="text-[#5A4B3B]">We&apos;ll get back to you shortly.</p>
+                <p className="mb-4 text-lg text-[#5A4B3B]">
+                  Thanks! Your message was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.
+                </p>
               </div>
             ) : (
               <>
@@ -73,7 +137,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className={labelClass}>Name *</label>
-                    <input name="name" required value={form.name} onChange={handleChange} className={inputClass} placeholder="Your full name" />
+                    <input name="name" required value={form.firstName + ' ' + form.lastName} onChange={handleChange} className={inputClass} placeholder="Your full name" />
                   </div>
                   <div>
                     <label className={labelClass}>Phone *</label>
@@ -84,10 +148,14 @@ export default function ContactPage() {
                     <input name="email" type="email" required value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" />
                   </div>
                   <div>
+                    <label className={labelClass}>Company Name</label>
+                    <input name="company" value={form.company} onChange={handleChange} className={inputClass} placeholder="Your Company LLC" />
+                  </div>
+                  <div>
                     <label className={labelClass}>Message *</label>
                     <textarea name="message" rows={4} required value={form.message} onChange={handleChange} className={inputClass} placeholder="How can we help?" />
                   </div>
-                  <button type="submit" className="bg-[#f97316] hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl text-lg w-full transition-colors shadow-lg">
+                  <button type="submit" disabled={submitting} className="bg-[#f97316] hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl text-lg w-full transition-colors shadow-lg disabled:cursor-not-allowed disabled:opacity-70">
                     Send Message →
                   </button>
                 </form>

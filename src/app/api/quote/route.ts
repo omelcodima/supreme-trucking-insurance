@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { getQuotesTable } from "@/lib/airtable";
 
-const maxFiles = 6;
-const maxFileSize = 10 * 1024 * 1024;
-const allowedTypes = new Set([
-  "application/pdf",
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-]);
+const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 
 type QuotePayload = {
   firstName: string;
@@ -22,31 +12,26 @@ type QuotePayload = {
   dot: string;
   coverageType: string;
   notes: string;
-  documents?: Array<{
-    name: string;
-    size: number;
-    type: string;
-  }>;
 };
 
-async function saveQuote(data: QuotePayload) {
-  const dataDirPath = path.join(process.cwd(), "data");
-  await fs.mkdir(dataDirPath, { recursive: true });
-  const filePath = path.join(dataDirPath, "quotes.json");
-
-  let quotes: Array<QuotePayload & { timestamp: string }> = [];
-
+async function saveQuoteToAirtable(data: QuotePayload) {
   try {
-    const fileContents = await fs.readFile(filePath, "utf8");
-    quotes = JSON.parse(fileContents);
-  } catch (readError: unknown) {
-    if ((readError as NodeJS.ErrnoException).code !== "ENOENT") {
-      console.error("Error reading quotes.json:", readError);
-    }
+    const quotesTable = getQuotesTable(airtableQuotesTableName);
+    await quotesTable.create([{
+      fields: {
+        "First Name": data.firstName,
+        "Last Name": data.lastName,
+        "Phone": data.phone,
+        "Email": data.email,
+        "Company": data.company,
+        "DOT Number": data.dot || null, // Allow null for optional fields
+        "Coverage Type": data.coverageType,
+        "Notes": data.notes || null,
+      },
+    }]);
+  } catch (airtableError) {
+    console.error("Error saving quote to Airtable:", airtableError);
   }
-
-  quotes.push({ ...data, timestamp: new Date().toISOString() });
-  await fs.writeFile(filePath, JSON.stringify(quotes, null, 2), "utf8");
 }
 
 async function sendWebhook(data: QuotePayload) {
@@ -75,62 +60,17 @@ async function sendWebhook(data: QuotePayload) {
 
 export async function POST(request: Request) {
   try {
-    const contentType = request.headers.get("content-type") || "";
-    let data: QuotePayload;
-
-    if (contentType.includes("multipart/form-data")) {
-      const formData = await request.formData();
-      const documents = formData.getAll("documents").filter((item): item is File => item instanceof File && item.size > 0);
-
-      if (documents.length > maxFiles) {
-        return NextResponse.json({ detail: `Please send no more than ${maxFiles} files at one time.` }, { status: 400 });
-      }
-
-      for (const document of documents) {
-        if (document.size > maxFileSize) {
-          return NextResponse.json(
-            { detail: `${document.name} is too large. Keep each file under 10MB.` },
-            { status: 400 },
-          );
-        }
-
-        if (!allowedTypes.has(document.type)) {
-          return NextResponse.json(
-            { detail: `${document.name} is not an accepted file type yet. Please send PDF, JPG, PNG, WEBP, DOC, or DOCX.` },
-            { status: 400 },
-          );
-        }
-      }
-
-      data = {
-        firstName: String(formData.get("firstName") || "").trim(),
-        lastName: String(formData.get("lastName") || "").trim(),
-        phone: String(formData.get("phone") || "").trim(),
-        email: String(formData.get("email") || "").trim(),
-        company: String(formData.get("company") || "").trim(),
-        dot: String(formData.get("dot") || "").trim(),
-        coverageType: String(formData.get("coverageType") || "").trim(),
-        notes: String(formData.get("notes") || "").trim(),
-        documents: documents.map((document) => ({
-          name: document.name,
-          size: document.size,
-          type: document.type,
-        })),
-      };
-    } else {
-      const json = (await request.json()) as Partial<QuotePayload>;
-      data = {
-        firstName: String(json.firstName || "").trim(),
-        lastName: String(json.lastName || "").trim(),
-        phone: String(json.phone || "").trim(),
-        email: String(json.email || "").trim(),
-        company: String(json.company || "").trim(),
-        dot: String(json.dot || "").trim(),
-        coverageType: String(json.coverageType || "").trim(),
-        notes: String(json.notes || "").trim(),
-        documents: Array.isArray(json.documents) ? json.documents : [],
-      };
-    }
+    const json = (await request.json()) as Partial<QuotePayload>;
+    const data: QuotePayload = {
+      firstName: String(json.firstName || "").trim(),
+      lastName: String(json.lastName || "").trim(),
+      phone: String(json.phone || "").trim(),
+      email: String(json.email || "").trim(),
+      company: String(json.company || "").trim(),
+      dot: String(json.dot || "").trim(),
+      coverageType: String(json.coverageType || "").trim(),
+      notes: String(json.notes || "").trim(),
+    };
 
     if (!data.firstName || !data.lastName || !data.phone || !data.email || !data.company || !data.coverageType) {
       return NextResponse.json(
@@ -139,20 +79,14 @@ export async function POST(request: Request) {
       );
     }
 
-    await saveQuote(data);
+    await saveQuoteToAirtable(data);
     await sendWebhook(data);
-
-    const documentMessage = data.documents?.length
-      ? " Optional document details were included with the quote request."
-      : " Documents were not attached, which is fine.";
 
     return NextResponse.json(
       {
         ok: true,
         message:
-          "Thanks. Your quote request was received successfully." +
-          documentMessage +
-          " Secure long-term document storage is still being finalized, so uploaded files are validated in this launch-safe flow but not retained by the backend yet.",
+          "Thanks! Your request was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
       },
       { status: 200 },
     );
