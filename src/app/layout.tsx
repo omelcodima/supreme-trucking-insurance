@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
   description:
     "Fast quotes. Multiple carriers. Owner operators, fleets & new authority. Licensed in 48 states. Call (360) 936-7196.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
