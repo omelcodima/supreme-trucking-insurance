@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getQuotesTable } from "@/lib/airtable";
+import { getQuotesTable } from "../../../lib/airtable";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 

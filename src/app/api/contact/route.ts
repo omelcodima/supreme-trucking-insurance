@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDocsTable } from "@/lib/airtable";
+import { getDocsTable } from "../../../lib/airtable";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || "Document Uploads"; // Renamed from Document Uploads to Contacts
 
