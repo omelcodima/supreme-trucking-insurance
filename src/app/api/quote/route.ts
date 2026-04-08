@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getQuotesTable } from "../../../lib/airtable";
+import { getQuotesTable } from "../../../../lib/airtable";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 
@@ -17,18 +17,16 @@ type QuotePayload = {
 async function saveQuoteToAirtable(data: QuotePayload) {
   try {
     const quotesTable = getQuotesTable(airtableQuotesTableName);
-    await quotesTable.create([{
-      fields: {
-        "First Name": data.firstName,
-        "Last Name": data.lastName,
-        "Phone": data.phone,
-        "Email": data.email,
-        "Company": data.company,
-        "DOT Number": data.dot || null,
-        "Coverage Type": data.coverageType,
-        "Notes": data.notes || null,
-      },
-    }]);
+    await quotesTable.create({
+      "First Name": data.firstName,
+      "Last Name": data.lastName,
+      "Phone": data.phone,
+      "Email": data.email,
+      "Company": data.company,
+      "DOT Number": data.dot || "",
+      "Coverage Type": data.coverageType,
+      "Notes": data.notes || "",
+    } as any);
   } catch (airtableError) {
     console.error("Error saving quote to Airtable:", airtableError);
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDocsTable } from "../../../lib/airtable";
+import { getDocsTable } from "../../../../lib/airtable";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || "Document Uploads"; // Renamed from Document Uploads to Contacts
 
@@ -15,16 +15,14 @@ type ContactPayload = {
 async function saveContactToAirtable(data: ContactPayload) {
   try {
     const contactsTable = getDocsTable(airtableContactsTableName);
-    await contactsTable.create([{
-      fields: {
-        "First Name": data.firstName,
-        "Last Name": data.lastName,
-        "Phone": data.phone,
-        "Email": data.email,
-        "Company": data.company,
-        "Message": data.message,
-      },
-    }]);
+    await contactsTable.create({
+      "First Name": data.firstName,
+      "Last Name": data.lastName,
+      "Phone": data.phone,
+      "Email": data.email,
+      "Company": data.company,
+      "Message": data.message,
+    } as any);
   } catch (airtableError) {
     console.error("Error saving contact to Airtable:", airtableError);
   }
