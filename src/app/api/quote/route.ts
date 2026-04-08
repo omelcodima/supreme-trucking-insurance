@@ -24,7 +24,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
         "Phone": data.phone,
         "Email": data.email,
         "Company": data.company,
-        "DOT Number": data.dot || null, // Allow null for optional fields
+        "DOT Number": data.dot || null,
         "Coverage Type": data.coverageType,
         "Notes": data.notes || null,
       },
