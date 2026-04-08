@@ -18,14 +18,11 @@ async function saveContactToAirtable(data: ContactPayload) {
   const record = await contactsTable.create({
     Name: `${data.firstName} ${data.lastName}`.trim(),
     Notes: [
-      `First Name: ${data.firstName}`,
-      `Last Name: ${data.lastName}`,
       `Phone: ${data.phone}`,
       `Email: ${data.email}`,
-      `Company: ${data.company}`,
+      `Company: ${data.company || "N/A"}`,
       `Message: ${data.message}`,
     ].join("\n"),
-    Status: "New",
   } as any);
 
   return record;

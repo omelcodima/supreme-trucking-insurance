@@ -20,16 +20,13 @@ async function saveQuoteToAirtable(data: QuotePayload) {
   const record = await quotesTable.create({
     Name: `${data.firstName} ${data.lastName}`.trim(),
     Notes: [
-      `First Name: ${data.firstName}`,
-      `Last Name: ${data.lastName}`,
       `Phone: ${data.phone}`,
       `Email: ${data.email}`,
       `Company: ${data.company}`,
-      `DOT Number: ${data.dot || ""}`,
+      `DOT Number: ${data.dot || "N/A"}`,
       `Coverage Type: ${data.coverageType}`,
-      `Additional Note: ${data.notes || ""}`,
+      `Additional Note: ${data.notes || "N/A"}`,
     ].join("\n"),
-    Status: "New",
   } as any);
 
   return record;
