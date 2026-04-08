@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDocsTable } from "../../../../lib/airtable";
 
-const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || "Document Uploads"; // Renamed from Document Uploads to Contacts
+const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || process.env.AIRTABLE_DOCS_TABLE_NAME || "Contacts";
 
 type ContactPayload = {
   firstName: string;
@@ -13,19 +13,22 @@ type ContactPayload = {
 };
 
 async function saveContactToAirtable(data: ContactPayload) {
-  try {
-    const contactsTable = getDocsTable(airtableContactsTableName);
-    await contactsTable.create({
-      "First Name": data.firstName,
-      "Last Name": data.lastName,
-      "Phone": data.phone,
-      "Email": data.email,
-      "Company": data.company,
-      "Message": data.message,
-    } as any);
-  } catch (airtableError) {
-    console.error("Error saving contact to Airtable:", airtableError);
-  }
+  const contactsTable = getDocsTable(airtableContactsTableName);
+
+  const record = await contactsTable.create({
+    Name: `${data.firstName} ${data.lastName}`.trim(),
+    Notes: [
+      `First Name: ${data.firstName}`,
+      `Last Name: ${data.lastName}`,
+      `Phone: ${data.phone}`,
+      `Email: ${data.email}`,
+      `Company: ${data.company}`,
+      `Message: ${data.message}`,
+    ].join("\n"),
+    Status: "New",
+  } as any);
+
+  return record;
 }
 
 export async function POST(request: Request) {
@@ -56,6 +59,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Error in POST /api/contact:", error);
-    return NextResponse.json({ detail: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { detail: "We could not save your message right now. Please try again or call (360) 936-7196." },
+      { status: 500 },
+    );
   }
 }

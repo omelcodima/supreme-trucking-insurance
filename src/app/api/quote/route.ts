@@ -15,21 +15,24 @@ type QuotePayload = {
 };
 
 async function saveQuoteToAirtable(data: QuotePayload) {
-  try {
-    const quotesTable = getQuotesTable(airtableQuotesTableName);
-    await quotesTable.create({
-      "First Name": data.firstName,
-      "Last Name": data.lastName,
-      "Phone": data.phone,
-      "Email": data.email,
-      "Company": data.company,
-      "DOT Number": data.dot || "",
-      "Coverage Type": data.coverageType,
-      "Notes": data.notes || "",
-    } as any);
-  } catch (airtableError) {
-    console.error("Error saving quote to Airtable:", airtableError);
-  }
+  const quotesTable = getQuotesTable(airtableQuotesTableName);
+
+  const record = await quotesTable.create({
+    Name: `${data.firstName} ${data.lastName}`.trim(),
+    Notes: [
+      `First Name: ${data.firstName}`,
+      `Last Name: ${data.lastName}`,
+      `Phone: ${data.phone}`,
+      `Email: ${data.email}`,
+      `Company: ${data.company}`,
+      `DOT Number: ${data.dot || ""}`,
+      `Coverage Type: ${data.coverageType}`,
+      `Additional Note: ${data.notes || ""}`,
+    ].join("\n"),
+    Status: "New",
+  } as any);
+
+  return record;
 }
 
 async function sendWebhook(data: QuotePayload) {
@@ -90,6 +93,9 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error("Error in POST /api/quote:", error);
-    return NextResponse.json({ detail: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { detail: "We could not save your quote request right now. Please try again or call (360) 936-7196." },
+      { status: 500 },
+    );
   }
 }
