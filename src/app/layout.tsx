@@ -42,7 +42,7 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
-                <Link href="/loss-runs" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</Link>
+                <a href="https://dotlossruns.com" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">Loss Run Help</a>
                 <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
                 <div className="relative group">
                   <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
@@ -110,7 +110,7 @@ export default function RootLayout({
                   </div>
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
-                    <Link href="/loss-runs" className="hover:text-[#f97316] transition-colors">Loss Run Help</Link>
+                    <a href="https://dotlossruns.com" className="hover:text-[#f97316] transition-colors">Loss Run Help</a>
                     <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
                     <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
                     <Link href="/contact" className="hover:text-[#f97316] transition-colors">Contact</Link>
@@ -151,7 +151,7 @@ export default function RootLayout({
                 <li><Link href="/fleet" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Small Fleet Insurance</Link></li>
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
-                <li><Link href="/loss-runs" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Loss Run Assistance</Link></li>
+                <li><a href="https://dotlossruns.com" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Loss Run Assistance</a></li>
               </ul>
             </div>
 

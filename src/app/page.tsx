@@ -343,9 +343,9 @@ export default function Home() {
               <Link href="/quote" className="bg-[#f97316] text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors shadow-lg text-center">
                 Upload Docs for Faster Quote
               </Link>
-              <Link href="/loss-runs" className="border border-[#DED3C4] bg-[#FFFDF9] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center">
+              <a href="https://dotlossruns.com" className="border border-[#DED3C4] bg-[#FFFDF9] text-[#2F261C] font-bold text-lg px-8 py-4 rounded-xl hover:border-[#f97316] hover:text-[#f97316] transition-colors text-center">
                 Need loss run help first?
-              </Link>
+              </a>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
