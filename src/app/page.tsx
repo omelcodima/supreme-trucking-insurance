@@ -234,31 +234,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="absolute left-5 right-5 bottom-5 md:left-6 md:right-6 card-premium rounded-[1.5rem] p-5 md:p-6">
-                  <div className="flex flex-col gap-4">
-                    <div>
-                      <p className="text-sm uppercase tracking-[0.16em] text-[#7B6B59]">Built for</p>
-                      <p className="text-2xl font-black text-[#2F261C]">Owner operators, fleets, and new authority</p>
-                      <p className="mt-2 text-sm text-[#5A4B3B]">
-                        Clean process. Faster answers. Premium presentation without losing the personal agency feel.
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                      <Link
-                        href="/quote"
-                        className="inline-flex items-center justify-center rounded-xl bg-[#f97316] px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
-                      >
-                        Start your quote →
-                      </Link>
-                      <Link
-                        href="/quote"
-                        className="inline-flex items-center justify-center rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-5 py-3 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
-                      >
-                        Upload docs for faster quote
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
