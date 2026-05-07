@@ -100,6 +100,7 @@ export default function RootLayout({
                   </span>
                   <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                     <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
+                      <Link href="/instant-indication" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Instant Indication</Link>
                       <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
                       <Link href="/careers" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Careers</Link>
                       <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
@@ -163,6 +164,7 @@ export default function RootLayout({
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
                     <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
+                    <Link href="/instant-indication" className="hover:text-[#f97316] transition-colors">Instant Indication</Link>
                     <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
                     <Link href="/careers" className="hover:text-[#f97316] transition-colors">Careers</Link>
                     <Link href="/contact" className="hover:text-[#f97316] transition-colors">Contact</Link>
@@ -216,6 +218,7 @@ export default function RootLayout({
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
                 <li><Link href="/coi-request" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">COI Request</Link></li>
+                <li><Link href="/instant-indication" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Instant Indication</Link></li>
               </ul>
             </div>
 
@@ -261,6 +264,15 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
+        <Link
+          href="/instant-indication"
+          className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-[#f97316]/35 bg-[#FFFDF9]/95 px-4 py-3 text-sm font-black text-[#2F261C] shadow-[0_16px_40px_rgba(89,63,37,0.18)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white hover:text-[#f97316] md:bottom-6 md:right-6"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 text-[#f97316]">
+            <path fill="currentColor" d="M4 19h16v2H4v-2Zm2-3h2V8H6v8Zm5 0h2V3h-2v13Zm5 0h2v-6h-2v6Z" />
+          </svg>
+          Instant indication
+        </Link>
       </body>
     </html>
   );
