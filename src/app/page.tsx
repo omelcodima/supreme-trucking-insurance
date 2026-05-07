@@ -227,15 +227,30 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="mt-8 flex justify-center">
+          <div className="card-premium mt-8 flex flex-col gap-5 rounded-[1.5rem] p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] text-xl font-black text-[#f97316]">
+                G
+              </div>
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
+                  Google Business Profile
+                </p>
+                <h3 className="mt-2 text-2xl font-extrabold leading-tight text-[#2F261C]">
+                  Find Supreme Trucking Insurance on Google.
+                </h3>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5A4B3B]">
+                  View the business profile for company details, directions, and Google search presence.
+                </p>
+              </div>
+            </div>
             <a
               href={googleBusinessUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 rounded-full border border-[#DED3C4] bg-[#FFFDF9]/82 px-5 py-3 text-sm font-extrabold text-[#2F261C] shadow-[0_12px_30px_rgba(89,63,37,0.06)] transition-all hover:-translate-y-0.5 hover:border-[#f97316]/45 hover:text-[#f97316] hover:shadow-[0_18px_36px_rgba(249,115,22,0.12)]"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#f97316] px-5 py-3 text-sm font-extrabold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-orange-600"
             >
-              <span className="text-base" aria-hidden="true">G</span>
-              View Supreme Trucking Insurance on Google
+              View on Google
             </a>
           </div>
         </div>
