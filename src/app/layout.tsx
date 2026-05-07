@@ -51,6 +51,7 @@ export default function RootLayout({
                   <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                     <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
                       <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
+                      <Link href="/careers" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Careers</Link>
                       <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
                       <Link href="/privacy-policy" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Privacy</Link>
                     </div>
@@ -113,6 +114,7 @@ export default function RootLayout({
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
                     <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
                     <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
+                    <Link href="/careers" className="hover:text-[#f97316] transition-colors">Careers</Link>
                     <Link href="/contact" className="hover:text-[#f97316] transition-colors">Contact</Link>
                     <Link href="/privacy-policy" className="hover:text-[#f97316] transition-colors">Privacy Policy</Link>
                   </div>
@@ -171,6 +173,7 @@ export default function RootLayout({
                 <div className="pt-2">
                   <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>
                   <Link href="/blog" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Blog</Link>
+                  <Link href="/careers" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Careers</Link>
                   <Link href="/quote" className="inline-block bg-[#f97316] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 transition-colors">
                     Get a Free Quote →
                   </Link>
