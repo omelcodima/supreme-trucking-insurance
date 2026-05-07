@@ -9,6 +9,53 @@ const inter = Inter({ subsets: ["latin"] });
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
+const socialLinks = [
+  {
+    name: "Twitter",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+        <path
+          fill="currentColor"
+          d="M17.53 3h3.27l-7.14 8.16L22 21h-6.52l-5.1-6.68L4.54 21H1.27l7.64-8.73L1 3h6.68l4.61 6.1L17.53 3Zm-1.15 16.27h1.81L6.7 4.64H4.76l11.62 14.63Z"
+        />
+      </svg>
+    ),
+  },
+  {
+    name: "Instagram",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+        <path
+          fill="currentColor"
+          d="M7.8 2h8.4A5.81 5.81 0 0 1 22 7.8v8.4a5.81 5.81 0 0 1-5.8 5.8H7.8A5.81 5.81 0 0 1 2 16.2V7.8A5.81 5.81 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm8.95 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7.25A4.75 4.75 0 1 1 12 16.75 4.75 4.75 0 0 1 12 7.25Zm0 2A2.75 2.75 0 1 0 12 14.75 2.75 2.75 0 0 0 12 9.25Z"
+        />
+      </svg>
+    ),
+  },
+  {
+    name: "Facebook",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+        <path
+          fill="currentColor"
+          d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.62A22.1 22.1 0 0 0 14.3 4c-2.38 0-4 1.45-4 4.11v2.79H7.6V14h2.7v8h3.2Z"
+        />
+      </svg>
+    ),
+  },
+  {
+    name: "LinkedIn",
+    icon: (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
+        <path
+          fill="currentColor"
+          d="M6.94 8.98H3.73V21h3.21V8.98ZM5.33 3A1.86 1.86 0 1 0 5.3 6.72 1.86 1.86 0 0 0 5.33 3Zm15 11.1c0-3.22-1.72-5.39-4.49-5.39a3.86 3.86 0 0 0-3.49 1.92V8.98H9.28V21h3.2v-5.95c0-1.57.3-3.1 2.25-3.1 1.93 0 1.96 1.8 1.96 3.2V21h3.2l.44-6.9Z"
+        />
+      </svg>
+    ),
+  },
+];
+
 export const metadata: Metadata = {
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
   description:
@@ -146,6 +193,18 @@ export default function RootLayout({
               <p className="text-[#5A4B3B] text-sm leading-relaxed">
                 Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in 48 states.
               </p>
+              <div className="mt-5 flex items-center gap-3" aria-label="Social media">
+                {socialLinks.map((social) => (
+                  <span
+                    key={social.name}
+                    aria-label={social.name}
+                    title={`${social.name} profile coming soon`}
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#D8CCBD] bg-[#FFFDF9]/70 text-[#5A4B3B] transition-all hover:-translate-y-0.5 hover:border-[#f97316]/45 hover:text-[#f97316] hover:shadow-[0_12px_26px_rgba(249,115,22,0.12)]"
+                  >
+                    {social.icon}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Services */}
