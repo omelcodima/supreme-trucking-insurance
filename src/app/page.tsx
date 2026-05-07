@@ -40,6 +40,9 @@ const carrierMarkets = [
   "GEICO",
 ];
 
+const googleBusinessUrl =
+  "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
+
 const independentPoints = [
   {
     title: "More market access",
@@ -223,6 +226,17 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <a
+              href={googleBusinessUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 rounded-full border border-[#DED3C4] bg-[#FFFDF9]/82 px-5 py-3 text-sm font-extrabold text-[#2F261C] shadow-[0_12px_30px_rgba(89,63,37,0.06)] transition-all hover:-translate-y-0.5 hover:border-[#f97316]/45 hover:text-[#f97316] hover:shadow-[0_18px_36px_rgba(249,115,22,0.12)]"
+            >
+              <span className="text-base" aria-hidden="true">G</span>
+              View Supreme Trucking Insurance on Google
+            </a>
           </div>
         </div>
       </section>
