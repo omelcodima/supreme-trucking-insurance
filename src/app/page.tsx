@@ -25,6 +25,21 @@ const operationCards = [
   },
 ];
 
+const carrierMarkets = [
+  "Progressive",
+  "Great West",
+  "Northland",
+  "Canal",
+  "IAT / Harco",
+  "AIG",
+  "Nirvana",
+  "Lancer",
+  "Benchmark",
+  "Berkley",
+  "Crum & Forster",
+  "GEICO",
+];
+
 const independentPoints = [
   {
     title: "More market access",
@@ -109,7 +124,40 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-soft warm-divider py-16 md:py-20">
+      <section className="section-soft warm-divider py-12 md:py-14">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <span className="eyebrow mb-4">Market access</span>
+              <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-4xl">
+                Carrier options for trucking risks.
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-7 text-[#5A4B3B]">
+              We shop trucking-focused markets based on your operation, state, radius, cargo, filings, and fleet profile.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
+            {carrierMarkets.map((carrier) => (
+              <div
+                key={carrier}
+                className="group flex min-h-20 items-center justify-center rounded-2xl border border-[#E7DED2] bg-[#FFFDF9]/82 px-4 py-4 text-center shadow-[0_10px_24px_rgba(89,63,37,0.05)] transition-all duration-300 hover:-translate-y-2 hover:scale-[1.03] hover:border-[#f97316]/50 hover:bg-white hover:shadow-[0_22px_44px_rgba(249,115,22,0.16)]"
+              >
+                <span className="text-base font-black tracking-normal text-[#4A4036] transition-colors duration-300 group-hover:text-[#f97316]">
+                  {carrier}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-5 text-xs leading-5 text-[#7B6B59]">
+            Carrier availability depends on underwriting, state, operation, filings, and coverage needs.
+          </p>
+        </div>
+      </section>
+
+      <section className="section-shell warm-divider py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-10 max-w-2xl">
             <span className="eyebrow mb-4">Coverage</span>
