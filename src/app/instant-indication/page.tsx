@@ -267,36 +267,7 @@ export default function InstantIndicationPage() {
       </section>
 
       <section className="section-soft py-12 md:py-16">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 lg:grid-cols-[0.85fr_1.15fr]">
-          <div className="card-muted rounded-[1.5rem] p-6">
-            <h2 className="text-xl font-black text-[#2F261C]">What the tool is doing</h2>
-            {processing && (
-              <div className="mt-5 overflow-hidden rounded-full bg-[#E7DED2]">
-                <div
-                  className="h-2 rounded-full bg-[#f97316] transition-all duration-700"
-                  style={{ width: `${((processingStep + 1) / processingSteps.length) * 100}%` }}
-                />
-              </div>
-            )}
-            <div className="mt-5 space-y-3 text-sm leading-6 text-[#5A4B3B]">
-              {(processing ? processingSteps : [
-                    "Reads state and unit count from U.S. DOT when available",
-                    "Shows a DOT company match only when U.S. DOT returns one",
-                    "Keeps the result clearly marked as non-binding",
-                    "Gives the client a reason to continue into the real quote flow",
-                  ]).map((step, index) => (
-                <div key={step} className="flex items-start gap-3 rounded-xl border border-[#E7DED2] bg-[#FFFDF9]/70 p-3">
-                  <span
-                    className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
-                      !processing || index <= processingStep ? "bg-[#f97316]" : "bg-[#D8CCBD]"
-                    }`}
-                  />
-                  <span>{step}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
+        <div className="mx-auto max-w-6xl px-4">
           <div className="card-premium rounded-[1.8rem] p-6 md:p-8">
             {processing ? (
               <div className="flex min-h-72 flex-col items-center justify-center text-center">
