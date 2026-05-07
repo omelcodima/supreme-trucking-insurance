@@ -279,7 +279,7 @@ export default function InstantIndicationPage() {
             <div className="mt-5 space-y-3 text-sm leading-6 text-[#5A4B3B]">
               {(processing ? processingSteps : [
                     "Uses your answers to create a rough indication range",
-                    "Shows a DOT company match only when FMCSA returns one",
+                    "Shows a DOT company match only when U.S. DOT returns one",
                     "Keeps the result clearly marked as non-binding",
                     "Gives the client a reason to continue into the real quote flow",
                   ]).map((step, index) => (
