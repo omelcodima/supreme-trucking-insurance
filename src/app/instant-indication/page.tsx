@@ -43,6 +43,8 @@ const processingSteps = [
   "Preparing the next-step quote checklist",
 ];
 
+const processingDurationMs = 5600;
+
 function roundToHundred(value: number) {
   return Math.round(value / 100) * 100;
 }
@@ -146,7 +148,7 @@ export default function InstantIndicationPage() {
 
     const interval = window.setInterval(() => {
       setProcessingStep((step) => Math.min(step + 1, processingSteps.length - 1));
-    }, 950);
+    }, processingDurationMs / processingSteps.length);
 
     if (form.dot.trim()) {
       try {
@@ -168,7 +170,7 @@ export default function InstantIndicationPage() {
       }
     }
 
-    const remainingDelay = Math.max(0, 5000 - (Date.now() - startedAt));
+    const remainingDelay = Math.max(0, processingDurationMs - (Date.now() - startedAt));
     window.setTimeout(() => {
       window.clearInterval(interval);
       setProcessing(false);
@@ -280,6 +282,15 @@ export default function InstantIndicationPage() {
                 <h2 className="mt-3 text-2xl font-black text-[#2F261C]">
                   {processingSteps[processingStep]}
                 </h2>
+                <div className="mt-6 w-full max-w-xl overflow-hidden rounded-full bg-[#E7DED2]">
+                  <div
+                    className="h-3 rounded-full bg-[#f97316] transition-all duration-700 ease-out"
+                    style={{ width: `${((processingStep + 1) / processingSteps.length) * 100}%` }}
+                  />
+                </div>
+                <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-[#7B6B59]">
+                  {Math.round(((processingStep + 1) / processingSteps.length) * 100)}%
+                </p>
                 <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
                   This is an estimate workflow using your answers. It is not a live carrier approval or bindable quote.
                 </p>
