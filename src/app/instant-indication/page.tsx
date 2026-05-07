@@ -27,6 +27,14 @@ const initialForm: EstimateForm = {
   radius: "",
 };
 
+const processingSteps = [
+  "Reading the DOT number you entered",
+  "Checking state, radius, and cargo factors",
+  "Sizing the estimate around truck count",
+  "Building the indication range",
+  "Preparing the next-step quote checklist",
+];
+
 function roundToHundred(value: number) {
   return Math.round(value / 100) * 100;
 }
@@ -68,6 +76,7 @@ function calculateEstimate(form: EstimateForm) {
 export default function InstantIndicationPage() {
   const [form, setForm] = useState(initialForm);
   const [processing, setProcessing] = useState(false);
+  const [processingStep, setProcessingStep] = useState(0);
   const [showResult, setShowResult] = useState(false);
 
   const estimate = useMemo(() => calculateEstimate(form), [form]);
@@ -80,11 +89,16 @@ export default function InstantIndicationPage() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setProcessing(true);
+    setProcessingStep(0);
     setShowResult(false);
+    const interval = window.setInterval(() => {
+      setProcessingStep((step) => Math.min(step + 1, processingSteps.length - 1));
+    }, 950);
     window.setTimeout(() => {
+      window.clearInterval(interval);
       setProcessing(false);
       setShowResult(true);
-    }, 2200);
+    }, 5000);
   };
 
   return (
@@ -180,7 +194,7 @@ export default function InstantIndicationPage() {
                 disabled={processing}
                 className="w-full rounded-xl bg-[#f97316] px-6 py-4 text-lg font-black text-white shadow-lg transition-colors hover:bg-orange-600 disabled:cursor-wait disabled:opacity-75"
               >
-                {processing ? "Building indication..." : "Get instant indication"}
+                {processing ? processingSteps[processingStep] : "Get instant indication"}
               </button>
             </form>
           </div>
@@ -191,22 +205,26 @@ export default function InstantIndicationPage() {
         <div className="mx-auto grid max-w-6xl gap-6 px-4 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="card-muted rounded-[1.5rem] p-6">
             <h2 className="text-xl font-black text-[#2F261C]">What the tool is doing</h2>
+            {processing && (
+              <div className="mt-5 overflow-hidden rounded-full bg-[#E7DED2]">
+                <div
+                  className="h-2 rounded-full bg-[#f97316] transition-all duration-700"
+                  style={{ width: `${((processingStep + 1) / processingSteps.length) * 100}%` }}
+                />
+              </div>
+            )}
             <div className="mt-5 space-y-3 text-sm leading-6 text-[#5A4B3B]">
-              {(processing
-                ? [
-                    "Reading the DOT number you entered",
-                    "Applying estimate factors from your answers",
-                    "Sizing the range around truck count and radius",
-                    "Preparing the follow-up checklist",
-                  ]
-                : [
+              {(processing ? processingSteps : [
                     "Uses your answers to create a rough indication range",
                     "Keeps the result clearly marked as non-binding",
                     "Gives the client a reason to continue into the real quote flow",
-                  ]
-              ).map((step) => (
+                  ]).map((step, index) => (
                 <div key={step} className="flex items-start gap-3 rounded-xl border border-[#E7DED2] bg-[#FFFDF9]/70 p-3">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#f97316]" />
+                  <span
+                    className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
+                      !processing || index <= processingStep ? "bg-[#f97316]" : "bg-[#D8CCBD]"
+                    }`}
+                  />
                   <span>{step}</span>
                 </div>
               ))}
@@ -214,7 +232,22 @@ export default function InstantIndicationPage() {
           </div>
 
           <div className="card-premium rounded-[1.8rem] p-6 md:p-8">
-            {showResult ? (
+            {processing ? (
+              <div className="flex min-h-72 flex-col items-center justify-center text-center">
+                <div className="mb-5 grid h-16 w-16 place-items-center rounded-3xl bg-[#FFF3E8] text-[#f97316]">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#F8C49A] border-t-[#f97316]" />
+                </div>
+                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
+                  Building indication
+                </p>
+                <h2 className="mt-3 text-2xl font-black text-[#2F261C]">
+                  {processingSteps[processingStep]}
+                </h2>
+                <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
+                  This is an estimate workflow using your answers. It is not a live carrier approval or bindable quote.
+                </p>
+              </div>
+            ) : showResult ? (
               <>
                 <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">Non-binding indication</p>
                 <h2 className="mt-3 text-3xl font-black text-[#2F261C]">
