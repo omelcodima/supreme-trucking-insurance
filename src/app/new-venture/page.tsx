@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "New Authority Insurance | Supreme Trucking Insurance",
-  description: "Just got your MC number? We get new authority truckers insured and hauling fast. Same-day quotes. Licensed in 48 states.",
+  description: "Just got your MC number? We get new authority truckers insured and hauling fast. Market options and clear updates. Licensed in 48 states.",
 };
 
 export default function NewVenturePage() {
@@ -27,12 +27,12 @@ export default function NewVenturePage() {
         "Occupational accident",
       ]}
       sideTitle="New venture success"
-      sideQuote="Just got my MC number and was insured and hauling in 24 hours. No other agency came close."
+      sideQuote="Just got my MC number and needed someone who understood new authority. Supreme made the next steps clear."
       sideQuoteByline="James W., New Venture, Florida"
       faqs={[
         { q: "What do I need to apply?", a: "Usually your DOT number, MC number, driver information, and vehicle details. We handle the rest." },
         { q: "Will new authority cost more?", a: "Usually yes, but we shop multiple carriers to find the most realistic option available." },
-        { q: "How long until I can haul?", a: "Often 24 hours or less once the application and filing requirements are complete." },
+        { q: "How long until I can haul?", a: "Timing depends on the market, filings, and file quality. We move quickly and keep you updated." },
       ]}
       primaryCtaLabel="Get insured now"
       ctaTitle="Ready to hit the road?"

@@ -65,7 +65,7 @@ export default function ContactPage() {
         type: "success",
         title: "Message Sent",
         body:
-          "Thanks! Your message was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
+          "Thanks! Your message was received successfully. We will follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
       });
     } catch (error) {
       setStatus({
@@ -127,7 +127,7 @@ export default function ContactPage() {
                 <div className="text-5xl mb-4">✅</div>
                 <h3 className="text-2xl font-black text-[#2F261C] mb-2">Message Sent</h3>
                 <p className="mb-4 text-lg text-[#5A4B3B]">
-                  Thanks! Your message was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.
+                  Thanks! Your message was received successfully. We will follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.
                 </p>
               </div>
             ) : (

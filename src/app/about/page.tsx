@@ -19,7 +19,7 @@ export default function AboutPage() {
       ]}
       listTitle="What clients expect from us"
       listItems={[
-        "Same-day quotes when the file is ready",
+        "Clear updates as carrier markets respond",
         "Straight talk about what you need and what you do not",
         "Carrier options instead of one-size-fits-all placement",
         "Fast FMCSA filing support for new authority",
@@ -39,7 +39,7 @@ export default function AboutPage() {
       }
       primaryCtaLabel="Work with a specialist"
       ctaTitle="Work with a specialist"
-      ctaDescription="Get a same-day quote from an agent who actually understands trucking insurance."
+      ctaDescription="Get clear guidance from an agent who actually understands trucking insurance."
       ctaButtonLabel="Get a Free Quote"
     />
   );

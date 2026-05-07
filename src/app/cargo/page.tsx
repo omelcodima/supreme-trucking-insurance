@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "Motor Truck Cargo Insurance | Supreme Trucking Insurance",
-  description: "Protect the freight you haul. Motor truck cargo insurance from top-rated carriers. Same-day quotes.",
+  description: "Protect the freight you haul. Motor truck cargo insurance from top-rated carriers. Market options and clear updates.",
 };
 
 export default function CargoPage() {
@@ -15,7 +15,7 @@ export default function CargoPage() {
       sectionTitle="Why cargo insurance matters"
       intro={[
         "Most brokers and shippers want cargo insurance before they will hand over a load. If freight is lost, damaged, or stolen, someone pays for it.",
-        "We place cargo coverage for general commodities, reefer, specialized loads, and higher-value freight with same-day turnaround in most cases.",
+        "We place cargo coverage for general commodities, reefer, specialized loads, and higher-value freight with clear market follow-up and practical timing.",
       ]}
       listTitle="What's covered"
       listItems={[
@@ -33,7 +33,7 @@ export default function CargoPage() {
       ]}
       primaryCtaLabel="Get a cargo quote"
       ctaTitle="Protect your cargo today"
-      ctaDescription="Fast cargo quotes from top-rated carriers, usually the same day."
+      ctaDescription="Cargo market options with clear follow-up from a trucking-focused agent."
       ctaButtonLabel="Get a Free Quote"
     />
   );

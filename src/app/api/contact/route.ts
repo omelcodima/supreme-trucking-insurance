@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ok: true,
       message:
-        "Thanks! Your message was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
+        "Thanks! Your message was received successfully. We will follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
     });
   } catch (error) {
     console.error("Error in POST /api/contact:", error);

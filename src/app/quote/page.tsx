@@ -54,7 +54,7 @@ export default function QuotePage() {
         title: "Quote request sent",
         body:
           result?.message ||
-          "Thanks! Your request was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
+          "Thanks! Your request was received successfully. We will review your file and follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
       });
     } catch (error) {
       setStatus({
@@ -117,7 +117,7 @@ export default function QuotePage() {
               <div className="mb-4 text-6xl">✅</div>
               <h2 className="mb-4 text-3xl font-black text-[#2F261C]">Quote request sent</h2>
               <p className="mb-4 text-lg text-[#5A4B3B]">
-                We received your quote request. We'll get back to you within 24 business hours.
+                We received your quote request. We will review your file and follow up as soon as possible.
               </p>
               <p className="text-[#7B6B59]">
                 If you have immediate questions, please call us directly:{" "}

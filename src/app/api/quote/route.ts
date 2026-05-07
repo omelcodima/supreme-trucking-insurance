@@ -83,7 +83,7 @@ export async function POST(request: Request) {
       {
         ok: true,
         message:
-          "Thanks! Your request was received successfully. We'll get back to you within 24 business hours. If you have immediate questions, please call us at (360) 936-7196.",
+          "Thanks! Your request was received successfully. We will review your file and follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
       },
       { status: 200 },
     );

@@ -4,7 +4,7 @@ import Link from "next/link";
 const trustItems = [
   { icon: "🛡️", label: "Licensed in 48 states" },
   { icon: "🚛", label: "10+ carrier options" },
-  { icon: "⚡", label: "Same-day turnaround" },
+  { icon: "⚡", label: "Responsive market updates" },
   { icon: "⭐", label: "Personal service" },
 ];
 
@@ -46,7 +46,7 @@ const benefits = [
   {
     emoji: "⚡",
     title: "Fast execution",
-    desc: "Most quotes come back the same day, and urgent new authority files move fast.",
+    desc: "We move quickly, keep your file organized, and update you as markets respond.",
   },
   {
     emoji: "🎯",
@@ -118,7 +118,7 @@ const comparisonRows = [
 const testimonials = [
   {
     quote:
-      "Dmitry got me covered in one day when my previous agent took two weeks. Best experience in 10 years of trucking.",
+      "Dmitry explained the options clearly and kept the file moving when my previous agent stopped responding.",
     name: "Mike T.",
     company: "Owner Operator, Texas",
   },
@@ -130,7 +130,7 @@ const testimonials = [
   },
   {
     quote:
-      "Just got my MC number and was insured and hauling in 24 hours. No other agency came close.",
+      "Just got my MC number and needed someone who understood new authority. Supreme made the next steps clear.",
     name: "James W.",
     company: "New Venture, Florida",
   },
@@ -192,7 +192,7 @@ export default function Home() {
                   Direct line: (360) 936-7196
                 </a>
                 <span className="hidden sm:inline text-[#B6A38E]">•</span>
-                <span>Same-day quote turnaround on many risks</span>
+                <span>Clear updates as markets respond</span>
               </div>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-3">

@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "Small Fleet Insurance | Supreme Trucking Insurance",
-  description: "Fleet insurance for 2-20 trucks. One renewal, better rates, personal service. Get a same-day quote.",
+  description: "Fleet insurance for 2-20 trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
 };
 
 export default function FleetPage() {
@@ -36,7 +36,7 @@ export default function FleetPage() {
       ]}
       primaryCtaLabel="Get your fleet quote"
       ctaTitle="Let's shop your fleet coverage"
-      ctaDescription="Tell us about the fleet and we’ll come back with options, usually the same day."
+      ctaDescription="Tell us about the fleet and we’ll shop the right markets with clear follow-up."
       ctaButtonLabel="Get a Free Quote"
     />
   );
