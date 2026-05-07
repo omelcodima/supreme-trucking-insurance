@@ -6,6 +6,9 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const googleBusinessUrl =
+  "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
+
 export const metadata: Metadata = {
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
   description:
@@ -169,6 +172,17 @@ export default function RootLayout({
                 <div>
                   <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-1">Email</p>
                   <a href="mailto:domelco@aicinsagency.com" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">domelco@aicinsagency.com</a>
+                </div>
+                <div>
+                  <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-1">Google Business</p>
+                  <a
+                    href={googleBusinessUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium"
+                  >
+                    View Supreme on Google
+                  </a>
                 </div>
                 <div className="pt-2">
                   <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>

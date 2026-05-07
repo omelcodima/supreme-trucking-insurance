@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 
+const googleBusinessUrl =
+  "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
+
 type StatusState = {
   type: "idle" | "success" | "error";
   title: string;
@@ -90,7 +93,7 @@ export default function ContactPage() {
             <span className="eyebrow mb-5">Contact</span>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">We respond fast and keep it simple.</h1>
             <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">
-              Reach out for quotes, loss run help, or general questions. We answer fast and keep the process simple.
+              Reach out for quotes, COI requests, policy documents, or general questions. We answer fast and keep the process simple.
             </p>
           </div>
           <div className="hero-image-shell p-4">
@@ -106,7 +109,21 @@ export default function ContactPage() {
           <div className="space-y-5">
             {[
               ["📞", "Phone", <a key="phone" href="tel:+13609367196" className="text-[#f97316] font-bold text-lg hover:underline">(360) 936-7196</a>, "Best for new quotes and urgent needs"],
-              ["📧", "Email", <a key="email" href="mailto:domelco@aicinsagency.com" className="text-[#f97316] font-bold hover:underline">domelco@aicinsagency.com</a>, "For documents, loss runs, and non-urgent questions"],
+              ["📧", "Email", <a key="email" href="mailto:domelco@aicinsagency.com" className="text-[#f97316] font-bold hover:underline">domelco@aicinsagency.com</a>, "For documents, COI requests, and non-urgent questions"],
+              [
+                "📍",
+                "Google Business",
+                <a
+                  key="google"
+                  href={googleBusinessUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#f97316] font-bold hover:underline"
+                >
+                  View Supreme on Google
+                </a>,
+                "Business profile, directions, and search listing",
+              ],
               ["⏰", "Response time", <span key="time" className="text-[#2F261C] font-semibold">Typically within 1 business hour</span>, "Mon–Fri 8AM–6PM Pacific"],
               ["🌎", "Licensed in", <span key="states" className="text-[#2F261C] font-semibold">48 states across the continental US</span>, "Focused on trucking coverage only"],
             ].map(([icon, title, value, note]) => (
