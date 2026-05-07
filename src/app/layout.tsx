@@ -42,6 +42,7 @@ export default function RootLayout({
                     </div>
                   </div>
                 </div>
+                <Link href="/coi-request" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">COI Request</Link>
                 <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
                 <div className="relative group">
                   <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
@@ -106,6 +107,7 @@ export default function RootLayout({
                     <Link href="/fleet" className="hover:text-[#f97316] transition-colors">Small Fleets</Link>
                     <Link href="/new-venture" className="hover:text-[#f97316] transition-colors">New Authority</Link>
                     <Link href="/cargo" className="hover:text-[#f97316] transition-colors">Cargo Insurance</Link>
+                    <Link href="/coi-request" className="hover:text-[#f97316] transition-colors">COI Request</Link>
                   </div>
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
@@ -149,6 +151,7 @@ export default function RootLayout({
                 <li><Link href="/fleet" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Small Fleet Insurance</Link></li>
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
+                <li><Link href="/coi-request" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">COI Request</Link></li>
               </ul>
             </div>
 
