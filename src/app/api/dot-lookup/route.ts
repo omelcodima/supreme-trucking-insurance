@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     const url = new URL(CARRIER_CENSUS_URL);
     url.searchParams.set(
       "$select",
-      "dot_number,legal_name,dba_name,phy_city,phy_state,power_units,total_drivers,status_code",
+      "dot_number,legal_name,dba_name,phy_city,phy_state,power_units,total_drivers,status_code,add_date,carrier_operation,classdef",
     );
     url.searchParams.set("$where", `dot_number = "${dot}"`);
     url.searchParams.set("$limit", "1");
@@ -80,6 +80,9 @@ export async function GET(request: Request) {
         powerUnits: readString(carrier, ["power_units"]),
         totalDrivers: readString(carrier, ["total_drivers"]),
         statusCode: readString(carrier, ["status_code"]),
+        addDate: readString(carrier, ["add_date"]),
+        carrierOperation: readString(carrier, ["carrier_operation"]),
+        classDef: readString(carrier, ["classdef"]),
       },
     });
   } catch {

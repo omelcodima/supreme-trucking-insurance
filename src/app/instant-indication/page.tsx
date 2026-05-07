@@ -3,17 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-const states = ["CA", "TX", "FL", "WA", "OR", "AZ", "NV", "IL", "GA", "NC", "PA", "OH", "Other"];
-
 const inputClass =
   "w-full rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-4 py-3 text-[#2F261C] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent transition-all";
 const labelClass = "mb-1.5 block text-sm font-semibold text-[#5A4B3B]";
 
 type EstimateForm = {
   dot: string;
-  state: string;
-  trucks: string;
-  operation: string;
   cargo: string;
   radius: string;
 };
@@ -29,21 +24,21 @@ type DotCarrier = {
   powerUnits?: string;
   totalDrivers?: string;
   statusCode?: string;
+  addDate?: string;
+  carrierOperation?: string;
+  classDef?: string;
 };
 
 const initialForm: EstimateForm = {
   dot: "",
-  state: "",
-  trucks: "1",
-  operation: "",
   cargo: "",
   radius: "",
 };
 
 const processingSteps = [
   "Reviewing the DOT number you entered",
-  "Checking state, radius, and cargo factors",
-  "Sizing the estimate around truck count",
+  "Reading state and unit count from U.S. DOT data",
+  "Checking radius and cargo factors",
   "Building the indication range",
   "Preparing the next-step quote checklist",
 ];
@@ -60,18 +55,50 @@ function currency(value: number) {
   }).format(value);
 }
 
-function calculateEstimate(form: EstimateForm) {
-  const trucks = Math.max(1, Number.parseInt(form.trucks || "1", 10));
+function readPositiveNumber(value?: string) {
+  const parsed = Number.parseInt(value || "", 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+function isRecentDot(addDate?: string) {
+  if (!addDate || addDate.length < 8) return false;
+
+  const year = Number.parseInt(addDate.slice(0, 4), 10);
+  const month = Number.parseInt(addDate.slice(4, 6), 10) - 1;
+  const day = Number.parseInt(addDate.slice(6, 8), 10);
+  const issuedAt = new Date(year, month, day);
+
+  if (Number.isNaN(issuedAt.getTime())) return false;
+
+  const months18 = 1000 * 60 * 60 * 24 * 548;
+  return Date.now() - issuedAt.getTime() < months18;
+}
+
+function inferOperation(carrier: DotCarrier | null, trucks: number) {
+  if (isRecentDot(carrier?.addDate)) return "new-authority";
+  if (trucks >= 11) return "fleet";
+  return "owner-operator";
+}
+
+function operationLabel(operation: string) {
+  if (operation === "new-authority") return "New authority";
+  if (operation === "fleet") return "Fleet";
+  return "Owner operator / small fleet";
+}
+
+function calculateEstimate(form: EstimateForm, carrier: DotCarrier | null) {
+  const trucks = readPositiveNumber(carrier?.powerUnits) || 1;
+  const operation = inferOperation(carrier, trucks);
   let perTruck = 7200;
 
-  if (form.operation === "new-authority") perTruck *= 1.22;
-  if (form.operation === "fleet") perTruck *= trucks >= 11 ? 0.9 : 0.97;
+  if (operation === "new-authority") perTruck *= 1.22;
+  if (operation === "fleet") perTruck *= 0.9;
   if (form.cargo === "reefer") perTruck *= 1.1;
-  if (form.cargo === "hazmat") perTruck *= 1.28;
-  if (form.cargo === "high-value") perTruck *= 1.18;
-  if (form.radius === "regional") perTruck *= 1.08;
+  if (form.cargo === "car-hauler") perTruck *= 1.16;
+  if (form.cargo === "flatbed") perTruck *= 1.08;
+  if (form.cargo === "hot-shot") perTruck *= 0.95;
   if (form.radius === "long-haul") perTruck *= 1.15;
-  if (["CA", "TX", "FL", "IL"].includes(form.state)) perTruck *= 1.07;
+  if (["CA", "TX", "FL", "IL"].includes(carrier?.state || "")) perTruck *= 1.07;
 
   const midpoint = roundToHundred(perTruck);
   const low = roundToHundred(midpoint * 0.88);
@@ -83,6 +110,8 @@ function calculateEstimate(form: EstimateForm) {
     high,
     totalLow: low * trucks,
     totalHigh: high * trucks,
+    state: carrier?.state || "DOT state unavailable",
+    operation,
   };
 }
 
@@ -94,7 +123,7 @@ export default function InstantIndicationPage() {
   const [dotLookupStatus, setDotLookupStatus] = useState<DotLookupStatus>("idle");
   const [carrier, setCarrier] = useState<DotCarrier | null>(null);
 
-  const estimate = useMemo(() => calculateEstimate(form), [form]);
+  const estimate = useMemo(() => calculateEstimate(form, carrier), [form, carrier]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const nextForm = { ...form, [event.target.name]: event.target.value };
@@ -181,7 +210,7 @@ export default function InstantIndicationPage() {
           <div className="card-premium rounded-[1.8rem] p-6 md:p-8">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7B6B59]">5 quick questions</p>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7B6B59]">3 quick inputs</p>
                 <h2 className="mt-2 text-2xl font-black text-[#2F261C]">Build my indication</h2>
               </div>
               <div className="hidden h-12 w-12 items-center justify-center rounded-2xl bg-[#f97316] text-white shadow-lg sm:flex">
@@ -195,39 +224,12 @@ export default function InstantIndicationPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid gap-4 sm:grid-cols-[1fr_0.55fr]">
-                <div>
-                  <label className={labelClass}>DOT number</label>
-                  <input name="dot" value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
-                  <p className="mt-2 text-xs leading-5 text-[#7B6B59]">
-                    {dotHelperText()}
-                  </p>
-                </div>
-                <div>
-                  <label className={labelClass}>Home state</label>
-                  <select name="state" required value={form.state} onChange={handleChange} className={inputClass}>
-                    <option value="">Select...</option>
-                    {states.map((state) => (
-                      <option key={state}>{state}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className={labelClass}>How many trucks?</label>
-                  <input name="trucks" required min="1" max="99" type="number" value={form.trucks} onChange={handleChange} className={inputClass} />
-                </div>
-                <div>
-                  <label className={labelClass}>Operation</label>
-                  <select name="operation" required value={form.operation} onChange={handleChange} className={inputClass}>
-                    <option value="">Select...</option>
-                    <option value="owner-operator">Owner operator</option>
-                    <option value="fleet">Fleet</option>
-                    <option value="new-authority">New authority</option>
-                  </select>
-                </div>
+              <div>
+                <label className={labelClass}>DOT number</label>
+                <input name="dot" value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
+                <p className="mt-2 text-xs leading-5 text-[#7B6B59]">
+                  {dotHelperText()}
+                </p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -236,18 +238,18 @@ export default function InstantIndicationPage() {
                   <select name="cargo" required value={form.cargo} onChange={handleChange} className={inputClass}>
                     <option value="">Select...</option>
                     <option value="general">General freight</option>
-                    <option value="reefer">Reefer / temperature controlled</option>
-                    <option value="high-value">Higher-value freight</option>
-                    <option value="hazmat">Hazmat or specialized</option>
+                    <option value="reefer">Reefer</option>
+                    <option value="car-hauler">Car hauler</option>
+                    <option value="flatbed">Flatbed</option>
+                    <option value="hot-shot">Hot shot</option>
                   </select>
                 </div>
                 <div>
                   <label className={labelClass}>Typical radius</label>
                   <select name="radius" required value={form.radius} onChange={handleChange} className={inputClass}>
                     <option value="">Select...</option>
-                    <option value="local">Local</option>
-                    <option value="regional">Regional</option>
                     <option value="long-haul">Long haul / interstate</option>
+                    <option value="local">Local</option>
                   </select>
                 </div>
               </div>
@@ -278,7 +280,7 @@ export default function InstantIndicationPage() {
             )}
             <div className="mt-5 space-y-3 text-sm leading-6 text-[#5A4B3B]">
               {(processing ? processingSteps : [
-                    "Uses your answers to create a rough indication range",
+                    "Reads state and unit count from U.S. DOT when available",
                     "Shows a DOT company match only when U.S. DOT returns one",
                     "Keeps the result clearly marked as non-binding",
                     "Gives the client a reason to continue into the real quote flow",
@@ -329,6 +331,7 @@ export default function InstantIndicationPage() {
                         {carrier.powerUnits} power unit{carrier.powerUnits === "1" ? "" : "s"}
                         {carrier.totalDrivers ? ` / ${carrier.totalDrivers} driver${carrier.totalDrivers === "1" ? "" : "s"}` : ""}
                         {carrier.statusCode === "A" ? " / Active DOT record" : ""}
+                        {` / ${operationLabel(estimate.operation)}`}
                       </span>
                     ) : null}
                   </div>
@@ -346,6 +349,9 @@ export default function InstantIndicationPage() {
                   <strong className="text-[#2F261C]">
                     {currency(estimate.totalLow)} - {currency(estimate.totalHigh)}
                   </strong>
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#7B6B59]">
+                  Based on {estimate.state}, {operationLabel(estimate.operation).toLowerCase()}, {form.cargo || "selected cargo"}, and {form.radius || "selected radius"}.
                 </p>
                 <div className="mt-6 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-5 text-sm leading-6 text-[#5A4B3B]">
                   This is a quick indication based on broad assumptions. Final pricing depends on filings, drivers, garaging, radius,
