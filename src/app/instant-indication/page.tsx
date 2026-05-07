@@ -18,6 +18,16 @@ type EstimateForm = {
   radius: string;
 };
 
+type DotLookupStatus = "idle" | "loading" | "matched" | "missing-key" | "not-found" | "error";
+
+type DotCarrier = {
+  legalName: string;
+  dbaName?: string;
+  dotNumber?: string;
+  city?: string;
+  state?: string;
+};
+
 const initialForm: EstimateForm = {
   dot: "",
   state: "",
@@ -28,7 +38,7 @@ const initialForm: EstimateForm = {
 };
 
 const processingSteps = [
-  "Reading the DOT number you entered",
+  "Reviewing the DOT number you entered",
   "Checking state, radius, and cargo factors",
   "Sizing the estimate around truck count",
   "Building the indication range",
@@ -78,27 +88,77 @@ export default function InstantIndicationPage() {
   const [processing, setProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [dotLookupStatus, setDotLookupStatus] = useState<DotLookupStatus>("idle");
+  const [carrier, setCarrier] = useState<DotCarrier | null>(null);
 
   const estimate = useMemo(() => calculateEstimate(form), [form]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
+    const nextForm = { ...form, [event.target.name]: event.target.value };
+    setForm(nextForm);
     setShowResult(false);
+    if (event.target.name === "dot") {
+      setCarrier(null);
+      setDotLookupStatus("idle");
+    }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setProcessing(true);
     setProcessingStep(0);
     setShowResult(false);
+    setCarrier(null);
+    setDotLookupStatus(form.dot.trim() ? "loading" : "idle");
+    const startedAt = Date.now();
+
     const interval = window.setInterval(() => {
       setProcessingStep((step) => Math.min(step + 1, processingSteps.length - 1));
     }, 950);
+
+    if (form.dot.trim()) {
+      try {
+        const response = await fetch(`/api/dot-lookup?dot=${encodeURIComponent(form.dot.trim())}`);
+        const data = await response.json();
+
+        if (data.ok && data.carrier?.legalName) {
+          setCarrier(data.carrier);
+          setDotLookupStatus("matched");
+        } else if (data.reason === "missing_key") {
+          setDotLookupStatus("missing-key");
+        } else if (data.reason === "not_found" || data.reason === "invalid_dot") {
+          setDotLookupStatus("not-found");
+        } else {
+          setDotLookupStatus("error");
+        }
+      } catch {
+        setDotLookupStatus("error");
+      }
+    }
+
+    const remainingDelay = Math.max(0, 5000 - (Date.now() - startedAt));
     window.setTimeout(() => {
       window.clearInterval(interval);
       setProcessing(false);
       setShowResult(true);
-    }, 5000);
+    }, remainingDelay);
+  };
+
+  const dotHelperText = () => {
+    if (dotLookupStatus === "loading") return "Looking for DOT company details while the estimate is prepared.";
+    if (dotLookupStatus === "matched" && carrier) {
+      return `Matched DOT to "${carrier.legalName}" from FMCSA records.`;
+    }
+    if (dotLookupStatus === "missing-key") {
+      return "FMCSA DOT lookup needs access connected. The indication can still continue from your answers.";
+    }
+    if (dotLookupStatus === "not-found") {
+      return "No DOT company match came back. The indication can still continue from your answers.";
+    }
+    if (dotLookupStatus === "error") {
+      return "DOT lookup is unavailable right now. The indication can still continue from your answers.";
+    }
+    return "DOT lookup can show the company name when FMCSA access is connected.";
   };
 
   return (
@@ -137,7 +197,7 @@ export default function InstantIndicationPage() {
                   <label className={labelClass}>DOT number</label>
                   <input name="dot" value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
                   <p className="mt-2 text-xs leading-5 text-[#7B6B59]">
-                    DOT lookup is not connected yet. We use this to start the follow-up conversation.
+                    {dotHelperText()}
                   </p>
                 </div>
                 <div>
@@ -216,6 +276,7 @@ export default function InstantIndicationPage() {
             <div className="mt-5 space-y-3 text-sm leading-6 text-[#5A4B3B]">
               {(processing ? processingSteps : [
                     "Uses your answers to create a rough indication range",
+                    "Shows a DOT company match only when FMCSA returns one",
                     "Keeps the result clearly marked as non-binding",
                     "Gives the client a reason to continue into the real quote flow",
                   ]).map((step, index) => (
@@ -250,6 +311,23 @@ export default function InstantIndicationPage() {
             ) : showResult ? (
               <>
                 <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">Non-binding indication</p>
+                {carrier && (
+                  <div className="mt-4 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm leading-6 text-[#5A4B3B]">
+                    <span className="font-black text-[#2F261C]">DOT match:</span> "{carrier.legalName}"
+                    {carrier.dbaName ? ` DBA ${carrier.dbaName}` : ""}
+                    {carrier.city || carrier.state ? (
+                      <span>
+                        {" "}
+                        - {[carrier.city, carrier.state].filter(Boolean).join(", ")}
+                      </span>
+                    ) : null}
+                  </div>
+                )}
+                {!carrier && dotLookupStatus !== "idle" && (
+                  <div className="mt-4 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm leading-6 text-[#5A4B3B]">
+                    {dotHelperText()}
+                  </div>
+                )}
                 <h2 className="mt-3 text-3xl font-black text-[#2F261C]">
                   {currency(estimate.low)} - {currency(estimate.high)} per truck
                 </h2>
