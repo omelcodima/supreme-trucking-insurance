@@ -40,15 +40,6 @@ const independentPoints = [
   },
 ];
 
-const uploadItems = [
-  "Current declarations page",
-  "Loss runs",
-  "Driver list",
-  "Vehicle schedule",
-  "Prior quote or application",
-  "MVRs and supporting docs",
-];
-
 const testimonials = [
   {
     quote: "Dmitry explained the options clearly and kept the file moving when my previous agent stopped responding.",
@@ -102,13 +93,6 @@ export default function Home() {
               </a>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-[#5A4B3B]">
-              <span>48 states licensed</span>
-              <span className="text-[#B6A38E]">•</span>
-              <span>10+ trucking markets</span>
-              <span className="text-[#B6A38E]">•</span>
-              <span>Clear updates</span>
-            </div>
           </div>
 
           <div className="hero-image-shell p-3">
@@ -174,35 +158,6 @@ export default function Home() {
               <div key={point.title} className="card-muted rounded-[1.35rem] p-6">
                 <h3 className="text-xl font-extrabold text-[#2F261C]">{point.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{point.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-alt py-16 md:py-20">
-        <div className="mx-auto grid max-w-6xl items-start gap-8 px-4 lg:grid-cols-[0.95fr_1.05fr]">
-          <div>
-            <span className="eyebrow mb-4">Start cleaner</span>
-            <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
-              Already have your insurance paperwork?
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
-              Upload the basics so the agency can review a cleaner file from the start and shop the right markets.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href="/quote" className="rounded-xl bg-[#f97316] px-7 py-4 text-center text-base font-bold text-white shadow-lg transition-colors hover:bg-orange-600">
-                Upload Docs
-              </Link>
-              <Link href="/coi-request" className="rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-7 py-4 text-center text-base font-bold text-[#2F261C] transition-colors hover:border-[#f97316] hover:text-[#f97316]">
-                Request COI
-              </Link>
-            </div>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {uploadItems.map((item) => (
-              <div key={item} className="card-premium rounded-2xl p-5">
-                <div className="text-sm font-bold text-[#2F261C]">{item}</div>
               </div>
             ))}
           </div>
