@@ -65,7 +65,7 @@ const testimonials = [
     company: "Owner Operator, Texas",
   },
   {
-    quote: "Fleet of 8 trucks. Supreme saved me over $18,000 at renewal by shopping my coverage properly.",
+    quote: "Fleet of 14 trucks. Supreme saved me over $18,000 at renewal by shopping my coverage properly.",
     name: "Carlos R.",
     company: "Fleet Owner, California",
   },

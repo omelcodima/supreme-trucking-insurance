@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "Small Fleet Insurance | Supreme Trucking Insurance",
-  description: "Fleet insurance for 2-20 trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
+  description: "Fleet insurance for 11 to 25+ trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
 };
 
 export default function FleetPage() {
@@ -10,8 +10,8 @@ export default function FleetPage() {
     <SubpageLayout
       eyebrow="Small fleets"
       title="Small Fleet Insurance"
-      description="Protecting 2 to 20 trucks with a lighter premium presentation and a simpler path to better fleet pricing."
-      image="/images/hero-premium.jpg"
+      description="Protecting fleets starting around 11 trucks, through 25 trucks and growing operations, with a simpler path to better fleet pricing."
+      image="/images/fleet-card-v2.jpg"
       sectionTitle="Simplify your fleet insurance"
       intro={[
         "Managing a fleet is already complex. Your insurance should not add another layer of chaos.",
@@ -27,10 +27,10 @@ export default function FleetPage() {
         "Hired auto and supporting coverages",
       ]}
       sideTitle="Client success story"
-      sideQuote="Fleet of 8 trucks. Supreme saved me over $18,000 at renewal by shopping my coverage properly."
+      sideQuote="Fleet of 14 trucks. Supreme saved me over $18,000 at renewal by shopping my coverage properly."
       sideQuoteByline="Carlos R., Fleet Owner, California"
       faqs={[
-        { q: "What size fleet do you work with?", a: "We focus on fleets from 2 to 20 trucks, where personal service still matters and pricing swings can be significant." },
+        { q: "What size fleet do you work with?", a: "We focus on fleets starting around 11 trucks, up to 25 trucks and more, where policy structure and renewal strategy start to matter more." },
         { q: "Can you beat my current rate?", a: "Often yes. We shop multiple carriers and compare structure, not just headline premium." },
         { q: "What if I add or remove trucks mid-term?", a: "We handle endorsements so your policy can keep up with how the fleet changes." },
       ]}
