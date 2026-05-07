@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const FMCSA_CARRIER_URL = "https://mobile.fmcsa.dot.gov/qc/services/carriers";
+const CARRIER_CENSUS_URL = "https://data.transportation.gov/resource/az4n-8mr2.json";
 
 type CarrierRecord = Record<string, unknown>;
 
@@ -16,33 +16,6 @@ function readString(record: CarrierRecord | undefined, keys: string[]) {
   return "";
 }
 
-function findCarrier(payload: unknown): CarrierRecord | undefined {
-  if (!payload || typeof payload !== "object") return undefined;
-
-  const root = payload as CarrierRecord;
-  const content = root.content as CarrierRecord | CarrierRecord[] | undefined;
-
-  if (content && !Array.isArray(content) && typeof content === "object") {
-    const carrier = content.carrier;
-    if (carrier && typeof carrier === "object") return carrier as CarrierRecord;
-    return content;
-  }
-
-  if (Array.isArray(content)) {
-    const first = content[0];
-    if (first && typeof first === "object") {
-      const carrier = (first as CarrierRecord).carrier;
-      if (carrier && typeof carrier === "object") return carrier as CarrierRecord;
-      return first as CarrierRecord;
-    }
-  }
-
-  const carrier = root.carrier;
-  if (carrier && typeof carrier === "object") return carrier as CarrierRecord;
-
-  return undefined;
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const dot = (searchParams.get("dot") || "").replace(/\D/g, "");
@@ -51,13 +24,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, reason: "invalid_dot" }, { status: 400 });
   }
 
-  const webKey = process.env.FMCSA_WEBKEY || process.env.FMCSA_WEB_KEY;
+  const appToken = process.env.DATA_TRANSPORTATION_APP_TOKEN || process.env.SOCRATA_APP_TOKEN;
 
-  if (!webKey) {
+  if (!appToken) {
     return NextResponse.json({
       ok: false,
       reason: "missing_key",
-      detail: "FMCSA_WEBKEY is not configured.",
+      detail: "DATA_TRANSPORTATION_APP_TOKEN is not configured.",
     });
   }
 
@@ -65,9 +38,20 @@ export async function GET(request: Request) {
   const timeout = setTimeout(() => controller.abort(), 6000);
 
   try {
-    const response = await fetch(`${FMCSA_CARRIER_URL}/${encodeURIComponent(dot)}?webKey=${encodeURIComponent(webKey)}`, {
+    const url = new URL(CARRIER_CENSUS_URL);
+    url.searchParams.set(
+      "$select",
+      "dot_number,legal_name,dba_name,phy_city,phy_state,power_units,total_drivers,status_code",
+    );
+    url.searchParams.set("$where", `dot_number = "${dot}"`);
+    url.searchParams.set("$limit", "1");
+
+    const response = await fetch(url, {
       cache: "no-store",
-      headers: { Accept: "application/json" },
+      headers: {
+        Accept: "application/json",
+        "X-App-Token": appToken,
+      },
       signal: controller.signal,
     });
 
@@ -77,8 +61,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ ok: false, reason: "upstream_error" }, { status: 502 });
     }
 
-    const carrier = findCarrier(payload);
-    const legalName = readString(carrier, ["legalName", "legal_name", "name"]);
+    const carrier = Array.isArray(payload) && payload[0] && typeof payload[0] === "object" ? (payload[0] as CarrierRecord) : undefined;
+    const legalName = readString(carrier, ["legal_name"]);
 
     if (!legalName) {
       return NextResponse.json({ ok: false, reason: "not_found" });
@@ -86,13 +70,16 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      source: "FMCSA QCMobile",
+      source: "U.S. DOT Company Census File",
       carrier: {
         legalName,
-        dbaName: readString(carrier, ["dbaName", "dba_name"]),
-        dotNumber: readString(carrier, ["dotNumber", "dot_number"]) || dot,
-        city: readString(carrier, ["phyCity", "physicalCity", "city"]),
-        state: readString(carrier, ["phyState", "physicalState", "state"]),
+        dbaName: readString(carrier, ["dba_name"]),
+        dotNumber: readString(carrier, ["dot_number"]) || dot,
+        city: readString(carrier, ["phy_city"]),
+        state: readString(carrier, ["phy_state"]),
+        powerUnits: readString(carrier, ["power_units"]),
+        totalDrivers: readString(carrier, ["total_drivers"]),
+        statusCode: readString(carrier, ["status_code"]),
       },
     });
   } catch {

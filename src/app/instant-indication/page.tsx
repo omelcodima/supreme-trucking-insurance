@@ -26,6 +26,9 @@ type DotCarrier = {
   dotNumber?: string;
   city?: string;
   state?: string;
+  powerUnits?: string;
+  totalDrivers?: string;
+  statusCode?: string;
 };
 
 const initialForm: EstimateForm = {
@@ -147,10 +150,10 @@ export default function InstantIndicationPage() {
   const dotHelperText = () => {
     if (dotLookupStatus === "loading") return "Looking for DOT company details while the estimate is prepared.";
     if (dotLookupStatus === "matched" && carrier) {
-      return `Matched DOT to "${carrier.legalName}" from FMCSA records.`;
+      return `Matched DOT to "${carrier.legalName}" from U.S. DOT records.`;
     }
     if (dotLookupStatus === "missing-key") {
-      return "FMCSA DOT lookup needs access connected. The indication can still continue from your answers.";
+      return "U.S. DOT lookup needs access connected. The indication can still continue from your answers.";
     }
     if (dotLookupStatus === "not-found") {
       return "No DOT company match came back. The indication can still continue from your answers.";
@@ -158,7 +161,7 @@ export default function InstantIndicationPage() {
     if (dotLookupStatus === "error") {
       return "DOT lookup is unavailable right now. The indication can still continue from your answers.";
     }
-    return "DOT lookup can show the company name when FMCSA access is connected.";
+    return "DOT lookup can show the company name when U.S. DOT access is connected.";
   };
 
   return (
@@ -319,6 +322,13 @@ export default function InstantIndicationPage() {
                       <span>
                         {" "}
                         - {[carrier.city, carrier.state].filter(Boolean).join(", ")}
+                      </span>
+                    ) : null}
+                    {carrier.powerUnits ? (
+                      <span className="mt-1 block text-xs uppercase tracking-[0.14em] text-[#7B6B59]">
+                        {carrier.powerUnits} power unit{carrier.powerUnits === "1" ? "" : "s"}
+                        {carrier.totalDrivers ? ` / ${carrier.totalDrivers} driver${carrier.totalDrivers === "1" ? "" : "s"}` : ""}
+                        {carrier.statusCode === "A" ? " / Active DOT record" : ""}
                       </span>
                     ) : null}
                   </div>
