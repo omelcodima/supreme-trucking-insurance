@@ -266,9 +266,9 @@ export default function RootLayout({
         </footer>
         <Link
           href="/instant-indication"
-          className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-[#f97316]/35 bg-[#FFFDF9]/95 px-4 py-3 text-sm font-black text-[#2F261C] shadow-[0_16px_40px_rgba(89,63,37,0.18)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white hover:text-[#f97316] md:bottom-6 md:right-6"
+          className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-3 rounded-full border border-[#f97316]/35 bg-[#FFFDF9]/95 px-6 py-4 text-lg font-black text-[#2F261C] shadow-[0_18px_44px_rgba(89,63,37,0.22)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white hover:text-[#f97316] md:bottom-6 md:right-6 md:px-7 md:py-4"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 text-[#f97316]">
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 text-[#f97316]">
             <path fill="currentColor" d="M4 19h16v2H4v-2Zm2-3h2V8H6v8Zm5 0h2V3h-2v13Zm5 0h2v-6h-2v6Z" />
           </svg>
           Instant indication
