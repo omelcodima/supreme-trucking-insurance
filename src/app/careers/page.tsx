@@ -45,7 +45,7 @@ export default function CareersPage() {
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
-                href="mailto:domelco@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
+                href="mailto:info@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
                 className="rounded-xl bg-[#f97316] px-8 py-4 text-center text-lg font-bold text-white shadow-lg transition-colors hover:bg-orange-600"
               >
                 Send Your Info
@@ -122,7 +122,7 @@ export default function CareersPage() {
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <a
-              href="mailto:domelco@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
+              href="mailto:info@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
               className="rounded-xl bg-white px-8 py-4 font-bold text-[#2F261C] transition-colors hover:bg-[#FFF3E8]"
             >
               Email Dmitri

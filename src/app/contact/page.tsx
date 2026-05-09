@@ -109,7 +109,7 @@ export default function ContactPage() {
           <div className="space-y-5">
             {[
               ["📞", "Phone", <a key="phone" href="tel:+13609367196" className="text-[#f97316] font-bold text-lg hover:underline">(360) 936-7196</a>, "Best for new quotes and urgent needs"],
-              ["📧", "Email", <a key="email" href="mailto:domelco@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">domelco@supremetruckinginsurance.com</a>, "For documents, COI requests, and non-urgent questions"],
+              ["📧", "Email", <a key="email" href="mailto:info@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">info@supremetruckinginsurance.com</a>, "For documents, COI requests, and non-urgent questions"],
               [
                 "📍",
                 "Google Business",

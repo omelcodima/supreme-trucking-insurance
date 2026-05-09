@@ -192,7 +192,7 @@ export default function PrivacyPolicyPage() {
                     <p><strong className="text-[#2F261C]">Direct:</strong> 360-750-4394</p>
                     <p><strong className="text-[#2F261C]">Office:</strong> 360-450-2211</p>
                     <p><strong className="text-[#2F261C]">Fax:</strong> 360-851-3239</p>
-                    <p><strong className="text-[#2F261C]">Email:</strong> domelco@supremetruckinginsurance.com</p>
+                    <p><strong className="text-[#2F261C]">Email:</strong> info@supremetruckinginsurance.com</p>
                   </div>
                 </div>
               </Section>

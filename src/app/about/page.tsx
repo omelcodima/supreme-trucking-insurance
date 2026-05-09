@@ -33,7 +33,7 @@ export default function AboutPage() {
             Phone: <a href="tel:+13609367196" className="text-[#f97316] font-bold hover:underline">(360) 936-7196</a>
           </p>
           <p className="text-[#5A4B3B] text-sm">
-            Email: <a href="mailto:domelco@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">domelco@supremetruckinginsurance.com</a>
+            Email: <a href="mailto:info@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">info@supremetruckinginsurance.com</a>
           </p>
         </div>
       }

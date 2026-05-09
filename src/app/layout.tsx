@@ -233,7 +233,7 @@ export default function RootLayout({
                 </div>
                 <div>
                   <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-1">Email</p>
-                  <a href="mailto:domelco@supremetruckinginsurance.com" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">domelco@supremetruckinginsurance.com</a>
+                  <a href="mailto:info@supremetruckinginsurance.com" className="text-[#2F261C] hover:text-[#f97316] transition-colors font-medium">info@supremetruckinginsurance.com</a>
                 </div>
                 <div>
                   <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-1">Google Business</p>
