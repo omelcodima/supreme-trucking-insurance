@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "New Authority Insurance | Supreme Trucking Insurance",
-  description: "Just got your MC number? We get new authority truckers insured and hauling fast. Market options and clear updates. Licensed in 48 states.",
+  description: "Just got your MC number? We get new authority truckers insured and hauling fast. Market options and clear updates. Licensed in most states.",
 };
 
 export default function NewVenturePage() {

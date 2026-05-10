@@ -4,7 +4,7 @@ const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
 const trustItems = [
-  ["48", "states licensed", "Built for truckers who run across state lines."],
+  ["Most", "states licensed", "Built for truckers who run across state lines."],
   ["4", "languages", "English, Russian, Ukrainian, and Romanian."],
   ["DOT", "first review", "We use DOT details to understand the account faster."],
   ["COI", "support", "Certificate requests have their own intake flow."],

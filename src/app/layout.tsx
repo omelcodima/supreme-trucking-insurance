@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
   description:
-    "Fast quotes. Multiple carriers. Owner operators, fleets & new authority. Licensed in 48 states. Call (360) 936-7196.",
+    "Fast quotes. Multiple carriers. Owner operators, fleets & new authority. Licensed in most states. Call (360) 936-7196.",
   keywords: [
     "trucking insurance",
     "commercial truck insurance",
@@ -250,7 +250,7 @@ export default function RootLayout({
                 <BrandLogo />
               </div>
               <p className="text-[#5A4B3B] text-sm leading-relaxed">
-                Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in 48 states.
+                Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in most states.
               </p>
               <div className="mt-5 flex items-center gap-3" aria-label="Social media">
                 {socialLinks.map((social) => (
@@ -336,7 +336,7 @@ export default function RootLayout({
 
           <div className="max-w-7xl mx-auto px-4 mt-10 pt-6 border-t border-[#D8CCBD] text-center">
             <p className="text-[#7B6B59] text-sm">
-              © 2026 Supreme Trucking Insurance. Licensed in 48 states.
+              © 2026 Supreme Trucking Insurance. Licensed in most states.
             </p>
           </div>
         </footer>

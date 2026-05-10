@@ -302,10 +302,12 @@ const priorityStatePages: StatePage[] = [
 
 const additionalStates = [
   ["alabama", "Alabama", "AL", "Southeast freight routes, regional hauls, local delivery, and interstate operations."],
+  ["alaska", "Alaska", "AK", "local hauling, construction support, specialized freight, remote-route trucking, and regional operations."],
   ["arkansas", "Arkansas", "AR", "regional freight, agricultural lanes, dry van, reefer, and cross-state trucking operations."],
   ["colorado", "Colorado", "CO", "mountain routes, regional freight, interstate lanes, construction hauls, and growing fleet operations."],
   ["connecticut", "Connecticut", "CT", "Northeast regional routes, local delivery, interstate freight, and compact-radius trucking operations."],
   ["delaware", "Delaware", "DE", "Mid-Atlantic freight routes, local delivery, port-adjacent work, and interstate trucking operations."],
+  ["hawaii", "Hawaii", "HI", "island freight, port-adjacent operations, local delivery, construction hauling, and specialized cargo."],
   ["idaho", "Idaho", "ID", "regional freight, agriculture, long-haul lanes, and Pacific Northwest trucking operations."],
   ["indiana", "Indiana", "IN", "Midwest freight lanes, manufacturing routes, interstate trucking, and fleet operations."],
   ["iowa", "Iowa", "IA", "agriculture, general freight, regional lanes, and Midwest trucking operations."],

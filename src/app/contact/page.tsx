@@ -108,7 +108,7 @@ export default function ContactPage() {
                 "Business profile, directions, and search listing",
               ],
               ["⏰", "Response time", <span key="time" className="text-[#2F261C] font-semibold">Typically within 1 business hour</span>, "Mon–Fri 8AM–6PM Pacific"],
-              ["🌎", "Licensed in", <span key="states" className="text-[#2F261C] font-semibold">48 states across the continental US</span>, "Focused on trucking coverage only"],
+              ["🌎", "Licensed in", <span key="states" className="text-[#2F261C] font-semibold">most states across the U.S.</span>, "Focused on trucking coverage only"],
             ].map(([icon, title, value, note]) => (
               <div key={title as string} className="card-premium rounded-[1.5rem] p-6 flex gap-4 items-start">
                 <div className="text-3xl">{icon as string}</div>

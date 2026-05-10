@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "About | Supreme Trucking Insurance",
-  description: "Meet Dmitry and the Supreme Trucking Insurance team. We specialize in trucking insurance for owner operators, fleets, and new authority. Licensed in 48 states.",
+  description: "Meet Dmitry and the Supreme Trucking Insurance team. We specialize in trucking insurance for owner operators, fleets, and new authority. Licensed in most states.",
 };
 
 export default function AboutPage() {
