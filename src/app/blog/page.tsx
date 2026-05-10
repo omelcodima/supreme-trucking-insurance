@@ -1,48 +1,55 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { blogPosts } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
-  title: "Blog | Supreme Trucking Insurance",
-  description: "Latest news and insights from Supreme Trucking Insurance.",
+  title: "Trucking Insurance Blog | Supreme Trucking Insurance",
+  description:
+    "Practical trucking insurance guides for owner-operators, fleets, new authorities, cargo coverage, and commercial truck insurance pricing.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 export default function BlogIndexPage() {
   return (
-    <main className="bg-[#FAF7F2] text-[#2F261C]">
-      <section className="bg-[#F7F3EC] border-b border-[#E7DED2]">
-        <div className="max-w-5xl mx-auto px-6 py-16 md:py-20">
-          <div className="max-w-3xl">
-            <p className="text-sm uppercase tracking-[0.24em] text-[#7B6B59] mb-4">Insights</p>
-            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-5">Our Blog</h1>
-            <p className="text-lg text-[#5A4B3B] leading-8">
-              Stay up-to-date with the latest in trucking insurance, industry news, and tips for owner-operators and fleets.
-            </p>
-          </div>
+    <>
+      <section className="section-shell warm-divider">
+        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+          <span className="eyebrow mb-5">Trucking insurance guides</span>
+          <h1 className="max-w-4xl text-4xl font-black leading-tight text-[#2F261C] md:text-6xl">
+            Practical answers before you shop trucking insurance.
+          </h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
+            Simple guides for owner-operators, fleets, new authorities, cargo coverage, and commercial truck insurance pricing.
+          </p>
         </div>
       </section>
 
-      <section className="py-12 md:py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          {/* Placeholder for blog post list */}
-          <div className="space-y-8">
-            <p className="text-center text-[#7B6B59]">No blog posts yet. Check back soon!</p>
-            {/* Example blog post card (commented out)
-            <div className="card-premium rounded-[1.5rem] p-6 flex flex-col md:flex-row md:items-center gap-6">
-              <div className="md:w-1/3 relative h-48 rounded-lg overflow-hidden">
-                <img src="/images/blog-placeholder.jpg" alt="Blog post image" className="object-cover w-full h-full" />
-              </div>
-              <div className="md:w-2/3">
-                <p className="text-sm uppercase tracking-[0.16em] text-[#7B6B59] mb-2">Category | Date</p>
-                <h2 className="text-2xl font-bold text-[#2F261C] mb-3"><Link href="/blog/post-slug" className="hover:underline">Blog Post Title</Link></h2>
-                <p className="text-[#5A4B3B] leading-relaxed text-sm mb-4">Short description of the blog post content...</p>
-                <Link href="/blog/post-slug" className="text-[#f97316] font-bold hover:underline">
-                  Read more →
-                </Link>
-              </div>
-            </div>
-            */}
+      <section className="section-soft py-14 md:py-18">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="grid gap-5 md:grid-cols-2">
+            {blogPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="card-premium rounded-[1.5rem] p-6 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
+              >
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
+                  {post.category} • {post.readTime}
+                </p>
+                <h2 className="mt-3 text-2xl font-black leading-tight text-[#2F261C]">
+                  {post.title}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{post.description}</p>
+                <span className="mt-5 inline-flex text-sm font-black text-[#2F261C] transition-colors group-hover:text-[#f97316]">
+                  Read guide →
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

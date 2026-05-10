@@ -300,7 +300,7 @@ export default function InstantIndicationPage() {
                 <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">Non-binding indication</p>
                 {carrier && (
                   <div className="mt-4 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm leading-6 text-[#5A4B3B]">
-                    <span className="font-black text-[#2F261C]">DOT match:</span> "{carrier.legalName}"
+                    <span className="font-black text-[#2F261C]">DOT match:</span> &ldquo;{carrier.legalName}&rdquo;
                     {carrier.dbaName ? ` DBA ${carrier.dbaName}` : ""}
                     {carrier.city || carrier.state ? (
                       <span>

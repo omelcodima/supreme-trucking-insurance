@@ -22,7 +22,7 @@ async function saveContactToAirtable(data: ContactPayload) {
     Email: data.email,
     Company: data.company || "",
     Message: data.message,
-  } as any);
+  } as Record<string, string>);
 
   return record;
 }

@@ -10,6 +10,25 @@ const inter = Inter({ subsets: ["latin"] });
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  name: "Supreme Trucking Insurance",
+  url: "https://supremetruckinginsurance.com",
+  logo: "https://supremetruckinginsurance.com/logo.png",
+  telephone: "+1-360-936-7196",
+  email: "info@supremetruckinginsurance.com",
+  areaServed: "United States",
+  sameAs: [googleBusinessUrl],
+  knowsAbout: [
+    "Commercial truck insurance",
+    "Owner operator insurance",
+    "Fleet trucking insurance",
+    "New authority trucking insurance",
+    "Motor truck cargo insurance",
+  ],
+};
+
 const socialLinks = [
   {
     name: "Twitter",
@@ -72,6 +91,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         {/* STICKY NAV */}
         <header className="sticky top-0 z-50 bg-[#F7F3EC]/95 border-b border-[#E7DED2] shadow-none backdrop-blur">
           <nav className="max-w-7xl mx-auto px-4 py-2">

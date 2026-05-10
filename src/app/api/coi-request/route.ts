@@ -64,7 +64,7 @@ async function saveCoiRequestToAirtable(data: CoiPayload) {
     Email: data.email || data.sendEmail,
     Company: data.company,
     Message: formatMessage(data),
-  } as any);
+  } as Record<string, string>);
 }
 
 export async function POST(request: Request) {

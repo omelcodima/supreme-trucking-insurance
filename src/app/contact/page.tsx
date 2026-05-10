@@ -6,16 +6,9 @@ import { useState } from "react";
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
-type StatusState = {
-  type: "idle" | "success" | "error";
-  title: string;
-  body: string;
-};
-
 export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [status, setStatus] = useState<StatusState>({ type: "idle", title: "", body: "" });
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -37,7 +30,6 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setStatus({ type: "idle", title: "", body: "" });
 
     try {
       const payload = {
@@ -64,18 +56,9 @@ export default function ContactPage() {
       }
 
       setSubmitted(true);
-      setStatus({
-        type: "success",
-        title: "Message Sent",
-        body:
-          "Thanks! Your message was received successfully. We will follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
-      });
     } catch (error) {
-      setStatus({
-        type: "error",
-        title: "Could not send message",
-        body: error instanceof Error ? error.message : "Please try again or call (360) 936-7196.",
-      });
+      console.error("Contact form error:", error);
+      alert(error instanceof Error ? error.message : "Please try again or call (360) 936-7196.");
     } finally {
       setSubmitting(false);
     }

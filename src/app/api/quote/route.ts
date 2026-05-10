@@ -26,7 +26,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
     "DOT Number": data.dot || "",
     "Coverage Type": data.coverageType,
     Notes: data.notes || "",
-  } as any);
+  } as Record<string, string>);
 
   return record;
 }

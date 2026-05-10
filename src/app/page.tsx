@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { featuredBlogPosts } from "@/lib/blogPosts";
 import { featuredStatePages } from "@/lib/statePages";
 
 const operationCards = [
@@ -294,6 +295,42 @@ export default function Home() {
             >
               View on Google
             </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-soft warm-divider py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl">
+              <span className="eyebrow mb-4">Guides</span>
+              <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
+                Helpful trucking insurance answers.
+              </h2>
+            </div>
+            <Link
+              href="/blog"
+              className="inline-flex rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-5 py-3 text-sm font-extrabold text-[#2F261C] transition-colors hover:border-[#f97316] hover:text-[#f97316]"
+            >
+              View all guides
+            </Link>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
+            {featuredBlogPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="card-premium rounded-[1.35rem] p-6 transition-transform hover:-translate-y-1"
+              >
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
+                  {post.category}
+                </p>
+                <h3 className="mt-3 text-xl font-extrabold leading-tight text-[#2F261C]">
+                  {post.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{post.description}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
