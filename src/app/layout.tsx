@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import BrandLogo from "../components/BrandLogo";
+import { featuredStatePages } from "@/lib/statePages";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -220,6 +221,18 @@ export default function RootLayout({
                 <li><Link href="/coi-request" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">COI Request</Link></li>
                 <li><Link href="/instant-indication" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Instant Indication</Link></li>
               </ul>
+              <h3 className="mt-8 text-lg font-bold mb-4 text-[#f97316]">States</h3>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                {featuredStatePages.slice(0, 8).map((state) => (
+                  <Link
+                    key={state.slug}
+                    href={`/trucking-insurance/${state.slug}`}
+                    className="text-[#5A4B3B] transition-colors hover:text-[#f97316]"
+                  >
+                    {state.name}
+                  </Link>
+                ))}
+              </div>
             </div>
 
             {/* Contact */}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { featuredStatePages } from "@/lib/statePages";
 
 const operationCards = [
   {
@@ -204,6 +205,41 @@ export default function Home() {
                 <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{point.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-soft warm-divider py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+            <div>
+              <span className="eyebrow mb-4">State coverage</span>
+              <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
+                Trucking insurance visibility across major freight states.
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
+                Supreme works with trucking operations in most states where licensed. These pages help truckers find the right starting point by state, operation, cargo, and filings.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredStatePages.map((state) => (
+                <Link
+                  key={state.slug}
+                  href={`/trucking-insurance/${state.slug}`}
+                  className="card-premium rounded-[1.15rem] px-4 py-4 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
+                >
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
+                    {state.abbreviation}
+                  </p>
+                  <h3 className="mt-1 text-lg font-black text-[#2F261C]">
+                    {state.name}
+                  </h3>
+                  <p className="mt-2 text-sm leading-5 text-[#5A4B3B]">
+                    Owner-operators, fleets, cargo, and new authority.
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>

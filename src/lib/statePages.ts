@@ -1,0 +1,307 @@
+export type StatePage = {
+  slug: string;
+  name: string;
+  abbreviation: string;
+  headline: string;
+  description: string;
+  marketNotes: string[];
+  operationFocus: string[];
+  faqs: { q: string; a: string }[];
+};
+
+export const statePages: StatePage[] = [
+  {
+    slug: "texas",
+    name: "Texas",
+    abbreviation: "TX",
+    headline: "Texas trucking insurance for fleets, owner-operators, and new authorities.",
+    description:
+      "Texas truckers deal with long-haul lanes, border freight, oilfield work, construction hauls, and fast-growing fleet operations. We help present the file clearly so trucking-focused markets can respond with practical options.",
+    marketNotes: [
+      "Strong fit for interstate freight, regional fleets, owner-operators, and new authority filings.",
+      "Cargo, radius, driver history, garaging, and DOT profile can change which markets are realistic.",
+      "We help organize the submission before it goes to carrier underwriters.",
+    ],
+    operationFocus: ["Owner operators", "Fleets 11+ trucks", "New authority", "Cargo", "Physical damage", "Long haul"],
+    faqs: [
+      {
+        q: "Do you help Texas new authorities?",
+        a: "Yes. We can help new authorities understand filings, liability, cargo, physical damage, and what carriers usually need before they review the account.",
+      },
+      {
+        q: "Can you insure Texas fleets?",
+        a: "We focus on trucking operations that need a cleaner fleet submission, especially when there are multiple units, drivers, states, and cargo types involved.",
+      },
+    ],
+  },
+  {
+    slug: "california",
+    name: "California",
+    abbreviation: "CA",
+    headline: "California commercial truck insurance with trucking-market access.",
+    description:
+      "California trucking insurance can be sensitive to radius, filings, freight type, ports, and driver history. We help owner-operators and fleets package the details carriers need to review the risk.",
+    marketNotes: [
+      "Useful for port work, regional delivery, interstate lanes, refrigerated freight, and general freight.",
+      "Higher operating costs make renewal shopping and file quality especially important.",
+      "We help compare structure, not just headline premium.",
+    ],
+    operationFocus: ["Port freight", "Reefer", "General freight", "Fleets", "Owner operators", "Cargo"],
+    faqs: [
+      {
+        q: "Can you help with California cargo and liability?",
+        a: "Yes. We can help arrange primary liability, motor truck cargo, physical damage, and supporting coverages based on the operation.",
+      },
+      {
+        q: "Is California harder for trucking insurance?",
+        a: "It can be. Market appetite depends heavily on drivers, radius, garaging, cargo, filings, and loss history.",
+      },
+    ],
+  },
+  {
+    slug: "florida",
+    name: "Florida",
+    abbreviation: "FL",
+    headline: "Florida trucking insurance for growing carriers and independent truckers.",
+    description:
+      "Florida trucking accounts often need clear handling around interstate routes, cargo value, garaging, and driver details. Supreme helps organize the file and shop trucking-focused markets where available.",
+    marketNotes: [
+      "Common needs include general freight, reefer, cargo, physical damage, and new venture support.",
+      "A clean DOT profile and complete driver information can help the review process.",
+      "We keep follow-up clear as carrier markets respond.",
+    ],
+    operationFocus: ["New venture", "Owner operators", "Reefer", "General freight", "Cargo", "Regional"],
+    faqs: [
+      {
+        q: "Do Florida truckers need cargo insurance?",
+        a: "Many brokers and shippers require cargo coverage before they release loads. The right limit depends on freight value and contracts.",
+      },
+      {
+        q: "Can you quote new trucking companies in Florida?",
+        a: "Yes, where markets are available. New ventures usually need a complete file with DOT, drivers, vehicles, garaging, and planned radius.",
+      },
+    ],
+  },
+  {
+    slug: "illinois",
+    name: "Illinois",
+    abbreviation: "IL",
+    headline: "Illinois trucking insurance for Midwest lanes and fleet operations.",
+    description:
+      "Illinois is a major freight hub, and trucking insurance submissions need to explain radius, cargo, drivers, and fleet profile clearly. We help carriers shop the right structure for the operation.",
+    marketNotes: [
+      "Good fit for regional and interstate fleets moving through Midwest freight lanes.",
+      "Cargo type, driver quality, and loss history can affect carrier appetite.",
+      "We support renewals, new authorities, and owner-operator policies.",
+    ],
+    operationFocus: ["Midwest fleets", "Interstate trucking", "Cargo", "Physical damage", "Owner operators", "Renewals"],
+    faqs: [
+      {
+        q: "Can you help Illinois fleets at renewal?",
+        a: "Yes. Renewal shopping works best when unit schedules, drivers, losses, cargo, and current policy details are ready early.",
+      },
+      {
+        q: "What coverage do Illinois truckers usually ask about?",
+        a: "Primary liability, motor truck cargo, physical damage, general liability, non-owned trailer, and supporting endorsements are common.",
+      },
+    ],
+  },
+  {
+    slug: "georgia",
+    name: "Georgia",
+    abbreviation: "GA",
+    headline: "Georgia commercial truck insurance for local, regional, and interstate carriers.",
+    description:
+      "Georgia trucking operations can range from local delivery to interstate freight. We help align the submission with the actual operation so markets understand the risk.",
+    marketNotes: [
+      "Supports owner-operators, fleets, new authorities, cargo, and physical damage needs.",
+      "Freight type, radius, garaging, and driver profile matter heavily.",
+      "We help keep the quote process direct and organized.",
+    ],
+    operationFocus: ["Regional freight", "Local delivery", "Owner operators", "Fleets", "Cargo", "New authority"],
+    faqs: [
+      {
+        q: "Can Georgia truckers get an indication first?",
+        a: "Yes. The instant indication tool can give a rough, non-binding range before the full underwriting review.",
+      },
+      {
+        q: "Do you work with Georgia owner-operators?",
+        a: "Yes, including solo truckers who need liability, cargo, physical damage, bobtail, or non-trucking liability options.",
+      },
+    ],
+  },
+  {
+    slug: "north-carolina",
+    name: "North Carolina",
+    abbreviation: "NC",
+    headline: "North Carolina trucking insurance for owner-operators and fleets.",
+    description:
+      "North Carolina truckers need coverage that matches their lanes, freight, vehicle schedule, and filings. We help prepare a clean file for trucking-focused markets.",
+    marketNotes: [
+      "Useful for local, regional, and interstate operations.",
+      "Cargo type and radius should be clear before the account goes to market.",
+      "Fleet submissions need accurate drivers, units, losses, and garaging.",
+    ],
+    operationFocus: ["Owner operators", "Regional fleets", "Cargo", "Physical damage", "New authority", "Local"],
+    faqs: [
+      {
+        q: "Can you help North Carolina fleets with multiple trucks?",
+        a: "Yes. Fleets should have unit schedules, driver lists, loss runs, and current policy information ready for a stronger submission.",
+      },
+      {
+        q: "Do you help with cargo coverage?",
+        a: "Yes. Motor truck cargo options depend on freight type, requested limit, and carrier appetite.",
+      },
+    ],
+  },
+  {
+    slug: "pennsylvania",
+    name: "Pennsylvania",
+    abbreviation: "PA",
+    headline: "Pennsylvania trucking insurance for freight carriers and new authorities.",
+    description:
+      "Pennsylvania trucking risks often involve regional and interstate routes, varied weather, and mixed cargo. Supreme helps present the account clearly so markets can evaluate it.",
+    marketNotes: [
+      "Works for owner-operators, fleets, cargo, physical damage, and filings.",
+      "Driver quality, loss history, cargo, and radius can shift pricing significantly.",
+      "We help carriers compare available structure and follow-up timing.",
+    ],
+    operationFocus: ["Interstate", "Regional", "Owner operators", "Fleets", "Cargo", "Physical damage"],
+    faqs: [
+      {
+        q: "Can you write Pennsylvania new authorities?",
+        a: "Where markets are available, yes. New authorities need clean DOT, driver, vehicle, garaging, and freight information.",
+      },
+      {
+        q: "What affects Pennsylvania trucking insurance pricing?",
+        a: "Radius, cargo, drivers, vehicle values, loss history, filings, and prior insurance history all matter.",
+      },
+    ],
+  },
+  {
+    slug: "ohio",
+    name: "Ohio",
+    abbreviation: "OH",
+    headline: "Ohio commercial truck insurance for Midwest trucking operations.",
+    description:
+      "Ohio sits on major freight lanes, so truckers often need coverage built for interstate routes, cargo requirements, and fleet growth. We help shop trucking-focused markets with a cleaner submission.",
+    marketNotes: [
+      "Good fit for Midwest lanes, general freight, regional fleets, and owner-operators.",
+      "Fleet files should include vehicles, drivers, loss runs, cargo, and radius.",
+      "New authority accounts need practical guidance before hauling.",
+    ],
+    operationFocus: ["Midwest freight", "Fleets", "Owner operators", "General freight", "Cargo", "New authority"],
+    faqs: [
+      {
+        q: "Do Ohio fleets need loss runs?",
+        a: "For renewal shopping, loss runs are usually important. They help carriers understand prior claims and pricing fit.",
+      },
+      {
+        q: "Can you help with Ohio cargo insurance?",
+        a: "Yes. We can help discuss cargo limits, freight type, and market options.",
+      },
+    ],
+  },
+  {
+    slug: "arizona",
+    name: "Arizona",
+    abbreviation: "AZ",
+    headline: "Arizona trucking insurance for regional and interstate carriers.",
+    description:
+      "Arizona trucking accounts often involve interstate lanes, regional freight, and cross-state exposure. We help truckers organize the details markets need to quote properly.",
+    marketNotes: [
+      "Supports owner-operators, new ventures, small fleets, cargo, and physical damage.",
+      "Long-haul radius and driver quality can affect market options.",
+      "Clean vehicle and driver schedules help avoid delays.",
+    ],
+    operationFocus: ["Long haul", "Regional", "Owner operators", "New authority", "Cargo", "Physical damage"],
+    faqs: [
+      {
+        q: "Do you help Arizona owner-operators?",
+        a: "Yes. We can help with liability, cargo, physical damage, and bobtail or non-trucking liability where needed.",
+      },
+      {
+        q: "Can Arizona truckers use the instant indication tool?",
+        a: "Yes. It gives a rough non-binding range and helps start the conversation before a full quote.",
+      },
+    ],
+  },
+  {
+    slug: "nevada",
+    name: "Nevada",
+    abbreviation: "NV",
+    headline: "Nevada truck insurance for owner-operators, fleets, and new ventures.",
+    description:
+      "Nevada trucking operations often run regional and interstate lanes across nearby states. We help present cargo, radius, filings, and driver information clearly to carrier markets.",
+    marketNotes: [
+      "Useful for long-haul, regional, general freight, and growing fleet operations.",
+      "Garaging, radius, and freight type are important underwriting details.",
+      "We help explain what markets need before they review the file.",
+    ],
+    operationFocus: ["Interstate", "Owner operators", "Fleets", "New venture", "Cargo", "Long haul"],
+    faqs: [
+      {
+        q: "Can Nevada new ventures get help with filings?",
+        a: "Yes. We help explain insurance-related filing needs and what information is usually required.",
+      },
+      {
+        q: "Do Nevada fleets need separate cargo coverage?",
+        a: "Many trucking operations need motor truck cargo coverage based on contracts and freight value. Limits vary by load type.",
+      },
+    ],
+  },
+  {
+    slug: "oregon",
+    name: "Oregon",
+    abbreviation: "OR",
+    headline: "Oregon trucking insurance with clear market follow-up.",
+    description:
+      "Oregon truckers may run local, regional, or interstate routes through the Pacific Northwest and beyond. Supreme helps organize coverage needs around the actual operation.",
+    marketNotes: [
+      "Works for owner-operators, fleets, cargo, physical damage, and new authorities.",
+      "Regional lanes, driver profile, and cargo type affect market appetite.",
+      "We help keep the process practical and easy to follow.",
+    ],
+    operationFocus: ["Pacific Northwest", "Regional", "Owner operators", "Fleets", "Cargo", "Physical damage"],
+    faqs: [
+      {
+        q: "Can you help Oregon owner-operators?",
+        a: "Yes. We help solo truckers understand primary liability, cargo, physical damage, and non-trucking coverage options.",
+      },
+      {
+        q: "Do Oregon fleets need renewal shopping early?",
+        a: "Yes. Starting early gives more time to gather loss runs, vehicle schedules, driver information, and current policy details.",
+      },
+    ],
+  },
+  {
+    slug: "washington",
+    name: "Washington",
+    abbreviation: "WA",
+    headline: "Washington trucking insurance from a focused trucking agency.",
+    description:
+      "Washington trucking operations can involve ports, regional delivery, interstate lanes, and Pacific Northwest weather exposure. We help truckers build a clean insurance file for market review.",
+    marketNotes: [
+      "Good fit for owner-operators, small fleets, cargo, physical damage, and new ventures.",
+      "Port work, reefer, general freight, and interstate lanes should be described clearly.",
+      "We provide direct follow-up as markets respond.",
+    ],
+    operationFocus: ["Port work", "Pacific Northwest", "Owner operators", "Fleets", "New authority", "Cargo"],
+    faqs: [
+      {
+        q: "Do you work with Washington trucking companies?",
+        a: "Yes. Supreme supports Washington trucking operations, including owner-operators, fleets, and new authority accounts where markets are available.",
+      },
+      {
+        q: "What should Washington truckers prepare for a quote?",
+        a: "DOT or MC number, vehicle schedule, drivers, garaging, cargo type, radius, current policy, and loss runs if available.",
+      },
+    ],
+  },
+];
+
+export const featuredStatePages = statePages.slice(0, 12);
+
+export function getStatePage(slug: string) {
+  return statePages.find((state) => state.slug === slug);
+}
