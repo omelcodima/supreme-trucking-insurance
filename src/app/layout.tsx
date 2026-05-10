@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import Analytics from "@/components/Analytics";
 import BrandLogo from "../components/BrandLogo";
 import { featuredStatePages } from "@/lib/statePages";
 import "./globals.css";
@@ -95,6 +96,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <Analytics />
         {/* STICKY NAV */}
         <header className="sticky top-0 z-50 bg-[#F7F3EC]/95 border-b border-[#E7DED2] shadow-none backdrop-blur">
           <nav className="max-w-7xl mx-auto px-4 py-2">

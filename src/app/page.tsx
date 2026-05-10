@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import TrustSignals from "@/components/TrustSignals";
 import { featuredBlogPosts } from "@/lib/blogPosts";
 import { featuredStatePages } from "@/lib/statePages";
 
@@ -209,6 +210,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <TrustSignals />
 
       <section className="section-soft warm-divider py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">

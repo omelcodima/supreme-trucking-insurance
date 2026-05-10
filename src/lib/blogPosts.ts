@@ -194,6 +194,186 @@ export const blogPosts: BlogPost[] = [
     takeaway:
       "A new authority should start with a clear DOT or MC profile, realistic operation details, and a coverage plan before taking loads.",
   },
+  {
+    slug: "truck-insurance-for-new-authority",
+    title: "Truck Insurance for New Authority",
+    description:
+      "What new trucking authorities should know about filings, liability, cargo, physical damage, and getting ready for carrier review.",
+    category: "New Authority",
+    date: "2026-05-10",
+    readTime: "5 min read",
+    intro:
+      "New authority truck insurance is one of the most common places where truckers lose time. The insurance file needs to match the DOT profile, planned cargo, radius, driver history, and required filings.",
+    sections: [
+      {
+        heading: "The policy has to match the authority",
+        body: [
+          "A new authority usually needs coverage before it can move freight under its own numbers. The exact setup depends on the operation, filings, vehicle schedule, cargo, and whether the company is truly ready to haul.",
+          "Markets want to understand the plan. If the application says local general freight but the DOT profile or customer plan suggests interstate long-haul, the file becomes harder to place.",
+        ],
+      },
+      {
+        heading: "What new ventures should prepare",
+        body: [
+          "Have the DOT or MC number, garaging address, driver details, truck and trailer information, cargo type, desired start date, and planned radius ready.",
+          "If you have prior trucking experience, explain it. Even if the business is new, driver and owner experience can help the account make more sense to underwriting.",
+        ],
+      },
+      {
+        heading: "Common coverage pieces",
+        body: [
+          "New authorities often ask about primary liability, motor truck cargo, physical damage, general liability, trailer interchange or non-owned trailer, and filings.",
+          "Not every operation needs the same package. The right structure depends on freight, contracts, radius, and what brokers or shippers require.",
+        ],
+      },
+    ],
+    takeaway:
+      "The faster path for a new authority is a complete, consistent insurance file before the first load is booked.",
+  },
+  {
+    slug: "fleet-insurance-for-11-to-25-trucks",
+    title: "Fleet Insurance for 11 to 25 Trucks",
+    description:
+      "A practical guide for small and growing trucking fleets with 11 to 25 trucks preparing for insurance review or renewal.",
+    category: "Fleets",
+    date: "2026-05-10",
+    readTime: "5 min read",
+    intro:
+      "Once a trucking company grows into 11 to 25 trucks, insurance becomes less about a single unit and more about the quality of the whole operation.",
+    sections: [
+      {
+        heading: "Fleet files need structure",
+        body: [
+          "A fleet underwriter wants to see accurate vehicle schedules, driver lists, garaging, commodities, radius, prior policies, and loss runs. Missing pieces make the account harder to evaluate.",
+          "If the fleet has grown quickly, the insurance file should explain how safety, hiring, dispatch, and maintenance are being handled.",
+        ],
+      },
+      {
+        heading: "Renewal timing matters",
+        body: [
+          "For fleets, renewal shopping should start early. Markets may need time to review loss runs, driver history, vehicle values, and coverage forms.",
+          "The closer it gets to expiration, the less room there is to correct documents, explain losses, or compare structure properly.",
+        ],
+      },
+      {
+        heading: "What can improve the presentation",
+        body: [
+          "Clean schedules, current driver data, clear cargo descriptions, safety notes, and complete loss information help tell a better underwriting story.",
+          "A fleet does not need a flashy presentation. It needs an accurate, complete, easy-to-review file.",
+        ],
+      },
+    ],
+    takeaway:
+      "For fleets with 11 to 25 trucks, the quality of the insurance submission can directly affect how seriously markets review the account.",
+  },
+  {
+    slug: "cargo-insurance-for-reefer-loads",
+    title: "Cargo Insurance for Reefer Loads",
+    description:
+      "What refrigerated trucking operations should know about reefer cargo exposure, spoilage concerns, and cargo limit conversations.",
+    category: "Cargo",
+    date: "2026-05-10",
+    readTime: "4 min read",
+    intro:
+      "Reefer cargo is different from dry freight because temperature control can create extra questions for brokers, shippers, and insurance markets.",
+    sections: [
+      {
+        heading: "Refrigerated freight needs detail",
+        body: [
+          "Markets may ask what commodities are hauled, typical load value, whether temperature-sensitive goods are involved, and what contracts require.",
+          "A vague description like freight is usually not enough for reefer operations. Food, produce, pharmaceuticals, frozen goods, and mixed refrigerated cargo can create different questions.",
+        ],
+      },
+      {
+        heading: "Spoilage and exclusions matter",
+        body: [
+          "Not every cargo form handles temperature-related loss the same way. Truckers should understand whether spoilage, reefer breakdown, or temperature variation is addressed in the coverage being offered.",
+          "The policy language matters. A broker requirement for cargo coverage does not automatically mean every refrigerated loss scenario is covered.",
+        ],
+      },
+      {
+        heading: "What to send for review",
+        body: [
+          "Send the commodity list, requested cargo limit, reefer details, radius, garaging, loss runs, and any contract wording that mentions cargo requirements.",
+          "If loads vary by season, explain that too. It can help underwriters understand the operation more accurately.",
+        ],
+      },
+    ],
+    takeaway:
+      "Reefer cargo coverage should be discussed with specific commodities, limits, contracts, and temperature exposure in mind.",
+  },
+  {
+    slug: "owner-operator-insurance-cost",
+    title: "Owner Operator Insurance Cost",
+    description:
+      "Why owner-operator truck insurance cost varies and what solo truckers can prepare before requesting a quote.",
+    category: "Owner Operators",
+    date: "2026-05-10",
+    readTime: "4 min read",
+    intro:
+      "Owner-operator insurance cost depends on more than the truck. Markets look at authority status, cargo, radius, garaging, driver history, vehicle value, and prior coverage.",
+    sections: [
+      {
+        heading: "Leased or own authority",
+        body: [
+          "An owner-operator leased to a motor carrier may need a different coverage setup than an owner-operator running under their own authority.",
+          "That difference can affect whether the conversation is about bobtail, non-trucking liability, physical damage, cargo, or primary liability.",
+        ],
+      },
+      {
+        heading: "The details that move pricing",
+        body: [
+          "Driver experience, violations, garaging state, radius, cargo type, unit value, and loss history can all change the quote.",
+          "New authority can also affect market appetite because the operation has less history for underwriters to review.",
+        ],
+      },
+      {
+        heading: "How to avoid delays",
+        body: [
+          "Have your DOT or MC number, driver license details, VIN, vehicle value, garaging, cargo type, and planned radius ready.",
+          "If you already have coverage, send the current declarations page and loss runs if available.",
+        ],
+      },
+    ],
+    takeaway:
+      "Owner-operator insurance cost is easier to discuss when the agency knows whether you are leased, independent, local, regional, or long-haul.",
+  },
+  {
+    slug: "truck-insurance-requirements-by-state",
+    title: "Truck Insurance Requirements by State",
+    description:
+      "A practical overview of why state, filings, cargo, radius, and authority type affect commercial truck insurance requirements.",
+    category: "Requirements",
+    date: "2026-05-10",
+    readTime: "5 min read",
+    intro:
+      "Truck insurance requirements can change by state, authority type, cargo, radius, and contract. That is why a state-specific conversation is often more useful than a generic quote request.",
+    sections: [
+      {
+        heading: "State and federal requirements are not the same thing",
+        body: [
+          "A trucking company may have federal filing needs, state-specific requirements, broker requirements, and lender requirements all at once.",
+          "The coverage conversation should separate what is legally required from what is contractually required by brokers, shippers, or finance companies.",
+        ],
+      },
+      {
+        heading: "Cargo and radius change the conversation",
+        body: [
+          "General freight, reefer, flatbed, car hauling, hot shot, and higher-value freight can all create different underwriting questions.",
+          "Local operations and interstate operations may also be viewed differently because radius affects exposure.",
+        ],
+      },
+      {
+        heading: "Use state pages as a starting point",
+        body: [
+          "State pages help organize the conversation around garaging, lanes, common freight, and market fit.",
+          "The final policy still depends on underwriting, filings, drivers, loss history, and the actual operation.",
+        ],
+      },
+    ],
+    takeaway:
+      "Truck insurance requirements should be reviewed by state and operation, then matched to the filings and contracts the trucking company actually needs.",
+  },
 ];
 
 export const featuredBlogPosts = blogPosts.slice(0, 3);
