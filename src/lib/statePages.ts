@@ -9,7 +9,7 @@ export type StatePage = {
   faqs: { q: string; a: string }[];
 };
 
-export const statePages: StatePage[] = [
+const priorityStatePages: StatePage[] = [
   {
     slug: "texas",
     name: "Texas",
@@ -299,6 +299,75 @@ export const statePages: StatePage[] = [
     ],
   },
 ];
+
+const additionalStates = [
+  ["alabama", "Alabama", "AL", "Southeast freight routes, regional hauls, local delivery, and interstate operations."],
+  ["arkansas", "Arkansas", "AR", "regional freight, agricultural lanes, dry van, reefer, and cross-state trucking operations."],
+  ["colorado", "Colorado", "CO", "mountain routes, regional freight, interstate lanes, construction hauls, and growing fleet operations."],
+  ["connecticut", "Connecticut", "CT", "Northeast regional routes, local delivery, interstate freight, and compact-radius trucking operations."],
+  ["delaware", "Delaware", "DE", "Mid-Atlantic freight routes, local delivery, port-adjacent work, and interstate trucking operations."],
+  ["idaho", "Idaho", "ID", "regional freight, agriculture, long-haul lanes, and Pacific Northwest trucking operations."],
+  ["indiana", "Indiana", "IN", "Midwest freight lanes, manufacturing routes, interstate trucking, and fleet operations."],
+  ["iowa", "Iowa", "IA", "agriculture, general freight, regional lanes, and Midwest trucking operations."],
+  ["kansas", "Kansas", "KS", "central freight corridors, agricultural hauls, general freight, and interstate operations."],
+  ["kentucky", "Kentucky", "KY", "regional lanes, manufacturing freight, interstate operations, and growing fleet accounts."],
+  ["louisiana", "Louisiana", "LA", "port-adjacent freight, regional hauls, oilfield support, cargo, and interstate trucking."],
+  ["maine", "Maine", "ME", "Northeast regional routes, local delivery, forestry-related hauls, and interstate trucking."],
+  ["maryland", "Maryland", "MD", "Mid-Atlantic freight, local delivery, port-adjacent trucking, and interstate lanes."],
+  ["massachusetts", "Massachusetts", "MA", "Northeast freight routes, local delivery, regional trucking, and cargo operations."],
+  ["michigan", "Michigan", "MI", "Great Lakes freight, manufacturing routes, regional carriers, and fleet operations."],
+  ["minnesota", "Minnesota", "MN", "upper Midwest routes, regional freight, reefer, general freight, and fleet accounts."],
+  ["mississippi", "Mississippi", "MS", "Southeast regional freight, agricultural routes, general freight, and local trucking."],
+  ["missouri", "Missouri", "MO", "central freight lanes, regional carriers, interstate trucking, and fleet renewals."],
+  ["montana", "Montana", "MT", "long-haul routes, rural garaging, agricultural freight, and interstate operations."],
+  ["nebraska", "Nebraska", "NE", "central interstate routes, agricultural freight, general freight, and regional operations."],
+  ["new-hampshire", "New Hampshire", "NH", "Northeast regional routes, local delivery, interstate freight, and owner-operator accounts."],
+  ["new-jersey", "New Jersey", "NJ", "port-adjacent freight, dense local delivery, interstate lanes, and cargo requirements."],
+  ["new-mexico", "New Mexico", "NM", "Southwest interstate lanes, long-haul freight, regional routes, and owner-operator accounts."],
+  ["new-york", "New York", "NY", "Northeast freight routes, local delivery, regional carriers, and interstate trucking operations."],
+  ["north-dakota", "North Dakota", "ND", "energy-related routes, agricultural freight, long-haul lanes, and regional carriers."],
+  ["oklahoma", "Oklahoma", "OK", "central freight corridors, oilfield support, general freight, and interstate operations."],
+  ["rhode-island", "Rhode Island", "RI", "Northeast regional trucking, local delivery, cargo, and interstate routes."],
+  ["south-carolina", "South Carolina", "SC", "Southeast freight, port-adjacent trucking, regional lanes, and growing fleet operations."],
+  ["south-dakota", "South Dakota", "SD", "agricultural freight, long-haul routes, regional carriers, and rural garaging."],
+  ["tennessee", "Tennessee", "TN", "Southeast and Midwest freight lanes, logistics hubs, regional fleets, and interstate trucking."],
+  ["utah", "Utah", "UT", "mountain-west routes, long-haul lanes, regional carriers, and interstate freight."],
+  ["vermont", "Vermont", "VT", "Northeast regional routes, local delivery, rural trucking, and owner-operator accounts."],
+  ["virginia", "Virginia", "VA", "Mid-Atlantic freight, port-adjacent operations, regional lanes, and interstate trucking."],
+  ["west-virginia", "West Virginia", "WV", "Appalachian routes, local hauling, regional freight, and trucking operations with varied terrain."],
+  ["wisconsin", "Wisconsin", "WI", "upper Midwest freight, dairy and refrigerated loads, general freight, and fleet accounts."],
+  ["wyoming", "Wyoming", "WY", "long-haul lanes, energy-related freight, rural garaging, and interstate trucking operations."],
+] as const;
+
+function createStatePage([slug, name, abbreviation, freightProfile]: (typeof additionalStates)[number]): StatePage {
+  return {
+    slug,
+    name,
+    abbreviation,
+    headline: `${name} trucking insurance for owner-operators, fleets, and new authorities.`,
+    description: `${name} trucking operations can involve ${freightProfile} Supreme helps organize the insurance file around DOT details, drivers, vehicles, cargo, radius, filings, and carrier market appetite.`,
+    marketNotes: [
+      `Good fit for ${name} owner-operators, fleets, new ventures, cargo, and physical damage conversations where markets are available.`,
+      "Carrier appetite can change based on DOT profile, drivers, garaging, radius, cargo type, loss history, and prior insurance.",
+      "We help prepare a cleaner submission so trucking-focused markets can review the account with fewer missing details.",
+    ],
+    operationFocus: ["Owner operators", "Fleets", "New authority", "Cargo", "Physical damage", "Regional"],
+    faqs: [
+      {
+        q: `Can you help ${name} trucking companies?`,
+        a: `Yes, where licensed and where markets are available. We help ${name} truckers review liability, cargo, physical damage, filings, and the information needed for carrier review.`,
+      },
+      {
+        q: `What should ${name} truckers prepare for a quote?`,
+        a: "DOT or MC number, vehicle schedule, drivers, garaging address, cargo type, radius, current policy, and loss runs if available.",
+      },
+    ],
+  };
+}
+
+const additionalStatePages = additionalStates.map(createStatePage);
+
+export const statePages: StatePage[] = [...priorityStatePages, ...additionalStatePages];
 
 export const featuredStatePages = statePages.slice(0, 12);
 

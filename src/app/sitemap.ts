@@ -18,6 +18,7 @@ const staticRoutes = [
   "/owner-operator",
   "/privacy-policy",
   "/quote",
+  "/trucking-insurance",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -233,6 +233,12 @@ export default function RootLayout({
                   </Link>
                 ))}
               </div>
+              <Link
+                href="/trucking-insurance"
+                className="mt-3 inline-block text-sm font-bold text-[#2F261C] transition-colors hover:text-[#f97316]"
+              >
+                All state pages →
+              </Link>
             </div>
 
             {/* Contact */}

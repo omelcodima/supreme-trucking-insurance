@@ -220,6 +220,12 @@ export default function Home() {
               <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
                 Supreme works with trucking operations in most states where licensed. These pages help truckers find the right starting point by state, operation, cargo, and filings.
               </p>
+              <Link
+                href="/trucking-insurance"
+                className="mt-6 inline-flex rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-5 py-3 text-sm font-extrabold text-[#2F261C] transition-colors hover:border-[#f97316] hover:text-[#f97316]"
+              >
+                View all state pages
+              </Link>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {featuredStatePages.map((state) => (
