@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "@/lib/blogPosts";
+import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Trucking Insurance Blog | Supreme Trucking Insurance",
@@ -9,11 +10,38 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/blog",
   },
+  openGraph: {
+    type: "website",
+    url: absoluteUrl("/blog"),
+    siteName,
+    title: "Trucking Insurance Blog",
+    description:
+      "Practical trucking insurance guides for owner-operators, fleets, new authorities, cargo coverage, and pricing.",
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+  },
 };
 
 export default function BlogIndexPage() {
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Trucking Insurance Guides",
+    itemListElement: blogPosts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: post.title,
+      url: absoluteUrl(`/blog/${post.slug}`),
+    })),
+  };
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+  ]);
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(itemListJsonLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)} />
       <section className="section-shell warm-divider">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
           <span className="eyebrow mb-5">Trucking insurance guides</span>

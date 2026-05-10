@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { statePages } from "@/lib/statePages";
 
 export const metadata: Metadata = {
@@ -9,11 +10,38 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/trucking-insurance",
   },
+  openGraph: {
+    type: "website",
+    url: absoluteUrl("/trucking-insurance"),
+    siteName,
+    title: "Trucking Insurance by State",
+    description:
+      "Find commercial trucking insurance pages by state for owner-operators, fleets, new authorities, cargo, and physical damage.",
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+  },
 };
 
 export default function TruckingInsuranceStatesPage() {
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Trucking Insurance by State",
+    itemListElement: statePages.map((state, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: `${state.name} Trucking Insurance`,
+      url: absoluteUrl(`/trucking-insurance/${state.slug}`),
+    })),
+  };
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Trucking Insurance by State", path: "/trucking-insurance" },
+  ]);
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(itemListJsonLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)} />
       <section className="section-shell warm-divider">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
           <span className="eyebrow mb-5">Trucking insurance by state</span>

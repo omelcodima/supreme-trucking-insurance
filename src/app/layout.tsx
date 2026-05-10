@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Link from "next/link";
 import Analytics from "@/components/Analytics";
 import BrandLogo from "../components/BrandLogo";
+import { defaultOgImage, siteName, siteUrl } from "@/lib/seo";
 import { featuredStatePages } from "@/lib/statePages";
 import "./globals.css";
 
@@ -78,9 +79,37 @@ const socialLinks = [
 ];
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
   description:
     "Fast quotes. Multiple carriers. Owner operators, fleets & new authority. Licensed in 48 states. Call (360) 936-7196.",
+  keywords: [
+    "trucking insurance",
+    "commercial truck insurance",
+    "owner operator insurance",
+    "fleet truck insurance",
+    "new authority truck insurance",
+    "motor truck cargo insurance",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: "Supreme Trucking Insurance",
+    description:
+      "Commercial trucking insurance for owner-operators, fleets, new authority, cargo, and physical damage.",
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Supreme Trucking Insurance",
+    description:
+      "Commercial trucking insurance for owner-operators, fleets, new authority, cargo, and physical damage.",
+    images: [defaultOgImage],
+  },
   icons: {
     icon: "/favicon.svg",
   },

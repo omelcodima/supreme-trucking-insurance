@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
 import { featuredStatePages, getStatePage, statePages } from "@/lib/statePages";
 
 type Props = {
@@ -25,6 +26,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: `/trucking-insurance/${state.slug}`,
     },
+    openGraph: {
+      type: "website",
+      url: absoluteUrl(`/trucking-insurance/${state.slug}`),
+      siteName,
+      title: `${state.name} Trucking Insurance`,
+      description: state.description,
+      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${state.name} Trucking Insurance`,
+      description: state.description,
+      images: [defaultOgImage],
+    },
   };
 }
 
@@ -37,9 +52,36 @@ export default async function StateInsurancePage({ params }: Props) {
   }
 
   const relatedStates = featuredStatePages.filter((item) => item.slug !== state.slug).slice(0, 5);
+  const pageUrl = absoluteUrl(`/trucking-insurance/${state.slug}`);
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `${state.name} Trucking Insurance`,
+    serviceType: "Commercial trucking insurance",
+    provider: {
+      "@type": "InsuranceAgency",
+      name: siteName,
+      url: "https://supremetruckinginsurance.com",
+      telephone: "+1-360-936-7196",
+    },
+    areaServed: {
+      "@type": "State",
+      name: state.name,
+    },
+    url: pageUrl,
+    description: state.description,
+  };
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Trucking Insurance by State", path: "/trucking-insurance" },
+    { name: `${state.name} Trucking Insurance`, path: `/trucking-insurance/${state.slug}` },
+  ]);
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(serviceJsonLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(faqJsonLd(state.faqs))} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)} />
       <section className="section-shell warm-divider">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:py-20 lg:grid-cols-[1fr_0.85fr]">
           <div>

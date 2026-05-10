@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getBlogPost } from "@/lib/blogPosts";
+import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -24,6 +25,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.description,
     alternates: {
       canonical: `/blog/${post.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      url: absoluteUrl(`/blog/${post.slug}`),
+      siteName,
+      title: post.title,
+      description: post.description,
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [defaultOgImage],
     },
   };
 }
@@ -57,14 +74,23 @@ export default async function BlogPostPage({ params }: Props) {
         url: "https://supremetruckinginsurance.com/logo.png",
       },
     },
-    mainEntityOfPage: `https://supremetruckinginsurance.com/blog/${post.slug}`,
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
   };
+  const breadcrumbs = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]);
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={jsonLdScript(articleJsonLd)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)}
       />
       <article className="section-shell warm-divider">
         <div className="mx-auto max-w-4xl px-4 py-16 md:py-20">
