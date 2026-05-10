@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts, getBlogPost } from "@/lib/blogPosts";
+import { blogPosts } from "@/lib/blogPosts";
+import { getAllBlogPosts, getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
@@ -14,7 +17,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getAnyBlogPost(slug);
 
   if (!post) {
     return {};
@@ -47,13 +50,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getAnyBlogPost(slug);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = blogPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
+  const allPosts = await getAllBlogPosts();
+  const relatedPosts = allPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -138,6 +142,22 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.takeaway}
               </p>
             </div>
+
+            {post.sourceUrl ? (
+              <div className="mt-5 rounded-[1.25rem] border border-[#DED3C4] bg-[#FFFDF9] p-5">
+                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
+                  Source
+                </p>
+                <a
+                  href={post.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 block text-sm font-bold leading-6 text-[#2F261C] transition-colors hover:text-[#f97316]"
+                >
+                  {post.sourceTitle || post.sourceUrl}
+                </a>
+              </div>
+            ) : null}
           </div>
 
           <aside className="space-y-4">

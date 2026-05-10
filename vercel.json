@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/blog/auto-draft",
+      "schedule": "0 16 * * 1"
+    }
+  ]
+}

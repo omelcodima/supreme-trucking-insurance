@@ -34,3 +34,40 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Automatic trucking blog drafts
+
+The site has a weekly Vercel Cron job at `/api/blog/auto-draft`. It checks FMCSA-related Federal Register items, optionally checks RSS feeds in `BLOG_NEWS_RSS_FEEDS`, asks OpenAI to create an original trucking-insurance draft, and saves it to Airtable.
+
+Required environment variables:
+
+```bash
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.2
+AIRTABLE_API_KEY=
+AIRTABLE_BASE_ID=
+AIRTABLE_BLOG_TABLE_NAME=Blog Posts
+BLOG_CRON_SECRET=
+```
+
+Recommended Airtable fields for the `Blog Posts` table:
+
+```text
+Status
+Slug
+Title
+Description
+Category
+Date
+Read Time
+Intro
+Sections JSON
+Takeaway
+Source Title
+Source URL
+Source Published At
+Google Business Post
+Social Post
+```
+
+By default, new AI posts are saved as `Draft`. Set `BLOG_AUTO_PUBLISH=true` only if you want Vercel Cron to publish new AI-generated posts automatically.

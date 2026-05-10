@@ -5,6 +5,11 @@ export type BlogPost = {
   category: string;
   date: string;
   readTime: string;
+  sourceTitle?: string;
+  sourceUrl?: string;
+  sourcePublishedAt?: string;
+  googleBusinessPost?: string;
+  socialPost?: string;
   intro: string;
   sections: {
     heading: string;

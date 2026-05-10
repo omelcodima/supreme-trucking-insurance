@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blogPosts";
+import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { statePages } from "@/lib/statePages";
 
 const baseUrl = "https://supremetruckinginsurance.com";
@@ -23,8 +23,9 @@ const staticRoutes = [
   "/trucking-insurance",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const blogPosts = await getAllBlogPosts();
 
   return [
     ...staticRoutes.map((route) => ({

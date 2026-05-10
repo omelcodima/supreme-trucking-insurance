@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { blogPosts } from "@/lib/blogPosts";
+import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Trucking Insurance Blog | Supreme Trucking Insurance",
@@ -21,7 +23,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogIndexPage() {
+export default async function BlogIndexPage() {
+  const blogPosts = await getAllBlogPosts();
+
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
