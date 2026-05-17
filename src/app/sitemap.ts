@@ -7,6 +7,7 @@ const baseUrl = "https://supremetruckinginsurance.com";
 const staticRoutes = [
   "",
   "/about",
+  "/articles",
   "/blog",
   "/careers",
   "/cargo",
