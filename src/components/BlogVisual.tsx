@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type BlogVisualProps = {
   title: string;
   category: string;
@@ -5,96 +7,91 @@ type BlogVisualProps = {
   variant?: "hero" | "card";
 };
 
-function getInitials(value: string) {
-  return value
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || "ST";
-}
-
-function getTheme(category: string) {
+function getVisual(category: string) {
   const normalized = category.toLowerCase();
 
-  if (normalized.includes("safety") || normalized.includes("fmcsa")) {
+  if (normalized.includes("cargo") || normalized.includes("reefer")) {
     return {
-      label: "FMCSA WATCH",
-      accent: "from-orange-500 via-amber-400 to-stone-200",
-      plate: "bg-orange-500",
-    };
-  }
-
-  if (normalized.includes("cargo")) {
-    return {
-      label: "CARGO NOTE",
-      accent: "from-sky-500 via-orange-400 to-stone-200",
-      plate: "bg-sky-700",
+      image: "/images/cargo-card-v2.jpg",
+      label: "Cargo coverage brief",
+      accent: "from-sky-500 to-orange-500",
     };
   }
 
   if (normalized.includes("fleet")) {
     return {
-      label: "FLEET BRIEF",
-      accent: "from-stone-700 via-orange-500 to-amber-200",
-      plate: "bg-stone-800",
+      image: "/images/fleet-card-v2.jpg",
+      label: "Fleet insurance update",
+      accent: "from-stone-800 to-orange-500",
+    };
+  }
+
+  if (normalized.includes("new authority") || normalized.includes("authority")) {
+    return {
+      image: "/images/new-authority-card-v2.jpg",
+      label: "New authority watch",
+      accent: "from-orange-600 to-amber-400",
+    };
+  }
+
+  if (normalized.includes("owner")) {
+    return {
+      image: "/images/owner-operator-card-v2.jpg",
+      label: "Owner-operator insight",
+      accent: "from-orange-500 to-stone-800",
     };
   }
 
   return {
-    label: "TRUCKING NEWS",
-    accent: "from-[#2F261C] via-[#f97316] to-[#F4D7A1]",
-    plate: "bg-[#2F261C]",
+    image: "/images/highway-premium.jpg",
+    label: "Trucking insurance news",
+    accent: "from-[#f97316] to-[#2F261C]",
   };
 }
 
 export function BlogVisual({ title, category, sourceName, variant = "card" }: BlogVisualProps) {
-  const theme = getTheme(category);
+  const visual = getVisual(category);
   const isHero = variant === "hero";
 
   return (
     <div
-      className={`relative isolate overflow-hidden rounded-[1.35rem] border border-white/40 bg-[#2F261C] shadow-[0_24px_70px_rgba(47,38,28,0.22)] ${
-        isHero ? "min-h-[310px] md:min-h-[390px]" : "min-h-[210px]"
+      className={`group/visual relative isolate overflow-hidden rounded-[1.35rem] border border-white/60 bg-[#2F261C] shadow-[0_24px_70px_rgba(47,38,28,0.18)] ${
+        isHero ? "min-h-[320px] md:min-h-[430px]" : "min-h-[230px]"
       }`}
-      aria-label={`Editorial visual for ${title}`}
+      aria-label={`Editorial image for ${title}`}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${theme.accent} opacity-95`} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.55),transparent_28%),radial-gradient(circle_at_78%_22%,rgba(255,255,255,0.18),transparent_24%),linear-gradient(115deg,rgba(47,38,28,0.05),rgba(47,38,28,0.55))]" />
-      <div className="absolute -left-12 bottom-9 h-28 w-[120%] rotate-[-6deg] rounded-full bg-[#2F261C]/80 shadow-2xl" />
-      <div className="absolute -left-10 bottom-16 h-2 w-[115%] rotate-[-6deg] bg-white/25" />
-      <div className="absolute -left-10 bottom-7 h-2 w-[115%] rotate-[-6deg] bg-white/15" />
-
-      <div className="absolute bottom-20 left-[12%] h-16 w-44 rounded-xl bg-[#FFF7EA] shadow-[0_18px_35px_rgba(0,0,0,0.22)] md:h-20 md:w-56">
-        <div className="absolute -left-8 bottom-0 h-12 w-16 rounded-l-full bg-[#FFF7EA]" />
-        <div className="absolute right-5 top-4 h-8 w-12 rounded-md bg-sky-200/80" />
-        <div className="absolute bottom-[-10px] left-8 h-8 w-8 rounded-full border-[6px] border-[#2F261C] bg-stone-500" />
-        <div className="absolute bottom-[-10px] right-8 h-8 w-8 rounded-full border-[6px] border-[#2F261C] bg-stone-500" />
-      </div>
-
-      <div className="absolute right-5 top-5 grid h-20 w-20 place-items-center rounded-2xl border border-white/45 bg-white/20 text-xl font-black text-white shadow-lg backdrop-blur md:right-7 md:top-7 md:h-24 md:w-24 md:text-2xl">
-        {getInitials(category)}
-      </div>
+      <Image
+        src={visual.image}
+        alt="Semi truck on highway for Supreme Trucking Insurance article"
+        fill
+        sizes={isHero ? "(min-width: 768px) 896px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+        className="scale-[1.02] object-cover transition-transform duration-700 group-hover/visual:scale-[1.06]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1f160f]/78 via-[#1f160f]/38 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1f160f]/72 via-transparent to-black/10" />
+      <div className={`absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r ${visual.accent}`} />
 
       <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-7">
-        <div>
-          <span className="inline-flex rounded-full border border-white/40 bg-white/20 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-sm backdrop-blur">
-            {theme.label}
+        <div className="flex items-start justify-between gap-4">
+          <span className="inline-flex rounded-full border border-white/45 bg-white/18 px-3.5 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-md">
+            {visual.label}
+          </span>
+          <span className="rounded-full border border-white/35 bg-white/18 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white/90 backdrop-blur-md">
+            Supreme
           </span>
         </div>
 
-        <div className="max-w-[82%] pt-24 md:pt-32">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-white/75">
-            Supreme Trucking Insurance
+        <div className={`${isHero ? "max-w-3xl" : "max-w-[92%]"}`}>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-orange-200">
+            {sourceName ? "Source-informed original brief" : "Trucking insurance insight"}
           </p>
-          <h3 className={`${isHero ? "mt-3 text-3xl md:text-5xl" : "mt-2 text-xl"} max-w-3xl font-black leading-tight text-white drop-shadow-sm`}>
+          <h3
+            className={`mt-2 font-black leading-tight text-white drop-shadow-[0_3px_14px_rgba(0,0,0,0.45)] ${
+              isHero ? "text-3xl md:text-5xl" : "text-xl md:text-2xl"
+            }`}
+          >
             {title}
           </h3>
-          {sourceName ? (
-            <p className="mt-3 max-w-xl text-xs font-bold uppercase tracking-[0.12em] text-white/70">
-              Source-informed original brief
-            </p>
-          ) : null}
         </div>
       </div>
     </div>
