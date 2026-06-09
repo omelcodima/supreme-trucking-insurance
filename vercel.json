@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/blog/auto-draft",
-      "schedule": "0 16 * * 1"
+      "schedule": "0 16 * * 1,3,5"
     }
   ]
 }

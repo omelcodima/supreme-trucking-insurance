@@ -30,6 +30,11 @@ type GeneratedPost = {
   socialPost: string;
 };
 
+const defaultRssFeeds = [
+  "https://landline.media/feed/",
+  "https://www.ttnews.com/rss.xml",
+];
+
 const federalRegisterUrl =
   "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=federal-motor-carrier-safety-administration&per_page=10&order=newest";
 
@@ -117,10 +122,11 @@ async function getFederalRegisterItems(): Promise<SourceItem[]> {
 }
 
 async function getRssItems(): Promise<SourceItem[]> {
-  const feedUrls = (process.env.BLOG_NEWS_RSS_FEEDS || "")
+  const configuredFeedUrls = (process.env.BLOG_NEWS_RSS_FEEDS || "")
     .split(",")
     .map((url) => url.trim())
     .filter(Boolean);
+  const feedUrls = configuredFeedUrls.length > 0 ? configuredFeedUrls : defaultRssFeeds;
 
   const items = await Promise.all(
     feedUrls.map(async (feedUrl) => {
@@ -159,6 +165,13 @@ async function getRssItems(): Promise<SourceItem[]> {
 function sourceScore(item: SourceItem) {
   const text = `${item.title} ${item.summary}`.toLowerCase();
   const terms = [
+    "breaking",
+    "rate",
+    "rates",
+    "premium",
+    "liability",
+    "lawsuit",
+    "nuclear verdict",
     "motor carrier",
     "commercial motor vehicle",
     "truck",
@@ -172,6 +185,11 @@ function sourceScore(item: SourceItem) {
     "insurance",
     "compliance",
     "fmcsa",
+    "dot",
+    "broker",
+    "freight",
+    "inspection",
+    "out of service",
   ];
 
   return terms.reduce((score, term) => score + (text.includes(term) ? 1 : 0), 0);
@@ -245,8 +263,8 @@ async function generatePost(source: SourceItem): Promise<GeneratedPost> {
     body: JSON.stringify({
       model,
       instructions:
-        "You create original trucking insurance blog drafts for Supreme Trucking Insurance. Do not copy the source text. Do not invent legal requirements. Keep it practical for owner-operators, fleets, and new authorities. Always say the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.",
-      input: `Create one original SEO blog draft from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost. sections must be an array of exactly 3 objects with heading and body. body must have 2 short paragraphs. Avoid quoting the source. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`,
+        "You create original trucking insurance news posts for Supreme Trucking Insurance. The post must sound like it was written by a practical trucking insurance agency, not a generic AI writer and not a copied news article. Do not copy sentences from the source. Do not invent legal requirements, prices, guarantees, same-day promises, or coverage promises. Avoid fake urgency and heavy marketing. Keep it useful for owner-operators, fleets, dispatchers, new authorities, and trucking companies. Connect the news to trucking insurance only where the connection is reasonable: underwriting, filings, safety history, cargo, drivers, inspections, claims, renewals, or carrier appetite. Always include that the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.",
+      input: `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost. sections must be an array of exactly 3 objects with heading and body. body must have 2 short paragraphs. Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. The article should summarize what happened, why trucking companies should care, and what insurance-related documents or questions they should prepare. Avoid quoting the source and do not present copied reporting as our own reporting. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`,
       max_output_tokens: 2200,
     }),
   });
