@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogVisual } from "@/components/BlogVisual";
 import { blogPosts } from "@/lib/blogPosts";
 import { getAllBlogPosts, getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
@@ -113,6 +114,14 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
           <p className="mt-6 text-xl leading-9 text-[#5A4B3B]">{post.intro}</p>
+          <div className="mt-10">
+            <BlogVisual
+              title={post.title}
+              category={post.category}
+              sourceName={post.sourceTitle}
+              variant="hero"
+            />
+          </div>
         </div>
       </article>
 

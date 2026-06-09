@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BlogVisual } from "@/components/BlogVisual";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 
@@ -65,18 +66,21 @@ export default async function BlogIndexPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="card-premium rounded-[1.5rem] p-6 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
+                className="card-premium group overflow-hidden rounded-[1.5rem] p-3 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
               >
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
-                  {post.category} • {post.readTime}
-                </p>
-                <h2 className="mt-3 text-2xl font-black leading-tight text-[#2F261C]">
-                  {post.title}
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{post.description}</p>
-                <span className="mt-5 inline-flex text-sm font-black text-[#2F261C] transition-colors group-hover:text-[#f97316]">
-                  Read guide →
-                </span>
+                <BlogVisual title={post.title} category={post.category} sourceName={post.sourceTitle} />
+                <div className="p-3 pt-5">
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
+                    {post.category} • {post.readTime}
+                  </p>
+                  <h2 className="mt-3 text-2xl font-black leading-tight text-[#2F261C]">
+                    {post.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{post.description}</p>
+                  <span className="mt-5 inline-flex text-sm font-black text-[#2F261C] transition-colors group-hover:text-[#f97316]">
+                    Read guide →
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
