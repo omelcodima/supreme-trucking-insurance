@@ -10,14 +10,6 @@ type BlogVisualProps = {
 function getVisual(category: string) {
   const normalized = category.toLowerCase();
 
-  if (normalized.includes("cargo") || normalized.includes("reefer")) {
-    return {
-      image: "/images/cargo-card-v2.jpg",
-      label: "Cargo coverage",
-      objectPosition: "center",
-    };
-  }
-
   if (normalized.includes("fleet")) {
     return {
       image: "/images/fleet-card-v2.jpg",
@@ -34,18 +26,16 @@ function getVisual(category: string) {
     };
   }
 
-  if (normalized.includes("owner")) {
-    return {
-      image: "/images/owner-operator-card-v2.jpg",
-      label: "Owner-operator",
-      objectPosition: "center",
-    };
-  }
+  const label = normalized.includes("cargo") || normalized.includes("reefer")
+    ? "Cargo coverage"
+    : normalized.includes("owner")
+      ? "Owner-operator"
+      : "Trucking news";
 
   return {
-    image: "/images/highway-premium.jpg",
-    label: "Trucking news",
-    objectPosition: "center",
+    image: "/images/hero-premium.jpg",
+    label,
+    objectPosition: "34% center",
   };
 }
 
