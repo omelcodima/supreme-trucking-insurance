@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 type BlogVisualProps = {
   title: string;
   category: string;
@@ -7,8 +5,26 @@ type BlogVisualProps = {
   variant?: "hero" | "card";
 };
 
-function getVisual(category: string) {
+function getVisual(category: string, title: string) {
   const normalized = category.toLowerCase();
+  const normalizedTitle = title.toLowerCase();
+
+  const isFmcsaOrCompliance =
+    normalized.includes("fmcsa") ||
+    normalizedTitle.includes("fmcsa") ||
+    normalizedTitle.includes("dot") ||
+    normalizedTitle.includes("qualification") ||
+    normalizedTitle.includes("exemption") ||
+    normalizedTitle.includes("safety") ||
+    normalizedTitle.includes("compliance");
+
+  if (isFmcsaOrCompliance) {
+    return {
+      image: "/images/hero-premium.jpg",
+      label: "FMCSA / compliance",
+      objectPosition: "34% center",
+    };
+  }
 
   if (normalized.includes("fleet")) {
     return {
@@ -40,7 +56,7 @@ function getVisual(category: string) {
 }
 
 export function BlogVisual({ title, category, sourceName, variant = "card" }: BlogVisualProps) {
-  const visual = getVisual(category);
+  const visual = getVisual(category, title);
   const isHero = variant === "hero";
 
   return (
@@ -50,18 +66,22 @@ export function BlogVisual({ title, category, sourceName, variant = "card" }: Bl
       }`}
       aria-label={`Editorial image for ${title}`}
     >
-      <Image
-        src={visual.image}
-        alt="Professional semi truck on highway for Supreme Trucking Insurance article"
-        fill
-        sizes={isHero ? "(min-width: 768px) 896px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-        className="scale-[1.01] object-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
-        style={{ objectPosition: visual.objectPosition }}
+      <div
+        className="absolute inset-0 scale-[1.01] bg-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
+        style={{
+          backgroundImage: `url(${visual.image})`,
+          backgroundPosition: visual.objectPosition,
+        }}
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-[#1f160f]/62 via-[#1f160f]/10 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#1f160f]/42 via-transparent to-transparent" />
       <div className="absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r from-[#f97316] via-[#fbbf24] to-white/70" />
+      <div
+        className="absolute bottom-4 right-4 h-20 w-48 rounded-2xl bg-contain bg-center bg-no-repeat opacity-[0.22] drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)] md:h-24 md:w-56"
+        style={{ backgroundImage: "url(/logo.svg)" }}
+        aria-hidden="true"
+      />
 
       <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-7">
         <div className="flex items-start justify-between gap-4">
