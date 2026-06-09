@@ -48,18 +48,31 @@ function parseSections(fields: Record<string, unknown>): BlogPost["sections"] {
 
   if (rawSections) {
     try {
-      const parsed = JSON.parse(rawSections) as BlogPost["sections"];
-      if (
-        Array.isArray(parsed) &&
-        parsed.every(
-          (section) =>
-            section &&
-            typeof section.heading === "string" &&
-            Array.isArray(section.body) &&
-            section.body.every((paragraph) => typeof paragraph === "string"),
-        )
-      ) {
-        return parsed;
+      const parsed = JSON.parse(rawSections) as {
+        heading?: unknown;
+        body?: unknown;
+      }[];
+
+      if (Array.isArray(parsed)) {
+        const sections = parsed
+          .map((section) => {
+            const heading = typeof section?.heading === "string" ? section.heading.trim() : "";
+            const body = Array.isArray(section?.body)
+              ? section.body.filter((paragraph): paragraph is string => typeof paragraph === "string")
+              : typeof section?.body === "string"
+                ? section.body
+                    .split(/\n{2,}/)
+                    .map((paragraph) => paragraph.trim())
+                    .filter(Boolean)
+                : [];
+
+            return { heading, body };
+          })
+          .filter((section) => section.heading && section.body.length);
+
+        if (sections.length > 0) {
+          return sections;
+        }
       }
     } catch {
       // Fall back to section fields below.
