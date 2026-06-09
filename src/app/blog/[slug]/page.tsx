@@ -5,6 +5,7 @@ import { BlogVisual } from "@/components/BlogVisual";
 import { blogPosts } from "@/lib/blogPosts";
 import { getAllBlogPosts, getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
+import { getPostImageAlt, getPostTags, getRelatedServiceLinks } from "@/lib/blogSeo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -26,9 +27,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
+  const tags = getPostTags(post);
+  const imageAltText = getPostImageAlt(post);
+
   return {
     title: `${post.title} | Supreme Trucking Insurance`,
     description: post.description,
+    keywords: tags,
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
@@ -40,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       publishedTime: post.date,
       modifiedTime: post.date,
-      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: imageAltText }],
     },
     twitter: {
       card: "summary_large_image",
@@ -61,12 +66,22 @@ export default async function BlogPostPage({ params }: Props) {
 
   const allPosts = await getAllBlogPosts();
   const relatedPosts = allPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
+  const tags = getPostTags(post);
+  const imageAltText = getPostImageAlt(post);
+  const serviceLinks = getRelatedServiceLinks(post);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.description,
+    image: [defaultOgImage],
+    keywords: tags,
+    articleSection: post.category,
+    about: tags.map((tag) => ({
+      "@type": "Thing",
+      name: tag,
+    })),
     datePublished: post.date,
     dateModified: post.date,
     author: {
@@ -119,11 +134,22 @@ export default async function BlogPostPage({ params }: Props) {
               title={post.title}
               category={post.category}
               sourceName={post.sourceTitle}
+              imageAltText={imageAltText}
               variant="hero"
             />
+          <div className="mt-6 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-[#DED3C4] bg-[#FFFDF9] px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#7B6B59]"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
-      </article>
+        </div>
+        </article>
 
       <section className="section-soft py-14 md:py-18">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1fr_320px]">
@@ -153,6 +179,26 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.takeaway}
               </p>
             </div>
+
+            {serviceLinks.length ? (
+              <div className="mt-5 rounded-[1.25rem] border border-[#F4C08A] bg-[#FFF7ED] p-5">
+                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#9A4D00]">
+                  Related Supreme resources
+                </p>
+                <div className="mt-4 grid gap-3">
+                  {serviceLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-xl border border-orange-200 bg-white/80 p-4 transition-colors hover:border-[#f97316]/60"
+                    >
+                      <p className="text-sm font-black text-[#2F261C]">{link.label}</p>
+                      <p className="mt-1 text-sm leading-6 text-[#5A4B3B]">{link.description}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             {post.sourceUrl ? (
               <div className="mt-5 rounded-[1.25rem] border border-[#DED3C4] bg-[#FFFDF9] p-5">

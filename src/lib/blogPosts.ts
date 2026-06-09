@@ -8,6 +8,8 @@ export type BlogPost = {
   sourceTitle?: string;
   sourceUrl?: string;
   sourcePublishedAt?: string;
+  tags?: string[];
+  imageAltText?: string;
   googleBusinessPost?: string;
   socialPost?: string;
   intro: string;

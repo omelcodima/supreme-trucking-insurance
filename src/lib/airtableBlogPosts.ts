@@ -43,6 +43,22 @@ function stringField(fields: Record<string, unknown>, name: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function stringListField(fields: Record<string, unknown>, name: string) {
+  const value = fields[name];
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
 function parseSections(fields: Record<string, unknown>): BlogPost["sections"] {
   const rawSections = stringField(fields, "Sections JSON");
 
@@ -112,6 +128,8 @@ function recordToBlogPost(record: AirtableRecord): BlogPost | null {
     sourceTitle: stringField(fields, "Source Title") || undefined,
     sourceUrl: stringField(fields, "Source URL") || undefined,
     sourcePublishedAt: stringField(fields, "Source Published At") || undefined,
+    tags: stringListField(fields, "Tags"),
+    imageAltText: stringField(fields, "Image Alt Text") || undefined,
     googleBusinessPost: stringField(fields, "Google Business Post") || undefined,
     socialPost: stringField(fields, "Social Post") || undefined,
     intro,

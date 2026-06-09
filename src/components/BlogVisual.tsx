@@ -2,6 +2,7 @@ type BlogVisualProps = {
   title: string;
   category: string;
   sourceName?: string;
+  imageAltText?: string;
   variant?: "hero" | "card";
 };
 
@@ -55,7 +56,13 @@ function getVisual(category: string, title: string) {
   };
 }
 
-export function BlogVisual({ title, category, sourceName, variant = "card" }: BlogVisualProps) {
+export function BlogVisual({
+  title,
+  category,
+  sourceName,
+  imageAltText,
+  variant = "card",
+}: BlogVisualProps) {
   const visual = getVisual(category, title);
   const isHero = variant === "hero";
 
@@ -64,7 +71,7 @@ export function BlogVisual({ title, category, sourceName, variant = "card" }: Bl
       className={`group/visual relative isolate overflow-hidden rounded-[1.35rem] border border-white/70 bg-[#F7F3EC] shadow-[0_24px_70px_rgba(47,38,28,0.16)] ${
         isHero ? "min-h-[320px] md:min-h-[430px]" : "min-h-[230px]"
       }`}
-      aria-label={`Editorial image for ${title}`}
+      aria-label={imageAltText || `Editorial image for ${title}`}
     >
       <div
         className="absolute inset-0 scale-[1.01] bg-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
