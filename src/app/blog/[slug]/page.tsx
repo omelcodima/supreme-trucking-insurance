@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogVisual } from "@/components/BlogVisual";
+import { SocialShareButtons } from "@/components/SocialShareButtons";
 import { blogPosts } from "@/lib/blogPosts";
 import { getAllBlogPosts, getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
@@ -69,6 +70,7 @@ export default async function BlogPostPage({ params }: Props) {
   const tags = getPostTags(post);
   const imageAltText = getPostImageAlt(post);
   const serviceLinks = getRelatedServiceLinks(post);
+  const articleUrl = absoluteUrl(`/blog/${post.slug}`);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -129,6 +131,12 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
           <p className="mt-6 text-xl leading-9 text-[#5A4B3B]">{post.intro}</p>
+          <SocialShareButtons
+            title={post.title}
+            description={post.description}
+            url={articleUrl}
+            className="mt-8 rounded-[1.25rem] border border-[#DED3C4] bg-[#F7F3EC]/75 p-5"
+          />
           <div className="mt-10">
             <BlogVisual
               title={post.title}
