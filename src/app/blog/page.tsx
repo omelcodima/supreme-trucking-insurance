@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Trucking Insurance Blog | Supreme Trucking Insurance",

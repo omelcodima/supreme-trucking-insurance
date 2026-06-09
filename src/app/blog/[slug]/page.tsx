@@ -9,7 +9,8 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export const revalidate = 3600;
+export const revalidate = 300;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
