@@ -6,54 +6,258 @@ type BlogVisualProps = {
   variant?: "hero" | "card";
 };
 
-function getVisual(category: string, title: string) {
-  const normalized = category.toLowerCase();
-  const normalizedTitle = title.toLowerCase();
+type VisualOption = {
+  image: string;
+  label: string;
+  objectPosition: string;
+  tone: "amber" | "blue" | "copper" | "slate";
+  flip?: boolean;
+};
 
-  const isFmcsaOrCompliance =
-    normalized.includes("fmcsa") ||
-    normalizedTitle.includes("fmcsa") ||
-    normalizedTitle.includes("dot") ||
-    normalizedTitle.includes("qualification") ||
-    normalizedTitle.includes("exemption") ||
-    normalizedTitle.includes("safety") ||
-    normalizedTitle.includes("compliance");
+const complianceVisuals: VisualOption[] = [
+  {
+    image: "/images/highway-premium.jpg",
+    label: "FMCSA / compliance",
+    objectPosition: "center",
+    tone: "blue",
+  },
+  {
+    image: "/images/owner-operator-card-v2.jpg",
+    label: "Driver qualification",
+    objectPosition: "center",
+    tone: "slate",
+  },
+  {
+    image: "/images/fleet-card-v2.jpg",
+    label: "Safety file review",
+    objectPosition: "center",
+    tone: "amber",
+  },
+  {
+    image: "/images/owner-operator-premium.jpg",
+    label: "Driver file check",
+    objectPosition: "center",
+    tone: "copper",
+  },
+];
 
-  if (isFmcsaOrCompliance) {
-    return {
-      image: "/images/hero-premium.jpg",
-      label: "FMCSA / compliance",
-      objectPosition: "34% center",
-    };
-  }
+const truckingNewsVisuals: VisualOption[] = [
+  {
+    image: "/images/highway-premium.jpg",
+    label: "Trucking news",
+    objectPosition: "center",
+    tone: "blue",
+  },
+  {
+    image: "/images/cargo-card-v2.jpg",
+    label: "Freight market",
+    objectPosition: "center",
+    tone: "copper",
+  },
+  {
+    image: "/images/fleet-card-v2.jpg",
+    label: "Carrier update",
+    objectPosition: "center",
+    tone: "amber",
+  },
+  {
+    image: "/images/hero-premium.jpg",
+    label: "Road risk brief",
+    objectPosition: "34% center",
+    tone: "slate",
+    flip: true,
+  },
+];
 
-  if (normalized.includes("fleet")) {
-    return {
+const categoryVisuals: Record<string, VisualOption[]> = {
+  fleet: [
+    {
       image: "/images/fleet-card-v2.jpg",
       label: "Fleet update",
       objectPosition: "center",
-    };
-  }
-
-  if (normalized.includes("new authority") || normalized.includes("authority")) {
-    return {
+      tone: "amber",
+    },
+    {
+      image: "/images/highway-premium.jpg",
+      label: "Fleet operations",
+      objectPosition: "center",
+      tone: "blue",
+    },
+  ],
+  cargo: [
+    {
+      image: "/images/cargo-card-v2.jpg",
+      label: "Cargo coverage",
+      objectPosition: "center",
+      tone: "copper",
+    },
+    {
+      image: "/images/hero-epic-american.png",
+      label: "Load risk",
+      objectPosition: "34% center",
+      tone: "amber",
+    },
+  ],
+  authority: [
+    {
       image: "/images/new-authority-card-v2.jpg",
       label: "New authority",
       objectPosition: "center",
-    };
+      tone: "amber",
+    },
+    {
+      image: "/images/owner-operator-card-v2.jpg",
+      label: "First truck file",
+      objectPosition: "center",
+      tone: "slate",
+    },
+  ],
+  owner: [
+    {
+      image: "/images/owner-operator-card-v2.jpg",
+      label: "Owner-operator",
+      objectPosition: "center",
+      tone: "slate",
+    },
+    {
+      image: "/images/owner-operator-premium.jpg",
+      label: "Solo trucker file",
+      objectPosition: "center",
+      tone: "blue",
+    },
+  ],
+  pricing: [
+    {
+      image: "/images/owner-operator-premium.jpg",
+      label: "Quote prep",
+      objectPosition: "center",
+      tone: "blue",
+    },
+    {
+      image: "/images/highway-premium.jpg",
+      label: "Premium drivers",
+      objectPosition: "center",
+      tone: "amber",
+      flip: true,
+    },
+  ],
+  requirements: [
+    {
+      image: "/images/highway-premium.jpg",
+      label: "Coverage requirements",
+      objectPosition: "center",
+      tone: "blue",
+    },
+    {
+      image: "/images/hero-epic-american.png",
+      label: "Filing checklist",
+      objectPosition: "34% center",
+      tone: "copper",
+    },
+  ],
+};
+
+function titleHash(value: string) {
+  return [...value].reduce((hash, character) => {
+    return (hash * 31 + character.charCodeAt(0)) >>> 0;
+  }, 7);
+}
+
+function pickVisual(options: VisualOption[], title: string) {
+  return options[titleHash(title) % options.length];
+}
+
+function getVisual(category: string, title: string, sourceName?: string) {
+  const normalized = category.toLowerCase();
+  const normalizedTitle = title.toLowerCase();
+  const combined = `${normalized} ${normalizedTitle}`;
+
+  const isFmcsaOrCompliance =
+    combined.includes("fmcsa") ||
+    combined.includes("dot") ||
+    combined.includes("qualification") ||
+    combined.includes("exemption") ||
+    combined.includes("safety") ||
+    combined.includes("compliance") ||
+    combined.includes("driver file") ||
+    combined.includes("hearing") ||
+    combined.includes("seizure");
+
+  if (isFmcsaOrCompliance) {
+    if (combined.includes("hearing") && combined.includes("renews")) {
+      return complianceVisuals[1];
+    }
+
+    if (combined.includes("hearing")) {
+      return complianceVisuals[3];
+    }
+
+    if (combined.includes("seizure") && combined.includes("notice")) {
+      return complianceVisuals[0];
+    }
+
+    if (combined.includes("seizure") && combined.includes("reviews")) {
+      return complianceVisuals[2];
+    }
+
+    return pickVisual(complianceVisuals, title);
   }
 
-  const label = normalized.includes("cargo") || normalized.includes("reefer")
-    ? "Cargo coverage"
-    : normalized.includes("owner")
-      ? "Owner-operator"
-      : "Trucking news";
+  if (normalized.includes("fleet")) {
+    return pickVisual(categoryVisuals.fleet, title);
+  }
 
-  return {
-    image: "/images/hero-premium.jpg",
-    label,
-    objectPosition: "34% center",
-  };
+  if (normalized.includes("cargo") || normalized.includes("reefer")) {
+    return pickVisual(categoryVisuals.cargo, title);
+  }
+
+  if (normalized.includes("new authority") || normalized.includes("authority")) {
+    return pickVisual(categoryVisuals.authority, title);
+  }
+
+  if (normalized.includes("owner")) {
+    return pickVisual(categoryVisuals.owner, title);
+  }
+
+  if (normalized.includes("pricing") || normalized.includes("cost") || normalizedTitle.includes("cost")) {
+    return pickVisual(categoryVisuals.pricing, title);
+  }
+
+  if (normalized.includes("requirement") || normalizedTitle.includes("requirement")) {
+    return pickVisual(categoryVisuals.requirements, title);
+  }
+
+  return pickVisual(sourceName ? truckingNewsVisuals : truckingNewsVisuals.slice(0, 3), title);
+}
+
+function getToneClasses(tone: VisualOption["tone"]) {
+  switch (tone) {
+    case "blue":
+      return {
+        overlay: "from-[#0f2633]/70 via-[#0f2633]/14 to-transparent",
+        side: "from-[#102c3a]/46 via-transparent to-transparent",
+        strip: "from-[#2563eb] via-[#f97316] to-white/70",
+      };
+    case "copper":
+      return {
+        overlay: "from-[#2c160d]/68 via-[#6b2c11]/14 to-transparent",
+        side: "from-[#3b1d10]/46 via-transparent to-transparent",
+        strip: "from-[#c2410c] via-[#f97316] to-white/70",
+      };
+    case "slate":
+      return {
+        overlay: "from-[#111827]/70 via-[#111827]/16 to-transparent",
+        side: "from-[#111827]/42 via-transparent to-transparent",
+        strip: "from-[#374151] via-[#f97316] to-white/70",
+      };
+    case "amber":
+    default:
+      return {
+        overlay: "from-[#1f160f]/62 via-[#1f160f]/10 to-transparent",
+        side: "from-[#1f160f]/42 via-transparent to-transparent",
+        strip: "from-[#f97316] via-[#fbbf24] to-white/70",
+      };
+  }
 }
 
 export function BlogVisual({
@@ -63,7 +267,8 @@ export function BlogVisual({
   imageAltText,
   variant = "card",
 }: BlogVisualProps) {
-  const visual = getVisual(category, title);
+  const visual = getVisual(category, title, sourceName);
+  const toneClasses = getToneClasses(visual.tone);
   const isHero = variant === "hero";
 
   return (
@@ -78,12 +283,13 @@ export function BlogVisual({
         style={{
           backgroundImage: `url(${visual.image})`,
           backgroundPosition: visual.objectPosition,
+          transform: visual.flip ? "scaleX(-1)" : undefined,
         }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1f160f]/62 via-[#1f160f]/10 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1f160f]/42 via-transparent to-transparent" />
-      <div className="absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r from-[#f97316] via-[#fbbf24] to-white/70" />
+      <div className={`absolute inset-0 bg-gradient-to-t ${toneClasses.overlay}`} />
+      <div className={`absolute inset-0 bg-gradient-to-r ${toneClasses.side}`} />
+      <div className={`absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r ${toneClasses.strip}`} />
       <div
         className="absolute bottom-4 right-4 h-20 w-48 rounded-2xl bg-contain bg-center bg-no-repeat opacity-[0.22] drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)] md:h-24 md:w-56"
         style={{ backgroundImage: "url(/logo.svg)" }}
