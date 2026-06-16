@@ -184,8 +184,12 @@ function getVisual(category: string, title: string, sourceName?: string) {
     combined.includes("seizure");
 
   if (isFmcsaOrCompliance) {
-    if (combined.includes("hearing") && combined.includes("renews")) {
+    if (combined.includes("hearing") && combined.includes("renews") && combined.includes("carriers")) {
       return complianceVisuals[1];
+    }
+
+    if (combined.includes("hearing") && combined.includes("renews")) {
+      return complianceVisuals[3];
     }
 
     if (combined.includes("hearing")) {
