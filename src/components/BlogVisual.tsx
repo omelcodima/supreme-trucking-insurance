@@ -39,6 +39,12 @@ const complianceVisuals: VisualOption[] = [
     objectPosition: "center",
     tone: "copper",
   },
+  {
+    image: "/images/cargo-card-v2.jpg",
+    label: "Exemption paperwork",
+    objectPosition: "center",
+    tone: "copper",
+  },
 ];
 
 const truckingNewsVisuals: VisualOption[] = [
@@ -190,6 +196,10 @@ function getVisual(category: string, title: string, sourceName?: string) {
 
     if (combined.includes("hearing") && combined.includes("renews")) {
       return complianceVisuals[3];
+    }
+
+    if (combined.includes("hearing") && combined.includes("applications")) {
+      return complianceVisuals[4];
     }
 
     if (combined.includes("hearing")) {
