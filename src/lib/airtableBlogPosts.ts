@@ -14,6 +14,11 @@ type AirtableCreateResponse = {
   records?: AirtableRecord[];
 };
 
+type AirtableFetchOptions = {
+  cache?: RequestCache;
+  revalidate?: number;
+};
+
 const airtableApiKey = process.env.AIRTABLE_API_KEY;
 const airtableBaseId = process.env.AIRTABLE_BASE_ID;
 const airtableBlogTableName = process.env.AIRTABLE_BLOG_TABLE_NAME;
@@ -36,6 +41,22 @@ function airtableUrl(offset?: string) {
 
 function hasAirtableConfig() {
   return Boolean(airtableApiKey && airtableBaseId && airtableBlogTableName);
+}
+
+function airtableFetchInit(options: AirtableFetchOptions = {}) {
+  const init: RequestInit & { next?: { revalidate: number } } = {
+    headers: {
+      Authorization: `Bearer ${airtableApiKey}`,
+    },
+  };
+
+  if (options.cache) {
+    init.cache = options.cache;
+  } else {
+    init.next = { revalidate: options.revalidate ?? 300 };
+  }
+
+  return init;
 }
 
 function stringField(fields: Record<string, unknown>, name: string) {
@@ -138,7 +159,7 @@ function recordToBlogPost(record: AirtableRecord): BlogPost | null {
   };
 }
 
-export async function listAirtableBlogRecords() {
+export async function listAirtableBlogRecords(options: AirtableFetchOptions = {}) {
   if (!hasAirtableConfig()) {
     return [];
   }
@@ -147,12 +168,7 @@ export async function listAirtableBlogRecords() {
   let offset: string | undefined;
 
   do {
-    const response = await fetch(airtableUrl(offset), {
-      headers: {
-        Authorization: `Bearer ${airtableApiKey}`,
-      },
-      next: { revalidate: 300 },
-    });
+    const response = await fetch(airtableUrl(offset), airtableFetchInit(options));
 
     if (!response.ok) {
       console.error("Airtable blog fetch failed:", response.status, await response.text());
@@ -167,8 +183,8 @@ export async function listAirtableBlogRecords() {
   return records;
 }
 
-export async function getPublishedAirtableBlogPosts() {
-  const records = await listAirtableBlogRecords();
+export async function getPublishedAirtableBlogPosts(options: AirtableFetchOptions = {}) {
+  const records = await listAirtableBlogRecords(options);
 
   return records
     .filter((record) => stringField(record.fields, "Status").toLowerCase() === "published")
