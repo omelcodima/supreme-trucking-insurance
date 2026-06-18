@@ -74,17 +74,14 @@ body {
 .hero-image-shell {
   position: relative;
   overflow: hidden;
-  border-radius: 2rem;
-  border: 1px solid var(--border-soft);
-  box-shadow: 0 24px 60px rgba(89, 63, 37, 0.12);
-  background: linear-gradient(180deg, rgba(247, 243, 236, 0.5), rgba(239, 231, 218, 0.95));
+  border-radius: 2.15rem;
+  border: 1px solid #e7ded2;
+  background: rgba(255, 252, 247, 0.72);
+  box-shadow: 12px 14px 0 rgba(160, 145, 122, 0.34);
 }
 
 .hero-image-shell::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(250, 247, 242, 0.04), rgba(47, 38, 28, 0.18));
+  content: none;
 }
 
 .warm-divider {

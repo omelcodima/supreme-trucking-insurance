@@ -117,13 +117,13 @@ export default function Home() {
           </div>
 
           <div className="hero-image-shell p-3">
-            <div className="relative min-h-[320px] overflow-hidden rounded-[1.5rem] md:min-h-[500px]">
-              <Image
-                src="/images/hero-premium.jpg"
-                alt="American semi truck driving on the highway"
-                fill
-                priority
-                className="object-cover"
+            <div className="relative min-h-[320px] overflow-hidden rounded-[1.5rem] bg-[#100F0D] md:min-h-[500px]">
+              <iframe
+                src="/supreme-promo.html"
+                title="Supreme Trucking Insurance promo video"
+                className="absolute inset-0 h-full w-full border-0"
+                loading="eager"
+                aria-label="Supreme Trucking Insurance animated promo"
               />
             </div>
           </div>
