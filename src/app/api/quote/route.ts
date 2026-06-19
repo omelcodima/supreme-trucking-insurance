@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getQuotesTable } from "../../../../lib/airtable";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
+const notificationEmail = "info@supremetruckinginsurance.com";
 
 type QuotePayload = {
   firstName: string;
@@ -25,7 +26,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
     Company: data.company,
     "DOT Number": data.dot || "",
     "Coverage Type": data.coverageType,
-    Notes: data.notes || "",
+    Notes: [`Notification email: ${notificationEmail}`, data.notes || ""].filter(Boolean).join("\n"),
   } as Record<string, string>);
 
   return record;
@@ -44,7 +45,7 @@ async function sendWebhook(data: QuotePayload) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, notificationEmail }),
     });
 
     if (!webhookResponse.ok) {

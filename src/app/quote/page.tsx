@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 type StatusState = {
@@ -73,46 +72,9 @@ export default function QuotePage() {
 
   return (
     <>
-      <section className="section-shell">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-14 md:pb-20 md:pt-20 lg:grid-cols-[1fr_0.95fr]">
-          <div>
-            <span className="eyebrow mb-5">Free quote</span>
-            <h1 className="text-4xl font-black leading-tight tracking-tight text-[#2F261C] md:text-6xl">Get your trucking insurance quote.</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#5A4B3B] md:text-xl">
-              One simple form to get your custom trucking insurance quote.
-            </p>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {[
-                ["Faster review", "Declarations pages, loss runs, and schedules give us a better starting point."],
-                ["Less back and forth", "Send the core docs now instead of chasing them later by email."],
-              ].map(([title, body]) => (
-                <div key={title} className="card-muted rounded-[1.5rem] p-5">
-                  <h2 className="text-lg font-black text-[#2F261C]">{title}</h2>
-                  <p className="mt-2 text-sm leading-relaxed text-[#5A4B3B]">{body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="hero-image-shell p-4">
-            <div className="relative h-[280px] overflow-hidden rounded-[1.5rem] md:h-[360px]">
-              <Image src="/images/highway-premium.jpg" alt="Truck on highway" fill priority style={{ objectFit: "cover" }} />
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#1F160D]/50 via-transparent to-[#FFF7ED]/25" />
-              <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/40 bg-[#FFFDF9]/88 p-5 shadow-[0_18px_45px_rgba(89,63,37,0.12)] backdrop-blur">
-                <p className="text-sm uppercase tracking-[0.16em] text-[#7B6B59]">Direct line</p>
-                <a href="tel:+13609367196" className="mt-2 text-2xl font-black text-[#2F261C] transition-colors hover:text-[#f97316]">
-                  (360) 936-7196
-                </a>
-                <p className="mt-3 text-sm text-[#5A4B3B]">Call now for an immediate quote or urgent questions.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-soft py-16">
+      <section className="section-soft py-8 md:py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-12">
+          <div className="mb-12 pt-4">
             <div className="mb-6 max-w-3xl">
               <span className="eyebrow mb-4">Full application</span>
               <h2 className="text-3xl font-black tracking-tight text-[#2F261C] md:text-5xl">Build a cleaner trucking application.</h2>
@@ -121,7 +83,7 @@ export default function QuotePage() {
               </p>
             </div>
             <div className="hero-image-shell p-3">
-              <div className="relative h-[760px] overflow-hidden rounded-[1.5rem] bg-[#FAF9F5] md:h-[860px]">
+              <div className="relative h-[820px] overflow-hidden rounded-[1.5rem] bg-[#FAF9F5] md:h-[900px]">
                 <iframe
                   src="/quote-application.html"
                   title="Supreme Trucking Insurance full quote application"
