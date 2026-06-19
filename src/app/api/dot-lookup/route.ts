@@ -41,7 +41,24 @@ export async function GET(request: Request) {
     const url = new URL(CARRIER_CENSUS_URL);
     url.searchParams.set(
       "$select",
-      "dot_number,legal_name,dba_name,phy_city,phy_state,power_units,total_drivers,status_code,add_date,carrier_operation,classdef",
+      [
+        "dot_number",
+        "legal_name",
+        "dba_name",
+        "phy_street",
+        "phy_city",
+        "phy_state",
+        "phy_zip",
+        "phone",
+        "power_units",
+        "total_drivers",
+        "status_code",
+        "add_date",
+        "mcs150_mileage",
+        "mcs151_mileage",
+        "carrier_operation",
+        "classdef",
+      ].join(","),
     );
     url.searchParams.set("$where", `dot_number = "${dot}"`);
     url.searchParams.set("$limit", "1");
@@ -75,12 +92,16 @@ export async function GET(request: Request) {
         legalName,
         dbaName: readString(carrier, ["dba_name"]),
         dotNumber: readString(carrier, ["dot_number"]) || dot,
+        street: readString(carrier, ["phy_street"]),
         city: readString(carrier, ["phy_city"]),
         state: readString(carrier, ["phy_state"]),
+        zip: readString(carrier, ["phy_zip"]),
+        phone: readString(carrier, ["phone"]),
         powerUnits: readString(carrier, ["power_units"]),
         totalDrivers: readString(carrier, ["total_drivers"]),
         statusCode: readString(carrier, ["status_code"]),
         addDate: readString(carrier, ["add_date"]),
+        mileage: readString(carrier, ["mcs150_mileage", "mcs151_mileage"]),
         carrierOperation: readString(carrier, ["carrier_operation"]),
         classDef: readString(carrier, ["classdef"]),
       },

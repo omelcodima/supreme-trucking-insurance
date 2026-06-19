@@ -78,7 +78,7 @@ export default function QuotePage() {
             <div className="hero-image-shell p-2 md:p-3">
               <div className="relative h-[820px] overflow-hidden rounded-[1.5rem] bg-[#FAF9F5] md:h-[calc(100vh-170px)] md:min-h-[780px]">
                 <iframe
-                  src="/quote-application.html?v=20260618-quote-runtime"
+                  src="/quote-application.html?v=20260618-safer-vin"
                   title="Supreme Trucking Insurance full quote application"
                   className="absolute inset-0 h-full w-full border-0"
                   loading="lazy"
@@ -134,7 +134,7 @@ export default function QuotePage() {
                     <div>
                       <label className={labelClass}>Company Name *</label>
                       <input name="company" required value={form.company} onChange={handleChange} className={inputClass} placeholder="Smith Trucking LLC" />
-                      <p className="mt-2 text-sm text-[#7B6B59]">DOT company prefill is coming soon. For now, enter the company name manually.</p>
+                      <p className="mt-2 text-sm text-[#7B6B59]">Use the full application above to prefill company details from DOT lookup.</p>
                     </div>
                     <div>
                       <label className={labelClass}>DOT Number</label>
