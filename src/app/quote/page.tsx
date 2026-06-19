@@ -112,6 +112,26 @@ export default function QuotePage() {
 
       <section className="section-soft py-16">
         <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-12">
+            <div className="mb-6 max-w-3xl">
+              <span className="eyebrow mb-4">Full application</span>
+              <h2 className="text-3xl font-black tracking-tight text-[#2F261C] md:text-5xl">Build a cleaner trucking application.</h2>
+              <p className="mt-4 text-lg leading-relaxed text-[#5A4B3B]">
+                Use the guided application when you want to collect more complete driver, equipment, coverage, and loss details before review.
+              </p>
+            </div>
+            <div className="hero-image-shell p-3">
+              <div className="relative h-[760px] overflow-hidden rounded-[1.5rem] bg-[#FAF9F5] md:h-[860px]">
+                <iframe
+                  src="/quote-application.html"
+                  title="Supreme Trucking Insurance full quote application"
+                  className="absolute inset-0 h-full w-full border-0"
+                  loading="lazy"
+                  aria-label="Supreme Trucking Insurance full quote application"
+                />
+              </div>
+            </div>
+          </div>
           {submitted ? (
             <div className="card-premium mx-auto max-w-3xl rounded-[1.8rem] p-12 text-center">
               <div className="mb-4 text-6xl">✅</div>
