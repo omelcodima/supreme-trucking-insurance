@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getQuotesTable } from "../../../../lib/airtable";
+import { sendLeadEmail } from "../../../lib/email";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 const notificationEmail = "info@supremetruckinginsurance.com";
@@ -56,6 +57,34 @@ async function sendWebhook(data: QuotePayload) {
   }
 }
 
+function formatQuoteEmail(data: QuotePayload) {
+  return [
+    "NEW TRUCKING INSURANCE QUOTE REQUEST",
+    "====================================",
+    "",
+    `Name: ${data.firstName} ${data.lastName}`,
+    `Phone: ${data.phone}`,
+    `Email: ${data.email}`,
+    `Company: ${data.company}`,
+    `DOT Number: ${data.dot || "Not provided"}`,
+    `Coverage Type: ${data.coverageType}`,
+    "",
+    "Notes:",
+    data.notes || "None",
+    "",
+    `Submitted from: supremetruckinginsurance.com/quote`,
+  ].join("\n");
+}
+
+async function sendQuoteEmail(data: QuotePayload) {
+  await sendLeadEmail({
+    to: notificationEmail,
+    subject: `New quote request: ${data.company}`,
+    text: formatQuoteEmail(data),
+    replyTo: data.email,
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const json = (await request.json()) as Partial<QuotePayload>;
@@ -79,6 +108,7 @@ export async function POST(request: Request) {
 
     await saveQuoteToAirtable(data);
     await sendWebhook(data);
+    await sendQuoteEmail(data);
 
     return NextResponse.json(
       {
@@ -91,7 +121,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error in POST /api/quote:", error);
     return NextResponse.json(
-      { detail: "We could not save your quote request right now. Please try again or call (360) 936-7196." },
+      { detail: "We could not send your quote request notification right now. Please try again or call (360) 936-7196." },
       { status: 500 },
     );
   }
