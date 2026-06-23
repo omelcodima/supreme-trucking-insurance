@@ -15,6 +15,7 @@ const googleBusinessUrl =
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "InsuranceAgency",
+  "@id": "https://supremetruckinginsurance.com/#insurance-agency",
   name: "Supreme Trucking Insurance",
   url: "https://supremetruckinginsurance.com",
   logo: "https://supremetruckinginsurance.com/logo.png",
@@ -156,6 +157,7 @@ export default function RootLayout({
                   <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                     <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
                       <Link href="/instant-indication" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Instant Indication</Link>
+                      <Link href="/best-truck-insurance-agency" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Best Agency Guide</Link>
                       <Link href="/articles" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Articles & Insights</Link>
                       <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
                       <Link href="/reviews" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Reviews</Link>
@@ -223,6 +225,7 @@ export default function RootLayout({
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
                     <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
                     <Link href="/instant-indication" className="hover:text-[#f97316] transition-colors">Instant Indication</Link>
+                    <Link href="/best-truck-insurance-agency" className="hover:text-[#f97316] transition-colors">Best Agency Guide</Link>
                     <Link href="/articles" className="hover:text-[#f97316] transition-colors">Articles & Insights</Link>
                     <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
                     <Link href="/reviews" className="hover:text-[#f97316] transition-colors">Reviews</Link>
@@ -328,6 +331,7 @@ export default function RootLayout({
                 <div className="pt-2">
                   <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>
                   <Link href="/sms-terms-and-conditions" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">SMS Terms & Conditions</Link>
+                  <Link href="/best-truck-insurance-agency" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Best Truck Insurance Agency Guide</Link>
                   <Link href="/articles" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Articles & Insights</Link>
                   <Link href="/blog" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Blog</Link>
                   <Link href="/reviews" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Reviews</Link>
