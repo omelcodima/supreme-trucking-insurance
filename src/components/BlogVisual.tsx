@@ -9,159 +9,203 @@ type BlogVisualProps = {
 type VisualOption = {
   image: string;
   label: string;
+  cue: string;
   objectPosition: string;
   tone: "amber" | "blue" | "copper" | "slate";
   flip?: boolean;
 };
 
+function visual(
+  image: string,
+  label: string,
+  cue: string,
+  tone: VisualOption["tone"],
+  objectPosition = "center",
+  flip = false,
+): VisualOption {
+  return { image, label, cue, tone, objectPosition, flip };
+}
+
+const visualLibrary = {
+  fmcsaRoad: visual(
+    "/images/highway-premium.jpg",
+    "FMCSA / DOT notice",
+    "Road safety and compliance update",
+    "blue",
+  ),
+  driverFile: visual(
+    "/images/new-authority-card-v2.jpg",
+    "Driver qualification",
+    "Medical, hearing, exemption paperwork",
+    "slate",
+  ),
+  driverStanding: visual(
+    "/images/owner-operator-card-v2.jpg",
+    "Driver file review",
+    "Owner-operator documents and eligibility",
+    "slate",
+  ),
+  safetyFleet: visual(
+    "/images/fleet-card-v2.jpg",
+    "Safety review",
+    "Inspections, carrier files, fleet exposure",
+    "amber",
+  ),
+  cargoDock: visual(
+    "/images/cargo-card-v2.jpg",
+    "Cargo / freight",
+    "Loaded trailers, warehouse risk, freight claims",
+    "copper",
+  ),
+  fleetYard: visual(
+    "/images/fleet-card-v2.jpg",
+    "Fleet operations",
+    "Multiple units, renewals, driver rosters",
+    "amber",
+  ),
+  authorityPrep: visual(
+    "/images/new-authority-card-v2.jpg",
+    "New authority",
+    "DOT setup, questions, first filings",
+    "amber",
+  ),
+  ownerOperator: visual(
+    "/images/owner-operator-card-v2.jpg",
+    "Owner-operator",
+    "Single-truck file and coverage checklist",
+    "slate",
+  ),
+  quotePrep: visual(
+    "/images/owner-operator-premium.jpg",
+    "Quote prep",
+    "Premium factors, truck value, underwriting file",
+    "blue",
+  ),
+  roadRisk: visual(
+    "/images/hero-premium.jpg",
+    "Road risk brief",
+    "Highway operations and insurance impact",
+    "slate",
+    "34% center",
+    true,
+  ),
+  filingChecklist: visual(
+    "/images/hero-epic-american.png",
+    "Filing checklist",
+    "DOT authority, filings, public notice context",
+    "copper",
+    "34% center",
+  ),
+};
+
 const complianceVisuals: VisualOption[] = [
-  {
-    image: "/images/highway-premium.jpg",
-    label: "FMCSA / compliance",
-    objectPosition: "center",
-    tone: "blue",
-  },
-  {
-    image: "/images/owner-operator-card-v2.jpg",
-    label: "Driver qualification",
-    objectPosition: "center",
-    tone: "slate",
-  },
-  {
-    image: "/images/fleet-card-v2.jpg",
-    label: "Safety file review",
-    objectPosition: "center",
-    tone: "amber",
-  },
-  {
-    image: "/images/owner-operator-premium.jpg",
-    label: "Driver file check",
-    objectPosition: "center",
-    tone: "copper",
-  },
-  {
-    image: "/images/cargo-card-v2.jpg",
-    label: "Exemption paperwork",
-    objectPosition: "center",
-    tone: "copper",
-  },
+  visualLibrary.fmcsaRoad,
+  visualLibrary.driverFile,
+  visualLibrary.safetyFleet,
+  visualLibrary.driverStanding,
+  visualLibrary.filingChecklist,
 ];
 
 const truckingNewsVisuals: VisualOption[] = [
-  {
-    image: "/images/highway-premium.jpg",
-    label: "Trucking news",
-    objectPosition: "center",
-    tone: "blue",
-  },
-  {
-    image: "/images/cargo-card-v2.jpg",
-    label: "Freight market",
-    objectPosition: "center",
-    tone: "copper",
-  },
-  {
-    image: "/images/fleet-card-v2.jpg",
-    label: "Carrier update",
-    objectPosition: "center",
-    tone: "amber",
-  },
-  {
-    image: "/images/hero-premium.jpg",
-    label: "Road risk brief",
-    objectPosition: "34% center",
-    tone: "slate",
-    flip: true,
-  },
+  visualLibrary.roadRisk,
+  visualLibrary.cargoDock,
+  visualLibrary.fleetYard,
+  visualLibrary.fmcsaRoad,
 ];
 
 const categoryVisuals: Record<string, VisualOption[]> = {
-  fleet: [
-    {
-      image: "/images/fleet-card-v2.jpg",
-      label: "Fleet update",
-      objectPosition: "center",
-      tone: "amber",
-    },
-    {
-      image: "/images/highway-premium.jpg",
-      label: "Fleet operations",
-      objectPosition: "center",
-      tone: "blue",
-    },
-  ],
-  cargo: [
-    {
-      image: "/images/cargo-card-v2.jpg",
-      label: "Cargo coverage",
-      objectPosition: "center",
-      tone: "copper",
-    },
-    {
-      image: "/images/hero-epic-american.png",
-      label: "Load risk",
-      objectPosition: "34% center",
-      tone: "amber",
-    },
-  ],
-  authority: [
-    {
-      image: "/images/new-authority-card-v2.jpg",
-      label: "New authority",
-      objectPosition: "center",
-      tone: "amber",
-    },
-    {
-      image: "/images/owner-operator-card-v2.jpg",
-      label: "First truck file",
-      objectPosition: "center",
-      tone: "slate",
-    },
-  ],
-  owner: [
-    {
-      image: "/images/owner-operator-card-v2.jpg",
-      label: "Owner-operator",
-      objectPosition: "center",
-      tone: "slate",
-    },
-    {
-      image: "/images/owner-operator-premium.jpg",
-      label: "Solo trucker file",
-      objectPosition: "center",
-      tone: "blue",
-    },
-  ],
-  pricing: [
-    {
-      image: "/images/owner-operator-premium.jpg",
-      label: "Quote prep",
-      objectPosition: "center",
-      tone: "blue",
-    },
-    {
-      image: "/images/highway-premium.jpg",
-      label: "Premium drivers",
-      objectPosition: "center",
-      tone: "amber",
-      flip: true,
-    },
-  ],
-  requirements: [
-    {
-      image: "/images/highway-premium.jpg",
-      label: "Coverage requirements",
-      objectPosition: "center",
-      tone: "blue",
-    },
-    {
-      image: "/images/hero-epic-american.png",
-      label: "Filing checklist",
-      objectPosition: "34% center",
-      tone: "copper",
-    },
-  ],
+  fleet: [visualLibrary.fleetYard, visualLibrary.safetyFleet, visualLibrary.fmcsaRoad],
+  cargo: [visualLibrary.cargoDock, visualLibrary.roadRisk],
+  authority: [visualLibrary.authorityPrep, visualLibrary.filingChecklist, visualLibrary.driverFile],
+  owner: [visualLibrary.ownerOperator, visualLibrary.driverStanding, visualLibrary.quotePrep],
+  pricing: [visualLibrary.quotePrep, visualLibrary.fmcsaRoad],
+  requirements: [visualLibrary.filingChecklist, visualLibrary.fmcsaRoad],
 };
+
+const titleVisualRules: { terms: string[]; visuals: VisualOption[] }[] = [
+  {
+    terms: ["renews seizure-disorder driving exemptions"],
+    visuals: [visualLibrary.driverFile],
+  },
+  {
+    terms: ["grants driver exemptions for seizure disorders"],
+    visuals: [visualLibrary.driverStanding],
+  },
+  {
+    terms: ["seizure exemption notice"],
+    visuals: [visualLibrary.safetyFleet],
+  },
+  {
+    terms: ["reviews seizure exemption applications"],
+    visuals: [visualLibrary.driverStanding],
+  },
+  {
+    terms: ["renews hearing exemptions for interstate cmv drivers: what carriers"],
+    visuals: [visualLibrary.driverFile],
+  },
+  {
+    terms: ["renews hearing exemptions for interstate cmv drivers: what trucking companies"],
+    visuals: [visualLibrary.driverStanding],
+  },
+  {
+    terms: ["reviews hearing exemption applications"],
+    visuals: [visualLibrary.filingChecklist],
+  },
+  {
+    terms: ["requirements by state", "state requirement", "insurance requirement", "coverage requirement"],
+    visuals: [visualLibrary.filingChecklist],
+  },
+  {
+    terms: ["marking paperwork", "paperwork review", "omb review"],
+    visuals: [visualLibrary.filingChecklist, visualLibrary.fmcsaRoad],
+  },
+  {
+    terms: ["hearing", "deaf", "vision", "seizure", "medical", "exemption", "qualification"],
+    visuals: [
+      visualLibrary.driverFile,
+      visualLibrary.driverStanding,
+      visualLibrary.safetyFleet,
+      visualLibrary.filingChecklist,
+      visualLibrary.fmcsaRoad,
+    ],
+  },
+  {
+    terms: ["driver file", "driver qualification", "driver applicant", "cdl", "drug", "clearinghouse"],
+    visuals: [visualLibrary.driverStanding, visualLibrary.driverFile, visualLibrary.safetyFleet],
+  },
+  {
+    terms: ["cargo", "freight", "load", "warehouse", "reefer", "broker", "shipper", "theft"],
+    visuals: [visualLibrary.cargoDock],
+  },
+  {
+    terms: ["fleet", "multiple units", "renewal", "carrier update", "motor carrier", "unit schedule"],
+    visuals: [visualLibrary.fleetYard, visualLibrary.safetyFleet],
+  },
+  {
+    terms: ["inspection", "out of service", "safety", "crash", "violation", "audit", "safety rating"],
+    visuals: [visualLibrary.safetyFleet, visualLibrary.fmcsaRoad],
+  },
+  {
+    terms: ["new authority", "authority", "registration", "mc number", "dot number", "first truck", "startup"],
+    visuals: [visualLibrary.authorityPrep, visualLibrary.filingChecklist],
+  },
+  {
+    terms: ["filing", "bmc-91", "mcs-90", "public notice", "application", "permit"],
+    visuals: [visualLibrary.filingChecklist, visualLibrary.authorityPrep],
+  },
+  {
+    terms: ["cost", "price", "pricing", "rate", "premium", "quote", "underwriting", "loss runs"],
+    visuals: [visualLibrary.quotePrep, visualLibrary.fmcsaRoad],
+  },
+  {
+    terms: ["owner-operator", "owner operator", "leased", "bobtail", "non-trucking"],
+    visuals: [visualLibrary.ownerOperator, visualLibrary.driverStanding],
+  },
+  {
+    terms: ["fmcsa", "dot", "federal register", "compliance", "rule", "notice"],
+    visuals: [visualLibrary.fmcsaRoad, visualLibrary.safetyFleet, visualLibrary.filingChecklist],
+  },
+];
 
 function titleHash(value: string) {
   return [...value].reduce((hash, character) => {
@@ -173,48 +217,38 @@ function pickVisual(options: VisualOption[], title: string) {
   return options[titleHash(title) % options.length];
 }
 
+function includesAny(text: string, terms: string[]) {
+  return terms.some((term) => text.includes(term));
+}
+
 function getVisual(category: string, title: string, sourceName?: string) {
   const normalized = category.toLowerCase();
   const normalizedTitle = title.toLowerCase();
-  const combined = `${normalized} ${normalizedTitle}`;
+  const normalizedSource = (sourceName || "").toLowerCase();
+  const combined = `${normalized} ${normalizedTitle} ${normalizedSource}`;
 
-  const isFmcsaOrCompliance =
-    combined.includes("fmcsa") ||
-    combined.includes("dot") ||
-    combined.includes("qualification") ||
-    combined.includes("exemption") ||
-    combined.includes("safety") ||
-    combined.includes("compliance") ||
-    combined.includes("driver file") ||
-    combined.includes("hearing") ||
-    combined.includes("seizure");
+  // First priority: the title/source itself. This prevents every FMCSA/news item
+  // from falling into the same generic highway photo and makes the image explain
+  // the subject of the headline: driver exemption, cargo, fleet, quote prep, etc.
+  const titleSpecificVisual = titleVisualRules.find((rule) => includesAny(combined, rule.terms));
+  if (titleSpecificVisual) {
+    return pickVisual(titleSpecificVisual.visuals, `${title}:${sourceName || ""}:${normalized}`);
+  }
+
+  const isFmcsaOrCompliance = includesAny(combined, [
+    "fmcsa",
+    "dot",
+    "qualification",
+    "exemption",
+    "safety",
+    "compliance",
+    "driver file",
+    "hearing",
+    "seizure",
+  ]);
 
   if (isFmcsaOrCompliance) {
-    if (combined.includes("hearing") && combined.includes("renews") && combined.includes("carriers")) {
-      return complianceVisuals[1];
-    }
-
-    if (combined.includes("hearing") && combined.includes("renews")) {
-      return complianceVisuals[3];
-    }
-
-    if (combined.includes("hearing") && combined.includes("applications")) {
-      return complianceVisuals[4];
-    }
-
-    if (combined.includes("hearing")) {
-      return complianceVisuals[3];
-    }
-
-    if (combined.includes("seizure") && combined.includes("notice")) {
-      return complianceVisuals[0];
-    }
-
-    if (combined.includes("seizure") && combined.includes("reviews")) {
-      return complianceVisuals[2];
-    }
-
-    return pickVisual(complianceVisuals, title);
+    return pickVisual(complianceVisuals, `${title}:${sourceName || ""}`);
   }
 
   if (normalized.includes("fleet")) {
@@ -242,6 +276,24 @@ function getVisual(category: string, title: string, sourceName?: string) {
   }
 
   return pickVisual(sourceName ? truckingNewsVisuals : truckingNewsVisuals.slice(0, 3), title);
+}
+
+function getVisualVariant(title: string, visual: VisualOption, isHero: boolean) {
+  const hash = titleHash(`${title}:${visual.image}:${visual.label}`);
+  const zoom = isHero ? 1.01 : 1.04 + (hash % 6) * 0.012;
+  const shouldFlip = visual.flip || (!isHero && ((hash >>> 4) % 5 === 0));
+  const focusX = 40 + (hash % 21);
+  const focusY = 46 + ((hash >>> 5) % 11);
+  const saturation = 0.96 + ((hash >>> 2) % 7) * 0.025;
+  const contrast = 1.02 + ((hash >>> 6) % 5) * 0.018;
+  const brightness = 0.93 + ((hash >>> 9) % 5) * 0.014;
+
+  return {
+    backgroundPosition: visual.objectPosition === "center" ? `${focusX}% ${focusY}%` : visual.objectPosition,
+    backgroundSize: `${isHero ? 104 : 112 + (hash % 5) * 4}%`,
+    filter: `saturate(${saturation.toFixed(2)}) contrast(${contrast.toFixed(2)}) brightness(${brightness.toFixed(2)})`,
+    transform: `${shouldFlip ? "scaleX(-1)" : ""} scale(${zoom.toFixed(3)})`.trim(),
+  };
 }
 
 function getToneClasses(tone: VisualOption["tone"]) {
@@ -284,6 +336,7 @@ export function BlogVisual({
   const visual = getVisual(category, title, sourceName);
   const toneClasses = getToneClasses(visual.tone);
   const isHero = variant === "hero";
+  const visualVariant = getVisualVariant(title, visual, isHero);
 
   return (
     <div
@@ -293,11 +346,13 @@ export function BlogVisual({
       aria-label={imageAltText || `Editorial image for ${title}`}
     >
       <div
-        className="absolute inset-0 scale-[1.01] bg-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
+        className="absolute inset-0 bg-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
         style={{
           backgroundImage: `url(${visual.image})`,
-          backgroundPosition: visual.objectPosition,
-          transform: visual.flip ? "scaleX(-1)" : undefined,
+          backgroundPosition: visualVariant.backgroundPosition,
+          backgroundSize: visualVariant.backgroundSize,
+          filter: visualVariant.filter,
+          transform: visualVariant.transform,
         }}
       />
 
@@ -312,9 +367,14 @@ export function BlogVisual({
 
       <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-7">
         <div className="flex items-start justify-between gap-4">
-          <span className="inline-flex rounded-full border border-white/65 bg-white/86 px-3.5 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-[#2F261C] shadow-lg backdrop-blur-md">
-            {visual.label}
-          </span>
+          <div className="flex max-w-[75%] flex-col items-start gap-2">
+            <span className="inline-flex rounded-full border border-white/65 bg-white/86 px-3.5 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-[#2F261C] shadow-lg backdrop-blur-md">
+              {visual.label}
+            </span>
+            <span className="inline-flex rounded-full border border-white/45 bg-[#2F261C]/72 px-3 py-1 text-[0.63rem] font-black uppercase tracking-[0.13em] text-white shadow-lg backdrop-blur-md">
+              {visual.cue}
+            </span>
+          </div>
           <span className="rounded-full bg-[#f97316] px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-lg">
             Supreme
           </span>
