@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDocsTable } from "../../../../lib/airtable";
+import { sendCustomerAutoReply, sendInternalLeadNotification } from "../../../lib/leadEmails";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || process.env.AIRTABLE_DOCS_TABLE_NAME || "Contacts";
 
@@ -67,6 +68,32 @@ async function saveCoiRequestToAirtable(data: CoiPayload) {
   } as Record<string, string>);
 }
 
+async function sendCoiEmails(data: CoiPayload) {
+  await sendInternalLeadNotification({
+    leadType: "coi_request",
+    company: data.company,
+    contactEmail: data.email || data.sendEmail,
+    subject: `COI request: ${data.company}`,
+    text: formatMessage(data),
+  });
+
+  await sendCustomerAutoReply({
+    to: data.email || data.sendEmail,
+    leadType: "coi_request",
+    subject: "We received your COI request",
+    text: [
+      `Hi ${data.requesterName || "there"},`,
+      "",
+      `We received the COI request for ${data.company}. Supreme Trucking Insurance will review the holder details and send the certificate as soon as possible.`,
+      "",
+      "For urgent COI requests, call us directly at (360) 936-7196.",
+      "",
+      "Supreme Trucking Insurance",
+      "(360) 936-7196",
+    ].join("\n"),
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const json = (await request.json()) as Partial<CoiPayload>;
@@ -101,6 +128,7 @@ export async function POST(request: Request) {
     }
 
     await saveCoiRequestToAirtable(data);
+    await sendCoiEmails(data);
 
     return NextResponse.json({
       ok: true,

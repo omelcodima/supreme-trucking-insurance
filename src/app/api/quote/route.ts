@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { getQuotesTable } from "../../../../lib/airtable";
-import { sendLeadEmail } from "../../../lib/email";
+import {
+  leadNotificationEmail,
+  scheduleQuoteFollowUps,
+  sendCustomerAutoReply,
+  sendInternalLeadNotification,
+} from "../../../lib/leadEmails";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
-const notificationEmail = "info@supremetruckinginsurance.com";
 
 type QuotePayload = {
   firstName: string;
@@ -27,7 +31,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
     Company: data.company,
     "DOT Number": data.dot || "",
     "Coverage Type": data.coverageType,
-    Notes: [`Notification email: ${notificationEmail}`, data.notes || ""].filter(Boolean).join("\n"),
+    Notes: [`Notification email: ${leadNotificationEmail}`, data.notes || ""].filter(Boolean).join("\n"),
   } as Record<string, string>);
 
   return record;
@@ -46,7 +50,7 @@ async function sendWebhook(data: QuotePayload) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data, notificationEmail }),
+      body: JSON.stringify({ ...data, notificationEmail: leadNotificationEmail }),
     });
 
     if (!webhookResponse.ok) {
@@ -77,11 +81,41 @@ function formatQuoteEmail(data: QuotePayload) {
 }
 
 async function sendQuoteEmail(data: QuotePayload) {
-  await sendLeadEmail({
-    to: notificationEmail,
+  await sendInternalLeadNotification({
+    leadType: "quote_request",
+    company: data.company,
+    contactEmail: data.email,
     subject: `New quote request: ${data.company}`,
     text: formatQuoteEmail(data),
-    replyTo: data.email,
+  });
+}
+
+async function sendQuoteCustomerEmails(data: QuotePayload) {
+  const name = [data.firstName, data.lastName].filter(Boolean).join(" ");
+
+  await sendCustomerAutoReply({
+    to: data.email,
+    leadType: "quote_request",
+    subject: "We received your trucking insurance quote request",
+    text: [
+      `Hi ${data.firstName || "there"},`,
+      "",
+      `We received your trucking insurance quote request for ${data.company}. Supreme Trucking Insurance will review the details and follow up as soon as possible.`,
+      "",
+      "If you have them ready, you can reply with your current declarations page, driver list, vehicle schedule, DOT/MC number, and loss runs if available.",
+      "",
+      "This message confirms we received your request. It is not a bindable quote, approval, or coverage confirmation.",
+      "",
+      "Supreme Trucking Insurance",
+      "(360) 936-7196",
+    ].join("\n"),
+  });
+
+  await scheduleQuoteFollowUps({
+    to: data.email,
+    name,
+    company: data.company,
+    source: "quote",
   });
 }
 
@@ -109,6 +143,7 @@ export async function POST(request: Request) {
     await saveQuoteToAirtable(data);
     await sendWebhook(data);
     await sendQuoteEmail(data);
+    await sendQuoteCustomerEmails(data);
 
     return NextResponse.json(
       {

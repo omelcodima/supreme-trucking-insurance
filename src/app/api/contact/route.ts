@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDocsTable } from "../../../../lib/airtable";
+import { sendCustomerAutoReply, sendInternalLeadNotification } from "../../../lib/leadEmails";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || process.env.AIRTABLE_DOCS_TABLE_NAME || "Contacts";
 
@@ -27,6 +28,49 @@ async function saveContactToAirtable(data: ContactPayload) {
   return record;
 }
 
+function formatContactEmail(data: ContactPayload) {
+  return [
+    "NEW WEBSITE CONTACT MESSAGE",
+    "===========================",
+    "",
+    `Name: ${data.firstName} ${data.lastName}`,
+    `Phone: ${data.phone}`,
+    `Email: ${data.email}`,
+    `Company: ${data.company}`,
+    "",
+    "Message:",
+    data.message,
+    "",
+    "Submitted from: supremetruckinginsurance.com/contact",
+  ].join("\n");
+}
+
+async function sendContactEmails(data: ContactPayload) {
+  await sendInternalLeadNotification({
+    leadType: "contact",
+    company: data.company,
+    contactEmail: data.email,
+    subject: `Website contact message: ${data.company}`,
+    text: formatContactEmail(data),
+  });
+
+  await sendCustomerAutoReply({
+    to: data.email,
+    leadType: "contact",
+    subject: "We received your message",
+    text: [
+      `Hi ${data.firstName || "there"},`,
+      "",
+      "We received your message. Supreme Trucking Insurance will review it and follow up as soon as possible.",
+      "",
+      "For urgent questions, call us directly at (360) 936-7196.",
+      "",
+      "Supreme Trucking Insurance",
+      "(360) 936-7196",
+    ].join("\n"),
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const json = (await request.json()) as Partial<ContactPayload>;
@@ -47,6 +91,7 @@ export async function POST(request: Request) {
     }
 
     await saveContactToAirtable(data);
+    await sendContactEmails(data);
 
     return NextResponse.json({
       ok: true,

@@ -1,8 +1,10 @@
 type SendLeadEmailInput = {
-  to: string;
+  to: string | string[];
   subject: string;
   text: string;
   replyTo?: string;
+  scheduledAt?: string;
+  tags?: Array<{ name: string; value: string }>;
 };
 
 function htmlEscape(value: string) {
@@ -17,7 +19,7 @@ function textToHtml(text: string) {
   return `<pre style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;line-height:1.5;color:#1f2933">${htmlEscape(text)}</pre>`;
 }
 
-export async function sendLeadEmail({ to, subject, text, replyTo }: SendLeadEmailInput) {
+export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, tags }: SendLeadEmailInput) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM || "Supreme Trucking Insurance <quotes@supremetruckinginsurance.com>";
 
@@ -34,11 +36,13 @@ export async function sendLeadEmail({ to, subject, text, replyTo }: SendLeadEmai
     },
     body: JSON.stringify({
       from,
-      to: [to],
+      to: Array.isArray(to) ? to : [to],
       subject,
       text,
       html: textToHtml(text),
       ...(replyTo ? { reply_to: replyTo } : {}),
+      ...(scheduledAt ? { scheduledAt } : {}),
+      ...(tags?.length ? { tags } : {}),
     }),
   });
 
