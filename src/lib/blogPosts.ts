@@ -9,7 +9,10 @@ export type BlogPost = {
   sourceUrl?: string;
   sourcePublishedAt?: string;
   tags?: string[];
+  imageUrl?: string;
   imageAltText?: string;
+  imageLabel?: string;
+  imageCue?: string;
   googleBusinessPost?: string;
   socialPost?: string;
   intro: string;
@@ -21,6 +24,61 @@ export type BlogPost = {
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "how-much-are-truckers-making-right-now",
+    title: "How Much Are Truckers Making Right Now?",
+    description:
+      "A practical 2026 snapshot of truck driver pay, owner-operator gross revenue, freight rates, operating costs, and what it means for trucking insurance decisions.",
+    category: "Trucking Income",
+    date: "2026-06-29",
+    readTime: "6 min read",
+    sourceTitle: "BLS Occupational Outlook Handbook: Heavy and Tractor-trailer Truck Drivers",
+    sourceUrl: "https://www.bls.gov/ooh/transportation-and-material-moving/heavy-and-tractor-trailer-truck-drivers.htm",
+    sourcePublishedAt: "2025-08-28",
+    tags: [
+      "truck driver pay",
+      "owner-operator income",
+      "freight rates",
+      "trucking operating costs",
+      "truck insurance cost",
+    ],
+    imageUrl: "/images/blog/trucker-earnings-2026.png",
+    imageAltText:
+      "Custom Supreme Trucking Insurance visual showing trucker earnings, freight rates, BLS median pay, DAT spot rates, and ATRI operating costs.",
+    imageLabel: "Trucker earnings",
+    imageCue: "Pay, rates, fuel, costs, insurance",
+    intro:
+      "The short answer: company truck drivers are still commonly looking at middle-five-figure wages, while owner-operators may see much larger gross numbers before fuel, truck payments, repairs, insurance, permits, taxes, and empty miles are paid. The difference between gross and net is the whole story.",
+    sections: [
+      {
+        heading: "Company driver pay is not the same as owner-operator income",
+        body: [
+          "The Bureau of Labor Statistics lists heavy and tractor-trailer truck drivers at a 2024 median pay of $57,440 per year, or $27.62 per hour. Some drivers earn more because of overtime, endorsements, team routes, specialized freight, seniority, or better lanes, but the median is a useful reality check against exaggerated recruiting claims.",
+          "Owner-operators are different because gross revenue is not take-home pay. A truck can generate strong revenue per mile and still leave thin net income after fuel, maintenance, truck and trailer payments, tires, insurance, factoring, permits, accounting, and downtime.",
+        ],
+      },
+      {
+        heading: "Rates have improved, but costs are still heavy",
+        body: [
+          "Recent market updates show why truckers are asking this question again. DAT reported Q1 2026 spot rates averaging about $2.56 per mile, while fuel costs were estimated around $0.51 per mile during that period. Higher rates help, but they do not automatically mean every carrier is profitable.",
+          "ATRI's latest operating cost benchmark put average trucking operating cost at $2.260 per mile for 2024, with non-fuel operating costs reaching a record high. That means a carrier must look at the lane, loaded miles, empty miles, fuel program, equipment cost, insurance cost, and maintenance history before deciding whether a rate is actually good.",
+        ],
+      },
+      {
+        heading: "What this means before shopping insurance",
+        body: [
+          "Insurance should be reviewed against the real operation, not a headline revenue number. A one-truck owner-operator running local dry van, a long-haul reefer carrier, a flatbed operation, and a small fleet with multiple drivers can all have different underwriting questions and different coverage pressure points.",
+          "Before requesting quotes, prepare the DOT or MC number, truck and trailer values, driver details, radius, cargo, loss runs, filings, garaging address, and any broker or shipper insurance requirements. A clean file helps the agency understand the business and helps markets review the account more seriously.",
+        ],
+      },
+    ],
+    takeaway:
+      "Truckers may be seeing better revenue opportunities than the worst part of the downturn, but net income still depends on costs, lanes, equipment, insurance, safety history, and how cleanly the operation is presented to markets. This article is informational only; final insurance pricing and coverage depend on underwriting, filings, drivers, cargo, state, and carrier appetite.",
+    googleBusinessPost:
+      "How much are truckers making right now? We published a practical 2026 snapshot covering driver pay, owner-operator gross vs. net, freight rates, operating costs, and what trucking companies should prepare before reviewing insurance.",
+    socialPost:
+      "New Supreme Trucking Insurance guide: trucker earnings in 2026 — company pay, owner-operator gross vs. net, freight rates, costs, and insurance prep.",
+  },
   {
     slug: "how-much-does-commercial-truck-insurance-cost",
     title: "How Much Does Commercial Truck Insurance Cost?",

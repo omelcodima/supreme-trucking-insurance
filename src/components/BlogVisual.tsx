@@ -2,7 +2,10 @@ type BlogVisualProps = {
   title: string;
   category: string;
   sourceName?: string;
+  imageUrl?: string;
   imageAltText?: string;
+  imageLabel?: string;
+  imageCue?: string;
   variant?: "hero" | "card";
 };
 
@@ -330,13 +333,32 @@ export function BlogVisual({
   title,
   category,
   sourceName,
+  imageUrl,
   imageAltText,
+  imageLabel,
+  imageCue,
   variant = "card",
 }: BlogVisualProps) {
-  const visual = getVisual(category, title, sourceName);
-  const toneClasses = getToneClasses(visual.tone);
+  const selectedVisual: VisualOption = imageUrl
+    ? {
+        image: imageUrl,
+        label: imageLabel || category,
+        cue: imageCue || "Subject-specific original visual",
+        tone: "amber",
+        objectPosition: "center",
+      }
+    : getVisual(category, title, sourceName);
+  const hasCustomImage = Boolean(imageUrl);
+  const toneClasses = getToneClasses(selectedVisual.tone);
   const isHero = variant === "hero";
-  const visualVariant = getVisualVariant(title, visual, isHero);
+  const visualVariant = hasCustomImage
+    ? {
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        filter: "none",
+        transform: "none",
+      }
+    : getVisualVariant(title, selectedVisual, isHero);
 
   return (
     <div
@@ -348,49 +370,55 @@ export function BlogVisual({
       <div
         className="absolute inset-0 bg-cover transition-transform duration-700 group-hover/visual:scale-[1.05]"
         style={{
-          backgroundImage: `url(${visual.image})`,
+          backgroundImage: `url(${selectedVisual.image})`,
           backgroundPosition: visualVariant.backgroundPosition,
           backgroundSize: visualVariant.backgroundSize,
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#F7F3EC",
           filter: visualVariant.filter,
           transform: visualVariant.transform,
         }}
       />
 
-      <div className={`absolute inset-0 bg-gradient-to-t ${toneClasses.overlay}`} />
-      <div className={`absolute inset-0 bg-gradient-to-r ${toneClasses.side}`} />
+      {!hasCustomImage ? <div className={`absolute inset-0 bg-gradient-to-t ${toneClasses.overlay}`} /> : null}
+      {!hasCustomImage ? <div className={`absolute inset-0 bg-gradient-to-r ${toneClasses.side}`} /> : null}
       <div className={`absolute left-0 top-0 h-1.5 w-full bg-gradient-to-r ${toneClasses.strip}`} />
-      <div
-        className="absolute bottom-4 right-4 h-20 w-48 rounded-2xl bg-contain bg-center bg-no-repeat opacity-[0.22] drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)] md:h-24 md:w-56"
-        style={{ backgroundImage: "url(/logo.svg)" }}
-        aria-hidden="true"
-      />
+      {!hasCustomImage ? (
+        <div
+          className="absolute bottom-4 right-4 h-20 w-48 rounded-2xl bg-contain bg-center bg-no-repeat opacity-[0.22] drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)] md:h-24 md:w-56"
+          style={{ backgroundImage: "url(/logo.svg)" }}
+          aria-hidden="true"
+        />
+      ) : null}
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-7">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex max-w-[75%] flex-col items-start gap-2">
-            <span className="inline-flex rounded-full border border-white/65 bg-white/86 px-3.5 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-[#2F261C] shadow-lg backdrop-blur-md">
-              {visual.label}
-            </span>
-            <span className="inline-flex rounded-full border border-white/45 bg-[#2F261C]/72 px-3 py-1 text-[0.63rem] font-black uppercase tracking-[0.13em] text-white shadow-lg backdrop-blur-md">
-              {visual.cue}
+      {!hasCustomImage ? (
+        <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-7">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex max-w-[75%] flex-col items-start gap-2">
+              <span className="inline-flex rounded-full border border-white/65 bg-white/86 px-3.5 py-1.5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-[#2F261C] shadow-lg backdrop-blur-md">
+                {selectedVisual.label}
+              </span>
+              <span className="inline-flex rounded-full border border-white/45 bg-[#2F261C]/72 px-3 py-1 text-[0.63rem] font-black uppercase tracking-[0.13em] text-white shadow-lg backdrop-blur-md">
+                {selectedVisual.cue}
+              </span>
+            </div>
+            <span className="rounded-full bg-[#f97316] px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-lg">
+              Supreme
             </span>
           </div>
-          <span className="rounded-full bg-[#f97316] px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-lg">
-            Supreme
-          </span>
-        </div>
 
-        <div className={`${isHero ? "max-w-3xl" : "max-w-[92%]"}`}>
-          <p className="inline-flex rounded-full bg-[#f97316] px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-lg">
-            {sourceName ? "Original news brief" : "Insurance insight"}
-          </p>
-          {isHero ? (
-            <h3 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] md:text-5xl">
-              {title}
-            </h3>
-          ) : null}
+          <div className={`${isHero ? "max-w-3xl" : "max-w-[92%]"}`}>
+            <p className="inline-flex rounded-full bg-[#f97316] px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.18em] text-white shadow-lg">
+              {sourceName ? "Original news brief" : "Insurance insight"}
+            </p>
+            {isHero ? (
+              <h3 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] md:text-5xl">
+                {title}
+              </h3>
+            ) : null}
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }

@@ -85,7 +85,10 @@ export default async function BlogIndexPage() {
                   title={post.title}
                   category={post.category}
                   sourceName={post.sourceTitle}
+                  imageUrl={post.imageUrl}
                   imageAltText={getPostImageAlt(post)}
+                  imageLabel={post.imageLabel}
+                  imageCue={post.imageCue}
                 />
                 <div className="p-3 pt-5">
                   <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">

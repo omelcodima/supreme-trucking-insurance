@@ -98,6 +98,10 @@ Takeaway
 Source Title
 Source URL
 Source Published At
+Image URL
+Image Alt Text
+Image Label
+Image Cue
 Google Business Post
 Social Post
 ```

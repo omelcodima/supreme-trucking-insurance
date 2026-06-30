@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const tags = getPostTags(post);
   const imageAltText = getPostImageAlt(post);
+  const postImage = absoluteUrl(post.imageUrl || defaultOgImage);
 
   return {
     title: `${post.title} | Supreme Trucking Insurance`,
@@ -46,13 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       publishedTime: post.date,
       modifiedTime: post.date,
-      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: imageAltText }],
+      images: [{ url: postImage, width: 1200, height: 630, alt: imageAltText }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [defaultOgImage],
+      images: [postImage],
     },
   };
 }
@@ -71,13 +72,14 @@ export default async function BlogPostPage({ params }: Props) {
   const imageAltText = getPostImageAlt(post);
   const serviceLinks = getRelatedServiceLinks(post);
   const articleUrl = absoluteUrl(`/blog/${post.slug}`);
+  const postImage = absoluteUrl(post.imageUrl || defaultOgImage);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.description,
-    image: [defaultOgImage],
+    image: [postImage],
     keywords: tags,
     articleSection: post.category,
     about: tags.map((tag) => ({
@@ -142,7 +144,10 @@ export default async function BlogPostPage({ params }: Props) {
               title={post.title}
               category={post.category}
               sourceName={post.sourceTitle}
+              imageUrl={post.imageUrl}
               imageAltText={imageAltText}
+              imageLabel={post.imageLabel}
+              imageCue={post.imageCue}
               variant="hero"
             />
           <div className="mt-6 flex flex-wrap gap-2">
