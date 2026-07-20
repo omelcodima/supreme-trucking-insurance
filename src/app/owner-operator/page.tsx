@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "Owner Operator Insurance | Supreme Trucking Insurance",
-  description: "Fast, affordable insurance for owner operators. Primary liability, cargo, physical damage, and bobtail coverage. Market options and clear updates.",
+  description: "Insurance for owner operators, including primary liability, cargo, physical damage, and bobtail coverage. Market options and clear updates.",
 };
 
 export default function OwnerOperatorPage() {
@@ -10,7 +10,7 @@ export default function OwnerOperatorPage() {
     <SubpageLayout
       eyebrow="Owner operators"
       title="Owner Operator Insurance"
-      description="Solo truckers deserve fast, affordable coverage presented in a clean, professional way. We help you get the right structure without wasting time."
+      description="Coverage for solo truckers, built around the truck, freight, operating radius, and contracts that keep the business moving."
       image="/images/owner-operator-card-v2.jpg"
       sectionTitle="Built for the solo trucker"
       intro={[
@@ -33,7 +33,7 @@ export default function OwnerOperatorPage() {
       ]}
       primaryCtaLabel="Get your free quote"
       ctaTitle="Ready to get your quote?"
-      ctaDescription="Fill out a quick form or call directly. Orange CTA stays prominent and easy to find."
+      ctaDescription="Tell us about your truck and operation, or call directly to discuss the coverage you need."
       ctaButtonLabel="Get a Free Quote"
     />
   );

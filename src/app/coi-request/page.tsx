@@ -87,7 +87,7 @@ export default function CoiRequestPage() {
               COI request.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#5A4B3B] md:text-xl">
-              Send the certificate holder details here and we will prepare the certificate of insurance as quickly as possible.
+              Send the certificate holder details here and our team will review the request during business hours.
             </p>
           </div>
         </div>

@@ -56,7 +56,7 @@ export default function SubpageLayout({
           </div>
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src={image} alt={title} fill priority style={{ objectFit: "cover" }} />
+              <Image src={image} alt={title} fill priority sizes="(min-width: 1024px) 48vw, 100vw" style={{ objectFit: "cover" }} />
             </div>
           </div>
         </div>

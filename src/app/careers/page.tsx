@@ -61,7 +61,7 @@ export default function CareersPage() {
 
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] overflow-hidden rounded-[1.5rem] md:h-[360px]">
-              <Image src="/images/highway-premium.jpg" alt="Semi truck on highway" fill priority style={{ objectFit: "cover" }} />
+              <Image src="/images/highway-premium.jpg" alt="Semi truck on highway" fill priority sizes="(min-width: 1024px) 44vw, 100vw" style={{ objectFit: "cover" }} />
               <div className="absolute inset-0 bg-gradient-to-tr from-[#1F160D]/55 via-transparent to-[#FFF7ED]/20" />
               <div className="absolute bottom-5 left-5 right-5 rounded-[1.4rem] border border-white/40 bg-[#FFFDF9]/88 p-5 shadow-[0_18px_45px_rgba(89,63,37,0.12)] backdrop-blur">
                 <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">What matters here</p>

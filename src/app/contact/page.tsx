@@ -74,14 +74,14 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto px-4 pt-14 pb-16 md:pt-20 md:pb-20 grid gap-10 lg:grid-cols-[1fr_0.95fr] items-center">
           <div>
             <span className="eyebrow mb-5">Contact</span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">We respond fast and keep it simple.</h1>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">Talk to a trucking insurance specialist.</h1>
             <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">
-              Reach out for quotes, COI requests, policy documents, or general questions. We answer fast and keep the process simple.
+              Reach out for quotes, COI requests, policy documents, or general questions about your trucking operation.
             </p>
           </div>
           <div className="hero-image-shell p-4">
             <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src="/images/highway-premium.jpg" alt="Truck" fill priority style={{ objectFit: "cover" }} />
+              <Image src="/images/highway-premium.jpg" alt="Truck" fill priority sizes="(min-width: 1024px) 46vw, 100vw" style={{ objectFit: "cover" }} />
             </div>
           </div>
         </div>
@@ -91,10 +91,9 @@ export default function ContactPage() {
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-5">
             {[
-              ["📞", "Phone", <a key="phone" href="tel:+13609367196" className="text-[#f97316] font-bold text-lg hover:underline">(360) 936-7196</a>, "Best for new quotes and urgent needs"],
-              ["📧", "Email", <a key="email" href="mailto:info@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">info@supremetruckinginsurance.com</a>, "For documents, COI requests, and non-urgent questions"],
+              ["Phone", <a key="phone" href="tel:+13609367196" className="text-[#f97316] font-bold text-lg hover:underline">(360) 936-7196</a>, "For new quotes and policy questions"],
+              ["Email", <a key="email" href="mailto:info@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">info@supremetruckinginsurance.com</a>, "For documents, COI requests, and general questions"],
               [
-                "📍",
                 "Google Business",
                 <a
                   key="google"
@@ -107,11 +106,10 @@ export default function ContactPage() {
                 </a>,
                 "Business profile, directions, and search listing",
               ],
-              ["⏰", "Response time", <span key="time" className="text-[#2F261C] font-semibold">Typically within 1 business hour</span>, "Mon–Fri 8AM–6PM Pacific"],
-              ["🌎", "Licensed in", <span key="states" className="text-[#2F261C] font-semibold">most states across the U.S.</span>, "Focused on trucking coverage only"],
-            ].map(([icon, title, value, note]) => (
-              <div key={title as string} className="card-premium rounded-[1.5rem] p-6 flex gap-4 items-start">
-                <div className="text-3xl">{icon as string}</div>
+              ["Business hours", <span key="time" className="text-[#2F261C] font-semibold">Monday–Friday, 8 AM–6 PM Pacific</span>, "Messages are answered during business hours"],
+              ["Licensed in", <span key="states" className="text-[#2F261C] font-semibold">most states across the U.S.</span>, "Focused on commercial trucking coverage"],
+            ].map(([title, value, note]) => (
+              <div key={title as string} className="card-premium rounded-[1.5rem] p-6">
                 <div>
                   <p className="font-black text-[#2F261C] mb-1">{title as string}</p>
                   <div>{value as React.ReactNode}</div>
@@ -133,7 +131,7 @@ export default function ContactPage() {
             ) : (
               <>
                 <h3 className="text-2xl font-black text-[#2F261C] mb-2">Send a message</h3>
-                <p className="text-[#7B6B59] mb-6 text-sm">Short form. Fast response. Same warm light styling as the rest of the site.</p>
+                <p className="text-[#7B6B59] mb-6 text-sm">Tell us how we can help and include the best way to reach you.</p>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className={labelClass}>Name *</label>

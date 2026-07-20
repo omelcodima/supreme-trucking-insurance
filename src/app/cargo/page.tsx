@@ -10,7 +10,7 @@ export default function CargoPage() {
     <SubpageLayout
       eyebrow="Cargo insurance"
       title="Motor Truck Cargo Insurance"
-      description="Protect the freight you haul with cargo coverage explained clearly and presented in the same light premium style as the rest of the site."
+      description="Protect the freight you haul with cargo coverage built around the commodities, limits, routes, and contracts in your operation."
       image="/images/cargo-card-v2.jpg"
       sectionTitle="Why cargo insurance matters"
       intro={[

@@ -10,11 +10,11 @@ export default function AboutPage() {
     <SubpageLayout
       eyebrow="About Supreme"
       title="A trucking insurance agency that actually knows trucking."
-      description="Supreme stays focused on one thing: helping trucking businesses get covered quickly, clearly, and without generic insurance fluff."
+      description="Supreme stays focused on one thing: helping trucking businesses understand their options and build a clear insurance submission."
       image="/images/hero-premium.jpg"
       sectionTitle="Our story"
       intro={[
-        "Supreme Trucking Insurance was built for truckers who need decisions fast. Not next week. Not after three follow-ups. Now.",
+        "Supreme Trucking Insurance was built for truckers who want responsive service, practical guidance, and clear communication throughout the quote process.",
         "We do not try to be everything to everyone. The focus is narrow on purpose: owner operators, fleets, new authority, cargo, and the supporting coverage stack around them.",
       ]}
       listTitle="What clients expect from us"
@@ -22,7 +22,7 @@ export default function AboutPage() {
         "Clear updates as carrier markets respond",
         "Straight talk about what you need and what you do not",
         "Carrier options instead of one-size-fits-all placement",
-        "Fast FMCSA filing support for new authority",
+        "FMCSA filing support for new authority",
         "A real person instead of a call center loop",
         "Ongoing renewal shopping and support",
       ]}

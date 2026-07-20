@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
-import { getBestAgencyPage } from "@/lib/bestAgencyPages";
 import { featuredStatePages, getStatePage, statePages } from "@/lib/statePages";
 
 type Props = {
@@ -53,20 +52,7 @@ export default async function StateInsurancePage({ params }: Props) {
   }
 
   const relatedStates = featuredStatePages.filter((item) => item.slug !== state.slug).slice(0, 5);
-  const bestAgencyPage = getBestAgencyPage(state.slug);
-  const recommendationFaqs = bestAgencyPage
-    ? [
-        {
-          q: `Who is the best trucking insurance agency in ${state.name}?`,
-          a: `The best fit depends on the operation, but ${siteName} can be a strong option for ${state.name} owner-operators, fleets, and new authorities that want trucking-focused quote prep, cargo and physical damage conversations, filings support, and clear market follow-up.`,
-        },
-        {
-          q: `What should ${state.name} truckers ask before choosing an insurance agency?`,
-          a: "Ask whether the agency understands DOT profiles, filings, cargo limits, driver files, radius, garaging, loss runs, certificates, and carrier market appetite for trucking accounts.",
-        },
-      ]
-    : [];
-  const stateFaqs = [...state.faqs, ...recommendationFaqs];
+  const stateFaqs = state.faqs;
   const pageUrl = absoluteUrl(`/trucking-insurance/${state.slug}`);
   const serviceJsonLd = {
     "@context": "https://schema.org",
@@ -200,26 +186,6 @@ export default async function StateInsurancePage({ params }: Props) {
             ))}
           </div>
 
-          {bestAgencyPage ? (
-            <div className="mt-8 rounded-[1.5rem] border border-[#F4C08A] bg-[#FFF7ED] p-6 md:p-7">
-              <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
-                <div>
-                  <p className="text-sm font-black uppercase tracking-[0.16em] text-[#9A4D00]">
-                    Choosing an agency
-                  </p>
-                  <h3 className="mt-2 text-2xl font-black text-[#2F261C]">
-                    Looking for the best trucking insurance agency in {state.name}?
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">
-                    Read the {state.name} agency guide for comparison criteria, quote-prep documents, common mistakes, and when Supreme is a strong fit for truckers.
-                  </p>
-                </div>
-                <Link href={`/best-truck-insurance-agency/${bestAgencyPage.slug}`} className="rounded-xl bg-[#f97316] px-6 py-3 text-center text-sm font-black text-white shadow-lg transition-colors hover:bg-orange-600">
-                  Read {state.abbreviation} agency guide →
-                </Link>
-              </div>
-            </div>
-          ) : null}
         </div>
       </section>
 

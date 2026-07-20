@@ -32,53 +32,6 @@ const organizationJsonLd = {
   ],
 };
 
-const socialLinks = [
-  {
-    name: "Twitter",
-    icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
-        <path
-          fill="currentColor"
-          d="M17.53 3h3.27l-7.14 8.16L22 21h-6.52l-5.1-6.68L4.54 21H1.27l7.64-8.73L1 3h6.68l4.61 6.1L17.53 3Zm-1.15 16.27h1.81L6.7 4.64H4.76l11.62 14.63Z"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Instagram",
-    icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
-        <path
-          fill="currentColor"
-          d="M7.8 2h8.4A5.81 5.81 0 0 1 22 7.8v8.4a5.81 5.81 0 0 1-5.8 5.8H7.8A5.81 5.81 0 0 1 2 16.2V7.8A5.81 5.81 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm8.95 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7.25A4.75 4.75 0 1 1 12 16.75 4.75 4.75 0 0 1 12 7.25Zm0 2A2.75 2.75 0 1 0 12 14.75 2.75 2.75 0 0 0 12 9.25Z"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "Facebook",
-    icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
-        <path
-          fill="currentColor"
-          d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.62A22.1 22.1 0 0 0 14.3 4c-2.38 0-4 1.45-4 4.11v2.79H7.6V14h2.7v8h3.2Z"
-        />
-      </svg>
-    ),
-  },
-  {
-    name: "LinkedIn",
-    icon: (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4">
-        <path
-          fill="currentColor"
-          d="M6.94 8.98H3.73V21h3.21V8.98ZM5.33 3A1.86 1.86 0 1 0 5.3 6.72 1.86 1.86 0 0 0 5.33 3Zm15 11.1c0-3.22-1.72-5.39-4.49-5.39a3.86 3.86 0 0 0-3.49 1.92V8.98H9.28V21h3.2v-5.95c0-1.57.3-3.1 2.25-3.1 1.93 0 1.96 1.8 1.96 3.2V21h3.2l.44-6.9Z"
-        />
-      </svg>
-    ),
-  },
-];
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
@@ -142,7 +95,7 @@ export default function RootLayout({
                   <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                     <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-48">
                       <Link href="/owner-operator" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Owner Operators</Link>
-                      <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Small Fleets</Link>
+                      <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Fleet Insurance</Link>
                       <Link href="/new-venture" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">New Authority</Link>
                       <Link href="/cargo" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Cargo Insurance</Link>
                     </div>
@@ -152,19 +105,14 @@ export default function RootLayout({
                 <Link href="/about" className="text-[#2F261C] font-medium hover:text-[#f97316] transition-colors">About</Link>
                 <div className="relative group">
                   <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
-                    More
+                    Resources
                   </span>
                   <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
                     <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-44">
                       <Link href="/instant-indication" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Instant Indication</Link>
-                      <Link href="/best-truck-insurance-agency" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Best Agency Guide</Link>
-                      <Link href="/articles" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Articles & Insights</Link>
-                      <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog</Link>
+                      <Link href="/blog" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Blog & Insights</Link>
                       <Link href="/reviews" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Reviews</Link>
-                      <Link href="/sms-terms-and-conditions" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">SMS Terms</Link>
-                      <Link href="/careers" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Careers</Link>
                       <Link href="/contact" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Contact</Link>
-                      <Link href="/privacy-policy" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Privacy</Link>
                     </div>
                   </div>
                 </div>
@@ -190,20 +138,6 @@ export default function RootLayout({
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 md:hidden">
-                <a
-                  href="tel:+13609367196"
-                  className="rounded-lg border border-[#DED3C4] bg-[#FFFDF9] px-3 py-2 text-sm font-bold text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316] transition-colors"
-                >
-                  Call
-                </a>
-                <Link
-                  href="/quote"
-                  className="rounded-lg bg-[#f97316] px-3 py-2 text-sm font-bold text-white hover:bg-orange-600 transition-colors"
-                >
-                  Quote
-                </Link>
-              </div>
             </div>
 
             <details className="group mt-2 md:hidden rounded-2xl border border-[#E7DED2] bg-[#FFFDF9] open:shadow-[0_18px_45px_rgba(89,63,37,0.08)]">
@@ -216,7 +150,7 @@ export default function RootLayout({
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Services</p>
                     <Link href="/owner-operator" className="hover:text-[#f97316] transition-colors">Owner Operators</Link>
-                    <Link href="/fleet" className="hover:text-[#f97316] transition-colors">Small Fleets</Link>
+                    <Link href="/fleet" className="hover:text-[#f97316] transition-colors">Fleet Insurance</Link>
                     <Link href="/new-venture" className="hover:text-[#f97316] transition-colors">New Authority</Link>
                     <Link href="/cargo" className="hover:text-[#f97316] transition-colors">Cargo Insurance</Link>
                     <Link href="/coi-request" className="hover:text-[#f97316] transition-colors">COI Request</Link>
@@ -224,15 +158,13 @@ export default function RootLayout({
                   <div className="grid gap-2">
                     <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Company</p>
                     <Link href="/about" className="hover:text-[#f97316] transition-colors">About</Link>
-                    <Link href="/instant-indication" className="hover:text-[#f97316] transition-colors">Instant Indication</Link>
-                    <Link href="/best-truck-insurance-agency" className="hover:text-[#f97316] transition-colors">Best Agency Guide</Link>
-                    <Link href="/articles" className="hover:text-[#f97316] transition-colors">Articles & Insights</Link>
-                    <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog</Link>
                     <Link href="/reviews" className="hover:text-[#f97316] transition-colors">Reviews</Link>
-                    <Link href="/sms-terms-and-conditions" className="hover:text-[#f97316] transition-colors">SMS Terms</Link>
-                    <Link href="/careers" className="hover:text-[#f97316] transition-colors">Careers</Link>
                     <Link href="/contact" className="hover:text-[#f97316] transition-colors">Contact</Link>
-                    <Link href="/privacy-policy" className="hover:text-[#f97316] transition-colors">Privacy Policy</Link>
+                  </div>
+                  <div className="grid gap-2">
+                    <p className="text-xs uppercase tracking-[0.16em] text-[#7B6B59]">Resources</p>
+                    <Link href="/instant-indication" className="hover:text-[#f97316] transition-colors">Instant Indication</Link>
+                    <Link href="/blog" className="hover:text-[#f97316] transition-colors">Blog & Insights</Link>
                   </div>
                   <div className="rounded-xl border border-[#E7DED2] bg-[#F7F3EC] px-4 py-3 text-[#5A4B3B]">
                     <a href="tel:+13609367196" className="block text-lg font-black text-[#2F261C] hover:text-[#f97316] transition-colors">
@@ -259,18 +191,6 @@ export default function RootLayout({
               <p className="text-[#5A4B3B] text-sm leading-relaxed">
                 Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in most states.
               </p>
-              <div className="mt-5 flex items-center gap-3" aria-label="Social media">
-                {socialLinks.map((social) => (
-                  <span
-                    key={social.name}
-                    aria-label={social.name}
-                    title={`${social.name} profile coming soon`}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#D8CCBD] bg-[#FFFDF9]/70 text-[#5A4B3B] transition-all hover:-translate-y-0.5 hover:border-[#f97316]/45 hover:text-[#f97316] hover:shadow-[0_12px_26px_rgba(249,115,22,0.12)]"
-                  >
-                    {social.icon}
-                  </span>
-                ))}
-              </div>
             </div>
 
             {/* Services */}
@@ -278,7 +198,7 @@ export default function RootLayout({
               <h3 className="text-lg font-bold mb-4 text-[#f97316]">Services</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/owner-operator" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Owner Operator Insurance</Link></li>
-                <li><Link href="/fleet" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Small Fleet Insurance</Link></li>
+                <li><Link href="/fleet" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Fleet Insurance</Link></li>
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
                 <li><Link href="/coi-request" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">COI Request</Link></li>
@@ -331,9 +251,9 @@ export default function RootLayout({
                 <div className="pt-2">
                   <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>
                   <Link href="/sms-terms-and-conditions" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">SMS Terms & Conditions</Link>
-                  <Link href="/best-truck-insurance-agency" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Best Truck Insurance Agency Guide</Link>
-                  <Link href="/articles" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Articles & Insights</Link>
-                  <Link href="/blog" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Blog</Link>
+                  <Link href="/about" className="mt-2 block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">About</Link>
+                  <Link href="/contact" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Contact</Link>
+                  <Link href="/blog" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Blog & Insights</Link>
                   <Link href="/reviews" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Reviews</Link>
                   <Link href="/careers" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm mb-3">Careers</Link>
                   <Link href="/quote" className="inline-block bg-[#f97316] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 transition-colors">
@@ -352,7 +272,7 @@ export default function RootLayout({
         </footer>
         <Link
           href="/instant-indication"
-          className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-3 rounded-full border border-[#f97316]/35 bg-[#FFFDF9]/95 px-6 py-4 text-lg font-black text-[#2F261C] shadow-[0_18px_44px_rgba(89,63,37,0.22)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white hover:text-[#f97316] md:bottom-6 md:right-6 md:px-7 md:py-4"
+          className="fixed bottom-6 right-6 z-40 hidden items-center gap-3 rounded-full border border-[#f97316]/35 bg-[#FFFDF9]/95 px-7 py-4 text-lg font-black text-[#2F261C] shadow-[0_18px_44px_rgba(89,63,37,0.22)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white hover:text-[#f97316] md:inline-flex"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 text-[#f97316]">
             <path fill="currentColor" d="M4 19h16v2H4v-2Zm2-3h2V8H6v8Zm5 0h2V3h-2v13Zm5 0h2v-6h-2v6Z" />

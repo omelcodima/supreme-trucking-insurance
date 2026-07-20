@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
-import { bestAgencyPages } from "@/lib/bestAgencyPages";
 import { statePages } from "@/lib/statePages";
 
 const baseUrl = "https://supremetruckinginsurance.com";
@@ -8,7 +7,6 @@ const baseUrl = "https://supremetruckinginsurance.com";
 const staticRoutes = [
   "",
   "/about",
-  "/articles",
   "/blog",
   "/careers",
   "/cargo",
@@ -24,7 +22,6 @@ const staticRoutes = [
   "/reviews",
   "/sms-terms-and-conditions",
   "/trucking-insurance",
-  "/best-truck-insurance-agency",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -43,12 +40,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
-    })),
-    ...bestAgencyPages.map((page) => ({
-      url: `${baseUrl}/best-truck-insurance-agency/${page.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.82,
     })),
     ...blogPosts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,

@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "New Authority Insurance | Supreme Trucking Insurance",
-  description: "Just got your MC number? We get new authority truckers insured and hauling fast. Market options and clear updates. Licensed in most states.",
+  description: "Insurance guidance for new authority trucking companies. Market options, filing support, and clear updates. Licensed in most states.",
 };
 
 export default function NewVenturePage() {
@@ -10,9 +10,9 @@ export default function NewVenturePage() {
     <SubpageLayout
       eyebrow="New authority"
       title="New Venture Insurance"
-      description="Just got your MC number? We specialize in new authority placements and fast filings without the old dark, heavy insurance-site feel."
+      description="Just got your MC number? We help new authority trucking companies prepare coverage, filings, and the details carrier markets need to review."
       image="/images/new-authority-card-v2.jpg"
-      sectionTitle="Start hauling fast"
+      sectionTitle="Prepare to haul with the right coverage"
       intro={[
         "Getting authority is exciting, but the clock starts immediately. You need the right filings and coverage in place before a single load moves.",
         "We know which carriers work with new ventures and how to present your file so things move quickly instead of stalling out.",
@@ -34,9 +34,9 @@ export default function NewVenturePage() {
         { q: "Will new authority cost more?", a: "Usually yes, but we shop multiple carriers to find the most realistic option available." },
         { q: "How long until I can haul?", a: "Timing depends on the market, filings, and file quality. We move quickly and keep you updated." },
       ]}
-      primaryCtaLabel="Get insured now"
-      ctaTitle="Ready to hit the road?"
-      ctaDescription="We’ll get you covered and help move the filings so you can start hauling fast."
+      primaryCtaLabel="Start your quote"
+      ctaTitle="Prepare your new authority submission"
+      ctaDescription="Tell us about the operation and we’ll help review coverage needs, filings, and the next steps."
       ctaButtonLabel="Get a Free Quote"
     />
   );

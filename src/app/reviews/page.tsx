@@ -14,13 +14,6 @@ export const metadata: Metadata = {
   },
 };
 
-const reviewPrompts = [
-  "Was the quote process clear?",
-  "Did we explain your trucking coverage options?",
-  "Did we help with COI, filings, cargo, fleet, or new authority questions?",
-  "Would you recommend Supreme to another trucker?",
-];
-
 export default function ReviewsPage() {
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -60,64 +53,24 @@ export default function ReviewsPage() {
             </div>
           </div>
 
-          <div className="card-premium rounded-[1.6rem] p-6 md:p-8">
+          <div className="card-premium rounded-[1.6rem] p-7 md:p-9">
             <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
-              Helpful review details
+              Verified source
             </p>
-            <div className="mt-5 grid gap-3">
-              {reviewPrompts.map((prompt) => (
-                <div
-                  key={prompt}
-                  className="rounded-2xl border border-[#E7DED2] bg-[#FFFDF9] px-4 py-4 text-sm font-bold text-[#5A4B3B]"
-                >
-                  {prompt}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-soft py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              ["Owner operators", "Tell other solo truckers if the process helped you understand liability, cargo, physical damage, or bobtail options."],
-              ["Fleets", "Mention whether renewal shopping, driver schedules, loss runs, or COI support was handled clearly."],
-              ["New authority", "Share whether the filings and first-step coverage process was easier to understand."],
-            ].map(([title, body]) => (
-              <div key={title} className="card-premium rounded-[1.35rem] p-6">
-                <h2 className="text-xl font-black text-[#2F261C]">{title}</h2>
-                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{body}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="card-muted mt-8 rounded-[1.5rem] p-6 md:p-8">
-            <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-              <div>
-                <span className="eyebrow mb-4">Google Business routine</span>
-                <h2 className="text-3xl font-black leading-tight text-[#2F261C]">
-                  Keep the profile active.
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">
-                  The website can point people to Google, but the Google Business Profile itself
-                  should stay active with photos, services, updates, and review responses.
-                </p>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {[
-                  "Add a truck or office photo every month.",
-                  "List each service: owner-operator, fleet, new authority, cargo, COI.",
-                  "Reply to every review with a short, professional response.",
-                  "Post one short update after each new guide is published.",
-                ].map((item) => (
-                  <div key={item} className="rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm font-bold leading-6 text-[#5A4B3B]">
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <h2 className="mt-4 text-3xl font-black leading-tight text-[#2F261C]">
+              Read our Google Business reviews.
+            </h2>
+            <p className="mt-4 text-base leading-7 text-[#5A4B3B]">
+              View our public business profile for current reviews, company details, and contact information.
+            </p>
+            <a
+              href={googleBusinessUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-6 py-3 font-bold text-[#2F261C] transition-colors hover:border-[#f97316] hover:text-[#f97316]"
+            >
+              Open Google Business
+            </a>
           </div>
         </div>
       </section>

@@ -172,7 +172,7 @@ export default function Home() {
             {operationCards.map((card) => (
               <Link key={card.title} href={card.href} className="card-premium block overflow-hidden rounded-[1.5rem] transition-transform hover:-translate-y-1">
                 <div className="relative h-48">
-                  <Image src={card.image} alt={card.title} fill className="object-cover" />
+                  <Image src={card.image} alt={card.title} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-extrabold text-[#2F261C]">{card.title}</h3>
