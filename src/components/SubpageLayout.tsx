@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 type QA = { q: string; a: string };
+type QuickFact = { label: string; value: string };
 
 type Props = {
   eyebrow: string;
@@ -23,6 +24,8 @@ type Props = {
   ctaTitle: string;
   ctaDescription: string;
   ctaButtonLabel: string;
+  immersiveHero?: boolean;
+  quickFacts?: QuickFact[];
 };
 
 export default function SubpageLayout({
@@ -44,23 +47,83 @@ export default function SubpageLayout({
   ctaTitle,
   ctaDescription,
   ctaButtonLabel,
+  immersiveHero = false,
+  quickFacts = [],
 }: Props) {
   return (
     <>
-      <section className="section-shell">
-        <div className="max-w-6xl mx-auto px-4 pt-14 pb-16 md:pt-20 md:pb-20 grid gap-10 lg:grid-cols-[1fr_0.95fr] items-center">
-          <div>
-            <span className="eyebrow mb-5">{eyebrow}</span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">{title}</h1>
-            <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">{description}</p>
-          </div>
-          <div className="hero-image-shell p-4">
-            <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
-              <Image src={image} alt={title} fill priority sizes="(min-width: 1024px) 48vw, 100vw" style={{ objectFit: "cover" }} />
+      {immersiveHero ? (
+        <>
+          <section className="section-shell warm-divider px-4 py-6 md:py-8">
+            <div className="relative mx-auto min-h-[510px] max-w-7xl overflow-hidden rounded-xl md:min-h-[570px]">
+              <Image
+                src={image}
+                alt={title}
+                fill
+                priority
+                sizes="(min-width: 1280px) 1280px, 100vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[#17110C]/60" />
+              <div className="relative z-10 flex min-h-[510px] items-end px-6 py-8 md:min-h-[570px] md:px-12 md:py-12 lg:px-16">
+                <div className="max-w-3xl text-white">
+                  <span className="mb-5 inline-flex rounded-full border border-white/35 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
+                    {eyebrow}
+                  </span>
+                  <h1 className="text-4xl font-black leading-tight tracking-normal md:text-6xl lg:text-7xl">
+                    {title}
+                  </h1>
+                  <p className="mt-5 max-w-2xl text-lg leading-8 text-white/90 md:text-xl md:leading-9">
+                    {description}
+                  </p>
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <Link
+                      href={primaryCtaHref}
+                      className="rounded-lg bg-[#f97316] px-7 py-4 text-center font-black text-white shadow-lg transition-colors hover:bg-orange-600"
+                    >
+                      {primaryCtaLabel}
+                    </Link>
+                    <a
+                      href="tel:+13609367196"
+                      className="rounded-lg border border-white/60 bg-black/20 px-7 py-4 text-center font-black text-white backdrop-blur-sm transition-colors hover:bg-white hover:text-[#2F261C]"
+                    >
+                      Call (360) 936-7196
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {quickFacts.length > 0 ? (
+            <section className="border-b border-[#E7DED2] bg-[#FFFDF9]">
+              <div className="mx-auto grid max-w-6xl px-4 md:grid-cols-3 md:divide-x md:divide-[#E7DED2]">
+                {quickFacts.map((fact) => (
+                  <div key={fact.label} className="border-b border-[#E7DED2] py-6 last:border-b-0 md:border-b-0 md:px-7 md:py-8 first:md:pl-0 last:md:pr-0">
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">{fact.label}</p>
+                    <p className="mt-2 text-base font-bold leading-6 text-[#2F261C]">{fact.value}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </>
+      ) : (
+        <section className="section-shell">
+          <div className="max-w-6xl mx-auto px-4 pt-14 pb-16 md:pt-20 md:pb-20 grid gap-10 lg:grid-cols-[1fr_0.95fr] items-center">
+            <div>
+              <span className="eyebrow mb-5">{eyebrow}</span>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#2F261C] leading-tight">{title}</h1>
+              <p className="mt-5 text-lg md:text-xl text-[#5A4B3B] max-w-2xl leading-relaxed">{description}</p>
+            </div>
+            <div className="hero-image-shell p-4">
+              <div className="relative h-[280px] md:h-[360px] rounded-[1.5rem] overflow-hidden">
+                <Image src={image} alt={title} fill priority sizes="(min-width: 1024px) 48vw, 100vw" style={{ objectFit: "cover" }} />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="section-soft py-18 md:py-20">
         <div className="max-w-6xl mx-auto px-4 grid gap-12 md:grid-cols-[1.05fr_0.95fr] items-start">

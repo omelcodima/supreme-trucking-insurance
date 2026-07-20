@@ -12,6 +12,13 @@ const inter = Inter({ subsets: ["latin"] });
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
+const serviceLinks = [
+  { href: "/owner-operator", label: "Owner Operators", detail: "Coverage for independent truck owners" },
+  { href: "/fleet", label: "Fleet Insurance", detail: "Structured coverage for growing fleets" },
+  { href: "/new-venture", label: "New Authority", detail: "Insurance and filing guidance" },
+  { href: "/cargo", label: "Cargo Insurance", detail: "Protection for the freight you haul" },
+];
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "InsuranceAgency",
@@ -89,15 +96,30 @@ export default function RootLayout({
               {/* NAV LINKS */}
               <div className="hidden md:flex items-center gap-8">
                 <div className="relative group">
-                  <span className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] transition-colors">
+                  <button
+                    type="button"
+                    className="text-[#2F261C] font-medium cursor-pointer hover:text-[#f97316] focus:text-[#f97316] transition-colors"
+                    aria-haspopup="true"
+                  >
                     Services
-                  </span>
-                  <div className="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
-                    <div className="bg-[#F7F3EC] border border-[#E7DED2] rounded-lg shadow-xl p-2 min-w-48">
-                      <Link href="/owner-operator" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Owner Operators</Link>
-                      <Link href="/fleet" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Fleet Insurance</Link>
-                      <Link href="/new-venture" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">New Authority</Link>
-                      <Link href="/cargo" className="block px-4 py-2 text-[#2F261C] hover:text-[#f97316] hover:bg-[#EFE7DA] rounded transition-colors text-sm">Cargo Insurance</Link>
+                  </button>
+                  <div className="absolute top-full left-0 pt-3 hidden group-hover:block group-focus-within:block z-50">
+                    <div className="w-[22rem] rounded-lg border border-[#E7DED2] bg-[#FFFDF9] p-3 shadow-[0_20px_50px_rgba(62,43,25,0.16)]">
+                      <p className="px-3 pb-2 pt-1 text-[11px] font-black uppercase tracking-[0.16em] text-[#9A8067]">
+                        Coverage by operation
+                      </p>
+                      {serviceLinks.map(({ href, label, detail }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="group/item block rounded-md px-3 py-3 transition-colors hover:bg-[#F3ECE2] focus:bg-[#F3ECE2]"
+                        >
+                          <span className="block text-sm font-bold text-[#2F261C] transition-colors group-hover/item:text-[#f97316]">
+                            {label}
+                          </span>
+                          <span className="mt-1 block text-xs leading-5 text-[#7B6B59]">{detail}</span>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 </div>

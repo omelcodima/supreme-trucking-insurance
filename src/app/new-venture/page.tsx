@@ -38,6 +38,12 @@ export default function NewVenturePage() {
       ctaTitle="Prepare your new authority submission"
       ctaDescription="Tell us about the operation and we’ll help review coverage needs, filings, and the next steps."
       ctaButtonLabel="Get a Free Quote"
+      immersiveHero
+      quickFacts={[
+        { label: "Designed for", value: "New DOT and MC authorities preparing to haul" },
+        { label: "Common needs", value: "Primary liability, cargo, physical damage, and filings" },
+        { label: "Start with", value: "DOT or MC number, vehicles, drivers, garaging, and freight" },
+      ]}
     />
   );
 }

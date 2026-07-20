@@ -35,6 +35,12 @@ export default function OwnerOperatorPage() {
       ctaTitle="Ready to get your quote?"
       ctaDescription="Tell us about your truck and operation, or call directly to discuss the coverage you need."
       ctaButtonLabel="Get a Free Quote"
+      immersiveHero
+      quickFacts={[
+        { label: "Designed for", value: "Independent owner-operators and leased operators" },
+        { label: "Common needs", value: "Liability, cargo, physical damage, and bobtail" },
+        { label: "Start with", value: "DOT number, truck details, driver history, and radius" },
+      ]}
     />
   );
 }

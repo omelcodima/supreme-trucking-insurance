@@ -35,6 +35,12 @@ export default function CargoPage() {
       ctaTitle="Protect your cargo today"
       ctaDescription="Cargo market options with clear follow-up from a trucking-focused agent."
       ctaButtonLabel="Get a Free Quote"
+      immersiveHero
+      quickFacts={[
+        { label: "Protects", value: "Freight against covered loss, damage, theft, and collision" },
+        { label: "Built around", value: "Commodity, cargo value, radius, contracts, and equipment" },
+        { label: "Start with", value: "Cargo type, required limit, routes, and broker requirements" },
+      ]}
     />
   );
 }

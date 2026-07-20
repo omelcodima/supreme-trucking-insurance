@@ -1,15 +1,15 @@
 import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
-  title: "Small Fleet Insurance | Supreme Trucking Insurance",
+  title: "Fleet Insurance | Supreme Trucking Insurance",
   description: "Fleet insurance for 11 to 25+ trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
 };
 
 export default function FleetPage() {
   return (
     <SubpageLayout
-      eyebrow="Small fleets"
-      title="Small Fleet Insurance"
+      eyebrow="Fleet insurance"
+      title="Fleet Insurance"
       description="Protecting fleets starting around 11 trucks, through 25 trucks and growing operations, with a simpler path to better fleet pricing."
       image="/images/fleet-card-v2.jpg"
       sectionTitle="Simplify your fleet insurance"
@@ -38,6 +38,12 @@ export default function FleetPage() {
       ctaTitle="Let's shop your fleet coverage"
       ctaDescription="Tell us about the fleet and we’ll shop the right markets with clear follow-up."
       ctaButtonLabel="Get a Free Quote"
+      immersiveHero
+      quickFacts={[
+        { label: "Designed for", value: "Fleets starting around 11 trucks and growing" },
+        { label: "Common needs", value: "Fleet liability, cargo, physical damage, and endorsements" },
+        { label: "Start with", value: "Unit schedule, drivers, loss runs, current policy, and radius" },
+      ]}
     />
   );
 }
