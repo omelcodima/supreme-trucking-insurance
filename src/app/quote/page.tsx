@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { measureLeadCreated } from "@/lib/openaiAds";
 
 type StatusState = {
   type: "idle" | "success" | "error";
@@ -47,6 +48,7 @@ export default function QuotePage() {
         throw new Error(result?.detail || result?.message || "We could not send your quote request. Please try again.");
       }
 
+      measureLeadCreated();
       setSubmitted(true);
       setStatus({
         type: "success",

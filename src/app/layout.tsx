@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import Script from "next/script";
 import Analytics from "@/components/Analytics";
+import OpenAIAdsEvents from "@/components/OpenAIAdsEvents";
 import BrandLogo from "../components/BrandLogo";
+import { OPENAI_ADS_PIXEL_ID } from "@/lib/openaiAds";
 import { defaultOgImage, siteName, siteUrl } from "@/lib/seo";
 import { featuredStatePages } from "@/lib/statePages";
 import "./globals.css";
@@ -82,10 +85,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Script id="openai-ads-measurement-pixel" strategy="beforeInteractive">
+          {`
+            (function (w, d, s, u) {
+              if (w.oaiq) return;
+              var q = function () { q.q.push(arguments); };
+              q.q = [];
+              w.oaiq = q;
+              var js = d.createElement(s);
+              js.async = true;
+              js.src = u;
+              var f = d.getElementsByTagName(s)[0];
+              f.parentNode.insertBefore(js, f);
+            })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+            oaiq("init", { pixelId: "${OPENAI_ADS_PIXEL_ID}" });
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
+        <OpenAIAdsEvents />
         <Analytics />
         {/* STICKY NAV */}
         <header className="sticky top-0 z-50 bg-[#F7F3EC]/95 border-b border-[#E7DED2] shadow-none backdrop-blur">
