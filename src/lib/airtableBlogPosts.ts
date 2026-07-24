@@ -151,7 +151,7 @@ function recordToBlogPost(record: AirtableRecord): BlogPost | null {
     sourcePublishedAt: stringField(fields, "Source Published At") || undefined,
     tags: stringListField(fields, "Tags"),
     imageUrl: stringField(fields, "Image URL") || undefined,
-    imageAltText: stringField(fields, "Image Alt Text") || undefined,
+    imageAltText: stringField(fields, "Image Alt") || stringField(fields, "Image Alt Text") || undefined,
     imageLabel: stringField(fields, "Image Label") || undefined,
     imageCue: stringField(fields, "Image Cue") || undefined,
     googleBusinessPost: stringField(fields, "Google Business Post") || undefined,

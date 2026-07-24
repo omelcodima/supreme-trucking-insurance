@@ -3,6 +3,8 @@ import {
   createAirtableBlogPost,
   listAirtableBlogRecords,
 } from "@/lib/airtableBlogPosts";
+import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
+import { normalizeReadTime } from "@/lib/blogReadTime";
 
 export const maxDuration = 60;
 
@@ -28,7 +30,77 @@ type GeneratedPost = {
   takeaway: string;
   googleBusinessPost: string;
   socialPost: string;
+  imagePrompt?: string;
 };
+
+type GeneratedPostPayload = Omit<GeneratedPost, "readTime"> & {
+  readTime?: unknown;
+};
+
+/**
+ * Find a real stock photo for the post via Pexels (preferred), falling back
+ * to AI generation. Image problems must never block publishing.
+ */
+async function findPexelsImage(query: string): Promise<{ url: string; credit: string } | null> {
+  const pexelsKey = process.env.PEXELS_API_KEY;
+  if (!pexelsKey) return null;
+  try {
+    const params = new URLSearchParams({ query, per_page: "6", orientation: "landscape" });
+    const response = await fetch(`https://api.pexels.com/v1/search?${params}`, {
+      headers: { Authorization: pexelsKey },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!response.ok) return null;
+    const body = (await response.json()) as {
+      photos?: { src?: { landscape?: string }; photographer?: string; avg_color?: string }[];
+    };
+    const photos = (body.photos || []).filter((p) => p.src?.landscape);
+    if (photos.length === 0) return null;
+    // Light rotation so back-to-back posts on similar topics don't reuse photo #1.
+    const pick = photos[Math.floor(Math.random() * Math.min(photos.length, 4))];
+    return { url: pick.src!.landscape!, credit: pick.photographer || "Pexels" };
+  } catch {
+    return null;
+  }
+}
+
+/** Distill a photo search query from the article's image prompt / topic. */
+function pexelsQueryFromPrompt(imagePrompt: string, title: string): string {
+  const t = (imagePrompt + " " + title).toLowerCase();
+  if (t.includes("medical") || t.includes("exam") || t.includes("audiometer") || t.includes("hearing")) return "medical exam doctor office";
+  if (t.includes("qualification") || t.includes("folder") || t.includes("documents") || t.includes("paperwork")) return "documents paperwork desk office";
+  if (t.includes("reefer") || t.includes("refrigerated")) return "refrigerated truck trailer loading";
+  if (t.includes("warehouse") || t.includes("dock") || t.includes("cargo") || t.includes("pallet")) return "warehouse loading dock freight";
+  if (t.includes("fleet") || t.includes("yard") || t.includes("parked")) return "truck fleet parking yard";
+  if (t.includes("cab") || t.includes("dashboard") || t.includes("driver seat")) return "truck driver cab interior";
+  if (t.includes("inspection") || t.includes("clipboard")) return "truck inspection mechanic";
+  if (t.includes("money") || t.includes("calculator") || t.includes("settlement") || t.includes("earning")) return "calculator finance paperwork desk";
+  return "semi truck highway";
+}
+
+function buildPostImageUrl(imagePrompt: string, slug: string): string {
+  const style =
+    "bright professional editorial photography, photorealistic, high detail, natural light, no text, no logos, no watermarks";
+  const prompt = encodeURIComponent(`${imagePrompt}, ${style}`);
+  // Deterministic seed per slug so the URL is stable across rebuilds.
+  let seed = 0;
+  for (let i = 0; i < slug.length; i++) seed = (seed * 31 + slug.charCodeAt(i)) >>> 0;
+  return `https://image.pollinations.ai/prompt/${prompt}?width=1200&height=630&nologo=true&model=flux&seed=${seed % 100000}`;
+}
+
+async function verifyImageUrl(url: string): Promise<boolean> {
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" },
+      signal: AbortSignal.timeout(60000),
+    });
+    const type = response.headers.get("content-type") || "";
+    return response.ok && type.startsWith("image/");
+  } catch {
+    return false;
+  }
+}
 
 const defaultRssFeeds = [
   "https://landline.media/feed/",
@@ -217,13 +289,7 @@ function getResponseText(data: unknown) {
 }
 
 function parseGeneratedPost(text: string): GeneratedPost {
-  const jsonText = text
-    .trim()
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/```$/i, "")
-    .trim();
-  const parsed = JSON.parse(jsonText) as GeneratedPost;
+  const parsed = parseGeneratedJson(text) as GeneratedPostPayload;
 
   if (
     !parsed.slug ||
@@ -241,16 +307,53 @@ function parseGeneratedPost(text: string): GeneratedPost {
     ...parsed,
     slug: slugify(parsed.slug || parsed.title),
     category: parsed.category || "Trucking News",
-    readTime: parsed.readTime || "4 min read",
+    readTime: normalizeReadTime(parsed.readTime),
     googleBusinessPost: parsed.googleBusinessPost || "",
     socialPost: parsed.socialPost || "",
   };
 }
 
 async function generatePost(source: SourceItem): Promise<GeneratedPost> {
+  const instructions =
+    "You write for the Supreme Trucking Insurance blog — a real independent trucking insurance agency. Write like an experienced agent talking to trucking clients, not like an AI content mill. Vary your writing: some posts benefit from short punchy sections, others from a deeper dive; use concrete operational details truckers recognize (loss runs, MC numbers, driver files, reefer breakdowns, COIs, renewal shopping). Include one practical 'what we tell our clients' style insight. Never copy sentences from the source. Never invent legal requirements, prices, guarantees, same-day promises, or coverage promises. No fake urgency, no heavy marketing. Connect news to insurance only where reasonable: underwriting, filings, safety history, cargo, drivers, inspections, claims, renewals, carrier appetite. Always note the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.";
+  const userPrompt = `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost, imagePrompt. sections must be an array of 3 to 5 objects with heading and body; vary section count and paragraph rhythm naturally (1-3 paragraphs per section; occasionally use a short dash list inside a body where it genuinely helps). Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. Summarize what happened, why trucking companies should care, and what insurance-related documents or questions to prepare. imagePrompt must describe ONE bright professional editorial photograph that literally depicts this article's specific subject (scene, objects, setting — e.g. 'refrigerated trailer being loaded at a food warehouse dock, morning light' for a reefer story). No text, no logos, no readable signage, no close-up faces in the imagePrompt. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`;
+
+  // Preferred path: Vercel AI Gateway (flat subscription, OpenAI-compatible).
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+  if (gatewayKey) {
+    const gatewayModel = process.env.BLOG_GATEWAY_MODEL || "openai/gpt-4o-mini";
+    const response = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${gatewayKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: gatewayModel,
+        max_tokens: 2200,
+        messages: [
+          { role: "system", content: instructions },
+          { role: "user", content: userPrompt },
+        ],
+      }),
+    });
+    if (response.ok) {
+      const body = (await response.json()) as {
+        choices?: { message?: { content?: string } }[];
+      };
+      const text = body.choices?.[0]?.message?.content?.trim();
+      if (text) {
+        return parseGeneratedPost(text);
+      }
+    } else {
+      console.error("AI Gateway blog generation failed, falling back to OpenAI:", response.status, await response.text());
+    }
+  }
+
+  // Fallback: direct OpenAI Responses API.
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is missing.");
+    throw new Error("No AI provider available: AI Gateway failed/absent and OPENAI_API_KEY is missing.");
   }
 
   const model = process.env.OPENAI_MODEL || "gpt-5.2";
@@ -262,9 +365,8 @@ async function generatePost(source: SourceItem): Promise<GeneratedPost> {
     },
     body: JSON.stringify({
       model,
-      instructions:
-        "You create original trucking insurance news posts for Supreme Trucking Insurance. The post must sound like it was written by a practical trucking insurance agency, not a generic AI writer and not a copied news article. Do not copy sentences from the source. Do not invent legal requirements, prices, guarantees, same-day promises, or coverage promises. Avoid fake urgency and heavy marketing. Keep it useful for owner-operators, fleets, dispatchers, new authorities, and trucking companies. Connect the news to trucking insurance only where the connection is reasonable: underwriting, filings, safety history, cargo, drivers, inspections, claims, renewals, or carrier appetite. Always include that the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.",
-      input: `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost. sections must be an array of exactly 3 objects with heading and body. body must have 2 short paragraphs. Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. The article should summarize what happened, why trucking companies should care, and what insurance-related documents or questions they should prepare. Avoid quoting the source and do not present copied reporting as our own reporting. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`,
+      instructions,
+      input: userPrompt,
       max_output_tokens: 2200,
     }),
   });
@@ -310,6 +412,24 @@ export async function GET(request: Request) {
 
     const status = process.env.BLOG_AUTO_PUBLISH === "true" ? "Published" : "Draft";
     const today = new Date().toISOString().slice(0, 10);
+
+    // Topic-specific hero image: real Pexels photo first, AI fallback. Never blocks publishing.
+    let imageUrl = "";
+    let imageAlt = "";
+    if (generatedPost.imagePrompt) {
+      const pexels = await findPexelsImage(pexelsQueryFromPrompt(generatedPost.imagePrompt, generatedPost.title));
+      if (pexels) {
+        imageUrl = pexels.url;
+        imageAlt = `${generatedPost.title} — photo by ${pexels.credit} (Pexels)`;
+      } else {
+        const candidateUrl = buildPostImageUrl(generatedPost.imagePrompt, slug);
+        if (await verifyImageUrl(candidateUrl)) {
+          imageUrl = candidateUrl;
+          imageAlt = `${generatedPost.title} — ${generatedPost.imagePrompt.slice(0, 120)}`;
+        }
+      }
+    }
+
     const created = await createAirtableBlogPost({
       Status: status,
       Slug: slug,
@@ -326,6 +446,7 @@ export async function GET(request: Request) {
       "Source Published At": source.publishedAt,
       "Google Business Post": generatedPost.googleBusinessPost,
       "Social Post": generatedPost.socialPost,
+      ...(imageUrl ? { "Image URL": imageUrl, "Image Alt": imageAlt } : {}),
     });
 
     return NextResponse.json({
