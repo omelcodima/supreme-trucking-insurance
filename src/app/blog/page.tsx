@@ -5,7 +5,7 @@ import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { getPostImageAlt, getPostTags } from "@/lib/blogSeo";
 
-export const revalidate = 300;
+export const revalidate = 21600;
 
 export const metadata: Metadata = {
   title: "Trucking Insurance Blog | Supreme Trucking Insurance",

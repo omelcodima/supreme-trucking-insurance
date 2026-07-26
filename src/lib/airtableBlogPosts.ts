@@ -14,46 +14,100 @@ type AirtableCreateResponse = {
   records?: AirtableRecord[];
 };
 
+type AirtableEnvironment = {
+  AIRTABLE_API_KEY?: string;
+  AIRTABLE_BASE_ID?: string;
+  AIRTABLE_BLOG_TABLE_NAME?: string;
+  AIRTABLE_BLOG_VIEW_NAME?: string;
+};
+
 type AirtableFetchOptions = {
   cache?: RequestCache;
   revalidate?: number;
+  environment?: AirtableEnvironment;
+  fetch?: typeof globalThis.fetch;
 };
 
-const airtableApiKey = process.env.AIRTABLE_API_KEY;
-const airtableBaseId = process.env.AIRTABLE_BASE_ID;
-const airtableBlogTableName = process.env.AIRTABLE_BLOG_TABLE_NAME;
+type AirtableCreateOptions = {
+  environment?: AirtableEnvironment;
+  fetch?: typeof globalThis.fetch;
+};
 
-function airtableUrl(offset?: string) {
+type AirtableConfig = {
+  apiKey: string;
+  baseId: string;
+  tableName: string;
+  viewName?: string;
+};
+
+export const AIRTABLE_BLOG_CACHE_SECONDS = 21_600;
+export const AIRTABLE_BLOG_CACHE_TAG = "airtable-blog-posts";
+
+export class AirtableBlogFetchError extends Error {
+  readonly status: number;
+
+  constructor(status: number) {
+    super(`Airtable blog request failed with status ${status}.`);
+    this.name = "AirtableBlogFetchError";
+    this.status = status;
+  }
+}
+
+function getAirtableConfig(environment?: AirtableEnvironment): AirtableConfig | null {
+  const source = environment ?? {
+    AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY,
+    AIRTABLE_BASE_ID: process.env.AIRTABLE_BASE_ID,
+    AIRTABLE_BLOG_TABLE_NAME: process.env.AIRTABLE_BLOG_TABLE_NAME,
+    AIRTABLE_BLOG_VIEW_NAME: process.env.AIRTABLE_BLOG_VIEW_NAME,
+  };
+  const apiKey = source.AIRTABLE_API_KEY?.trim();
+  const baseId = source.AIRTABLE_BASE_ID?.trim();
+  const tableName = source.AIRTABLE_BLOG_TABLE_NAME?.trim();
+
+  if (!apiKey || !baseId || !tableName) {
+    return null;
+  }
+
+  return {
+    apiKey,
+    baseId,
+    tableName,
+    viewName: source.AIRTABLE_BLOG_VIEW_NAME?.trim() || undefined,
+  };
+}
+
+function airtableUrl(config: AirtableConfig, offset?: string) {
   const params = new URLSearchParams({
     pageSize: "100",
   });
 
-  if (process.env.AIRTABLE_BLOG_VIEW_NAME) {
-    params.set("view", process.env.AIRTABLE_BLOG_VIEW_NAME);
+  if (config.viewName) {
+    params.set("view", config.viewName);
   }
 
   if (offset) {
     params.set("offset", offset);
   }
 
-  return `https://api.airtable.com/v0/${airtableBaseId}/${encodeURIComponent(airtableBlogTableName || "")}?${params}`;
+  return `https://api.airtable.com/v0/${config.baseId}/${encodeURIComponent(config.tableName)}?${params}`;
 }
 
-function hasAirtableConfig() {
-  return Boolean(airtableApiKey && airtableBaseId && airtableBlogTableName);
-}
-
-function airtableFetchInit(options: AirtableFetchOptions = {}) {
-  const init: RequestInit & { next?: { revalidate: number } } = {
+function airtableFetchInit(config: AirtableConfig, options: AirtableFetchOptions = {}) {
+  const init: RequestInit & {
+    next?: { revalidate: number; tags: string[] };
+  } = {
     headers: {
-      Authorization: `Bearer ${airtableApiKey}`,
+      Authorization: `Bearer ${config.apiKey}`,
     },
   };
 
   if (options.cache) {
     init.cache = options.cache;
   } else {
-    init.next = { revalidate: options.revalidate ?? 300 };
+    init.next = {
+      revalidate: options.revalidate ?? AIRTABLE_BLOG_CACHE_SECONDS,
+      tags: [AIRTABLE_BLOG_CACHE_TAG],
+    };
   }
 
   return init;
@@ -163,19 +217,24 @@ function recordToBlogPost(record: AirtableRecord): BlogPost | null {
 }
 
 export async function listAirtableBlogRecords(options: AirtableFetchOptions = {}) {
-  if (!hasAirtableConfig()) {
+  const config = getAirtableConfig(options.environment);
+  if (!config) {
     return [];
   }
 
+  const fetchImplementation = options.fetch ?? globalThis.fetch;
   const records: AirtableRecord[] = [];
   let offset: string | undefined;
 
   do {
-    const response = await fetch(airtableUrl(offset), airtableFetchInit(options));
+    const response = await fetchImplementation(
+      airtableUrl(config, offset),
+      airtableFetchInit(config, options),
+    );
 
     if (!response.ok) {
-      console.error("Airtable blog fetch failed:", response.status, await response.text());
-      return records;
+      await response.body?.cancel().catch(() => undefined);
+      throw new AirtableBlogFetchError(response.status);
     }
 
     const data = (await response.json()) as AirtableListResponse;
@@ -196,17 +255,21 @@ export async function getPublishedAirtableBlogPosts(options: AirtableFetchOption
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export async function createAirtableBlogPost(fields: Record<string, string>) {
-  if (!hasAirtableConfig()) {
+export async function createAirtableBlogPost(
+  fields: Record<string, string>,
+  options: AirtableCreateOptions = {},
+) {
+  const config = getAirtableConfig(options.environment);
+  if (!config) {
     throw new Error("Airtable blog configuration is missing.");
   }
 
-  const response = await fetch(
-    `https://api.airtable.com/v0/${airtableBaseId}/${encodeURIComponent(airtableBlogTableName || "")}`,
+  const response = await (options.fetch ?? globalThis.fetch)(
+    `https://api.airtable.com/v0/${config.baseId}/${encodeURIComponent(config.tableName)}`,
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${airtableApiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -216,7 +279,8 @@ export async function createAirtableBlogPost(fields: Record<string, string>) {
   );
 
   if (!response.ok) {
-    throw new Error(`Airtable blog create failed: ${response.status} ${await response.text()}`);
+    await response.body?.cancel().catch(() => undefined);
+    throw new AirtableBlogFetchError(response.status);
   }
 
   return (await response.json()) as AirtableCreateResponse;

@@ -1,5 +1,7 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import {
+  AIRTABLE_BLOG_CACHE_TAG,
   createAirtableBlogPost,
   listAirtableBlogRecords,
 } from "@/lib/airtableBlogPosts";
@@ -384,7 +386,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
     }
 
-    const existingRecords = await listAirtableBlogRecords();
+    const existingRecords = await listAirtableBlogRecords({ cache: "no-store" });
     const existingSourceUrls = new Set(
       existingRecords.map((record) => stringField(record.fields, "Source URL")).filter(Boolean),
     );
@@ -448,6 +450,10 @@ export async function GET(request: Request) {
       "Social Post": generatedPost.socialPost,
       ...(imageUrl ? { "Image URL": imageUrl, "Image Alt": imageAlt } : {}),
     });
+
+    if (status === "Published") {
+      revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
+    }
 
     return NextResponse.json({
       ok: true,
