@@ -24,11 +24,13 @@ type AirtableEnvironment = {
 type AirtableFetchOptions = {
   cache?: RequestCache;
   revalidate?: number;
+  timeoutMs?: number;
   environment?: AirtableEnvironment;
   fetch?: typeof globalThis.fetch;
 };
 
 type AirtableCreateOptions = {
+  timeoutMs?: number;
   environment?: AirtableEnvironment;
   fetch?: typeof globalThis.fetch;
 };
@@ -42,6 +44,7 @@ type AirtableConfig = {
 
 export const AIRTABLE_BLOG_CACHE_SECONDS = 21_600;
 export const AIRTABLE_BLOG_CACHE_TAG = "airtable-blog-posts";
+export const AIRTABLE_BLOG_REQUEST_TIMEOUT_MS = 5_000;
 
 export class AirtableBlogFetchError extends Error {
   readonly status: number;
@@ -99,6 +102,7 @@ function airtableFetchInit(config: AirtableConfig, options: AirtableFetchOptions
     headers: {
       Authorization: `Bearer ${config.apiKey}`,
     },
+    signal: AbortSignal.timeout(options.timeoutMs ?? AIRTABLE_BLOG_REQUEST_TIMEOUT_MS),
   };
 
   if (options.cache) {
@@ -272,6 +276,7 @@ export async function createAirtableBlogPost(
         Authorization: `Bearer ${config.apiKey}`,
         "Content-Type": "application/json",
       },
+      signal: AbortSignal.timeout(options.timeoutMs ?? AIRTABLE_BLOG_REQUEST_TIMEOUT_MS),
       body: JSON.stringify({
         records: [{ fields }],
       }),

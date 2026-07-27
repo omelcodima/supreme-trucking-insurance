@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   AIRTABLE_BLOG_CACHE_SECONDS,
   AIRTABLE_BLOG_CACHE_TAG,
+  AIRTABLE_BLOG_REQUEST_TIMEOUT_MS,
   AirtableBlogFetchError,
   createAirtableBlogPost,
   listAirtableBlogRecords,
@@ -42,6 +43,30 @@ test("published-blog reads use one shared long-lived cache tag", async () => {
     tags: [AIRTABLE_BLOG_CACHE_TAG],
   });
   assert.equal(calls[0]?.init?.cache, undefined);
+  assert.equal(calls[0]?.init?.signal instanceof AbortSignal, true);
+});
+
+test("Airtable reads abort before a stalled upstream can exhaust a page build", async () => {
+  const startedAt = Date.now();
+
+  await assert.rejects(
+    listAirtableBlogRecords({
+      timeoutMs: 25,
+      environment: testEnvironment,
+      fetch: asFetch(
+        async (_input, init) =>
+          await new Promise<Response>((_resolve, reject) => {
+            init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), {
+              once: true,
+            });
+          }),
+      ),
+    }),
+    (error: unknown) => error instanceof DOMException && error.name === "TimeoutError",
+  );
+
+  assert.ok(Date.now() - startedAt < 1_000);
+  assert.equal(AIRTABLE_BLOG_REQUEST_TIMEOUT_MS, 5_000);
 });
 
 test("an Airtable read error fails closed without returning partial records or response content", async () => {
