@@ -1,8 +1,12 @@
 import SubpageLayout from "@/components/SubpageLayout";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Fleet Insurance | Supreme Trucking Insurance",
   description: "Fleet insurance for 11 to 25+ trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
+  alternates: {
+    canonical: "/fleet",
+  },
 };
 
 export default function FleetPage() {

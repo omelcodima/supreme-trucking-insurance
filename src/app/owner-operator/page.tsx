@@ -1,8 +1,12 @@
 import SubpageLayout from "@/components/SubpageLayout";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Owner Operator Insurance | Supreme Trucking Insurance",
   description: "Insurance for owner operators, including primary liability, cargo, physical damage, and bobtail coverage. Market options and clear updates.",
+  alternates: {
+    canonical: "/owner-operator",
+  },
 };
 
 export default function OwnerOperatorPage() {

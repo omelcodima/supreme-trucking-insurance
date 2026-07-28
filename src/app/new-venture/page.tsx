@@ -1,8 +1,12 @@
 import SubpageLayout from "@/components/SubpageLayout";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "New Authority Insurance | Supreme Trucking Insurance",
   description: "Insurance guidance for new authority trucking companies. Market options, filing support, and clear updates. Licensed in most states.",
+  alternates: {
+    canonical: "/new-venture",
+  },
 };
 
 export default function NewVenturePage() {

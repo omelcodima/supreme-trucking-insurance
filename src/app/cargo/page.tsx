@@ -1,8 +1,12 @@
 import SubpageLayout from "@/components/SubpageLayout";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Motor Truck Cargo Insurance | Supreme Trucking Insurance",
   description: "Protect the freight you haul. Motor truck cargo insurance from top-rated carriers. Market options and clear updates.",
+  alternates: {
+    canonical: "/cargo",
+  },
 };
 
 export default function CargoPage() {
