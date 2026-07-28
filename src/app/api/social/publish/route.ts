@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { publishToSocials } from "@/lib/socialPublish";
-import { summarizeSocialResults } from "@/lib/socialPostingState";
+import {
+  getConfiguredSocialNetworks,
+  summarizeSocialResults,
+} from "@/lib/socialPostingState";
 
 /**
  * POST/GET /api/social/publish
@@ -67,6 +70,18 @@ async function run(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
   }
+
+  const configuredNetworks = getConfiguredSocialNetworks();
+  if (configuredNetworks.length === 0) {
+    return NextResponse.json({
+      ok: true,
+      message: "No social networks configured; nothing to publish.",
+      attempted: false,
+      posted: false,
+      results: [],
+    });
+  }
+
   if (!AIRTABLE_BASE || !AIRTABLE_KEY) {
     return NextResponse.json({ ok: false, error: "Airtable not configured" }, { status: 500 });
   }
