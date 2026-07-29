@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { BlogVisual } from "@/components/BlogVisual";
 import { SocialShareButtons } from "@/components/SocialShareButtons";
 import { blogPosts } from "@/lib/blogPosts";
-import { getAllBlogPosts, getAnyBlogPost } from "@/lib/allBlogPosts";
+import { getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { getPostImageAlt, getPostTags, getRelatedServiceLinks } from "@/lib/blogSeo";
 
@@ -65,8 +65,7 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const allPosts = await getAllBlogPosts();
-  const relatedPosts = allPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
+  const relatedPosts = blogPosts.filter((item) => item.slug !== post.slug).slice(0, 3);
   const tags = getPostTags(post);
   const imageAltText = getPostImageAlt(post);
   const serviceLinks = getRelatedServiceLinks(post);

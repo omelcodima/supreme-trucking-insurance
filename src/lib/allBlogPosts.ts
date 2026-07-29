@@ -6,6 +6,7 @@ import {
   AirtableBlogFetchError,
   getPublishedAirtableBlogPosts,
 } from "@/lib/airtableBlogPosts";
+import { resolveBlogPost } from "@/lib/blogPostResolver";
 import { blogPosts } from "@/lib/blogPosts";
 import type { BlogPost } from "@/lib/blogPosts";
 
@@ -52,6 +53,5 @@ export async function getAllBlogPosts(options: BlogPostFetchOptions = {}) {
 }
 
 export async function getAnyBlogPost(slug: string) {
-  const posts = await getAllBlogPosts();
-  return posts.find((post) => post.slug === slug);
+  return resolveBlogPost(slug, blogPosts, () => getAllBlogPosts());
 }
