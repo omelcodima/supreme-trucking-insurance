@@ -6,6 +6,7 @@ import {
   sendCustomerAutoReply,
   sendInternalLeadNotification,
 } from "../../../lib/leadEmails";
+import { deliverLeadWithFallback } from "../../../lib/leadDelivery";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 
@@ -47,6 +48,7 @@ async function sendWebhook(data: QuotePayload) {
   try {
     const webhookResponse = await fetch(webhookUrl, {
       method: "POST",
+      signal: AbortSignal.timeout(10_000),
       headers: {
         "Content-Type": "application/json",
       },
@@ -140,10 +142,11 @@ export async function POST(request: Request) {
       );
     }
 
-    await saveQuoteToAirtable(data);
-    await sendWebhook(data);
-    await sendQuoteEmail(data);
-    await sendQuoteCustomerEmails(data);
+    await deliverLeadWithFallback([
+      { name: "airtable", deliver: () => saveQuoteToAirtable(data) },
+      { name: "email", deliver: () => sendQuoteEmail(data) },
+    ]);
+    await Promise.all([sendWebhook(data), sendQuoteCustomerEmails(data)]);
 
     return NextResponse.json(
       {

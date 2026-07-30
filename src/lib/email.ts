@@ -29,6 +29,7 @@ export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, t
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
+    signal: AbortSignal.timeout(10_000),
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",

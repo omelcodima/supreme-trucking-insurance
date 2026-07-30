@@ -6,6 +6,7 @@ import {
   sendCustomerAutoReply,
   sendInternalLeadNotification,
 } from "../../../lib/leadEmails";
+import { deliverLeadWithFallback } from "../../../lib/leadDelivery";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 
@@ -66,6 +67,7 @@ async function sendWebhook(payload: FullApplicationPayload) {
   try {
     const response = await fetch(webhookUrl, {
       method: "POST",
+      signal: AbortSignal.timeout(10_000),
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: "full_application", notificationEmail: leadNotificationEmail, ...payload }),
     });
@@ -111,20 +113,26 @@ function formatFullApplicationEmail(data: Required<FullApplicationPayload>) {
   ].join("\n");
 }
 
-async function sendFullApplicationEmails(data: Required<FullApplicationPayload>) {
+async function sendFullApplicationNotification(data: Required<FullApplicationPayload>) {
   const form = data.form;
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactEmail = value(form, "email");
-  const contactName = value(form, "contactName") || value(form, "legalName");
-  const firstName = contactName.split(/\s+/)[0] || "there";
 
-  await sendInternalLeadNotification({
+  return sendInternalLeadNotification({
     leadType: "full_application",
     company: legalName,
     contactEmail,
     subject: `Full application submitted: ${legalName}`,
     text: formatFullApplicationEmail(data),
   });
+}
+
+async function sendFullApplicationCustomerEmails(data: Required<FullApplicationPayload>) {
+  const form = data.form;
+  const legalName = value(form, "legalName") || "Full trucking application";
+  const contactEmail = value(form, "email");
+  const contactName = value(form, "contactName") || value(form, "legalName");
+  const firstName = contactName.split(/\s+/)[0] || "there";
 
   await sendCustomerAutoReply({
     to: contactEmail,
@@ -171,9 +179,11 @@ export async function POST(request: Request) {
       claims: Array.isArray(json.claims) ? json.claims : [],
     };
 
-    await saveFullApplication(data);
-    await sendWebhook(data);
-    await sendFullApplicationEmails(data);
+    await deliverLeadWithFallback([
+      { name: "airtable", deliver: () => saveFullApplication(data) },
+      { name: "email", deliver: () => sendFullApplicationNotification(data) },
+    ]);
+    await Promise.all([sendWebhook(data), sendFullApplicationCustomerEmails(data)]);
 
     return NextResponse.json({
       ok: true,

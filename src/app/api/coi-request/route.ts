@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDocsTable } from "../../../../lib/airtable";
 import { sendCustomerAutoReply, sendInternalLeadNotification } from "../../../lib/leadEmails";
+import { deliverLeadWithFallback } from "../../../lib/leadDelivery";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || process.env.AIRTABLE_DOCS_TABLE_NAME || "Contacts";
 
@@ -68,16 +69,18 @@ async function saveCoiRequestToAirtable(data: CoiPayload) {
   } as Record<string, string>);
 }
 
-async function sendCoiEmails(data: CoiPayload) {
-  await sendInternalLeadNotification({
+async function sendCoiNotification(data: CoiPayload) {
+  return sendInternalLeadNotification({
     leadType: "coi_request",
     company: data.company,
     contactEmail: data.email || data.sendEmail,
     subject: `COI request: ${data.company}`,
     text: formatMessage(data),
   });
+}
 
-  await sendCustomerAutoReply({
+async function sendCoiCustomerEmail(data: CoiPayload) {
+  return sendCustomerAutoReply({
     to: data.email || data.sendEmail,
     leadType: "coi_request",
     subject: "We received your COI request",
@@ -127,8 +130,11 @@ export async function POST(request: Request) {
       );
     }
 
-    await saveCoiRequestToAirtable(data);
-    await sendCoiEmails(data);
+    await deliverLeadWithFallback([
+      { name: "airtable", deliver: () => saveCoiRequestToAirtable(data) },
+      { name: "email", deliver: () => sendCoiNotification(data) },
+    ]);
+    await sendCoiCustomerEmail(data);
 
     return NextResponse.json({
       ok: true,

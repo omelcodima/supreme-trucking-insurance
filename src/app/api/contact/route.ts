@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDocsTable } from "../../../../lib/airtable";
 import { sendCustomerAutoReply, sendInternalLeadNotification } from "../../../lib/leadEmails";
+import { deliverLeadWithFallback } from "../../../lib/leadDelivery";
 
 const airtableContactsTableName = process.env.AIRTABLE_CONTACTS_TABLE_NAME || process.env.AIRTABLE_DOCS_TABLE_NAME || "Contacts";
 
@@ -45,16 +46,18 @@ function formatContactEmail(data: ContactPayload) {
   ].join("\n");
 }
 
-async function sendContactEmails(data: ContactPayload) {
-  await sendInternalLeadNotification({
+async function sendContactNotification(data: ContactPayload) {
+  return sendInternalLeadNotification({
     leadType: "contact",
     company: data.company,
     contactEmail: data.email,
     subject: `Website contact message: ${data.company}`,
     text: formatContactEmail(data),
   });
+}
 
-  await sendCustomerAutoReply({
+async function sendContactCustomerEmail(data: ContactPayload) {
+  return sendCustomerAutoReply({
     to: data.email,
     leadType: "contact",
     subject: "We received your message",
@@ -90,8 +93,11 @@ export async function POST(request: Request) {
       );
     }
 
-    await saveContactToAirtable(data);
-    await sendContactEmails(data);
+    await deliverLeadWithFallback([
+      { name: "airtable", deliver: () => saveContactToAirtable(data) },
+      { name: "email", deliver: () => sendContactNotification(data) },
+    ]);
+    await sendContactCustomerEmail(data);
 
     return NextResponse.json({
       ok: true,
