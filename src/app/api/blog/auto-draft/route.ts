@@ -1,4 +1,4 @@
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import {
   AIRTABLE_BLOG_CACHE_TAG,
@@ -8,6 +8,7 @@ import {
 } from "@/lib/airtableBlogPosts";
 import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
 import { normalizeReadTime } from "@/lib/blogReadTime";
+import { normalizeGeneratedBlogParagraph } from "@/lib/blogText";
 
 export const maxDuration = 180;
 
@@ -308,11 +309,25 @@ function parseGeneratedPost(text: string): GeneratedPost {
     throw new Error("OpenAI response did not include the required blog fields.");
   }
 
+  const sections = parsed.sections
+    .map((section) => ({
+      heading: normalizeGeneratedBlogParagraph(section?.heading),
+      body: Array.isArray(section?.body)
+        ? section.body.map(normalizeGeneratedBlogParagraph).filter(Boolean)
+        : [],
+    }))
+    .filter((section) => section.heading && section.body.length > 0);
+
+  if (sections.length < 3) {
+    throw new Error("OpenAI response did not include enough valid blog sections.");
+  }
+
   return {
     ...parsed,
     slug: slugify(parsed.slug || parsed.title),
     category: parsed.category || "Trucking News",
     readTime: normalizeReadTime(parsed.readTime),
+    sections,
     googleBusinessPost: parsed.googleBusinessPost || "",
     socialPost: parsed.socialPost || "",
   };
@@ -321,7 +336,7 @@ function parseGeneratedPost(text: string): GeneratedPost {
 async function generatePost(source: SourceItem): Promise<GeneratedPost> {
   const instructions =
     "You write for the Supreme Trucking Insurance blog — a real independent trucking insurance agency. Write like an experienced agent talking to trucking clients, not like an AI content mill. Vary your writing: some posts benefit from short punchy sections, others from a deeper dive; use concrete operational details truckers recognize (loss runs, MC numbers, driver files, reefer breakdowns, COIs, renewal shopping). Include one practical 'what we tell our clients' style insight. Never copy sentences from the source. Never invent legal requirements, prices, guarantees, same-day promises, or coverage promises. No fake urgency, no heavy marketing. Connect news to insurance only where reasonable: underwriting, filings, safety history, cargo, drivers, inspections, claims, renewals, carrier appetite. Always note the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.";
-  const userPrompt = `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost, imagePrompt. sections must be an array of 3 to 5 objects with heading and body; vary section count and paragraph rhythm naturally (1-3 paragraphs per section; occasionally use a short dash list inside a body where it genuinely helps). Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. Summarize what happened, why trucking companies should care, and what insurance-related documents or questions to prepare. imagePrompt must describe ONE bright professional editorial photograph that literally depicts this article's specific subject (scene, objects, setting — e.g. 'refrigerated trailer being loaded at a food warehouse dock, morning light' for a reefer story). No text, no logos, no readable signage, no close-up faces in the imagePrompt. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`;
+  const userPrompt = `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost, imagePrompt. sections must be an array of 3 to 5 objects with heading and body; every heading and body paragraph must be plain text only—do not use Markdown emphasis, backticks, headings, or escaped formatting markers; for a short list, use simple dash-prefixed lines without bold markup; vary section count and paragraph rhythm naturally (1-3 paragraphs per section; occasionally use a short dash list inside a body where it genuinely helps). Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. Summarize what happened, why trucking companies should care, and what insurance-related documents or questions to prepare. imagePrompt must describe ONE bright professional editorial photograph that literally depicts this article's specific subject (scene, objects, setting — e.g. 'refrigerated trailer being loaded at a food warehouse dock, morning light' for a reefer story). No text, no logos, no readable signage, no close-up faces in the imagePrompt. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`;
 
   // Preferred path: Vercel AI Gateway (flat subscription, OpenAI-compatible).
   const gatewayKey = process.env.AI_GATEWAY_API_KEY;
@@ -496,6 +511,9 @@ export async function GET(request: Request) {
 
     if (status === "Published") {
       revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${slug}`);
+      revalidatePath("/sitemap.xml");
     }
 
     return NextResponse.json({
