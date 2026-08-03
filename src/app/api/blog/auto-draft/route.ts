@@ -116,7 +116,7 @@ const defaultRssFeeds = [
 const federalRegisterUrl =
   "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=federal-motor-carrier-safety-administration&per_page=10&order=newest";
 
-function isAuthorized(request: Request) {
+function isAuthorized(request: Request, allowVercelCronUserAgent = true) {
   const cronSecret = process.env.BLOG_CRON_SECRET || process.env.CRON_SECRET;
   const authorization = request.headers.get("authorization");
   const userAgent = request.headers.get("user-agent") || "";
@@ -125,7 +125,14 @@ function isAuthorized(request: Request) {
     return true;
   }
 
-  return userAgent.includes("vercel-cron/1.0");
+  return allowVercelCronUserAgent && userAgent.includes("vercel-cron/1.0");
+}
+
+function revalidatePublishedBlogCaches() {
+  revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
+  revalidatePath("/blog");
+  revalidatePath("/blog/[slug]", "page");
+  revalidatePath("/sitemap.xml");
 }
 
 function slugify(value: string) {
@@ -404,6 +411,20 @@ export async function GET(request: Request) {
       return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
     }
 
+    const revalidateOnly = new URL(request.url).searchParams.get("mode") === "revalidate";
+    if (revalidateOnly) {
+      if (!isAuthorized(request, false)) {
+        return NextResponse.json({ detail: "Secret authorization required." }, { status: 401 });
+      }
+
+      revalidatePublishedBlogCaches();
+      return NextResponse.json({
+        ok: true,
+        mode: "revalidate",
+        paths: ["/blog", "/blog/[slug]", "/sitemap.xml"],
+      });
+    }
+
     console.info("Blog automation stage: Airtable duplicate check started.");
     const existingRecords = await retryAirtableRead(
       () =>
@@ -510,10 +531,7 @@ export async function GET(request: Request) {
     console.info("Blog automation stage: Airtable create completed.", { slug, status });
 
     if (status === "Published") {
-      revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
-      revalidatePath("/blog");
-      revalidatePath(`/blog/${slug}`);
-      revalidatePath("/sitemap.xml");
+      revalidatePublishedBlogCaches();
     }
 
     return NextResponse.json({
