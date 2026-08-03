@@ -45,15 +45,75 @@ type AirtableConfig = {
 export const AIRTABLE_BLOG_CACHE_SECONDS = 21_600;
 export const AIRTABLE_BLOG_CACHE_TAG = "airtable-blog-posts";
 export const AIRTABLE_BLOG_REQUEST_TIMEOUT_MS = 5_000;
+export const AIRTABLE_RATE_LIMIT_RETRY_MS = 30_000;
 
 export class AirtableBlogFetchError extends Error {
   readonly status: number;
+  readonly retryAfterMs?: number;
 
-  constructor(status: number) {
+  constructor(status: number, retryAfterMs?: number) {
     super(`Airtable blog request failed with status ${status}.`);
     this.name = "AirtableBlogFetchError";
     this.status = status;
+    this.retryAfterMs = retryAfterMs;
   }
+}
+
+type AirtableReadRetryOptions = {
+  maxAttempts?: number;
+  timeoutRetryDelayMs?: number;
+  rateLimitRetryDelayMs?: number;
+  sleep?: (delayMs: number) => Promise<void>;
+  onRetry?: (event: {
+    attempt: number;
+    delayMs: number;
+    reason: "timeout" | "rate-limit";
+  }) => void;
+};
+
+function retryAfterMilliseconds(value: string | null) {
+  if (!value) {
+    return undefined;
+  }
+
+  const seconds = Number(value);
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return Math.ceil(seconds * 1_000);
+  }
+
+  const retryAt = Date.parse(value);
+  return Number.isNaN(retryAt) ? undefined : Math.max(0, retryAt - Date.now());
+}
+
+export async function retryAirtableRead<T>(
+  operation: () => Promise<T>,
+  options: AirtableReadRetryOptions = {},
+): Promise<T> {
+  const maxAttempts = Math.max(1, Math.floor(options.maxAttempts ?? 2));
+  const sleep = options.sleep ?? ((delayMs: number) => new Promise((resolve) => setTimeout(resolve, delayMs)));
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      const timedOut = error instanceof Error && error.name === "TimeoutError";
+      const rateLimited = error instanceof AirtableBlogFetchError && error.status === 429;
+
+      if (attempt === maxAttempts || (!timedOut && !rateLimited)) {
+        throw error;
+      }
+
+      const reason = rateLimited ? "rate-limit" : "timeout";
+      const delayMs = rateLimited
+        ? error.retryAfterMs ?? options.rateLimitRetryDelayMs ?? AIRTABLE_RATE_LIMIT_RETRY_MS
+        : options.timeoutRetryDelayMs ?? 1_000;
+
+      options.onRetry?.({ attempt, delayMs, reason });
+      await sleep(delayMs);
+    }
+  }
+
+  throw new Error("Airtable read retry loop ended unexpectedly.");
 }
 
 function getAirtableConfig(environment?: AirtableEnvironment): AirtableConfig | null {
@@ -238,7 +298,10 @@ export async function listAirtableBlogRecords(options: AirtableFetchOptions = {}
 
     if (!response.ok) {
       await response.body?.cancel().catch(() => undefined);
-      throw new AirtableBlogFetchError(response.status);
+      throw new AirtableBlogFetchError(
+        response.status,
+        retryAfterMilliseconds(response.headers.get("retry-after")),
+      );
     }
 
     const data = (await response.json()) as AirtableListResponse;
@@ -285,7 +348,10 @@ export async function createAirtableBlogPost(
 
   if (!response.ok) {
     await response.body?.cancel().catch(() => undefined);
-    throw new AirtableBlogFetchError(response.status);
+    throw new AirtableBlogFetchError(
+      response.status,
+      retryAfterMilliseconds(response.headers.get("retry-after")),
+    );
   }
 
   return (await response.json()) as AirtableCreateResponse;

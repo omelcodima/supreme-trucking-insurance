@@ -4,11 +4,14 @@ import {
   AIRTABLE_BLOG_CACHE_TAG,
   createAirtableBlogPost,
   listAirtableBlogRecords,
+  retryAirtableRead,
 } from "@/lib/airtableBlogPosts";
 import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
 import { normalizeReadTime } from "@/lib/blogReadTime";
 
-export const maxDuration = 60;
+export const maxDuration = 180;
+
+const CRON_AIRTABLE_READ_TIMEOUT_MS = 20_000;
 
 type SourceItem = {
   title: string;
@@ -386,7 +389,27 @@ export async function GET(request: Request) {
       return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
     }
 
-    const existingRecords = await listAirtableBlogRecords({ cache: "no-store" });
+    console.info("Blog automation stage: Airtable duplicate check started.");
+    const existingRecords = await retryAirtableRead(
+      () =>
+        listAirtableBlogRecords({
+          cache: "no-store",
+          timeoutMs: CRON_AIRTABLE_READ_TIMEOUT_MS,
+        }),
+      {
+        maxAttempts: 2,
+        onRetry: ({ attempt, delayMs, reason }) => {
+          console.warn("Blog automation stage: retrying Airtable duplicate check.", {
+            attempt,
+            delayMs,
+            reason,
+          });
+        },
+      },
+    );
+    console.info("Blog automation stage: Airtable duplicate check completed.", {
+      records: existingRecords.length,
+    });
     const existingSourceUrls = new Set(
       existingRecords.map((record) => stringField(record.fields, "Source URL")).filter(Boolean),
     );
@@ -394,9 +417,17 @@ export async function GET(request: Request) {
       existingRecords.map((record) => stringField(record.fields, "Slug")).filter(Boolean),
     );
 
-    const candidates = [...(await getFederalRegisterItems()), ...(await getRssItems())]
+    console.info("Blog automation stage: source collection started.");
+    const [federalRegisterItems, rssItems] = await Promise.all([
+      getFederalRegisterItems(),
+      getRssItems(),
+    ]);
+    const candidates = [...federalRegisterItems, ...rssItems]
       .filter((item) => !existingSourceUrls.has(item.url))
       .sort((a, b) => sourceScore(b) - sourceScore(a));
+    console.info("Blog automation stage: source collection completed.", {
+      candidates: candidates.length,
+    });
 
     const source = candidates.find((item) => sourceScore(item) > 0) || candidates[0];
 
@@ -404,7 +435,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ ok: true, message: "No new trucking source items found." });
     }
 
+    console.info("Blog automation stage: content generation started.", {
+      sourceUrl: source.url,
+    });
     const generatedPost = await generatePost(source);
+    console.info("Blog automation stage: content generation completed.", {
+      slug: generatedPost.slug,
+    });
     let slug = generatedPost.slug;
     let suffix = 2;
     while (existingSlugs.has(slug)) {
@@ -419,6 +456,7 @@ export async function GET(request: Request) {
     let imageUrl = "";
     let imageAlt = "";
     if (generatedPost.imagePrompt) {
+      console.info("Blog automation stage: image selection started.");
       const pexels = await findPexelsImage(pexelsQueryFromPrompt(generatedPost.imagePrompt, generatedPost.title));
       if (pexels) {
         imageUrl = pexels.url;
@@ -430,8 +468,12 @@ export async function GET(request: Request) {
           imageAlt = `${generatedPost.title} — ${generatedPost.imagePrompt.slice(0, 120)}`;
         }
       }
+      console.info("Blog automation stage: image selection completed.", {
+        imageFound: Boolean(imageUrl),
+      });
     }
 
+    console.info("Blog automation stage: Airtable create started.", { slug, status });
     const created = await createAirtableBlogPost({
       Status: status,
       Slug: slug,
@@ -449,7 +491,8 @@ export async function GET(request: Request) {
       "Google Business Post": generatedPost.googleBusinessPost,
       "Social Post": generatedPost.socialPost,
       ...(imageUrl ? { "Image URL": imageUrl, "Image Alt": imageAlt } : {}),
-    });
+    }, { timeoutMs: CRON_AIRTABLE_READ_TIMEOUT_MS });
+    console.info("Blog automation stage: Airtable create completed.", { slug, status });
 
     if (status === "Published") {
       revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");

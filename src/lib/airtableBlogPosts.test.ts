@@ -5,9 +5,11 @@ import {
   AIRTABLE_BLOG_CACHE_SECONDS,
   AIRTABLE_BLOG_CACHE_TAG,
   AIRTABLE_BLOG_REQUEST_TIMEOUT_MS,
+  AIRTABLE_RATE_LIMIT_RETRY_MS,
   AirtableBlogFetchError,
   createAirtableBlogPost,
   listAirtableBlogRecords,
+  retryAirtableRead,
 } from "./airtableBlogPosts.ts";
 
 const testEnvironment = {
@@ -75,13 +77,17 @@ test("an Airtable read error fails closed without returning partial records or r
     listAirtableBlogRecords({
       environment: testEnvironment,
       fetch: asFetch(async () =>
-        new Response(leakedBody, { status: 429 })),
+        new Response(leakedBody, {
+          status: 429,
+          headers: { "retry-after": "30" },
+        })),
     }),
     (error: unknown) => {
       if (!(error instanceof AirtableBlogFetchError)) {
         return false;
       }
       assert.equal(error.status, 429);
+      assert.equal(error.retryAfterMs, AIRTABLE_RATE_LIMIT_RETRY_MS);
       assert.match(error.message, /status 429/);
       assert.doesNotMatch(error.message, new RegExp(leakedBody));
       return true;
@@ -127,4 +133,74 @@ test("automation can request a truly fresh duplicate check without disabling pag
 
   assert.equal(observedInit?.cache, "no-store");
   assert.equal(observedInit?.next, undefined);
+});
+
+test("automation retries one rate-limited Airtable read after Retry-After", async () => {
+  let attempts = 0;
+  const delays: number[] = [];
+
+  const result = await retryAirtableRead(
+    async () => {
+      attempts += 1;
+      if (attempts === 1) {
+        throw new AirtableBlogFetchError(429, 1_250);
+      }
+      return "recovered";
+    },
+    {
+      sleep: async (delayMs) => {
+        delays.push(delayMs);
+      },
+    },
+  );
+
+  assert.equal(result, "recovered");
+  assert.equal(attempts, 2);
+  assert.deepEqual(delays, [1_250]);
+});
+
+test("automation retries one timed-out Airtable read with a bounded delay", async () => {
+  let attempts = 0;
+  const delays: number[] = [];
+
+  const result = await retryAirtableRead(
+    async () => {
+      attempts += 1;
+      if (attempts === 1) {
+        throw new DOMException("The operation timed out", "TimeoutError");
+      }
+      return "recovered";
+    },
+    {
+      timeoutRetryDelayMs: 250,
+      sleep: async (delayMs) => {
+        delays.push(delayMs);
+      },
+    },
+  );
+
+  assert.equal(result, "recovered");
+  assert.equal(attempts, 2);
+  assert.deepEqual(delays, [250]);
+});
+
+test("automation does not retry non-transient Airtable failures", async () => {
+  let attempts = 0;
+
+  await assert.rejects(
+    retryAirtableRead(
+      async () => {
+        attempts += 1;
+        throw new AirtableBlogFetchError(422);
+      },
+      {
+        sleep: async () => {
+          throw new Error("sleep must not run");
+        },
+      },
+    ),
+    (error: unknown) => error instanceof AirtableBlogFetchError && error.status === 422,
+  );
+
+  assert.equal(attempts, 1);
 });
