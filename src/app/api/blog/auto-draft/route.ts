@@ -6,6 +6,7 @@ import {
   listAirtableBlogRecords,
   retryAirtableRead,
 } from "@/lib/airtableBlogPosts";
+import { isBlogCronAuthorized } from "@/lib/blogCronAuth";
 import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
 import { normalizeReadTime } from "@/lib/blogReadTime";
 import { normalizeGeneratedBlogParagraph } from "@/lib/blogText";
@@ -115,18 +116,6 @@ const defaultRssFeeds = [
 
 const federalRegisterUrl =
   "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=federal-motor-carrier-safety-administration&per_page=10&order=newest";
-
-function isAuthorized(request: Request, allowVercelCronUserAgent = true) {
-  const cronSecret = process.env.BLOG_CRON_SECRET || process.env.CRON_SECRET;
-  const authorization = request.headers.get("authorization");
-  const userAgent = request.headers.get("user-agent") || "";
-
-  if (cronSecret && authorization === `Bearer ${cronSecret}`) {
-    return true;
-  }
-
-  return allowVercelCronUserAgent && userAgent.includes("vercel-cron/1.0");
-}
 
 function revalidatePublishedBlogCaches() {
   revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
@@ -407,16 +396,12 @@ async function generatePost(source: SourceItem): Promise<GeneratedPost> {
 
 export async function GET(request: Request) {
   try {
-    if (!isAuthorized(request)) {
+    if (!isBlogCronAuthorized(request)) {
       return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
     }
 
     const revalidateOnly = new URL(request.url).searchParams.get("mode") === "revalidate";
     if (revalidateOnly) {
-      if (!isAuthorized(request, false)) {
-        return NextResponse.json({ detail: "Secret authorization required." }, { status: 401 });
-      }
-
       revalidatePublishedBlogCaches();
       return NextResponse.json({
         ok: true,
