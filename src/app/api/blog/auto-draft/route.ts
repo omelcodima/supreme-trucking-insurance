@@ -473,24 +473,29 @@ export async function GET(request: Request) {
     const status = process.env.BLOG_AUTO_PUBLISH === "true" ? "Published" : "Draft";
     const today = new Date().toISOString().slice(0, 10);
 
-    // Topic-specific hero image: real Pexels photo first, AI fallback. Never blocks publishing.
+    // Immediate legal fallback. The Hermes post-publish worker upgrades this to
+    // a stable, subject-specific Higgsfield asset without blocking publication.
     let imageUrl = "";
     let imageAlt = "";
+    let imageProvider = "";
     if (generatedPost.imagePrompt) {
-      console.info("Blog automation stage: image selection started.");
+      console.info("Blog automation stage: fallback image selection started.");
       const pexels = await findPexelsImage(pexelsQueryFromPrompt(generatedPost.imagePrompt, generatedPost.title));
       if (pexels) {
         imageUrl = pexels.url;
         imageAlt = `${generatedPost.title} — photo by ${pexels.credit} (Pexels)`;
+        imageProvider = "Pexels";
       } else {
         const candidateUrl = buildPostImageUrl(generatedPost.imagePrompt, slug);
         if (await verifyImageUrl(candidateUrl)) {
           imageUrl = candidateUrl;
           imageAlt = `${generatedPost.title} — ${generatedPost.imagePrompt.slice(0, 120)}`;
+          imageProvider = "Pollinations";
         }
       }
-      console.info("Blog automation stage: image selection completed.", {
+      console.info("Blog automation stage: fallback image selection completed.", {
         imageFound: Boolean(imageUrl),
+        imageProvider,
       });
     }
 
@@ -511,7 +516,14 @@ export async function GET(request: Request) {
       "Source Published At": source.publishedAt,
       "Google Business Post": generatedPost.googleBusinessPost,
       "Social Post": generatedPost.socialPost,
-      ...(imageUrl ? { "Image URL": imageUrl, "Image Alt": imageAlt } : {}),
+      ...(generatedPost.imagePrompt ? { "Image Prompt": generatedPost.imagePrompt } : {}),
+      ...(imageUrl
+        ? {
+            "Image URL": imageUrl,
+            "Image Alt": imageAlt,
+            "Image Provider": imageProvider,
+          }
+        : {}),
     }, { timeoutMs: CRON_AIRTABLE_READ_TIMEOUT_MS });
     console.info("Blog automation stage: Airtable create completed.", { slug, status });
 
