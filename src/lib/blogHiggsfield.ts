@@ -11,6 +11,7 @@ type BlogImagePromptInput = {
 
 type ExistingBlogImage = {
   slug: string;
+  date?: string;
   imageProvider?: string;
   imageUrl?: string;
 };
@@ -68,4 +69,13 @@ export function needsHiggsfieldUpgrade(image: ExistingBlogImage) {
   const imageUrl = cleanContext(image.imageUrl, 2_000);
 
   return provider !== "higgsfield" || imageUrl !== getStableBlogImageUrl(image.slug);
+}
+
+export function isScheduledHiggsfieldUpgrade(image: ExistingBlogImage, currentDate: string) {
+  const publicationDate = cleanContext(image.date, 20);
+  const scheduledDate = cleanContext(currentDate, 20);
+
+  return /^\d{4}-\d{2}-\d{2}$/.test(scheduledDate)
+    && publicationDate === scheduledDate
+    && needsHiggsfieldUpgrade(image);
 }

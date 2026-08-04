@@ -6,6 +6,7 @@ import {
   buildHiggsfieldBlogPrompt,
   getStableBlogImagePath,
   getStableBlogImageUrl,
+  isScheduledHiggsfieldUpgrade,
   needsHiggsfieldUpgrade,
 } from "./blogHiggsfield.ts";
 
@@ -74,4 +75,30 @@ test("upgrades Pexels and unknown images but keeps a verified Higgsfield asset",
   assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "", imageUrl: "" }), true);
   assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "Higgsfield", imageUrl: stableUrl }), false);
   assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "Higgsfield", imageUrl: "https://temporary.example/image.jpg" }), true);
+});
+
+test("scheduled runs generate only for a post published today", () => {
+  const today = "2026-08-05";
+
+  assert.equal(
+    isScheduledHiggsfieldUpgrade(
+      { slug: "today-post", date: today, imageProvider: "Pexels", imageUrl: "https://images.pexels.com/a.jpg" },
+      today,
+    ),
+    true,
+  );
+  assert.equal(
+    isScheduledHiggsfieldUpgrade(
+      { slug: "old-post", date: "2026-08-03", imageProvider: "Pexels", imageUrl: "https://images.pexels.com/b.jpg" },
+      today,
+    ),
+    false,
+  );
+  assert.equal(
+    isScheduledHiggsfieldUpgrade(
+      { slug: "today-done", date: today, imageProvider: "Higgsfield", imageUrl: getStableBlogImageUrl("today-done") },
+      today,
+    ),
+    false,
+  );
 });

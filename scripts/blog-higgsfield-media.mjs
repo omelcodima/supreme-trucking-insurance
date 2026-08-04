@@ -11,6 +11,7 @@ import {
   buildHiggsfieldBlogPrompt,
   getStableBlogImagePath,
   getStableBlogImageUrl,
+  isScheduledHiggsfieldUpgrade,
   needsHiggsfieldUpgrade,
 } from "../src/lib/blogHiggsfield.ts";
 
@@ -120,6 +121,17 @@ function candidateTimestamp(candidate) {
   return Number.isNaN(value) ? 0 : value;
 }
 
+function currentPacificDate(now = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(now);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
 async function discover(args) {
   const config = airtableConfig();
   const requestedSlug = args[0]?.trim() || "";
@@ -128,12 +140,32 @@ async function discover(args) {
     .filter(Boolean)
     .sort((a, b) => candidateTimestamp(b) - candidateTimestamp(a));
 
+  const currentDate = currentPacificDate();
   const candidate = requestedSlug
     ? candidates.find((item) => item.slug === requestedSlug)
-    : candidates.find((item) => item.needsUpgrade);
+    : candidates.find((item) => isScheduledHiggsfieldUpgrade(item, currentDate));
 
   if (!candidate) {
-    jsonOutput({ ok: true, action: "none", reason: requestedSlug ? "published slug not found" : "no Higgsfield upgrade needed" });
+    const latest = candidates[0];
+    jsonOutput({
+      ok: true,
+      action: "none",
+      reason: requestedSlug
+        ? "published slug not found"
+        : "no Published post dated today needs a Higgsfield upgrade",
+      currentDate,
+      latest: latest
+        ? {
+            recordId: latest.recordId,
+            slug: latest.slug,
+            title: latest.title,
+            date: latest.date,
+            imageProvider: latest.imageProvider,
+            imageModel: latest.imageModel,
+            imageUrl: latest.imageUrl,
+          }
+        : null,
+    });
     return;
   }
 
