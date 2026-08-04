@@ -95,6 +95,8 @@ function recordCandidate(record) {
     title,
     date: field(record, "Date"),
     intro: field(record, "Intro"),
+    sectionsJson: field(record, "Sections JSON"),
+    takeaway: field(record, "Takeaway"),
     sourceTitle: field(record, "Source Title"),
     sourceUrl: field(record, "Source URL"),
     imagePrompt: field(record, "Image Prompt"),
@@ -301,6 +303,212 @@ async function verifyPublicImage(url) {
   return { status: response.status, contentType, contentLength: length };
 }
 
+function decodeHtmlEntities(value) {
+  return value
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCodePoint(Number.parseInt(code, 16)));
+}
+
+function htmlToText(value) {
+  return decodeHtmlEntities(value)
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeForMatch(value) {
+  return value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\u2010-\u2015]/g, "-")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function containsMeaningfulText(haystack, needle) {
+  const normalizedHaystack = normalizeForMatch(haystack);
+  const normalizedNeedle = normalizeForMatch(needle);
+  if (normalizedNeedle.length < 20) return false;
+  return normalizedHaystack.includes(normalizedNeedle.slice(0, 140));
+}
+
+async function fetchPublicAsset(url, accept) {
+  const response = await fetch(url, {
+    headers: { "User-Agent": USER_AGENT, Accept: accept || "*/*" },
+    cache: "no-store",
+    redirect: "follow",
+    signal: AbortSignal.timeout(45_000),
+  });
+  const contentLength = Number(response.headers.get("content-length") || 0);
+  if (contentLength > MAX_DOWNLOAD_BYTES) {
+    await response.body?.cancel().catch(() => undefined);
+    throw new Error(`Public verification payload is too large: ${url}`);
+  }
+  const body = Buffer.from(await response.arrayBuffer());
+  if (body.length > MAX_DOWNLOAD_BYTES) throw new Error(`Public verification payload is too large: ${url}`);
+  return {
+    status: response.status,
+    contentType: response.headers.get("content-type") || "",
+    body,
+    effectiveUrl: response.url,
+  };
+}
+
+function canonicalBlogOrigin() {
+  const configuredOrigin = (process.env.SUPREME_BLOG_ORIGIN || "https://supremetruckinginsurance.com").trim().replace(/\/+$/, "");
+  const originUrl = new URL(configuredOrigin);
+  if (originUrl.protocol !== "https:" || originUrl.username || originUrl.password) {
+    throw new Error("SUPREME_BLOG_ORIGIN must be a credential-free HTTPS origin.");
+  }
+  return originUrl.origin;
+}
+
+async function verifyLive(args) {
+  const config = airtableConfig();
+  const requestedSlug = args[0]?.trim() || "";
+  const candidates = (await listAirtableRecords(config))
+    .map(recordCandidate)
+    .filter(Boolean)
+    .sort((a, b) => candidateTimestamp(b) - candidateTimestamp(a));
+  const candidate = requestedSlug
+    ? candidates.find((item) => item.slug === requestedSlug)
+    : candidates[0];
+  if (!candidate) throw new Error(requestedSlug ? "Published slug not found for verification." : "No Published article found.");
+
+  let sections;
+  try {
+    sections = JSON.parse(candidate.sectionsJson);
+  } catch {
+    throw new Error("Airtable Sections JSON is invalid during live verification.");
+  }
+  if (!Array.isArray(sections) || sections.length === 0) {
+    throw new Error("Airtable article has no sections during live verification.");
+  }
+  const sectionHeading = sections.find((section) => typeof section?.heading === "string" && section.heading.trim())?.heading || "";
+  const bodyParagraph = sections
+    .flatMap((section) => Array.isArray(section?.body) ? section.body : [])
+    .find((paragraph) => typeof paragraph === "string" && paragraph.trim().length >= 20) || "";
+  if (!sectionHeading || !bodyParagraph) throw new Error("Airtable article has no substantive section body.");
+
+  const origin = canonicalBlogOrigin();
+  const articleUrl = `${origin}/blog/${candidate.slug}`;
+  const cacheBust = Date.now().toString();
+  const [article, blog, sitemap, image] = await Promise.all([
+    fetchPublicAsset(`${articleUrl}?verify=${cacheBust}`, "text/html"),
+    fetchPublicAsset(`${origin}/blog?verify=${cacheBust}`, "text/html"),
+    fetchPublicAsset(`${origin}/sitemap.xml?verify=${cacheBust}`, "application/xml,text/xml"),
+    fetchPublicAsset(`${candidate.stableUrl}?verify=${cacheBust}`, "image/webp,image/*"),
+  ]);
+
+  const articleHtml = article.body.toString("utf8");
+  const articleText = htmlToText(articleHtml);
+  const blogHtml = blog.body.toString("utf8");
+  const sitemapXml = sitemap.body.toString("utf8");
+  const imageMetadata = await sharp(image.body).metadata();
+  let localImage = null;
+  try {
+    localImage = await readFile(path.resolve(candidate.stablePath));
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
+  const remoteHash = createHash("sha256").update(image.body).digest("hex");
+  const localHash = localImage ? createHash("sha256").update(localImage).digest("hex") : "";
+
+  const checks = {
+    airtableStatusPublished: true,
+    airtableProviderHiggsfield: candidate.imageProvider.toLowerCase() === "higgsfield",
+    airtableModelPresent: Boolean(candidate.imageModel),
+    airtableStableImageUrl: candidate.imageUrl === candidate.stableUrl,
+    articleStatus200: article.status === 200,
+    articleCanonicalUrl: article.effectiveUrl.startsWith(articleUrl),
+    articleTitlePresent: containsMeaningfulText(articleText, candidate.title),
+    articleIntroPresent: containsMeaningfulText(articleText, candidate.intro),
+    articleSectionPresent: containsMeaningfulText(articleText, sectionHeading),
+    articleBodyPresent: containsMeaningfulText(articleText, bodyParagraph),
+    articleSubstantive: articleText.length >= 1_000,
+    articleStableImageUrl: articleHtml.includes(candidate.stableUrl),
+    articleLiteralMarkdownAbsent: !articleText.includes("**") && !articleText.includes("`") && !articleText.includes("__"),
+    blogStatus200: blog.status === 200,
+    blogContainsSlug: blogHtml.includes(candidate.slug),
+    sitemapStatus200: sitemap.status === 200,
+    sitemapContainsCanonicalUrl: sitemapXml.includes(articleUrl),
+    imageStatus200: image.status === 200,
+    imageContentTypeWebp: image.contentType.toLowerCase().startsWith("image/webp"),
+    imageDimensions1600x900: imageMetadata.format === "webp" && imageMetadata.width === 1600 && imageMetadata.height === 900,
+    imageHasBytes: image.body.length > 20_000,
+    localImagePresent: Boolean(localImage),
+    localRemoteHashMatch: Boolean(localImage) && localHash === remoteHash,
+  };
+  const failedChecks = Object.entries(checks).filter(([, passed]) => !passed).map(([name]) => name);
+  const ok = failedChecks.length === 0;
+  jsonOutput({
+    ok,
+    action: "verified-live",
+    recordId: candidate.recordId,
+    slug: candidate.slug,
+    title: candidate.title,
+    articleUrl,
+    provider: candidate.imageProvider,
+    model: candidate.imageModel,
+    stableUrl: candidate.stableUrl,
+    image: {
+      status: image.status,
+      contentType: image.contentType,
+      bytes: image.body.length,
+      width: imageMetadata.width,
+      height: imageMetadata.height,
+      sha256: remoteHash,
+    },
+    checks,
+    failedChecks,
+  });
+  if (!ok) process.exitCode = 1;
+}
+
+async function revalidateLive() {
+  const secret = requiredEnvironment("SUPREME_BLOG_CRON_SECRET");
+  const origin = canonicalBlogOrigin();
+  const response = await fetch(`${origin}/api/blog/auto-draft?mode=revalidate`, {
+    headers: {
+      Authorization: `Bearer ${secret}`,
+      "User-Agent": USER_AGENT,
+      Accept: "application/json",
+    },
+    cache: "no-store",
+    signal: AbortSignal.timeout(45_000),
+  });
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+  const ok = response.status === 200
+    && body?.ok === true
+    && body?.mode === "revalidate"
+    && Array.isArray(body?.paths)
+    && body.paths.includes("/blog")
+    && body.paths.includes("/blog/[slug]")
+    && body.paths.includes("/sitemap.xml");
+  jsonOutput({
+    ok,
+    action: "revalidated",
+    status: response.status,
+    mode: body?.mode || "",
+    paths: Array.isArray(body?.paths) ? body.paths : [],
+  });
+  if (!ok) process.exitCode = 1;
+}
+
 async function publish() {
   const input = validateGenerationInput(await readJsonStdin());
   const publicImage = await verifyPublicImage(input.stableUrl);
@@ -339,9 +547,11 @@ async function publish() {
 async function main() {
   const [command, ...args] = process.argv.slice(2);
   if (command === "discover") return discover(args);
+  if (command === "verify") return verifyLive(args);
+  if (command === "revalidate") return revalidateLive();
   if (command === "stage") return stage();
   if (command === "publish") return publish();
-  throw new Error("Usage: blog-higgsfield-media.mjs <discover [slug]|stage|publish>");
+  throw new Error("Usage: blog-higgsfield-media.mjs <discover [slug]|verify [slug]|revalidate|stage|publish>");
 }
 
 main().catch((error) => {
