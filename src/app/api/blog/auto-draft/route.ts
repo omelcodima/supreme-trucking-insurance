@@ -7,6 +7,7 @@ import {
   retryAirtableRead,
 } from "@/lib/airtableBlogPosts";
 import { isBlogCronAuthorized } from "@/lib/blogCronAuth";
+import { retryMalformedBlogGeneration } from "@/lib/blogGenerationRetry";
 import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
 import { normalizeReadTime } from "@/lib/blogReadTime";
 import { normalizeGeneratedBlogParagraph } from "@/lib/blogText";
@@ -329,10 +330,14 @@ function parseGeneratedPost(text: string): GeneratedPost {
   };
 }
 
-async function generatePost(source: SourceItem): Promise<GeneratedPost> {
+async function generatePost(source: SourceItem, attempt = 1): Promise<GeneratedPost> {
   const instructions =
     "You write for the Supreme Trucking Insurance blog — a real independent trucking insurance agency. Write like an experienced agent talking to trucking clients, not like an AI content mill. Vary your writing: some posts benefit from short punchy sections, others from a deeper dive; use concrete operational details truckers recognize (loss runs, MC numbers, driver files, reefer breakdowns, COIs, renewal shopping). Include one practical 'what we tell our clients' style insight. Never copy sentences from the source. Never invent legal requirements, prices, guarantees, same-day promises, or coverage promises. No fake urgency, no heavy marketing. Connect news to insurance only where reasonable: underwriting, filings, safety history, cargo, drivers, inspections, claims, renewals, carrier appetite. Always note the post is informational and final coverage depends on underwriting, filings, drivers, cargo, state, and carrier appetite.";
-  const userPrompt = `Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost, imagePrompt. sections must be an array of 3 to 5 objects with heading and body; every heading and body paragraph must be plain text only—do not use Markdown emphasis, backticks, headings, or escaped formatting markers; for a short list, use simple dash-prefixed lines without bold markup; vary section count and paragraph rhythm naturally (1-3 paragraphs per section; occasionally use a short dash list inside a body where it genuinely helps). Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. Summarize what happened, why trucking companies should care, and what insurance-related documents or questions to prepare. imagePrompt must describe ONE bright professional editorial photograph that literally depicts this article's specific subject (scene, objects, setting — e.g. 'refrigerated trailer being loaded at a food warehouse dock, morning light' for a reefer story). No text, no logos, no readable signage, no close-up faces in the imagePrompt. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`;
+  const retryInstruction =
+    attempt > 1
+      ? "This is a validation retry: include every required key and exactly 3 to 5 non-empty section objects. "
+      : "";
+  const userPrompt = `${retryInstruction}Create one original SEO blog/news post from this source. Return only valid JSON with these keys: slug, title, description, category, readTime, intro, sections, takeaway, googleBusinessPost, socialPost, imagePrompt. sections must be an array of 3 to 5 objects with heading and body; every heading and body paragraph must be plain text only—do not use Markdown emphasis, backticks, headings, or escaped formatting markers; for a short list, use simple dash-prefixed lines without bold markup; vary section count and paragraph rhythm naturally (1-3 paragraphs per section; occasionally use a short dash list inside a body where it genuinely helps). Write in Supreme Trucking Insurance's voice: simple, modern, practical, low-noise, no fake claims. Summarize what happened, why trucking companies should care, and what insurance-related documents or questions to prepare. imagePrompt must describe ONE bright professional editorial photograph that literally depicts this article's specific subject (scene, objects, setting — e.g. 'refrigerated trailer being loaded at a food warehouse dock, morning light' for a reefer story). No text, no logos, no readable signage, no close-up faces in the imagePrompt. Source title: ${source.title}\nSource URL: ${source.url}\nSource published: ${source.publishedAt}\nSource summary: ${source.summary}`;
 
   // Preferred path: Vercel AI Gateway (flat subscription, OpenAI-compatible).
   const gatewayKey = process.env.AI_GATEWAY_API_KEY;
@@ -460,7 +465,17 @@ export async function GET(request: Request) {
     console.info("Blog automation stage: content generation started.", {
       sourceUrl: source.url,
     });
-    const generatedPost = await generatePost(source);
+    const generatedPost = await retryMalformedBlogGeneration(
+      (attempt) => generatePost(source, attempt),
+      {
+        onRetry: ({ attempt, error }) => {
+          console.warn("Blog automation stage: retrying malformed generated content.", {
+            attempt,
+            reason: error.message,
+          });
+        },
+      },
+    );
     console.info("Blog automation stage: content generation completed.", {
       slug: generatedPost.slug,
     });
