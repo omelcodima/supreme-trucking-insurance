@@ -126,7 +126,9 @@ const federalRegisterUrl =
   "https://www.federalregister.gov/api/v1/documents.json?conditions%5Bagencies%5D%5B%5D=federal-motor-carrier-safety-administration&per_page=10&order=newest";
 
 function revalidatePublishedBlogCaches() {
-  revalidateTag(AIRTABLE_BLOG_CACHE_TAG, "max");
+  // Publishing is a webhook-style mutation: expire the shared CMS cache now so
+  // listing pages and sitemap.xml cannot serve a stale post set on first read.
+  revalidateTag(AIRTABLE_BLOG_CACHE_TAG, { expire: 0 });
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");
   revalidatePath("/sitemap.xml");
