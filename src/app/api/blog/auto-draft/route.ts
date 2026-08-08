@@ -10,7 +10,10 @@ import { isBlogCronAuthorized } from "@/lib/blogCronAuth";
 import { retryMalformedBlogGeneration } from "@/lib/blogGenerationRetry";
 import { parseGeneratedJson } from "@/lib/blogGeneratedJson";
 import { normalizeReadTime } from "@/lib/blogReadTime";
-import { normalizeGeneratedBlogParagraph } from "@/lib/blogText";
+import {
+  normalizeGeneratedBlogParagraph,
+  normalizeGeneratedBlogSectionBody,
+} from "@/lib/blogText";
 
 export const maxDuration = 180;
 
@@ -41,8 +44,12 @@ type GeneratedPost = {
   imagePrompt?: string;
 };
 
-type GeneratedPostPayload = Omit<GeneratedPost, "readTime"> & {
+type GeneratedPostPayload = Omit<GeneratedPost, "readTime" | "sections"> & {
   readTime?: unknown;
+  sections?: {
+    heading?: unknown;
+    body?: unknown;
+  }[];
 };
 
 /**
@@ -309,9 +316,7 @@ function parseGeneratedPost(text: string): GeneratedPost {
   const sections = parsed.sections
     .map((section) => ({
       heading: normalizeGeneratedBlogParagraph(section?.heading),
-      body: Array.isArray(section?.body)
-        ? section.body.map(normalizeGeneratedBlogParagraph).filter(Boolean)
-        : [],
+      body: normalizeGeneratedBlogSectionBody(section?.body),
     }))
     .filter((section) => section.heading && section.body.length > 0);
 

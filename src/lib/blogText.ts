@@ -10,3 +10,13 @@ export function normalizeGeneratedBlogParagraph(value: unknown): string {
     .replace(/`([^`\n]+)`/g, "$1")
     .trim();
 }
+
+export function normalizeGeneratedBlogSectionBody(value: unknown): string[] {
+  const paragraphs = Array.isArray(value)
+    ? value
+    : typeof value === "string"
+      ? value.split(/\n{2,}/)
+      : [];
+
+  return paragraphs.map(normalizeGeneratedBlogParagraph).filter(Boolean);
+}
