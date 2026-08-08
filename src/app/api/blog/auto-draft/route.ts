@@ -416,6 +416,7 @@ export async function GET(request: Request) {
         listAirtableBlogRecords({
           cache: "no-store",
           timeoutMs: CRON_AIRTABLE_READ_TIMEOUT_MS,
+          fields: ["Source URL", "Slug"],
         }),
       {
         maxAttempts: 2,

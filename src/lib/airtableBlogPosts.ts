@@ -25,6 +25,7 @@ type AirtableFetchOptions = {
   cache?: RequestCache;
   revalidate?: number;
   timeoutMs?: number;
+  fields?: readonly string[];
   environment?: AirtableEnvironment;
   fetch?: typeof globalThis.fetch;
 };
@@ -139,10 +140,17 @@ function getAirtableConfig(environment?: AirtableEnvironment): AirtableConfig | 
   };
 }
 
-function airtableUrl(config: AirtableConfig, offset?: string) {
+function airtableUrl(config: AirtableConfig, offset?: string, fields: readonly string[] = []) {
   const params = new URLSearchParams({
     pageSize: "100",
   });
+
+  for (const field of fields) {
+    const normalizedField = field.trim();
+    if (normalizedField) {
+      params.append("fields[]", normalizedField);
+    }
+  }
 
   if (config.viewName) {
     params.set("view", config.viewName);
@@ -292,7 +300,7 @@ export async function listAirtableBlogRecords(options: AirtableFetchOptions = {}
 
   do {
     const response = await fetchImplementation(
-      airtableUrl(config, offset),
+      airtableUrl(config, offset, options.fields),
       airtableFetchInit(config, options),
     );
 

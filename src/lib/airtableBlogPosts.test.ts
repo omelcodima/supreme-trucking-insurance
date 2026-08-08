@@ -135,6 +135,25 @@ test("automation can request a truly fresh duplicate check without disabling pag
   assert.equal(observedInit?.next, undefined);
 });
 
+test("automation can limit duplicate checks to source identity fields", async () => {
+  let observedUrl = "";
+  await listAirtableBlogRecords({
+    cache: "no-store",
+    fields: ["Source URL", "Slug"],
+    environment: testEnvironment,
+    fetch: asFetch(async (input) => {
+      observedUrl = input;
+      return new Response(JSON.stringify({ records: [] }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }),
+  });
+
+  const params = new URL(observedUrl).searchParams;
+  assert.deepEqual(params.getAll("fields[]"), ["Source URL", "Slug"]);
+});
+
 test("automation retries one rate-limited Airtable read after Retry-After", async () => {
   let attempts = 0;
   const delays: number[] = [];
