@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { absoluteUrl, breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
 
 type QA = { q: string; a: string };
 type QuickFact = { label: string; value: string };
@@ -26,6 +27,8 @@ type Props = {
   ctaButtonLabel: string;
   immersiveHero?: boolean;
   quickFacts?: QuickFact[];
+  canonicalPath?: string;
+  serviceType?: string;
 };
 
 export default function SubpageLayout({
@@ -49,9 +52,47 @@ export default function SubpageLayout({
   ctaButtonLabel,
   immersiveHero = false,
   quickFacts = [],
+  canonicalPath,
+  serviceType,
 }: Props) {
+  const breadcrumbData = canonicalPath
+    ? breadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: title, path: canonicalPath },
+      ])
+    : null;
+  const serviceData = canonicalPath && serviceType
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: serviceType,
+        serviceType,
+        description,
+        url: absoluteUrl(canonicalPath),
+        areaServed: {
+          "@type": "Country",
+          name: "United States",
+        },
+        provider: {
+          "@id": absoluteUrl("/#insurance-agency"),
+        },
+      }
+    : null;
+
   return (
     <>
+      {breadcrumbData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={jsonLdScript(breadcrumbData)}
+        />
+      ) : null}
+      {serviceData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={jsonLdScript(serviceData)}
+        />
+      ) : null}
       {immersiveHero ? (
         <>
           <section className="section-shell warm-divider px-4 py-6 md:py-8">

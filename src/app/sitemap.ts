@@ -25,23 +25,20 @@ const staticRoutes = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
-  const blogPosts = await getAllBlogPosts();
+  const posts = await getAllBlogPosts();
 
   return [
     ...staticRoutes.map((route) => ({
       url: `${baseUrl}${route}`,
-      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: route === "" ? 1 : 0.7,
     })),
     ...statePages.map((state) => ({
       url: `${baseUrl}/trucking-insurance/${state.slug}`,
-      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
-    ...blogPosts.map((post) => ({
+    ...posts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       lastModified: new Date(post.date),
       changeFrequency: "monthly" as const,

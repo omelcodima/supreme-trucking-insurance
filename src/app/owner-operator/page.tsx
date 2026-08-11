@@ -39,6 +39,8 @@ export default function OwnerOperatorPage() {
       ctaTitle="Ready to get your quote?"
       ctaDescription="Tell us about your truck and operation, or call directly to discuss the coverage you need."
       ctaButtonLabel="Get a Free Quote"
+      canonicalPath="/owner-operator"
+      serviceType="Owner-Operator Trucking Insurance"
       immersiveHero
       quickFacts={[
         { label: "Designed for", value: "Independent owner-operators and leased operators" },

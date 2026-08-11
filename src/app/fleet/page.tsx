@@ -42,6 +42,8 @@ export default function FleetPage() {
       ctaTitle="Let's shop your fleet coverage"
       ctaDescription="Tell us about the fleet and we’ll shop the right markets with clear follow-up."
       ctaButtonLabel="Get a Free Quote"
+      canonicalPath="/fleet"
+      serviceType="Commercial Truck Fleet Insurance"
       immersiveHero
       quickFacts={[
         { label: "Designed for", value: "Fleets starting around 11 trucks and growing" },

@@ -42,6 +42,8 @@ export default function NewVenturePage() {
       ctaTitle="Prepare your new authority submission"
       ctaDescription="Tell us about the operation and we’ll help review coverage needs, filings, and the next steps."
       ctaButtonLabel="Get a Free Quote"
+      canonicalPath="/new-venture"
+      serviceType="New Venture Trucking Insurance"
       immersiveHero
       quickFacts={[
         { label: "Designed for", value: "New DOT and MC authorities preparing to haul" },
