@@ -35,6 +35,22 @@ test("builds a subject-specific premium editorial image prompt", () => {
   assert.ok(prompt.length <= 2_500);
 });
 
+test("makes E-mirror replacement geometry explicit after a literal QA failure", () => {
+  const prompt = buildHiggsfieldBlogPrompt({
+    title: "FMCSA Reviews ClearView E-Mirror Exemption",
+    intro: "The camera monitor system would replace the two traditional rear-vision mirrors.",
+    sourceTitle: "Application for Exemption From Transit Solutions, LLC",
+    imagePrompt:
+      "Late-model Class 8 tractor-trailer in a distribution yard with camera pods where side mirrors normally sit.",
+  });
+
+  assert.match(prompt, /attached trailer/i);
+  assert.match(prompt, /camera pods in the normal mirror positions/i);
+  assert.match(prompt, /do not show conventional protruding side mirrors/i);
+  assert.match(prompt, /show the replacement and omit the displaced component/i);
+  assert.ok(prompt.length <= 2_500);
+});
+
 test("normalizes control characters and caps untrusted article context", () => {
   const prompt = buildHiggsfieldBlogPrompt({
     title: `Truck\u0000 Safety   Update ${"x".repeat(4_000)}`,

@@ -37,10 +37,16 @@ export function buildHiggsfieldBlogPrompt(input: BlogImagePromptInput) {
   const scene = cleanContext(input.imagePrompt, 900);
   const intro = cleanContext(input.intro, 650);
   const sourceTitle = cleanContext(input.sourceTitle, 400);
+  const subjectContext = `${title} ${scene} ${intro} ${sourceTitle}`;
+  const eMirrorConstraint = /\b(?:e[- ]?mirror|camera[- ]based mirror|camera pods?)\b/i.test(subjectContext)
+    ? "For this camera-monitor-system subject, show a complete late-model American Class 8 tractor with an attached trailer; use compact, physically plausible camera pods in the normal mirror positions; do not show conventional protruding side mirrors."
+    : "";
 
   const prompt = [
     `Article subject: ${title}.`,
     scene ? `Literal scene brief: ${scene}.` : "Create a literal scene that clearly matches the article subject.",
+    eMirrorConstraint,
+    "Honor replacement relationships literally: when the brief says one component replaces another, show the replacement and omit the displaced component.",
     intro ? `Editorial context: ${intro}.` : "",
     sourceTitle ? `Official source context: ${sourceTitle}.` : "",
     "Create ONE premium photorealistic editorial photograph for Supreme Trucking Insurance.",
