@@ -2,6 +2,7 @@
 
 import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, stat, unlink } from "node:fs/promises";
+import https from "node:https";
 import path from "node:path";
 import process from "node:process";
 
@@ -17,7 +18,9 @@ import {
 
 const MAX_INPUT_BYTES = 64 * 1024;
 const MAX_DOWNLOAD_BYTES = 30 * 1024 * 1024;
+const MAX_AIRTABLE_RESPONSE_BYTES = 10 * 1024 * 1024;
 const DOWNLOAD_TIMEOUT_MS = 90_000;
+const AIRTABLE_TIMEOUT_MS = 45_000;
 const USER_AGENT = "Supreme-Trucking-Insurance-Higgsfield-Worker/1.0";
 
 function requiredEnvironment(name) {
@@ -49,22 +52,53 @@ function airtableTableUrl(config, suffix = "") {
 }
 
 async function airtableRequest(url, config, init = {}) {
-  const response = await fetch(url, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${config.apiKey}`,
-      "Content-Type": "application/json",
-      ...(init.headers || {}),
-    },
-    signal: AbortSignal.timeout(30_000),
+  const body = typeof init.body === "string" || Buffer.isBuffer(init.body) ? init.body : undefined;
+  return new Promise((resolve, reject) => {
+    const request = https.request(url, {
+      method: init.method || "GET",
+      // The worker host has no usable IPv6 route; Undici's family selection can
+      // exhaust its connect budget before reaching Airtable's working IPv4 IPs.
+      family: 4,
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
+        "User-Agent": USER_AGENT,
+        ...(body ? { "Content-Length": Buffer.byteLength(body) } : {}),
+        ...(init.headers || {}),
+      },
+    }, (response) => {
+      const chunks = [];
+      let bytes = 0;
+      response.on("data", (chunk) => {
+        bytes += chunk.length;
+        if (bytes > MAX_AIRTABLE_RESPONSE_BYTES) {
+          request.destroy(new Error("Airtable response exceeded the maximum size."));
+          return;
+        }
+        chunks.push(chunk);
+      });
+      response.on("end", () => {
+        const status = response.statusCode || 0;
+        if (status < 200 || status >= 300) {
+          reject(new Error(`Airtable request failed with status ${status}.`));
+          return;
+        }
+        try {
+          resolve(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+        } catch {
+          reject(new Error("Airtable returned invalid JSON."));
+        }
+      });
+      response.on("error", reject);
+    });
+
+    request.setTimeout(AIRTABLE_TIMEOUT_MS, () => {
+      request.destroy(new Error(`Airtable request timed out after ${AIRTABLE_TIMEOUT_MS}ms.`));
+    });
+    request.on("error", reject);
+    if (body) request.write(body);
+    request.end();
   });
-
-  if (!response.ok) {
-    await response.body?.cancel().catch(() => undefined);
-    throw new Error(`Airtable request failed with status ${response.status}.`);
-  }
-
-  return response.json();
 }
 
 async function listAirtableRecords(config) {
