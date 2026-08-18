@@ -4,6 +4,7 @@ import {
   getConfiguredSocialNetworks,
   summarizeSocialResults,
 } from "@/lib/socialPostingState";
+import { isBlogCronAuthorized } from "@/lib/blogCronAuth";
 
 /**
  * POST/GET /api/social/publish
@@ -13,7 +14,8 @@ import {
  * its caption + hero image to every configured network. Attempt errors are
  * saved for visibility, but the record is stamped only after a successful post.
  *
- * Auth mirrors the blog cron: Bearer BLOG_CRON_SECRET or vercel-cron UA.
+ * Auth mirrors the blog cron and requires the exact configured bearer secret.
+ * A Vercel-looking User-Agent is public input and never grants access.
  * Safe no-op until at least one network's tokens are set.
  */
 
@@ -21,14 +23,6 @@ const AIRTABLE_BASE = process.env.AIRTABLE_BASE_ID;
 const AIRTABLE_TABLE = "Blog Posts";
 const AIRTABLE_KEY = process.env.AIRTABLE_API_KEY;
 const SITE = "https://supremetruckinginsurance.com";
-
-function isAuthorized(request: Request) {
-  const secret = process.env.BLOG_CRON_SECRET || process.env.CRON_SECRET;
-  const auth = request.headers.get("authorization");
-  const ua = request.headers.get("user-agent") || "";
-  if (secret && auth === `Bearer ${secret}`) return true;
-  return ua.includes("vercel-cron/1.0");
-}
 
 function airtableHeaders() {
   return { Authorization: `Bearer ${AIRTABLE_KEY}`, "Content-Type": "application/json" };
@@ -67,7 +61,7 @@ async function recordAttempt(recordId: string, results: unknown, posted: boolean
 }
 
 async function run(request: Request) {
-  if (!isAuthorized(request)) {
+  if (!isBlogCronAuthorized(request)) {
     return NextResponse.json({ detail: "Unauthorized" }, { status: 401 });
   }
 

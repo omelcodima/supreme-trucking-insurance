@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --conditions=react-server --experimental-strip-types --test --test-concurrency=1 src/lib/*.test.ts src/lib/coverwhale/*.test.ts",
-    "health:lead-routes": "node scripts/verify-lead-routes.mjs"
+    "health:lead-routes": "node scripts/verify-lead-routes.mjs",
+    "health:seo-routes": "node scripts/verify-seo-routes.mjs"
   },
   "dependencies": {
     "@upstash/redis": "^1.38.0",
