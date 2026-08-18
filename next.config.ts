@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/loss-runs",
-        destination: "/contact/upload-docs",
+        destination: "/quote",
         permanent: true,
       },
     ];
