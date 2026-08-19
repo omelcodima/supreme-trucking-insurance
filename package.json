@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --experimental-strip-types --test src/lib/*.test.ts",
-    "health:lead-routes": "node scripts/verify-lead-routes.mjs"
+    "health:lead-routes": "node scripts/verify-lead-routes.mjs",
+    "health:seo-routes": "node scripts/verify-seo-routes.mjs"
   },
   "dependencies": {
     "airtable": "^0.12.2",

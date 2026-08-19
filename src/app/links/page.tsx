@@ -3,9 +3,9 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 
 export const metadata: Metadata = {
-  title: "Supreme Trucking Insurance Links | Quotes, Documents & Updates",
+  title: "Supreme Trucking Insurance Links | Quotes, COIs & Updates",
   description:
-    "Quick links for Supreme Trucking Insurance: get a quote, instant DOT indication, upload documents, call, email, read trucking insurance updates, and view Google Business.",
+    "Quick links for Supreme Trucking Insurance: get a quote, request a COI, check trucking insurance by state, call, email, read updates, and view Google Business.",
   alternates: {
     canonical: "/links",
   },
@@ -23,9 +23,9 @@ const primaryLinks = [
     href: "/instant-indication",
   },
   {
-    label: "Upload documents",
-    description: "Send loss runs, current policy documents, driver lists, vehicle schedules, or renewals.",
-    href: "/contact/upload-docs",
+    label: "Trucking insurance by state",
+    description: "Find owner-operator, fleet, cargo, and new-authority information for your state.",
+    href: "/trucking-insurance",
   },
   {
     label: "Request a certificate of insurance",
@@ -42,7 +42,7 @@ const quickLinks = [
     href: "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency",
   },
   { label: "Latest trucking insurance updates", href: "/blog" },
-  { label: "Coverage articles", href: "/articles" },
+  { label: "Client reviews", href: "/reviews" },
 ];
 
 export default function LinksPage() {
