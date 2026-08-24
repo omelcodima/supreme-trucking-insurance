@@ -14,6 +14,7 @@ import {
   normalizeGeneratedBlogParagraph,
   normalizeGeneratedBlogSectionBody,
 } from "@/lib/blogText";
+import { findNearDuplicateBlogTopic } from "@/lib/blogTopicSimilarity";
 
 export const maxDuration = 180;
 
@@ -428,7 +429,7 @@ export async function GET(request: Request) {
         listAirtableBlogRecords({
           cache: "no-store",
           timeoutMs: CRON_AIRTABLE_READ_TIMEOUT_MS,
-          fields: ["Source URL", "Slug"],
+          fields: ["Source URL", "Slug", "Title", "Source Title"],
         }),
       {
         maxAttempts: 2,
@@ -450,17 +451,27 @@ export async function GET(request: Request) {
     const existingSlugs = new Set(
       existingRecords.map((record) => stringField(record.fields, "Slug")).filter(Boolean),
     );
+    const existingTopicTitles = existingRecords.flatMap((record) =>
+      [
+        stringField(record.fields, "Title"),
+        stringField(record.fields, "Source Title"),
+      ].filter(Boolean),
+    );
 
     console.info("Blog automation stage: source collection started.");
     const [federalRegisterItems, rssItems] = await Promise.all([
       getFederalRegisterItems(),
       getRssItems(),
     ]);
-    const candidates = [...federalRegisterItems, ...rssItems]
-      .filter((item) => !existingSourceUrls.has(item.url))
+    const unusedSourceCandidates = [...federalRegisterItems, ...rssItems].filter(
+      (item) => !existingSourceUrls.has(item.url),
+    );
+    const candidates = unusedSourceCandidates
+      .filter((item) => !findNearDuplicateBlogTopic(item.title, existingTopicTitles))
       .sort((a, b) => sourceScore(b) - sourceScore(a));
     console.info("Blog automation stage: source collection completed.", {
       candidates: candidates.length,
+      topicDuplicatesFiltered: unusedSourceCandidates.length - candidates.length,
     });
 
     const source = candidates.find((item) => sourceScore(item) > 0) || candidates[0];
@@ -486,6 +497,15 @@ export async function GET(request: Request) {
     console.info("Blog automation stage: content generation completed.", {
       slug: generatedPost.slug,
     });
+    const generatedTopicDuplicate = findNearDuplicateBlogTopic(
+      generatedPost.title,
+      existingTopicTitles,
+    );
+    if (generatedTopicDuplicate) {
+      throw new Error(
+        `Generated blog topic overlaps an existing post: ${generatedTopicDuplicate.existingTitle}`,
+      );
+    }
     let slug = generatedPost.slug;
     let suffix = 2;
     while (existingSlugs.has(slug)) {
