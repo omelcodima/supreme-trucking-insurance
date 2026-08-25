@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
+import { BLOG_CONSOLIDATIONS } from "./src/lib/blogConsolidations";
 
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      ...Object.entries(BLOG_CONSOLIDATIONS).map(([source, destination]) => ({
+        source: `/blog/${source}`,
+        destination: `/blog/${destination}`,
+        permanent: true,
+      })),
       {
         source: "/articles",
         destination: "/blog",

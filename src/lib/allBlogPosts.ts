@@ -6,6 +6,7 @@ import {
   AirtableBlogFetchError,
   getPublishedAirtableBlogPosts,
 } from "@/lib/airtableBlogPosts";
+import { filterConsolidatedBlogPosts } from "@/lib/blogConsolidations";
 import { resolveBlogPost } from "@/lib/blogPostResolver";
 import { blogPosts } from "@/lib/blogPosts";
 import type { BlogPost } from "@/lib/blogPosts";
@@ -49,7 +50,8 @@ export async function getAllBlogPosts(options: BlogPostFetchOptions = {}) {
     console.error(`Airtable blog posts unavailable (${status}); serving bundled posts.`);
   }
 
-  return uniqueBySlug([...dynamicPosts, ...blogPosts]).sort((a, b) => b.date.localeCompare(a.date));
+  return filterConsolidatedBlogPosts(uniqueBySlug([...dynamicPosts, ...blogPosts]))
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export async function getAnyBlogPost(slug: string) {
