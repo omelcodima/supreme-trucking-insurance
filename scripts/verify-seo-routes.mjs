@@ -123,13 +123,25 @@ const sitemapIssues = sitemapChecks
   }));
 const internalRedirects = internalChecks.filter((route) => route.status >= 300 && route.status < 400);
 const brokenInternalLinks = internalChecks.filter((route) => route.status === 0 || route.status >= 400);
+const sitemapUrlSet = new Set(sitemapUrls);
+const blogIndexUrl = normalizedUrl("/blog", baseUrl);
+const missingBlogArticlesFromSitemap = internalChecks
+  .filter((route) => {
+    const pathname = new URL(route.url).pathname;
+    return route.status === 200 &&
+      pathname.startsWith("/blog/") &&
+      route.referencedBy.includes(blogIndexUrl) &&
+      !sitemapUrlSet.has(route.url);
+  })
+  .map((route) => ({ url: route.url, referencedBy: route.referencedBy }));
 
 const report = {
   ok:
     duplicateSitemapUrls.length === 0 &&
     sitemapIssues.length === 0 &&
     internalRedirects.length === 0 &&
-    brokenInternalLinks.length === 0,
+    brokenInternalLinks.length === 0 &&
+    missingBlogArticlesFromSitemap.length === 0,
   checkedAt: new Date().toISOString(),
   baseUrl: origin,
   sitemapStatus: sitemapResponse.status,
@@ -139,10 +151,12 @@ const report = {
   sitemapIssueCount: sitemapIssues.length,
   internalRedirectCount: internalRedirects.length,
   brokenInternalLinkCount: brokenInternalLinks.length,
+  missingBlogArticleFromSitemapCount: missingBlogArticlesFromSitemap.length,
   duplicateSitemapUrls,
   sitemapIssues,
   internalRedirects,
   brokenInternalLinks,
+  missingBlogArticlesFromSitemap,
 };
 
 console.log(JSON.stringify(report, null, 2));

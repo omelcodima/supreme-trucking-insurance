@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { connection } from "next/server";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { statePages } from "@/lib/statePages";
 
@@ -25,6 +26,10 @@ const staticRoutes = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // The metadata route otherwise adds a Full Route Cache layer that can outlive
+  // a successful CMS tag/path revalidation. Build the XML at request time while
+  // retaining the tagged Airtable data cache used by getAllBlogPosts().
+  await connection();
   const posts = await getAllBlogPosts();
 
   return [
