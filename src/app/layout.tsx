@@ -7,13 +7,15 @@ import OpenAIAdsEvents from "@/components/OpenAIAdsEvents";
 import BrandLogo from "../components/BrandLogo";
 import { OPENAI_ADS_PIXEL_ID } from "@/lib/openaiAds";
 import { defaultOgImage, siteName, siteUrl } from "@/lib/seo";
+import {
+  googleBusinessUrl,
+  organizationSameAs,
+  socialProfiles,
+} from "@/lib/socialProfiles";
 import { featuredStatePages } from "@/lib/statePages";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const googleBusinessUrl =
-  "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
 const serviceLinks = [
   { href: "/owner-operator", label: "Owner Operators", detail: "Coverage for independent truck owners" },
@@ -32,7 +34,7 @@ const organizationJsonLd = {
   telephone: "+1-360-936-7196",
   email: "info@supremetruckinginsurance.com",
   areaServed: "United States",
-  sameAs: [googleBusinessUrl],
+  sameAs: organizationSameAs,
   knowsAbout: [
     "Commercial truck insurance",
     "Owner operator insurance",
@@ -103,7 +105,9 @@ export default function RootLayout({
         </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         <OpenAIAdsEvents />
         <Analytics />
@@ -289,6 +293,23 @@ export default function RootLayout({
                   >
                     View Supreme on Google
                   </a>
+                </div>
+                <div>
+                  <p className="text-[#7B6B59] text-xs uppercase tracking-wide mb-2">Follow Supreme</p>
+                  <div className="flex flex-wrap gap-2">
+                    {socialProfiles.map((profile) => (
+                      <a
+                        key={profile.href}
+                        href={profile.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Supreme Trucking Insurance on ${profile.label}`}
+                        className="rounded-full border border-[#D8CCBD] bg-[#FFFDF9]/70 px-3 py-1.5 text-xs font-bold text-[#2F261C] transition-colors hover:border-[#f97316]/60 hover:text-[#f97316]"
+                      >
+                        {profile.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
                 <div className="pt-2">
                   <Link href="/privacy-policy" className="block text-[#2F261C] hover:text-[#f97316] transition-colors text-sm">Privacy Policy</Link>

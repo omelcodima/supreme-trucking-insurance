@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
+import { googleBusinessUrl, socialProfiles } from "@/lib/socialProfiles";
 
 export const metadata: Metadata = {
   title: "Supreme Trucking Insurance Links | Quotes, COIs & Updates",
   description:
-    "Quick links for Supreme Trucking Insurance: get a quote, request a COI, check trucking insurance by state, call, email, read updates, and view Google Business.",
+    "Quick links for Supreme Trucking Insurance: quotes, COIs, state guides, updates, Google Business, and official social profiles.",
   alternates: {
     canonical: "/links",
   },
@@ -39,7 +40,7 @@ const quickLinks = [
   { label: "Email info@supremetruckinginsurance.com", href: "mailto:info@supremetruckinginsurance.com" },
   {
     label: "View Supreme on Google",
-    href: "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency",
+    href: googleBusinessUrl,
   },
   { label: "Latest trucking insurance updates", href: "/blog" },
   { label: "Client reviews", href: "/reviews" },
@@ -101,11 +102,22 @@ export default function LinksPage() {
 
           <div className="mt-8 rounded-[1.25rem] border border-[#F4C08A] bg-[#FFF7ED] p-5 text-left">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#9A4D00]">
-              Social profiles
+              Official social profiles
             </p>
-            <p className="mt-3 text-sm leading-7 text-[#5A4B3B]">
-              Facebook, Instagram, LinkedIn, and Google Business posting will use this page as the link-in-bio hub once owner verification is completed.
-            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {socialProfiles.map((profile) => (
+                <a
+                  key={profile.href}
+                  href={profile.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl border border-[#F4C08A] bg-white/75 px-4 py-3 transition-colors hover:border-[#f97316] hover:bg-white"
+                >
+                  <span className="block text-sm font-black text-[#2F261C]">{profile.label}</span>
+                  <span className="mt-1 block text-xs text-[#7B6B59]">{profile.handle}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
