@@ -15,6 +15,7 @@ import {
   isScheduledHiggsfieldUpgrade,
   needsHiggsfieldUpgrade,
 } from "../src/lib/blogHiggsfield.ts";
+import { parseOptionalSlugArg } from "../src/lib/blogWorkerArgs.ts";
 
 const MAX_INPUT_BYTES = 64 * 1024;
 const MAX_DOWNLOAD_BYTES = 30 * 1024 * 1024;
@@ -170,7 +171,7 @@ function currentPacificDate(now = new Date()) {
 
 async function discover(args) {
   const config = airtableConfig();
-  const requestedSlug = args[0]?.trim() || "";
+  const requestedSlug = parseOptionalSlugArg(args);
   const candidates = (await listAirtableRecords(config))
     .map(recordCandidate)
     .filter(Boolean)
@@ -368,6 +369,31 @@ function normalizeForMatch(value) {
     .trim();
 }
 
+function credentialFreeHttpsUrl(value, label) {
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new Error(`${label} must be a valid URL.`);
+  }
+  if (parsed.protocol !== "https:" || parsed.username || parsed.password) {
+    throw new Error(`${label} must be a credential-free HTTPS URL.`);
+  }
+  return parsed;
+}
+
+function cacheBustedUrl(value, cacheBust) {
+  const parsed = credentialFreeHttpsUrl(value, "Article image URL");
+  parsed.searchParams.set("verify", cacheBust);
+  return parsed.toString();
+}
+
+function htmlContainsAssetUrl(value, assetUrl) {
+  return value.includes(assetUrl)
+    || decodeHtmlEntities(value).includes(assetUrl)
+    || value.includes(encodeURIComponent(assetUrl));
+}
+
 function containsMeaningfulText(haystack, needle) {
   const normalizedHaystack = normalizeForMatch(haystack);
   const normalizedNeedle = normalizeForMatch(needle);
@@ -408,7 +434,7 @@ function canonicalBlogOrigin() {
 
 async function verifyLive(args) {
   const config = airtableConfig();
-  const requestedSlug = args[0]?.trim() || "";
+  const requestedSlug = parseOptionalSlugArg(args);
   const candidates = (await listAirtableRecords(config))
     .map(recordCandidate)
     .filter(Boolean)
@@ -433,6 +459,10 @@ async function verifyLive(args) {
     .find((paragraph) => typeof paragraph === "string" && paragraph.trim().length >= 20) || "";
   if (!sectionHeading || !bodyParagraph) throw new Error("Airtable article has no substantive section body.");
 
+  const isHiggsfield = candidate.imageProvider.toLowerCase() === "higgsfield";
+  const expectedImageUrl = isHiggsfield ? candidate.stableUrl : candidate.imageUrl;
+  credentialFreeHttpsUrl(expectedImageUrl, "Airtable Image URL");
+
   const origin = canonicalBlogOrigin();
   const articleUrl = `${origin}/blog/${candidate.slug}`;
   const cacheBust = Date.now().toString();
@@ -440,7 +470,7 @@ async function verifyLive(args) {
     fetchPublicAsset(`${articleUrl}?verify=${cacheBust}`, "text/html"),
     fetchPublicAsset(`${origin}/blog?verify=${cacheBust}`, "text/html"),
     fetchPublicAsset(`${origin}/sitemap.xml?verify=${cacheBust}`, "application/xml,text/xml"),
-    fetchPublicAsset(`${candidate.stableUrl}?verify=${cacheBust}`, "image/webp,image/*"),
+    fetchPublicAsset(cacheBustedUrl(expectedImageUrl, cacheBust), "image/webp,image/*"),
   ]);
 
   const articleHtml = article.body.toString("utf8");
@@ -449,19 +479,22 @@ async function verifyLive(args) {
   const sitemapXml = sitemap.body.toString("utf8");
   const imageMetadata = await sharp(image.body).metadata();
   let localImage = null;
-  try {
-    localImage = await readFile(path.resolve(candidate.stablePath));
-  } catch (error) {
-    if (error?.code !== "ENOENT") throw error;
+  if (isHiggsfield) {
+    try {
+      localImage = await readFile(path.resolve(candidate.stablePath));
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
   }
   const remoteHash = createHash("sha256").update(image.body).digest("hex");
   const localHash = localImage ? createHash("sha256").update(localImage).digest("hex") : "";
 
   const checks = {
     airtableStatusPublished: true,
-    airtableProviderHiggsfield: candidate.imageProvider.toLowerCase() === "higgsfield",
-    airtableModelPresent: Boolean(candidate.imageModel),
-    airtableStableImageUrl: candidate.imageUrl === candidate.stableUrl,
+    airtableProviderPresent: Boolean(candidate.imageProvider),
+    airtableImageUrlPresent: Boolean(candidate.imageUrl),
+    higgsfieldModelPresent: !isHiggsfield || Boolean(candidate.imageModel),
+    higgsfieldStableImageUrl: !isHiggsfield || candidate.imageUrl === candidate.stableUrl,
     articleStatus200: article.status === 200,
     articleCanonicalUrl: article.effectiveUrl.startsWith(articleUrl),
     articleTitlePresent: containsMeaningfulText(articleText, candidate.title),
@@ -469,18 +502,23 @@ async function verifyLive(args) {
     articleSectionPresent: containsMeaningfulText(articleText, sectionHeading),
     articleBodyPresent: containsMeaningfulText(articleText, bodyParagraph),
     articleSubstantive: articleText.length >= 1_000,
-    articleStableImageUrl: articleHtml.includes(candidate.stableUrl),
+    articleExpectedImageUrl: htmlContainsAssetUrl(articleHtml, expectedImageUrl),
     articleLiteralMarkdownAbsent: !articleText.includes("**") && !articleText.includes("`") && !articleText.includes("__"),
     blogStatus200: blog.status === 200,
     blogContainsSlug: blogHtml.includes(candidate.slug),
     sitemapStatus200: sitemap.status === 200,
     sitemapContainsCanonicalUrl: sitemapXml.includes(articleUrl),
     imageStatus200: image.status === 200,
-    imageContentTypeWebp: image.contentType.toLowerCase().startsWith("image/webp"),
-    imageDimensions1600x900: imageMetadata.format === "webp" && imageMetadata.width === 1600 && imageMetadata.height === 900,
+    imageContentType: image.contentType.toLowerCase().startsWith("image/"),
+    imageDimensionsMinimum: Boolean(imageMetadata.width && imageMetadata.height)
+      && imageMetadata.width >= 768
+      && imageMetadata.height >= 432,
     imageHasBytes: image.body.length > 20_000,
-    localImagePresent: Boolean(localImage),
-    localRemoteHashMatch: Boolean(localImage) && localHash === remoteHash,
+    higgsfieldImageContentTypeWebp: !isHiggsfield || image.contentType.toLowerCase().startsWith("image/webp"),
+    higgsfieldImageDimensions1600x900: !isHiggsfield
+      || (imageMetadata.format === "webp" && imageMetadata.width === 1600 && imageMetadata.height === 900),
+    higgsfieldLocalImagePresent: !isHiggsfield || Boolean(localImage),
+    higgsfieldLocalRemoteHashMatch: !isHiggsfield || (Boolean(localImage) && localHash === remoteHash),
   };
   const failedChecks = Object.entries(checks).filter(([, passed]) => !passed).map(([name]) => name);
   const ok = failedChecks.length === 0;
@@ -493,7 +531,8 @@ async function verifyLive(args) {
     articleUrl,
     provider: candidate.imageProvider,
     model: candidate.imageModel,
-    stableUrl: candidate.stableUrl,
+    imageUrl: expectedImageUrl,
+    stableUrl: isHiggsfield ? candidate.stableUrl : "",
     image: {
       status: image.status,
       contentType: image.contentType,
@@ -585,7 +624,7 @@ async function main() {
   if (command === "revalidate") return revalidateLive();
   if (command === "stage") return stage();
   if (command === "publish") return publish();
-  throw new Error("Usage: blog-higgsfield-media.mjs <discover [slug]|verify [slug]|revalidate|stage|publish>");
+  throw new Error("Usage: blog-higgsfield-media.mjs <discover [<slug>|--slug <slug>]|verify [<slug>|--slug <slug>]|revalidate|stage|publish>");
 }
 
 main().catch((error) => {
