@@ -1,10 +1,32 @@
 #!/usr/bin/env node
 
+import { readFile } from "node:fs/promises";
+
 const baseUrl = new URL(process.argv[2] || process.env.SEO_BASE_URL || "https://supremetruckinginsurance.com");
 const origin = baseUrl.origin;
 const sitemapUrl = new URL("/sitemap.xml", baseUrl).href;
 const concurrency = Number.parseInt(process.env.SEO_AUDIT_CONCURRENCY || "8", 10);
 const userAgent = "Supreme-SEO-Health/1.0";
+const publishedSnapshot = JSON.parse(
+  await readFile(new URL("../src/data/publishedBlogSnapshot.json", import.meta.url), "utf8"),
+);
+
+if (!Array.isArray(publishedSnapshot.posts) || publishedSnapshot.posts.length === 0) {
+  throw new Error("Published blog snapshot is empty or invalid.");
+}
+
+const latestSnapshotPost = publishedSnapshot.posts
+  .filter((post) => typeof post?.slug === "string" && typeof post?.date === "string")
+  .sort((a, b) => b.date.localeCompare(a.date))[0];
+
+if (!latestSnapshotPost) {
+  throw new Error("Published blog snapshot has no dated post sentinel.");
+}
+
+const configuredMinimumBlogArticleCount = Number.parseInt(process.env.SEO_MIN_BLOG_ARTICLE_COUNT || "", 10);
+const minimumBlogArticleCount = Number.isFinite(configuredMinimumBlogArticleCount)
+  ? configuredMinimumBlogArticleCount
+  : publishedSnapshot.posts.length;
 
 function normalizedUrl(value, relativeTo = baseUrl) {
   const url = new URL(value, relativeTo);
@@ -125,6 +147,12 @@ const internalRedirects = internalChecks.filter((route) => route.status >= 300 &
 const brokenInternalLinks = internalChecks.filter((route) => route.status === 0 || route.status >= 400);
 const sitemapUrlSet = new Set(sitemapUrls);
 const blogIndexUrl = normalizedUrl("/blog", baseUrl);
+const sitemapBlogArticleUrls = sitemapUrls.filter((url) => new URL(url).pathname.startsWith("/blog/"));
+const latestSnapshotArticleUrl = normalizedUrl(`/blog/${latestSnapshotPost.slug}`, baseUrl);
+const missingBlogSnapshotSentinels = sitemapUrlSet.has(latestSnapshotArticleUrl)
+  ? []
+  : [latestSnapshotArticleUrl];
+const blogArticleCountFloorMet = sitemapBlogArticleUrls.length >= minimumBlogArticleCount;
 const missingBlogArticlesFromSitemap = internalChecks
   .filter((route) => {
     const pathname = new URL(route.url).pathname;
@@ -141,6 +169,8 @@ const report = {
     sitemapIssues.length === 0 &&
     internalRedirects.length === 0 &&
     brokenInternalLinks.length === 0 &&
+    blogArticleCountFloorMet &&
+    missingBlogSnapshotSentinels.length === 0 &&
     missingBlogArticlesFromSitemap.length === 0,
   checkedAt: new Date().toISOString(),
   baseUrl: origin,
@@ -151,11 +181,17 @@ const report = {
   sitemapIssueCount: sitemapIssues.length,
   internalRedirectCount: internalRedirects.length,
   brokenInternalLinkCount: brokenInternalLinks.length,
+  sitemapBlogArticleCount: sitemapBlogArticleUrls.length,
+  minimumBlogArticleCount,
+  blogArticleCountFloorMet,
+  latestSnapshotArticleUrl,
+  missingBlogSnapshotSentinelCount: missingBlogSnapshotSentinels.length,
   missingBlogArticleFromSitemapCount: missingBlogArticlesFromSitemap.length,
   duplicateSitemapUrls,
   sitemapIssues,
   internalRedirects,
   brokenInternalLinks,
+  missingBlogSnapshotSentinels,
   missingBlogArticlesFromSitemap,
 };
 
