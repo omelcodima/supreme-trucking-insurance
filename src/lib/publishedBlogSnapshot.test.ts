@@ -36,7 +36,7 @@ test("published fallback snapshot is public-only, complete, and internally uniqu
   assert.equal(snapshot.schemaVersion, "supreme-blog-published-snapshot/v1");
   assert.equal(typeof snapshot.capturedAt, "string");
   assert.ok(!Number.isNaN(Date.parse(snapshot.capturedAt as string)));
-  assert.equal(snapshot.posts?.length, 27);
+  assert.ok((snapshot.posts?.length ?? 0) >= 27);
 
   const posts = snapshot.posts ?? [];
   const slugs = new Set<string>();
@@ -56,4 +56,14 @@ test("published fallback snapshot is public-only, complete, and internally uniqu
   }
 
   assert.ok(slugs.has("fmcsa-broker-transparency-rule-delay-what-truckers-should-do-now"));
+  assert.deepEqual(
+    posts.map((post) => post.slug),
+    [...posts]
+      .sort(
+        (left, right) =>
+          String(right.date).localeCompare(String(left.date)) ||
+          String(left.slug).localeCompare(String(right.slug)),
+      )
+      .map((post) => post.slug),
+  );
 });

@@ -1,8 +1,72 @@
 {
   "schemaVersion": "supreme-blog-published-snapshot/v1",
-  "capturedAt": "2026-08-29T17:42:04.612381+00:00",
-  "source": "last successful published-post cache read",
+  "capturedAt": "2026-09-01T17:12:21.670Z",
+  "source": "live Airtable published-post refresh",
   "posts": [
+    {
+      "slug": "2027-ucr-fee-increase-what-trucking-fleets-need-to-know",
+      "title": "2027 UCR Fee Increase: What Trucking Fleets Need To Know Now",
+      "description": "FMCSA has approved higher Unified Carrier Registration (UCR) fees starting with the 2027 registration year. Here is what changed, how much more you might pay, and what documents to have ready so UCR does not trip up your insurance or filings.",
+      "category": "Regulatory Updates",
+      "date": "2026-09-01",
+      "readTime": "7 min read",
+      "sourceTitle": "Fees for the Unified Carrier Registration Plan and Agreement",
+      "sourceUrl": "https://www.federalregister.gov/documents/2026/09/01/2026-17893/fees-for-the-unified-carrier-registration-plan-and-agreement",
+      "sourcePublishedAt": "2026-09-01",
+      "tags": [],
+      "imageUrl": "https://images.pexels.com/photos/5668501/pexels-photo-5668501.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+      "imageAltText": "2027 UCR Fee Increase: What Trucking Fleets Need To Know Now — photo by Sora Shimazaki (Pexels)",
+      "googleBusinessPost": "FMCSA has approved higher Unified Carrier Registration (UCR) fees starting with the 2027 registration year. The average increase is about 20% over the 2025–2026 levels, with the exact bump depending on your fleet size.\n\nIf you run interstate as a carrier, private carrier, broker, freight forwarder, or leasing company, this will affect your annual compliance budget. More important than the fee itself is making sure your UCR filing matches your USDOT records and your insurance schedule so you avoid headaches at roadside and at renewal.\n\nNeed help understanding how this change fits into your insurance and compliance plan? Our agents work with trucking operations every day and can walk through your options. This post is informational only; actual coverage and requirements depend on your operation, drivers, equipment, cargo, states, and carrier underwriting appetite.",
+      "socialPost": "Heads up for carriers and brokers: FMCSA just locked in higher Unified Carrier Registration (UCR) fees starting with the 2027 registration year.\n\nAverage increase is around 20% vs. 2025–2026, but still below what fleets paid from 2019–2022. The bigger issue is making sure your UCR filing lines up with your USDOT records and insurance schedule so you are not fighting violations or delays.\n\nNow is a good time to tighten up your unit counts, driver list, and filings calendar. Talk with your insurance agent about how your growth plans, new states, or added trucks could move you into a different UCR bracket. Informational only; actual coverage and requirements depend on your specific operation and carrier underwriting.",
+      "intro": "The Unified Carrier Registration fees are going up for 2027 and beyond. FMCSA has adopted a UCR Board recommendation that increases fees by about 20 percent on average compared to the 2025–2026 schedule. It is not the highest they have ever been, but it is a real line item change for carriers, brokers, and leasing companies.\n\nIf you run interstate and have an active USDOT or MC number, this touches you. It is worth getting your head around it now so UCR does not become a last‑minute scramble that slows down your insurance filings or renewals.",
+      "sections": [
+        {
+          "heading": "What FMCSA just changed about UCR fees",
+          "body": [
+            "FMCSA has issued a final rule that bumps up Unified Carrier Registration fees starting with the 2027 registration year. The change follows a recommendation from the UCR Board submitted in September 2025.",
+            "Here are the key points in plain language:\n- Fees go up for the 2027 registration year and stay at that new level for later years unless FMCSA changes them again\n- The average increase is around 20 percent compared with the 2025 and 2026 fee schedule\n- The actual dollar increase runs from single‑digit dollars on the low end to several thousand dollars at the top bracket, depending on your fleet size\n- Even with the hike, the 2027 fees are still lower than what carriers paid from 2019 through 2022",
+            "The rule applies to the usual UCR crowd: for‑hire motor carriers, motor private carriers of property, brokers, freight forwarders, and leasing companies that are required to register under UCR and operate in participating states."
+          ]
+        },
+        {
+          "heading": "Why trucking companies and brokers should care",
+          "body": [
+            "Most fleets feel UCR in two ways: it is another bill to pay, and it is another compliance box that has to be checked correctly.",
+            "From the operational side, a higher fee is not going to make or break a healthy trucking company, but it can sting when you have tractors in the shop, higher fuel, and tight freight rates. More important than the dollar amount is what happens if you forget it:\n- Roadside inspectors do look at UCR status\n- States can issue citations or penalties for non‑registration\n- In some cases, unpaid UCR can lead to trouble with credentials you need to operate",
+            "On the insurance side, UCR is part of your overall compliance picture. When underwriters look at a fleet, they are looking at the story your paperwork tells. Clean inspections, current UCR, proper authority, IFTA in order, and consistent driver files all feed into the perception that you are on top of your operation.",
+            "When UCR is not handled on time, it is often a sign of a disorganized back office. That can raise questions at renewal time, especially when combined with late filings, loss runs with open claims, or a string of out‑of‑service inspections."
+          ]
+        },
+        {
+          "heading": "How the 2027 UCR increase connects to your insurance",
+          "body": [
+            "UCR itself does not change your insurance premium by a fixed formula, but it does sit in the same bucket as other compliance items that underwriters quietly track.",
+            "Here is how it tends to come up in real life:\n- New ventures: When we help a new carrier place its first auto and cargo policy, the carrier often wants BMC‑91 or BMC‑34 filings turned on quickly so they can get rolling. If they delay UCR, they sometimes end up with authority active, insurance in place, but still technically not compliant under UCR. That is not how you want to start out.\n- Renewals: When an underwriter is on the fence about a fleet, they sometimes look at UCR and other registration items as tie‑breakers. A fleet that keeps authority, UCR, and other registrations current tends to be easier to write than one that is constantly fixing lapses.\n- Growth plans: If you are moving into a higher UCR bracket by adding tractors, that usually means you are also adjusting limits, cargo coverage, or adding new shippers that want specific certificates of insurance. All of that lands on your desk at the same time.",
+            "What we tell our clients is this: treat UCR like you treat your insurance renewal. Put it on the calendar, assign a person, and do it early. It is cheaper to spend 30 minutes getting it right than to pay a citation or delay a load because something did not match in a roadside database."
+          ]
+        },
+        {
+          "heading": "Documents to have ready before you file UCR and talk to your agent",
+          "body": [
+            "UCR filing is not complicated, but it goes smoother if your paperwork and data match what your insurance and authority say. Before you log in to the UCR system or call whoever handles your registrations, line up a few basics.",
+            "We usually suggest fleets pull together:\n- USDOT and MC numbers, exactly as they appear in FMCSA records\n- Current legal name and any DBAs, matching your MCS‑150\n- Accurate vehicle counts by class that line up with your insurance schedule\n- Recent loss runs from your insurance carrier if you are also in renewal season",
+            "The vehicle count piece matters more than most people think. If your UCR filing says you run 30 power units, but your auto liability policy schedules 40, someone is going to ask why. It may be an honest timing issue, but it is better to keep those numbers close on purpose.",
+            "When you talk to your insurance agent around renewal, be ready to answer:\n- Are you adding or dropping any states where you operate\n- Are you changing your mix of company drivers and owner‑operators\n- Are you planning to add units that bump you into a higher UCR bracket",
+            "Those answers help your agent and the underwriter see the same growth picture you are using to plan your budget, including the new UCR fee level."
+          ]
+        },
+        {
+          "heading": "Planning ahead for 2027 and beyond",
+          "body": [
+            "The new UCR fees start with the 2027 registration year, but it is smart to think about them when you budget for 2026 and early 2027, especially if you are growing.",
+            "A few practical tips:\n- Put UCR in your annual compliance calendar alongside IFTA, 2290, and insurance renewals\n- Build a simple spreadsheet that tracks units, states, and key renewal dates\n- Have one person responsible for updating FMCSA records when you add or remove trucks so UCR, insurance schedules, and MCS‑150s stay aligned",
+            "If you operate in multiple states, keep in mind that UCR is only one piece. Some states layer on their own intrastate requirements, business licenses, or weight‑distance taxes. The cleanest operations we see have a single folder or digital hub where they park everything: COIs, loss runs, driver lists, equipment lists, UCR confirmations, and state credentials.",
+            "This article is informational only and is not legal, tax, or insurance advice. Actual UCR obligations and insurance coverage depend on your specific operation, your drivers, your equipment, your cargo, your states of operation, and individual carrier underwriting appetite. Always check the official UCR and FMCSA sites or your compliance professional for the latest rules, and review coverage details with your insurance agent or carrier."
+          ]
+        }
+      ],
+      "takeaway": "UCR fees are going up for 2027, but the real risk for trucking companies is not the extra dollars, it is the compliance hassle if you ignore it. Get your unit counts, authority records, and insurance schedules lined up early so your UCR filings, roadside inspections, and renewals all tell the same clean story."
+    },
     {
       "slug": "fmcsa-broker-transparency-rule-delay-what-truckers-should-do-now",
       "title": "Still Waiting On FMCSA Broker Transparency: What Carriers Should Do Now",
