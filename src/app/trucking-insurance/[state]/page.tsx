@@ -8,12 +8,13 @@ type Props = {
   params: Promise<{ state: string }>;
 };
 
-// "commercial truck insurance <state>" is the phrasing with search volume
-// (Florida 480/mo, Texas 390/mo); "<state> trucking insurance" is the smaller
-// twin. Keep the title under 60 characters for long state names.
+// Search Console shows "<state> truck insurance" as the query these pages
+// earn impressions for (Georgia 338, Arizona 210, Illinois 194 in 3 months),
+// with "commercial truck insurance <state>" and "<state> trucking insurance"
+// behind it. Keep the title under 60 characters for long state names.
 function stateTitle(name: string) {
-  const full = `${name} Commercial Truck Insurance | Supreme Trucking Insurance`;
-  return full.length <= 60 ? full : `${name} Commercial Truck Insurance | Supreme Trucking`;
+  const full = `${name} Truck Insurance & Trucking Insurance | Supreme`;
+  return full.length <= 60 ? full : `${name} Truck Insurance | Supreme Trucking Insurance`;
 }
 
 export function generateStaticParams() {
