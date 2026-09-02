@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { connection } from "next/server";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
 import { statePages } from "@/lib/statePages";
+import { classPages } from "@/lib/classPages";
 
 const baseUrl = "https://supremetruckinginsurance.com";
 
@@ -37,6 +38,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}${route}`,
       changeFrequency: "monthly" as const,
       priority: route === "" ? 1 : 0.7,
+    })),
+    ...classPages.map((page) => ({
+      url: `${baseUrl}/${page.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
     ...statePages.map((state) => ({
       url: `${baseUrl}/trucking-insurance/${state.slug}`,

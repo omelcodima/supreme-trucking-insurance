@@ -27,6 +27,17 @@ export default function AboutPage() {
         "Ongoing renewal shopping and support",
       ]}
       extraSideCard={
+        <>
+        <div className="card-premium rounded-[1.4rem] p-6 mb-6">
+          <h3 className="text-xl font-black text-[#2F261C] mb-3">Tools we built</h3>
+          <p className="text-[#5A4B3B] mb-3 text-sm leading-6">
+            Running a trucking book taught us what the software was missing, so we built it. Our agency runs on{" "}
+            <a href="https://www.renewrig.com" className="text-[#f97316] font-bold hover:underline">RenewRig</a>, the
+            renewal-first CRM that reads client documents and chases loss runs, and we publish{" "}
+            <a href="https://www.carrierlens.app" className="text-[#f97316] font-bold hover:underline">Carrierlens</a>, a
+            free directory of which carriers and wholesalers write which trucking risks, by state.
+          </p>
+        </div>
         <div className="card-premium rounded-[1.4rem] p-6">
           <h3 className="text-xl font-black text-[#2F261C] mb-3">Contact</h3>
           <p className="text-[#5A4B3B] mb-2 text-sm">
@@ -36,6 +47,7 @@ export default function AboutPage() {
             Email: <a href="mailto:info@supremetruckinginsurance.com" className="text-[#f97316] font-bold hover:underline">info@supremetruckinginsurance.com</a>
           </p>
         </div>
+        </>
       }
       primaryCtaLabel="Work with a specialist"
       ctaTitle="Work with a specialist"

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { statePages } from "@/lib/statePages";
+import { classPages } from "@/lib/classPages";
 
 export const metadata: Metadata = {
   title: "Trucking Insurance by State | Supreme Trucking Insurance",
@@ -68,9 +69,41 @@ export default function TruckingInsuranceStatesPage() {
         </div>
       </section>
 
+      <section className="py-14 md:py-16">
+        <div className="mx-auto max-w-6xl px-4">
+          <span className="eyebrow mb-4">By operation</span>
+          <h2 className="text-3xl font-black leading-tight text-[#2F261C] md:text-4xl">
+            Insurance for the kind of truck you run.
+          </h2>
+          <p className="mt-3 max-w-3xl text-base leading-7 text-[#5A4B3B]">
+            The markets, limits, and coverages change with the operation. Start with yours.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {classPages.map((page) => (
+              <Link
+                key={page.slug}
+                href={`/${page.slug}`}
+                className="card-premium rounded-[1.15rem] px-4 py-4 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
+              >
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
+                  {page.eyebrow}
+                </p>
+                <h3 className="mt-1 text-lg font-black text-[#2F261C]">
+                  {page.name}
+                </h3>
+                <p className="mt-2 text-sm leading-5 text-[#5A4B3B]">
+                  {page.quickFacts[0]?.value}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-soft py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <span className="eyebrow mb-4">By state</span>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {statePages.map((state) => (
               <Link
                 key={state.slug}

@@ -13,6 +13,7 @@ import {
   socialProfiles,
 } from "@/lib/socialProfiles";
 import { featuredStatePages } from "@/lib/statePages";
+import { classPages } from "@/lib/classPages";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -237,6 +238,14 @@ export default function RootLayout({
               <p className="text-[#5A4B3B] text-sm leading-relaxed">
                 Your trusted partner for trucking insurance. We specialize in owner operators, small fleets, and new authority. Licensed in most states.
               </p>
+              {/* The two tools the agency built and runs on — the family of sites. */}
+              <p className="mt-5 text-xs uppercase tracking-[0.12em] text-[#7B6B59]">Tools we built</p>
+              <a href="https://www.renewrig.com" className="mt-2 block text-sm text-[#2F261C] hover:text-[#f97316] transition-colors">
+                RenewRig — the renewal CRM our agency runs on
+              </a>
+              <a href="https://www.carrierlens.app" className="mt-1 block text-sm text-[#2F261C] hover:text-[#f97316] transition-colors">
+                Carrierlens — directory of trucking insurance markets
+              </a>
             </div>
 
             {/* Services */}
@@ -249,6 +258,16 @@ export default function RootLayout({
                 <li><Link href="/cargo" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Cargo Insurance</Link></li>
                 <li><Link href="/coi-request" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">COI Request</Link></li>
                 <li><Link href="/instant-indication" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Instant Indication</Link></li>
+              </ul>
+              <h3 className="mt-8 text-lg font-bold mb-4 text-[#f97316]">By operation</h3>
+              <ul className="space-y-2 text-sm">
+                {classPages.map((page) => (
+                  <li key={page.slug}>
+                    <Link href={`/${page.slug}`} className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">
+                      {page.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
               <h3 className="mt-8 text-lg font-bold mb-4 text-[#f97316]">States</h3>
               <div className="grid grid-cols-2 gap-2 text-sm">
