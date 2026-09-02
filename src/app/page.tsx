@@ -46,19 +46,29 @@ const carrierMarkets = [
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
-const independentPoints = [
+const coverageStack = [
   {
-    title: "More market access",
-    description: "We can shop multiple trucking-focused carriers instead of forcing one company’s rate.",
+    title: "Commercial auto / primary liability",
+    description: "The trucking liability layer markets and the FMCSA expect.",
+    href: "/commercial-auto-insurance",
   },
-  {
-    title: "Better fit for your operation",
-    description: "Owner-operator, fleet, new authority, cargo, physical damage, and filings are not all the same problem.",
-  },
-  {
-    title: "A real person managing the file",
-    description: "You get clear updates as carrier markets respond, not a call-center handoff.",
-  },
+  { title: "Motor truck cargo", description: "The freight you are contracted to haul.", href: "/cargo" },
+  { title: "Physical damage", description: "The truck and trailer you own.", href: null },
+  { title: "Bobtail / non-trucking", description: "When you are not under dispatch.", href: "/bobtail-insurance" },
+  { title: "BMC-91 filings", description: "New authority and FMCSA filing support.", href: "/new-venture" },
+];
+
+const quoteSteps = [
+  "Send the DOT (and MC if you have it) on the quote form, or call (360) 936-7196.",
+  "We shop trucking-focused markets instead of forcing one company’s rate.",
+  "You get updates as markets respond.",
+];
+
+const whyPoints = [
+  { title: "Licensed in most states", description: "Built for truckers who run across state lines." },
+  { title: "Four languages", description: "English, Russian, Ukrainian, and Romanian." },
+  { title: "DOT-first review", description: "We read the DOT file before the submission goes out, so it matches the operation." },
+  { title: "Dedicated COI intake", description: "Certificates handled on their own form, not buried in email." },
 ];
 
 const testimonials = [
@@ -90,7 +100,8 @@ export default function Home() {
               Trucking insurance, handled fast.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
-              Coverage for owner-operators, fleets, and new authority with access to multiple trucking markets.
+              Truck insurance and commercial truck insurance for owner-operators, fleets, and new authority. We shop
+              multiple trucking markets so the file goes to a market that fits how you actually haul.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -161,13 +172,38 @@ export default function Home() {
           <div className="mb-10 max-w-2xl">
             <span className="eyebrow mb-4">Coverage</span>
             <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
-              Coverage for how you operate.
+              Truck insurance coverage that matches how you haul
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
-              One clear place to understand who we help and which coverage stack usually matters.
+              Trucking insurance is a stack, not one policy. Most files start with commercial auto / primary
+              liability, then cargo, physical damage, bobtail, and BMC-91 filings when the authority needs them.
             </p>
           </div>
-
+          <ul className="mb-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {coverageStack.map((item) => (
+              <li key={item.title} className="card-muted rounded-[1.15rem] p-5">
+                <h3 className="text-base font-extrabold text-[#2F261C]">
+                  {item.href ? (
+                    <Link href={item.href} className="hover:text-[#f97316]">
+                      {item.title}
+                    </Link>
+                  ) : (
+                    item.title
+                  )}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-[#5A4B3B]">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="mb-10 max-w-2xl">
+            <span className="eyebrow mb-4">Who we work with</span>
+            <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
+              Who this trucking insurance agency is for
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
+              Supreme is a brokerage for trucking accounts, not a freight dispatcher and not a one-carrier quote site.
+            </p>
+          </div>
           <div className="grid gap-6 md:grid-cols-3">
             {operationCards.map((card) => (
               <Link key={card.title} href={card.href} className="card-premium block overflow-hidden rounded-[1.5rem] transition-transform hover:-translate-y-1">
@@ -192,21 +228,80 @@ export default function Home() {
       </section>
 
       <section className="section-shell py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-10 max-w-3xl">
-            <span className="eyebrow mb-4">Why independent</span>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1fr_0.9fr]">
+          <div>
+            <span className="eyebrow mb-4">Quote path</span>
             <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
-              Why work with an independent trucking agency?
+              How a quote starts (DOT first)
             </h2>
+            <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
+              We review the DOT file first so the submission matches the operation. Then you get a real person on
+              the file, not a call-center handoff.
+            </p>
+            <ol className="mt-6 space-y-3">
+              {quoteSteps.map((step, index) => (
+                <li key={step} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f97316] text-sm font-black text-white">
+                    {index + 1}
+                  </span>
+                  <p className="text-base leading-7 text-[#5A4B3B]">
+                    {index === 0 ? (
+                      <>
+                        Send the DOT (and MC if you have it) on{" "}
+                        <Link href="/quote" className="font-bold text-[#f97316] hover:underline">
+                          the quote form
+                        </Link>
+                        , or call{" "}
+                        <a href="tel:+13609367196" className="font-bold text-[#2F261C] hover:text-[#f97316]">
+                          (360) 936-7196
+                        </a>
+                        .
+                      </>
+                    ) : (
+                      step
+                    )}
+                  </p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-4 text-sm leading-6 text-[#7B6B59]">If the form is too slow, call.</p>
+            <div className="mt-6 flex flex-col gap-2 text-sm">
+              <Link href="/blog/owner-operator-truck-insurance-checklist" className="font-bold text-[#2F261C] hover:text-[#f97316]">
+                Prep list: Owner Operator Truck Insurance Checklist →
+              </Link>
+              <Link href="/blog/how-much-does-commercial-truck-insurance-cost" className="font-bold text-[#2F261C] hover:text-[#f97316]">
+                Cost context: How Much Does Commercial Truck Insurance Cost? →
+              </Link>
+            </div>
           </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {independentPoints.map((point) => (
-              <div key={point.title} className="card-muted rounded-[1.35rem] p-6">
-                <h3 className="text-xl font-extrabold text-[#2F261C]">{point.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{point.description}</p>
-              </div>
-            ))}
+          <div>
+            <span className="eyebrow mb-4">Why Supreme</span>
+            <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
+              Why truckers use Supreme
+            </h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {whyPoints.map((point) => (
+                <div key={point.title} className="card-muted rounded-[1.35rem] p-5">
+                  <h3 className="text-lg font-extrabold text-[#2F261C]">{point.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#5A4B3B]">{point.description}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-sm leading-6 text-[#5A4B3B]">
+              State starting points:{" "}
+              <Link href="/trucking-insurance" className="font-bold text-[#2F261C] hover:text-[#f97316]">all states</Link>,{" "}
+              <Link href="/trucking-insurance/washington" className="font-bold text-[#2F261C] hover:text-[#f97316]">Washington</Link>,{" "}
+              <Link href="/trucking-insurance/oregon" className="font-bold text-[#2F261C] hover:text-[#f97316]">Oregon</Link>,{" "}
+              <Link href="/trucking-insurance/california" className="font-bold text-[#2F261C] hover:text-[#f97316]">California</Link>,{" "}
+              <Link href="/trucking-insurance/georgia" className="font-bold text-[#2F261C] hover:text-[#f97316]">Georgia</Link>,{" "}
+              <Link href="/trucking-insurance/ohio" className="font-bold text-[#2F261C] hover:text-[#f97316]">Ohio</Link>.
+              Certificates:{" "}
+              <Link href="/coi-request" className="font-bold text-[#2F261C] hover:text-[#f97316]">COI request</Link>.
+            </p>
+            <p className="mt-3 text-sm leading-6 text-[#7B6B59]">
+              Named trucking markets on this site: {carrierMarkets.join(", ")}. Access depends on the file — a
+              named market is not a promise that every account is placed there.
+            </p>
           </div>
         </div>
       </section>

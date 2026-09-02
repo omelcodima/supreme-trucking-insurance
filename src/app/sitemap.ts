@@ -13,6 +13,7 @@ const staticRoutes = [
   "/careers",
   "/cargo",
   "/coi-request",
+  "/commercial-auto-insurance",
   "/contact",
   "/fleet",
   "/instant-indication",

@@ -106,7 +106,7 @@ export default function QuotePage() {
           ) : (
             <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="card-premium rounded-[1.8rem] p-8 md:p-10">
-                <h2 className="mb-2 text-2xl font-black text-[#2F261C] md:text-3xl">Request a trucking insurance quote</h2>
+                <h1 className="mb-2 text-2xl font-black text-[#2F261C] md:text-3xl">Request a trucking insurance quote</h1>
                 <p className="mb-8 text-sm text-[#7B6B59]">Fields marked with * are required.</p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">

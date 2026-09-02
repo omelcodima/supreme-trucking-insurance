@@ -8,6 +8,14 @@ type Props = {
   params: Promise<{ state: string }>;
 };
 
+// "commercial truck insurance <state>" is the phrasing with search volume
+// (Florida 480/mo, Texas 390/mo); "<state> trucking insurance" is the smaller
+// twin. Keep the title under 60 characters for long state names.
+function stateTitle(name: string) {
+  const full = `${name} Commercial Truck Insurance | Supreme Trucking Insurance`;
+  return full.length <= 60 ? full : `${name} Commercial Truck Insurance | Supreme Trucking`;
+}
+
 export function generateStaticParams() {
   return statePages.map((state) => ({ state: state.slug }));
 }
@@ -21,8 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${state.name} Trucking Insurance | Supreme Trucking Insurance`,
-    description: `Commercial truck insurance options for ${state.name} owner-operators, fleets, new authorities, cargo, and physical damage. Licensed where available.`,
+    title: stateTitle(state.name),
+    description: `${state.name} commercial truck insurance and trucking insurance for owner-operators, fleets, and new authorities. Shop trucking markets, start a quote.`,
     alternates: {
       canonical: `/trucking-insurance/${state.slug}`,
     },

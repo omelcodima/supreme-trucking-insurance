@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+
+// Airtable descriptions run long; search engines cut them around 155 characters.
+function clampDescription(text: string) {
+  if (text.length <= 155) return text;
+  const cut = text.slice(0, 152);
+  return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+}
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogVisual } from "@/components/BlogVisual";
@@ -32,8 +39,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const postImage = absoluteUrl(post.imageUrl || defaultOgImage);
 
   return {
-    title: `${post.title} | Supreme Trucking Insurance`,
-    description: post.description,
+    title: post.title.length > 40 ? post.title : `${post.title} | Supreme Trucking Insurance`,
+    description: clampDescription(post.description),
     keywords: tags,
     alternates: {
       canonical: `/blog/${post.slug}`,

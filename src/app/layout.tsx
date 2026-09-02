@@ -47,9 +47,9 @@ const organizationJsonLd = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Supreme Trucking Insurance | Fast Quotes. Multiple Carriers.",
+  title: "Trucking Insurance for Owner-Operators and Fleets | Supreme",
   description:
-    "Fast quotes. Multiple carriers. Owner operators, fleets & new authority. Licensed in most states. Call (360) 936-7196.",
+    "Trucking insurance and commercial truck insurance for owner-operators, fleets, and new authority. Shop trucking markets. Start a quote or call (360) 936-7196.",
   keywords: [
     "trucking insurance",
     "commercial truck insurance",
@@ -252,6 +252,7 @@ export default function RootLayout({
             <div>
               <h3 className="text-lg font-bold mb-4 text-[#f97316]">Services</h3>
               <ul className="space-y-2 text-sm">
+                <li><Link href="/commercial-auto-insurance" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Commercial Auto / Primary Liability</Link></li>
                 <li><Link href="/owner-operator" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Owner Operator Insurance</Link></li>
                 <li><Link href="/fleet" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">Fleet Insurance</Link></li>
                 <li><Link href="/new-venture" className="text-[#5A4B3B] hover:text-[#f97316] transition-colors">New Authority / New Venture</Link></li>
