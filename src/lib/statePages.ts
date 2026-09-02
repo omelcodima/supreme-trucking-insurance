@@ -1,3 +1,5 @@
+import { stateDeepDives, type StateDeepDive } from "@/lib/stateDeepDives";
+
 export type StatePage = {
   slug: string;
   name: string;
@@ -7,6 +9,8 @@ export type StatePage = {
   marketNotes: string[];
   operationFocus: string[];
   faqs: { q: string; a: string }[];
+  /** State-specific sections for pages that earn impressions; see stateDeepDives.ts. */
+  deepDive?: StateDeepDive[];
 };
 
 const priorityStatePages: StatePage[] = [
@@ -369,7 +373,10 @@ function createStatePage([slug, name, abbreviation, freightProfile]: (typeof add
 
 const additionalStatePages = additionalStates.map(createStatePage);
 
-export const statePages: StatePage[] = [...priorityStatePages, ...additionalStatePages];
+export const statePages: StatePage[] = [...priorityStatePages, ...additionalStatePages].map((page) => ({
+  ...page,
+  deepDive: stateDeepDives[page.slug],
+}));
 
 export const featuredStatePages = statePages.slice(0, 12);
 

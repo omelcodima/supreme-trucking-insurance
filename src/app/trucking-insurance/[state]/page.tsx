@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
 import { featuredStatePages, getStatePage, statePages } from "@/lib/statePages";
+import { classPages } from "@/lib/classPages";
 
 type Props = {
   params: Promise<{ state: string }>;
@@ -173,6 +174,43 @@ export default async function StateInsurancePage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {state.deepDive && state.deepDive.length > 0 ? (
+        <section className="section-shell py-16 md:py-20">
+          <div className="mx-auto max-w-6xl px-4">
+            <div className="mb-8 max-w-3xl">
+              <span className="eyebrow mb-4">{state.abbreviation} in detail</span>
+              <h2 className="text-3xl font-black leading-tight text-[#2F261C] md:text-5xl">
+                {state.name} truck insurance, in detail.
+              </h2>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-3">
+              {state.deepDive.map((block) => (
+                <div key={block.heading} className="card-premium rounded-[1.4rem] p-6">
+                  <h3 className="text-xl font-black leading-tight text-[#2F261C]">{block.heading}</h3>
+                  {block.paragraphs.map((paragraph) => (
+                    <p key={paragraph.slice(0, 40)} className="mt-3 text-sm leading-6 text-[#5A4B3B]">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-sm leading-6 text-[#5A4B3B]">
+              By operation:{" "}
+              {classPages.slice(0, 8).map((page, index) => (
+                <span key={page.slug}>
+                  {index > 0 ? ", " : ""}
+                  <Link href={`/${page.slug}`} className="font-bold text-[#2F261C] hover:text-[#f97316]">
+                    {page.name.toLowerCase()}
+                  </Link>
+                </span>
+              ))}
+              .
+            </p>
+          </div>
+        </section>
+      ) : null}
 
       <section className="section-shell py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
