@@ -29,11 +29,21 @@ const organizationJsonLd = {
   "@type": "InsuranceAgency",
   "@id": "https://supremetruckinginsurance.com/#insurance-agency",
   name: "Supreme Trucking Insurance",
+  description:
+    "Commercial trucking insurance for owner-operators, fleets, new authorities, cargo, and physical damage.",
   url: "https://supremetruckinginsurance.com",
   logo: "https://supremetruckinginsurance.com/logo.png",
   telephone: "+1-360-936-7196",
   email: "info@supremetruckinginsurance.com",
   areaServed: "United States",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    telephone: "+1-360-936-7196",
+    email: "info@supremetruckinginsurance.com",
+    areaServed: "US",
+    availableLanguage: ["English", "Russian", "Ukrainian", "Romanian"],
+  },
   sameAs: organizationSameAs,
   knowsAbout: [
     "Commercial truck insurance",

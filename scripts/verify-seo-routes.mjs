@@ -72,6 +72,54 @@ function extractInternalLinks(html, pageUrl) {
   return [...links];
 }
 
+function verifyOrganizationSchema(html) {
+  const schemas = [];
+
+  for (const match of html.matchAll(
+    /<script\b[^>]*\btype=(?:"application\/ld\+json"|'application\/ld\+json')[^>]*>([\s\S]*?)<\/script>/gi,
+  )) {
+    try {
+      schemas.push(JSON.parse(match[1]));
+    } catch {
+      // A malformed JSON-LD block is not usable as the organization schema.
+    }
+  }
+
+  const organization = schemas.find((schema) => {
+    const types = Array.isArray(schema?.["@type"]) ? schema["@type"] : [schema?.["@type"]];
+    return types.includes("InsuranceAgency");
+  });
+  const contactPoint = Array.isArray(organization?.contactPoint)
+    ? organization.contactPoint[0]
+    : organization?.contactPoint;
+  const languages = Array.isArray(contactPoint?.availableLanguage)
+    ? contactPoint.availableLanguage
+    : [];
+  const expectedLanguages = ["English", "Russian", "Ukrainian", "Romanian"];
+
+  const checks = {
+    found: Boolean(organization),
+    canonicalId:
+      organization?.["@id"] === "https://supremetruckinginsurance.com/#insurance-agency",
+    name: organization?.name === "Supreme Trucking Insurance",
+    url: organization?.url === "https://supremetruckinginsurance.com",
+    logo: organization?.logo === "https://supremetruckinginsurance.com/logo.png",
+    description: typeof organization?.description === "string" && organization.description.length > 40,
+    primaryPhone: organization?.telephone === "+1-360-936-7196",
+    primaryEmail: organization?.email === "info@supremetruckinginsurance.com",
+    contactType: contactPoint?.["@type"] === "ContactPoint" && contactPoint?.contactType === "customer service",
+    contactPhone: contactPoint?.telephone === "+1-360-936-7196",
+    contactEmail: contactPoint?.email === "info@supremetruckinginsurance.com",
+    contactLanguages: expectedLanguages.every((language) => languages.includes(language)),
+  };
+
+  return {
+    ok: Object.values(checks).every(Boolean),
+    checks,
+    schemaCount: schemas.length,
+  };
+}
+
 async function fetchRoute(url) {
   try {
     const response = await fetch(url, {
@@ -110,6 +158,16 @@ if (sitemapResponse.status !== 200) {
 }
 
 const sitemapXml = await sitemapResponse.text();
+const homeResponse = await fetch(baseUrl, {
+  redirect: "manual",
+  headers: { "user-agent": userAgent },
+  signal: AbortSignal.timeout(30_000),
+});
+const homeContentType = homeResponse.headers.get("content-type") || "";
+const homeHtml = homeResponse.status === 200 && homeContentType.includes("text/html")
+  ? await homeResponse.text()
+  : "";
+const organizationSchema = verifyOrganizationSchema(homeHtml);
 const sitemapUrls = [...sitemapXml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => {
   const canonicalUrl = new URL(match[1].trim(), baseUrl);
   return normalizedUrl(`${canonicalUrl.pathname}${canonicalUrl.search}`, baseUrl);
@@ -165,6 +223,8 @@ const missingBlogArticlesFromSitemap = internalChecks
 
 const report = {
   ok:
+    homeResponse.status === 200 &&
+    organizationSchema.ok &&
     duplicateSitemapUrls.length === 0 &&
     sitemapIssues.length === 0 &&
     internalRedirects.length === 0 &&
@@ -174,6 +234,8 @@ const report = {
     missingBlogArticlesFromSitemap.length === 0,
   checkedAt: new Date().toISOString(),
   baseUrl: origin,
+  homeStatus: homeResponse.status,
+  organizationSchema,
   sitemapStatus: sitemapResponse.status,
   sitemapUrlCount: sitemapUrls.length,
   uniqueInternalLinkCount: internalChecks.length,
