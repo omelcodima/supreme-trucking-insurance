@@ -50,22 +50,29 @@ test("published-blog reads use one shared long-lived cache tag", async () => {
 
 test("Airtable reads abort before a stalled upstream can exhaust a page build", async () => {
   const startedAt = Date.now();
+  // AbortSignal.timeout() deliberately uses an unref'ed timer. Keep the test
+  // process alive while the mocked fetch has no real socket/handle of its own.
+  const keepAlive = setTimeout(() => undefined, 1_000);
 
-  await assert.rejects(
-    listAirtableBlogRecords({
-      timeoutMs: 25,
-      environment: testEnvironment,
-      fetch: asFetch(
-        async (_input, init) =>
-          await new Promise<Response>((_resolve, reject) => {
-            init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), {
-              once: true,
-            });
-          }),
-      ),
-    }),
-    (error: unknown) => error instanceof DOMException && error.name === "TimeoutError",
-  );
+  try {
+    await assert.rejects(
+      listAirtableBlogRecords({
+        timeoutMs: 25,
+        environment: testEnvironment,
+        fetch: asFetch(
+          async (_input, init) =>
+            await new Promise<Response>((_resolve, reject) => {
+              init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), {
+                once: true,
+              });
+            }),
+        ),
+      }),
+      (error: unknown) => error instanceof DOMException && error.name === "TimeoutError",
+    );
+  } finally {
+    clearTimeout(keepAlive);
+  }
 
   assert.ok(Date.now() - startedAt < 1_000);
   assert.equal(AIRTABLE_BLOG_REQUEST_TIMEOUT_MS, 5_000);
