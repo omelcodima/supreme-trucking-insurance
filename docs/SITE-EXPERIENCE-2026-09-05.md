@@ -50,3 +50,12 @@ node --experimental-strip-types --import 'data:text/javascript,import {after} fr
 - Safe lead-route checks return the expected HTTP 400 validation response on all four endpoints.
 
 All browser submission tests intercepted network requests. No real quote emails were sent, and inbox delivery was not asserted by this change.
+
+## Production handoff
+
+- Code commit: `e9bf645` on `codex/site-experience-cleanup`.
+- Vercel deployment: `dpl_5zvkZWE7LSKaEwFBHgGaE2vJhDNr`, built with production configuration, checked while staged, then promoted on September 5, 2026.
+- Main domain: https://supremetruckinginsurance.com/ . Local development server: http://localhost:3105 .
+- Repeated the isolated browser suite on the main domain successfully. The live SEO audit has 121 sitemap URLs, 40 articles, 105 unique internal links, zero broken links, and no missing article sentinel. Live safe validation checks pass on all four lead routes.
+- GitHub synchronization is still blocked: the local `gh` token for `omelcodima` is invalid and SSH authentication also fails. `git push origin HEAD:main` did not change the remote. Local code is committed and the Vercel deployment is live, but origin/main still has the prior version.
+- Required follow-up: reauthenticate GitHub with `gh auth login -h github.com`, then fetch and reconcile any new origin/main commits before a normal fast-forward push. Do not force-push. Until this is done, a later deployment from the old remote branch could replace this version.
