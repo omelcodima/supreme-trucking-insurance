@@ -1,8 +1,69 @@
 {
   "schemaVersion": "supreme-blog-published-snapshot/v1",
-  "capturedAt": "2026-09-01T17:12:21.670Z",
+  "capturedAt": "2026-09-02T17:05:26.679Z",
   "source": "live Airtable published-post refresh",
   "posts": [
+    {
+      "slug": "dot-cracks-down-on-cdl-fraud-what-trucking-fleets-should-do-now",
+      "title": "DOT Ups the Ante on CDL Fraud: What Trucking Fleets Should Do Now",
+      "description": "DOT and other agencies are stepping up efforts against CDL fraud and bad truck driving schools. Here is what this means for trucking companies, hiring, safety files, and your insurance renewals.",
+      "category": "Safety & Compliance",
+      "date": "2026-09-02",
+      "readTime": "7 min read",
+      "sourceTitle": "DOT ups ante in fight against fraud in trucking industry",
+      "sourceUrl": "https://landline.media/dot-ups-ante-in-fight-against-fraud-in-trucking-industry/",
+      "sourcePublishedAt": "2026-08-31",
+      "tags": [],
+      "imageUrl": "https://images.pexels.com/photos/6814526/pexels-photo-6814526.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+      "imageAltText": "DOT Ups the Ante on CDL Fraud: What Trucking Fleets Should Do Now — photo by cottonbro studio (Pexels)",
+      "googleBusinessPost": "DOT is stepping up enforcement against CDL fraud and sketchy truck driving schools. That is good for safety, but it can also impact your hiring, safety files, and insurance renewals.\n\nNow is a smart time to:\n- Review driver qualification files\n- Verify CDLs, MVRs, and medical cards\n- Document where new drivers trained\n\nIf a driver’s CDL or training turns out to be questionable after a crash, it can complicate both claims and renewals.\n\nHave questions about how this could affect your trucking insurance program? Supreme Trucking Insurance can walk through what underwriters typically look for and how to present your operation clearly. This is informational only; coverage always depends on underwriting, filings, drivers, cargo, state, and carrier appetite.",
+      "socialPost": "DOT is turning up the heat on CDL fraud and bad truck driving schools. That will not just hit the obvious bad actors — it can impact hiring, safety scores, and how insurers look at your drivers.\n\nNow is a good time to clean up driver files, verify CDLs and MVRs, and track where new drivers trained. The better your documentation, the easier your next renewal conversation.\n\nInformational only; insurance depends on underwriting, filings, drivers, cargo, state, and carrier appetite.",
+      "intro": "The U.S. Department of Transportation is getting more aggressive about rooting out fraud in the trucking industry, especially around commercial driver’s licenses and shady CDL schools. That might sound like something that only hits the obvious bad actors, but it can land on good carriers too if you are not paying attention to how you hire and document your drivers. In this post we will walk through what is changing, why it matters for your insurance, and what paperwork you should tighten up before the next audit, claim, or renewal.",
+      "sections": [
+        {
+          "heading": "What DOT is targeting: fraudulent CDLs and bad schools",
+          "body": [
+            "DOT and its partner agencies are doubling down on finding and removing unqualified drivers from the road and shutting down bad CDL training programs. The focus is on fraud in the CDL process, not just minor paperwork mistakes.",
+            "That can include things like:\n- Drivers who obtained a CDL without completing proper training or testing\n- Schools issuing falsified training certificates or cutting corners on entry-level driver training\n- Third parties helping applicants cheat on written or skills tests",
+            "When DOT uncovers this, they can move to yank the driver’s CDL, shut down the school, and in some cases refer cases for criminal prosecution. The point is simple: fewer unqualified drivers slipping into the system and more pressure on everyone involved in CDL issuance and training to keep it clean."
+          ]
+        },
+        {
+          "heading": "Why good carriers still need to care",
+          "body": [
+            "Even if you run a clean operation, this crackdown can still land in your lap. If a driver in your fleet turns out to have a fraudulent CDL or came through a school that is later shut down for fraud, you are the one with that driver in your trucks.",
+            "From an insurance angle, this is where it gets real:\n- Underwriters are already digging deeper into driver quality, tenure, and training history\n- A driver kicked out of the CDL system mid-policy can trigger coverage questions during claims\n- A pattern of weak vetting or sketchy training sources can make renewals tougher, especially if you have losses",
+            "What we tell our clients: Do not assume that because a driver has a plastic CDL in their wallet, they are automatically a safe bet. Carriers and regulators are both looking at the story behind that license now, not just the license itself."
+          ]
+        },
+        {
+          "heading": "Tighten up driver qualification files and hiring checks",
+          "body": [
+            "This enforcement push is a good excuse to clean up driver qualification files and your hiring process. If DOT or an insurer takes a hard look, you want your documentation to show that you did your part.",
+            "At a minimum, make sure every driver file clearly shows:\n- Current CDL copies with proper class and endorsements\n- Motor vehicle records pulled at hire and at least annually\n- Employment verifications and prior driving history, especially for previous CMV jobs\n- Medical card status and long form or clinic receipts, where applicable\n- Road test or documentation of an equivalent test as allowed by regulations",
+            "On top of that, start documenting where each driver trained. If they used a CDL school, keep a copy of the certificate and the school’s name and location. If you find a driver who cannot or will not provide basic training background, be cautious. That gap will not look good to an adjuster after a claim."
+          ]
+        },
+        {
+          "heading": "Questions to ask about CDL training and schools",
+          "body": [
+            "With more focus on bad CDL schools, fleets should start treating training source as a risk factor. A few simple questions during hiring can save headaches later.",
+            "You might ask:\n- Where did you complete your CDL training, and when?\n- Was the program registered in the FMCSA training provider registry at the time?\n- How many hours of behind-the-wheel time did you actually get?\n- Do you still have your completion certificate or paperwork from the school?",
+            "You do not need to play detective on every program, but if something does not sound right, slow down. A brand-new driver with a spotless story but zero paperwork and a school no one has heard of is a red flag. When in doubt, talk it through with your safety manager and your insurance agent before making an offer."
+          ]
+        },
+        {
+          "heading": "How this can show up in insurance underwriting and claims",
+          "body": [
+            "As DOT and other agencies pull fraudulent CDLs out of circulation, insurers are going to follow that trail. Many underwriters already ask more questions about driver experience and training; this gives them one more reason.",
+            "On new quotes and renewals, do not be surprised to see closer review of:\n- Driver rosters matched to current MVRs and CDL classes\n- Tenure with your company and total years of CDL experience\n- Any gaps, suspensions, or unusual training backgrounds",
+            "In a serious crash, investigators may look all the way back to how the driver entered the industry. If an adjuster or plaintiff attorney can argue that a driver never should have been on the road, that can complicate the claim and your legal defense.",
+            "The safest place to be is able to say, and show in your files, that you took reasonable steps to hire qualified drivers, based on the information you had at the time. Good documentation is your friend here."
+          ]
+        }
+      ],
+      "takeaway": "DOT’s tougher stance on CDL fraud and bad driving schools is aimed at unsafe players, but it affects every carrier that puts a driver behind the wheel. Now is the time to tighten up driver qualification files, verify training backgrounds where you can, and be ready to answer deeper underwriting questions at renewal. This article is informational only; actual coverage depends on underwriting, filings, drivers, cargo, state, and each carrier’s appetite."
+    },
     {
       "slug": "2027-ucr-fee-increase-what-trucking-fleets-need-to-know",
       "title": "2027 UCR Fee Increase: What Trucking Fleets Need To Know Now",
