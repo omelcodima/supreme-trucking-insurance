@@ -192,7 +192,7 @@ export default function InstantIndicationPage() {
     if (dotLookupStatus === "error") {
       return "DOT lookup is unavailable right now. The indication can still continue from your answers.";
     }
-    return "DOT lookup can show the company name when U.S. DOT access is connected.";
+    return "Enter your USDOT number to look up your company.";
   };
 
   return (

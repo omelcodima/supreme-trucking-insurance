@@ -1,0 +1,18 @@
+<svg width="100%" viewBox="78 25 545 104" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Bold S mark in a sharp hexagon -->
+  <polygon points="100,30 140,30 160,65 140,100 100,100 80,65" fill="#FF4D00" style="fill:rgb(255, 77, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <text font-family="Arial Black, sans-serif" font-weight="900" font-size="48" fill="#FFFFFF" x="120" y="80" text-anchor="middle" style="fill:rgb(255, 255, 255);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Arial Black&quot;, sans-serif;font-size:48px;font-weight:900;text-anchor:middle;dominant-baseline:auto">S</text>
+
+  <!-- SUPREME bold -->
+  <text font-family="Arial Black, sans-serif" font-weight="900" font-size="44" fill="#111111" x="190" y="82" style="fill:rgb(17, 17, 17);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Arial Black&quot;, sans-serif;font-size:44px;font-weight:900;text-anchor:start;dominant-baseline:auto">SUPREME</text>
+
+  <!-- Accent bar -->
+  <rect x="190" y="92" width="430" height="4" fill="#FF4D00" style="fill:rgb(255, 77, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Sub text -->
+  <text font-family="Arial, sans-serif" font-weight="400" font-size="15" letter-spacing="6" fill="#555555" x="191" y="122" style="fill:rgb(85, 85, 85);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Arial, sans-serif;font-size:15px;font-weight:400;text-anchor:start;dominant-baseline:auto">TRUCKING INSURANCE</text>
+
+  <!-- URL -->
+
+</svg>

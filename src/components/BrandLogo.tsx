@@ -7,21 +7,18 @@ type Props = {
 };
 
 export default function BrandLogo({ compact = false, href = "/" }: Props) {
-  const boxClass = compact
-    ? "relative h-[74px] w-[220px] overflow-hidden sm:h-[86px] sm:w-[280px] lg:h-[104px] lg:w-[430px]"
-    : "relative h-[90px] w-[260px] overflow-hidden sm:h-[104px] sm:w-[360px] lg:h-[118px] lg:w-[500px]";
-  const imageClass = compact ? "object-contain object-left -mt-[6px] sm:-mt-[8px]" : "object-contain object-left -mt-[8px] sm:-mt-[10px]";
+  const boxClass = compact ? "brand-mark brand-mark-compact" : "brand-mark";
 
   return (
-    <Link href={href} className="flex items-center">
+    <Link href={href} className="brand-link" aria-label="Supreme Trucking Insurance home">
       <div className={boxClass}>
         <Image
-          src="/logo.svg"
+          src="/logo-compact.svg"
           alt="Supreme Trucking Insurance"
           fill
-          priority
-          className={imageClass}
-          sizes={compact ? "430px" : "500px"}
+          priority={compact}
+          className="object-contain object-left"
+          sizes="240px"
         />
       </div>
     </Link>

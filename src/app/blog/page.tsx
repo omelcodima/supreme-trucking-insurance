@@ -2,8 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BlogVisual } from "@/components/BlogVisual";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
-import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
-import { getPostImageAlt, getPostTags } from "@/lib/blogSeo";
+import {
+  absoluteUrl,
+  breadcrumbJsonLd,
+  defaultOgImage,
+  jsonLdScript,
+  siteName,
+} from "@/lib/seo";
+import { getPostImageAlt } from "@/lib/blogSeo";
+import { ArrowLeft, ArrowRight, Search } from "lucide-react";
+import { blogPosts as guides } from "@/lib/blogPosts";
+import { selectArticles } from "@/lib/blogLibrary";
 
 export const revalidate = 21600;
 
@@ -34,88 +43,217 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function BlogIndexPage() {
-  const blogPosts = await getAllBlogPosts();
-
-  const itemListJsonLd = {
+export default async function BlogIndexPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const value = (key: string) =>
+    typeof params[key] === "string" ? (params[key] as string) : "";
+  const filters = {
+    q: value("q").slice(0, 200),
+    category: value("category"),
+    type: value("type"),
+    page: value("page"),
+  };
+  const guideSlugs = new Set(guides.map((p) => p.slug));
+  const allPosts = (await getAllBlogPosts()).map((post) => ({
+    ...post,
+    kind: guideSlugs.has(post.slug) ? ("guides" as const) : ("news" as const),
+  }));
+  const categories = [...new Set(allPosts.map((post) => post.category))].sort();
+  const result = selectArticles(allPosts, filters);
+  function href(changes: Partial<typeof filters>) {
+    const search = new URLSearchParams();
+    Object.entries({ ...filters, ...changes }).forEach(([key, val]) => {
+      if (val && !(key === "page" && val === "1")) search.set(key, val);
+    });
+    return search.size ? `/blog?${search}` : "/blog";
+  }
+  const list = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Trucking Insurance Guides",
-    itemListElement: blogPosts.map((post, index) => ({
+    name: "Trucking insurance guides and news",
+    itemListElement: result.posts.map((post, index) => ({
       "@type": "ListItem",
-      position: index + 1,
+      position: (result.page - 1) * 9 + index + 1,
       name: post.title,
       url: absoluteUrl(`/blog/${post.slug}`),
     })),
   };
-  const breadcrumbs = breadcrumbJsonLd([
-    { name: "Home", path: "/" },
-    { name: "Blog", path: "/blog" },
-  ]);
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(itemListJsonLd)} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)} />
-      <section className="section-shell warm-divider">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-          <span className="eyebrow mb-5">Trucking insurance guides</span>
-          <h1 className="max-w-4xl text-4xl font-black leading-tight text-[#2F261C] md:text-6xl">
-            Practical answers before you shop trucking insurance.
-          </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
-            Simple guides for owner-operators, fleets, new authorities, cargo coverage, and commercial truck insurance pricing.
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(list)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLdScript(
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+          ]),
+        )}
+      />
+      <section className="site-section blog-heading">
+        <div className="site-container">
+          <p className="section-kicker">Supreme resources</p>
+          <h1 className="section-heading">Trucking insurance guides & news.</h1>
+          <p className="section-description">
+            Practical coverage advice and trucking updates, without the jargon.
           </p>
         </div>
       </section>
-
-      <section className="section-soft py-14 md:py-18">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-5 md:grid-cols-2">
-            {blogPosts.map((post) => {
-              const postTags = getPostTags(post).slice(0, 3);
-
-              return (
+      <section className="blog-library">
+        <div className="site-container">
+          <form
+            action="/blog"
+            method="get"
+            className="blog-filters"
+            role="search"
+            aria-label="Search articles"
+          >
+            <div className="blog-search">
+              <label className="sr-only" htmlFor="article-search">
+                Search articles
+              </label>
+              <Search size={18} aria-hidden="true" />
+              <input
+                id="article-search"
+                className="filter-input"
+                type="search"
+                name="q"
+                defaultValue={filters.q}
+                placeholder="Search articles"
+                maxLength={200}
+              />
+            </div>
+            <div>
+              <label className="sr-only" htmlFor="article-category">
+                Topic
+              </label>
+              <select
+                id="article-category"
+                className="filter-input"
+                name="category"
+                defaultValue={filters.category}
+              >
+                <option value="">All topics</option>
+                {categories.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+            {filters.type && (
+              <input type="hidden" name="type" value={filters.type} />
+            )}
+            <button className="button-primary" type="submit">
+              <Search size={17} aria-hidden="true" />
+              Search
+            </button>
+          </form>
+          <div className="blog-toolbar">
+            <nav aria-label="Article type" className="article-types">
+              {[
+                ["", "All articles"],
+                ["guides", "Insurance guides"],
+                ["news", "Trucking news"],
+              ].map(([type, label]) => (
                 <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="card-premium group overflow-hidden rounded-[1.5rem] p-3 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
+                  key={type}
+                  href={href({ type, page: "1" })}
+                  aria-current={
+                    filters.type === type ||
+                    (!["guides", "news"].includes(filters.type) && type === "")
+                      ? "page"
+                      : undefined
+                  }
                 >
-                <BlogVisual
-                  title={post.title}
-                  category={post.category}
-                  sourceName={post.sourceTitle}
-                  imageUrl={post.imageUrl}
-                  imageAltText={getPostImageAlt(post)}
-                  imageLabel={post.imageLabel}
-                  imageCue={post.imageCue}
-                />
-                <div className="p-3 pt-5">
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
-                    {post.category} • {post.readTime}
-                  </p>
-                  <h2 className="mt-3 text-2xl font-black leading-tight text-[#2F261C]">
-                    {post.title}
-                  </h2>
-                  <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">{post.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {postTags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-[#F7F3EC] px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.12em] text-[#7B6B59]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="mt-5 inline-flex text-sm font-black text-[#2F261C] transition-colors group-hover:text-[#f97316]">
-                    Read guide →
-                  </span>
-                </div>
+                  {label}
                 </Link>
-              );
-            })}
+              ))}
+            </nav>
+            <p>{result.total} articles</p>
           </div>
+          {result.total ? (
+            <div className="blog-grid">
+              {result.posts.map((post) => (
+                <article key={post.slug} className="blog-card">
+                  <Link href={`/blog/${post.slug}`}>
+                    <BlogVisual
+                      title={post.title}
+                      category={post.category}
+                      sourceName={post.sourceTitle}
+                      imageUrl={post.imageUrl}
+                      imageAltText={getPostImageAlt(post)}
+                    />
+                    <div className="blog-card-copy">
+                      <p className="blog-meta">
+                        {post.category}
+                        <span>{post.readTime}</span>
+                      </p>
+                      <h2>{post.title}</h2>
+                      <p className="blog-description">{post.description}</p>
+                      <span className="text-link">
+                        Read article
+                        <ArrowRight size={15} aria-hidden="true" />
+                      </span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="blog-empty">
+              <h2>No articles found</h2>
+              <Link href="/blog" className="text-link">
+                Clear filters
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            </div>
+          )}
+          {result.pageCount > 1 && (
+            <nav className="blog-pagination" aria-label="Article pages">
+              {result.page > 1 ? (
+                <Link
+                  href={href({ page: String(result.page - 1) })}
+                  className="button-secondary"
+                >
+                  <ArrowLeft size={16} aria-hidden="true" />
+                  Previous
+                </Link>
+              ) : (
+                <span />
+              )}
+              <div>
+                {Array.from({ length: result.pageCount }, (_, i) => i + 1).map(
+                  (page) => (
+                    <Link
+                      key={page}
+                      href={href({ page: String(page) })}
+                      aria-label={`Page ${page}`}
+                      aria-current={page === result.page ? "page" : undefined}
+                    >
+                      {page}
+                    </Link>
+                  ),
+                )}
+              </div>
+              {result.page < result.pageCount ? (
+                <Link
+                  href={href({ page: String(result.page + 1) })}
+                  className="button-secondary"
+                >
+                  Next
+                  <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
+          )}
         </div>
       </section>
     </>

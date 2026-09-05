@@ -351,6 +351,9 @@ export function BlogVisual({
   const hasCustomImage = Boolean(imageUrl);
   const toneClasses = getToneClasses(selectedVisual.tone);
   const isHero = variant === "hero";
+  if (!isHero) {
+    return <div className="blog-thumbnail" role="img" aria-label={imageAltText || title} style={{ backgroundImage: `url(${selectedVisual.image})`, backgroundSize: hasCustomImage ? "contain" : "cover", backgroundPosition: selectedVisual.objectPosition || "center" }} />;
+  }
   const visualVariant = hasCustomImage
     ? {
         backgroundPosition: "center",

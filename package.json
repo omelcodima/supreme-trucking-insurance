@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:application && next build",
+    "build:application": "node scripts/build-quote-application.mjs",
     "start": "next start",
     "lint": "eslint",
     "test": "node --experimental-strip-types --test src/lib/*.test.ts",
@@ -14,6 +15,7 @@
   "dependencies": {
     "airtable": "^0.12.2",
     "jsonrepair": "3.15.0",
+    "lucide-react": "^1.41.0",
     "next": "16.3.3",
     "postcss": "8.5.26",
     "react": "19.2.8",

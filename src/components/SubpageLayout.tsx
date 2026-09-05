@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import { quoteHrefForPath } from "@/lib/quoteContext";
+import { googleBusinessUrl } from "@/lib/socialProfiles";
 import { absoluteUrl, breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
 
 type QA = { q: string; a: string };
@@ -42,11 +45,10 @@ export default function SubpageLayout({
   listItems,
   sideTitle,
   sideQuote,
-  sideQuoteByline,
   faqs = [],
   extraSideCard,
   primaryCtaLabel,
-  primaryCtaHref = "/quote",
+  primaryCtaHref,
   ctaTitle,
   ctaDescription,
   ctaButtonLabel,
@@ -55,6 +57,7 @@ export default function SubpageLayout({
   canonicalPath,
   serviceType,
 }: Props) {
+  const ctaHref = primaryCtaHref || quoteHrefForPath(canonicalPath || "");
   const breadcrumbData = canonicalPath
     ? breadcrumbJsonLd([
         { name: "Home", path: "/" },
@@ -95,38 +98,38 @@ export default function SubpageLayout({
       ) : null}
       {immersiveHero ? (
         <>
-          <section className="section-shell warm-divider px-4 py-6 md:py-8">
-            <div className="relative mx-auto min-h-[510px] max-w-7xl overflow-hidden rounded-xl md:min-h-[570px]">
+          <section className="section-shell service-hero">
+            <div className="relative mx-auto overflow-hidden">
               <Image
                 src={image}
                 alt={title}
                 fill
                 priority
-                sizes="(min-width: 1280px) 1280px, 100vw"
+                sizes="100vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-[#17110C]/60" />
-              <div className="relative z-10 flex min-h-[510px] items-end px-6 py-8 md:min-h-[570px] md:px-12 md:py-12 lg:px-16">
+              <div className="absolute inset-0 bg-black/55" />
+              <div className="site-container service-hero-inner relative z-10 flex items-end">
                 <div className="max-w-3xl text-white">
-                  <span className="mb-5 inline-flex rounded-full border border-white/35 bg-black/20 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-white backdrop-blur-sm">
+                  <span className="mb-4 block text-xs font-semibold uppercase text-white">
                     {eyebrow}
                   </span>
-                  <h1 className="text-4xl font-black leading-tight tracking-normal md:text-6xl lg:text-7xl">
+                  <h1 className="text-4xl font-bold leading-tight md:text-5xl">
                     {title}
                   </h1>
-                  <p className="mt-5 max-w-2xl text-lg leading-8 text-white/90 md:text-xl md:leading-9">
+                  <p className="mt-5 max-w-2xl text-base leading-7 text-white/95 md:text-lg md:leading-8">
                     {description}
                   </p>
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                     <Link
-                      href={primaryCtaHref}
-                      className="rounded-lg bg-[#f97316] px-7 py-4 text-center font-black text-white shadow-lg transition-colors hover:bg-orange-600"
+                      href={ctaHref}
+                      className="button-primary"
                     >
                       {primaryCtaLabel}
                     </Link>
                     <a
                       href="tel:+13609367196"
-                      className="rounded-lg border border-white/60 bg-black/20 px-7 py-4 text-center font-black text-white backdrop-blur-sm transition-colors hover:bg-white hover:text-[#2F261C]"
+                      className="button-secondary"
                     >
                       Call (360) 936-7196
                     </a>
@@ -166,7 +169,7 @@ export default function SubpageLayout({
         </section>
       )}
 
-      <section className="section-soft py-18 md:py-20">
+      <section className="section-shell site-section">
         <div className="max-w-6xl mx-auto px-4 grid gap-12 md:grid-cols-[1.05fr_0.95fr] items-start">
           <div>
             <h2 className="text-3xl md:text-4xl font-black text-[#2F261C] mb-6">{sectionTitle}</h2>
@@ -181,35 +184,34 @@ export default function SubpageLayout({
             <h3 className="text-xl font-bold text-[#2F261C] mt-8 mb-4">{listTitle}</h3>
             <div className="grid gap-3 sm:grid-cols-2 mb-8">
               {listItems.map((item) => (
-                <div key={item} className="card-premium rounded-2xl px-4 py-4 text-sm text-[#5A4B3B] flex gap-3 items-start">
-                  <span className="text-[#f97316] font-bold">✓</span>
+                <div key={item} className="border-b py-3 text-sm text-[#515c59] flex gap-3 items-start">
+                  <Check className="shrink-0 text-[#c94c05]" size={18} aria-hidden="true" />
                   <span>{item}</span>
                 </div>
               ))}
             </div>
 
             <Link
-              href={primaryCtaHref}
-              className="inline-block bg-[#f97316] text-white font-bold px-8 py-4 rounded-xl hover:bg-orange-600 transition-colors shadow-lg"
+              href={ctaHref}
+              className="button-primary"
             >
-              {primaryCtaLabel} →
+              {primaryCtaLabel}<ArrowRight size={17} aria-hidden="true" />
             </Link>
           </div>
 
           <div className="space-y-4">
             {(sideTitle || sideQuote) && (
-              <div className="rounded-[1.6rem] border border-[#DED3C4] bg-[#EFE7DA] p-6 shadow-[0_18px_45px_rgba(89,63,37,0.08)]">
-                {sideTitle && <h3 className="text-xl font-black text-[#2F261C] mb-3">{sideTitle}</h3>}
-                {sideQuote && <p className="text-[#5A4B3B] italic leading-relaxed">“{sideQuote}”</p>}
-                {sideQuoteByline && <p className="mt-4 text-sm font-bold text-[#f97316]">— {sideQuoteByline}</p>}
+              <div className="border-b pb-6">
+                <h3 className="text-lg font-bold mb-3">Get to know Supreme</h3>
+                <a href={googleBusinessUrl} target="_blank" rel="noopener noreferrer" className="text-link">View our Google Business profile<ArrowRight size={16} aria-hidden="true" /></a>
               </div>
             )}
 
             {faqs.map((faq) => (
-              <div key={faq.q} className="card-muted rounded-[1.4rem] p-5">
-                <h4 className="font-bold text-[#2F261C] mb-2">{faq.q}</h4>
-                <p className="text-sm text-[#5A4B3B] leading-relaxed">{faq.a}</p>
-              </div>
+              <details key={faq.q} className="service-faq">
+                <summary>{faq.q}<ChevronDown size={17} aria-hidden="true" /></summary>
+                <p>{faq.a}</p>
+              </details>
             ))}
 
             {extraSideCard}
@@ -217,15 +219,15 @@ export default function SubpageLayout({
         </div>
       </section>
 
-      <section className="py-16 md:py-18 bg-[#f97316] text-white text-center">
+      <section className="site-section bg-[#e9f0ed] text-[#202625] text-center">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-black mb-4">{ctaTitle}</h2>
-          <p className="text-white/90 mb-8 text-lg">{ctaDescription}</p>
+          <h2 className="text-3xl font-bold mb-4">{ctaTitle}</h2>
+          <p className="text-[#515c59] mb-8">{ctaDescription}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/quote" className="bg-white text-[#2F261C] font-bold px-8 py-4 rounded-xl hover:bg-[#FFF3E8] transition-colors">
+            <Link href={ctaHref} className="button-primary">
               {ctaButtonLabel}
             </Link>
-            <a href="tel:+13609367196" className="border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-colors">
+            <a href="tel:+13609367196" className="button-secondary">
               Call (360) 936-7196
             </a>
           </div>
