@@ -21,6 +21,10 @@ body {
   color: var(--text-primary);
 }
 
+#main-content a[href^="mailto:"] {
+  overflow-wrap: anywhere;
+}
+
 * {
   border-color: var(--border-soft);
   letter-spacing: 0;

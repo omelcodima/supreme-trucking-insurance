@@ -36,7 +36,7 @@ const primaryLinks = [
 ];
 
 const quickLinks = [
-  { label: "Call (360) 936-7196", href: "tel:+136****7196" },
+  { label: "Call (360) 936-7196", href: "tel:+13609367196" },
   { label: "Email info@supremetruckinginsurance.com", href: "mailto:info@supremetruckinginsurance.com" },
   {
     label: "View Supreme on Google",
@@ -61,7 +61,7 @@ export default function LinksPage() {
             Supreme Trucking Insurance quick links
           </h1>
           <p className="mt-5 text-base leading-8 text-[#5A4B3B] md:text-lg">
-            Save this page for social bios, text messages, and drivers who need the right link fast.
+            Quotes, certificates, and a direct line to your agent.
           </p>
 
           <div className="mt-8 grid gap-3 text-left">

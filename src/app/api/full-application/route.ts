@@ -7,6 +7,7 @@ import {
   sendInternalLeadNotification,
 } from "../../../lib/leadEmails";
 import { deliverLeadWithFallback } from "../../../lib/leadDelivery";
+import { createApplicationPdf } from "../../../lib/applicationPdf";
 
 const airtableQuotesTableName = process.env.AIRTABLE_QUOTES_TABLE_NAME || "Quotes";
 
@@ -117,13 +118,16 @@ async function sendFullApplicationNotification(data: Required<FullApplicationPay
   const form = data.form;
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactEmail = value(form, "email");
+  const text = formatFullApplicationEmail(data);
+  const pdf = await createApplicationPdf(text);
 
   return sendInternalLeadNotification({
     leadType: "full_application",
     company: legalName,
     contactEmail,
     subject: `Full application submitted: ${legalName}`,
-    text: formatFullApplicationEmail(data),
+    text,
+    attachments: [{ filename: "Supreme-Trucking-Application.pdf", content: pdf.toString("base64"), content_type: "application/pdf" }],
   });
 }
 
@@ -164,6 +168,9 @@ export async function POST(request: Request) {
   try {
     const json = (await request.json()) as FullApplicationPayload;
     const summary = String(json.summary || "").trim();
+    if (summary.length > 120_000) {
+      return NextResponse.json({ detail: "The application is too long. Please shorten the notes and try again." }, { status: 400 });
+    }
     const form = (json.form && typeof json.form === "object" ? json.form : {}) as Record<string, unknown>;
 
     if (!summary && !value(form, "legalName")) {
@@ -187,7 +194,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      message: `Application received. A copy was sent for review at ${leadNotificationEmail}.`,
+      message: "Application received. Our team will review it and follow up with next steps.",
     });
   } catch (error) {
     console.error("Error in POST /api/full-application:", error);

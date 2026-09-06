@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { trackLeadForm } from "@/lib/leadAnalytics";
 
 const googleBusinessUrl =
@@ -11,9 +12,9 @@ export default function ContactPage() {
   const submissionLock = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     phone: "",
     email: "",
     company: "",
@@ -21,12 +22,7 @@ export default function ContactPage() {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.target.name === "name") {
-      const [firstName, ...lastNameParts] = e.target.value.split(" ");
-      setForm({ ...form, firstName: firstName || "", lastName: lastNameParts.join(" ") || "" });
-    } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    }
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,11 +31,13 @@ export default function ContactPage() {
     submissionLock.current = true;
     trackLeadForm("contact", "attempt");
     setSubmitting(true);
+    setErrorMessage("");
 
     try {
+      const [firstName, ...lastNameParts] = form.name.trim().split(/\s+/);
       const payload = {
-        firstName: form.firstName,
-        lastName: form.lastName,
+        firstName,
+        lastName: lastNameParts.join(" "),
         phone: form.phone,
         email: form.email,
         company: form.company,
@@ -65,7 +63,7 @@ export default function ContactPage() {
     } catch (error) {
       trackLeadForm("contact", "error");
       console.error("Contact form error:", error);
-      alert(error instanceof Error ? error.message : "Please try again or call (360) 936-7196.");
+      setErrorMessage(error instanceof Error ? error.message : "Please try again or call (360) 936-7196.");
     } finally {
       submissionLock.current = false;
       setSubmitting(false);
@@ -129,40 +127,42 @@ export default function ContactPage() {
 
           <div className="card-premium rounded-[1.75rem] p-8">
             {submitted ? (
-              <div className="text-center py-8">
-                <div className="text-5xl mb-4">✅</div>
-                <h3 className="text-2xl font-black text-[#2F261C] mb-2">Message Sent</h3>
+              <div className="text-center py-8" role="status">
+                <CheckCircle2 className="mx-auto mb-4 text-green-700" size={44} aria-hidden="true" />
+                <h2 className="text-2xl font-black text-[#2F261C] mb-2">Message received</h2>
                 <p className="mb-4 text-lg text-[#5A4B3B]">
                   Thanks! Your message was received successfully. We will follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.
                 </p>
               </div>
             ) : (
               <>
-                <h3 className="text-2xl font-black text-[#2F261C] mb-2">Send a message</h3>
+                <h2 className="text-2xl font-black text-[#2F261C] mb-2">Send a message</h2>
                 <p className="text-[#7B6B59] mb-6 text-sm">Tell us how we can help and include the best way to reach you.</p>
                 <form onSubmit={handleSubmit} className="space-y-4" data-analytics-form="contact">
                   <div>
-                    <label className={labelClass}>Name *</label>
-                    <input name="name" required value={form.firstName + ' ' + form.lastName} onChange={handleChange} className={inputClass} placeholder="Your full name" />
+                    <label htmlFor="contact-name" className={labelClass}>Name *</label>
+                    <input id="contact-name" name="name" autoComplete="name" required value={form.name} onChange={handleChange} className={inputClass} placeholder="Your full name" />
                   </div>
                   <div>
-                    <label className={labelClass}>Phone *</label>
-                    <input name="phone" type="tel" required value={form.phone} onChange={handleChange} className={inputClass} placeholder="(360) 555-0100" />
+                    <label htmlFor="contact-phone" className={labelClass}>Phone *</label>
+                    <input id="contact-phone" name="phone" autoComplete="tel" type="tel" required value={form.phone} onChange={handleChange} className={inputClass} placeholder="(360) 555-0100" />
                   </div>
                   <div>
-                    <label className={labelClass}>Email *</label>
-                    <input name="email" type="email" required value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" />
+                    <label htmlFor="contact-email" className={labelClass}>Email *</label>
+                    <input id="contact-email" name="email" autoComplete="email" type="email" required value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" />
                   </div>
                   <div>
-                    <label className={labelClass}>Company Name</label>
-                    <input name="company" value={form.company} onChange={handleChange} className={inputClass} placeholder="Your Company LLC" />
+                    <label htmlFor="contact-company" className={labelClass}>Company Name</label>
+                    <input id="contact-company" name="company" autoComplete="organization" value={form.company} onChange={handleChange} className={inputClass} placeholder="Your Company LLC" />
                   </div>
                   <div>
-                    <label className={labelClass}>Message *</label>
-                    <textarea name="message" rows={4} required value={form.message} onChange={handleChange} className={inputClass} placeholder="How can we help?" />
+                    <label htmlFor="contact-message" className={labelClass}>Message *</label>
+                    <textarea id="contact-message" name="message" rows={4} required value={form.message} onChange={handleChange} className={inputClass} placeholder="How can we help?" />
                   </div>
-                  <button type="submit" disabled={submitting} className="bg-[#f97316] hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl text-lg w-full transition-colors shadow-lg disabled:cursor-not-allowed disabled:opacity-70">
-                    Send Message →
+                  {errorMessage && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{errorMessage}</p>}
+                  <button type="submit" disabled={submitting} className="button-primary w-full disabled:cursor-not-allowed disabled:opacity-70">
+                    {submitting ? "Sending..." : "Send message"}
+                    <ArrowRight size={18} aria-hidden="true" />
                   </button>
                 </form>
               </>

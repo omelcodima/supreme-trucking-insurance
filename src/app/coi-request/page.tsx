@@ -105,7 +105,7 @@ export default function CoiRequestPage() {
         <div className="mx-auto grid max-w-6xl items-start gap-8 px-4 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="card-premium rounded-[1.8rem] p-8 md:p-10">
             {submitted ? (
-              <div className="py-10 text-center">
+              <div className="py-10 text-center" role="status">
                 <div className="mb-4 text-6xl">✓</div>
                 <h2 className="mb-3 text-3xl font-black text-[#2F261C]">{status.title}</h2>
                 <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[#5A4B3B]">{status.body}</p>
@@ -118,73 +118,73 @@ export default function CoiRequestPage() {
                 <form onSubmit={handleSubmit} className="space-y-6" data-analytics-form="coi_request">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className={labelClass}>Trucking Company Name *</label>
-                      <input name="company" required value={form.company} onChange={handleChange} className={inputClass} placeholder="Supreme Trucking LLC" />
+                      <label htmlFor="coi-company" className={labelClass}>Trucking Company Name *</label>
+                      <input id="coi-company" name="company" required value={form.company} onChange={handleChange} className={inputClass} placeholder="Supreme Trucking LLC" />
                     </div>
                     <div>
-                      <label className={labelClass}>DOT / MC Number *</label>
-                      <input name="dotMc" required value={form.dotMc} onChange={handleChange} className={inputClass} placeholder="DOT 1234567 / MC 123456" />
+                      <label htmlFor="coi-dotMc" className={labelClass}>DOT / MC Number *</label>
+                      <input id="coi-dotMc" name="dotMc" required value={form.dotMc} onChange={handleChange} className={inputClass} placeholder="DOT 1234567 / MC 123456" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                     <div>
-                      <label className={labelClass}>Your Name</label>
-                      <input name="requesterName" value={form.requesterName} onChange={handleChange} className={inputClass} placeholder="Your full name" />
+                      <label htmlFor="coi-requesterName" className={labelClass}>Your Name</label>
+                      <input id="coi-requesterName" name="requesterName" value={form.requesterName} onChange={handleChange} className={inputClass} placeholder="Your full name" />
                     </div>
                     <div>
-                      <label className={labelClass}>Your Phone</label>
-                      <input name="phone" type="tel" value={form.phone} onChange={handleChange} className={inputClass} placeholder="(360) 555-0100" />
+                      <label htmlFor="coi-phone" className={labelClass}>Your Phone</label>
+                      <input id="coi-phone" name="phone" type="tel" value={form.phone} onChange={handleChange} className={inputClass} placeholder="(360) 555-0100" />
                     </div>
                     <div>
-                      <label className={labelClass}>Your Email</label>
-                      <input name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" />
+                      <label htmlFor="coi-email" className={labelClass}>Your Email</label>
+                      <input id="coi-email" name="email" type="email" value={form.email} onChange={handleChange} className={inputClass} placeholder="you@example.com" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className={labelClass}>Email Address To Send Certificate</label>
-                      <input name="sendEmail" type="email" value={form.sendEmail} onChange={handleChange} className={inputClass} placeholder="certificateholder@example.com" />
+                      <label htmlFor="coi-sendEmail" className={labelClass}>Email Address To Send Certificate</label>
+                      <input id="coi-sendEmail" name="sendEmail" type="email" value={form.sendEmail} onChange={handleChange} className={inputClass} placeholder="certificateholder@example.com" />
                     </div>
                     <div>
-                      <label className={labelClass}>Fax Number To Send Certificate</label>
-                      <input name="sendFax" value={form.sendFax} onChange={handleChange} className={inputClass} placeholder="(360) 555-0101" />
+                      <label htmlFor="coi-sendFax" className={labelClass}>Fax Number To Send Certificate</label>
+                      <input id="coi-sendFax" name="sendFax" value={form.sendFax} onChange={handleChange} className={inputClass} placeholder="(360) 555-0101" />
                     </div>
                   </div>
 
                   <div>
-                    <label className={labelClass}>Certificate Holder Name *</label>
-                    <input name="holderName" required value={form.holderName} onChange={handleChange} className={inputClass} placeholder="Broker, shipper, bank, or certificate holder name" />
+                    <label htmlFor="coi-holderName" className={labelClass}>Certificate Holder Name *</label>
+                    <input id="coi-holderName" name="holderName" required value={form.holderName} onChange={handleChange} className={inputClass} placeholder="Broker, shipper, bank, or certificate holder name" />
                   </div>
 
                   <div>
-                    <label className={labelClass}>Certificate Holder Address *</label>
-                    <input name="holderAddress" required value={form.holderAddress} onChange={handleChange} className={inputClass} placeholder="Street address" />
+                    <label htmlFor="coi-holderAddress" className={labelClass}>Certificate Holder Address *</label>
+                    <input id="coi-holderAddress" name="holderAddress" required value={form.holderAddress} onChange={handleChange} className={inputClass} placeholder="Street address" />
                   </div>
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_0.45fr_0.45fr]">
                     <div>
-                      <label className={labelClass}>City *</label>
-                      <input name="holderCity" required value={form.holderCity} onChange={handleChange} className={inputClass} placeholder="City" />
+                      <label htmlFor="coi-holderCity" className={labelClass}>City *</label>
+                      <input id="coi-holderCity" name="holderCity" required value={form.holderCity} onChange={handleChange} className={inputClass} placeholder="City" />
                     </div>
                     <div>
-                      <label className={labelClass}>State *</label>
-                      <input name="holderState" required value={form.holderState} onChange={handleChange} className={inputClass} placeholder="WA" />
+                      <label htmlFor="coi-holderState" className={labelClass}>State *</label>
+                      <input id="coi-holderState" name="holderState" required value={form.holderState} onChange={handleChange} className={inputClass} placeholder="WA" />
                     </div>
                     <div>
-                      <label className={labelClass}>Zip *</label>
-                      <input name="holderZip" required value={form.holderZip} onChange={handleChange} className={inputClass} placeholder="98684" />
+                      <label htmlFor="coi-holderZip" className={labelClass}>Zip *</label>
+                      <input id="coi-holderZip" name="holderZip" required value={form.holderZip} onChange={handleChange} className={inputClass} placeholder="98684" />
                     </div>
                   </div>
 
                   <div>
-                    <label className={labelClass}>Additional Notes</label>
-                    <textarea name="notes" rows={4} value={form.notes} onChange={handleChange} className={inputClass} placeholder="Special wording, loan number, job number, or other instructions" />
+                    <label htmlFor="coi-notes" className={labelClass}>Additional Notes</label>
+                    <textarea id="coi-notes" name="notes" rows={4} value={form.notes} onChange={handleChange} className={inputClass} placeholder="Special wording, loan number, job number, or other instructions" />
                   </div>
 
                   {status.type === "error" ? (
-                    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                       <strong>{status.title}:</strong> {status.body}
                     </div>
                   ) : null}

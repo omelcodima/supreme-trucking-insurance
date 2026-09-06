@@ -4,6 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy | Supreme Trucking Insurance",
   description: "Privacy Policy for Supreme Trucking Insurance and AIC Insurance Agency.",
+  alternates: { canonical: "/privacy-policy" },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -17,7 +18,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="bg-[#FAF7F2] text-[#2F261C]">
+    <div className="bg-[#FAF7F2] text-[#2F261C]">
       <section className="bg-[#F7F3EC] border-b border-[#E7DED2]">
         <div className="max-w-5xl mx-auto px-6 py-16 md:py-20">
           <div className="max-w-3xl">
@@ -192,7 +193,7 @@ export default function PrivacyPolicyPage() {
                     <p><strong className="text-[#2F261C]">Direct:</strong> 360-750-4394</p>
                     <p><strong className="text-[#2F261C]">Office:</strong> 360-450-2211</p>
                     <p><strong className="text-[#2F261C]">Fax:</strong> 360-851-3239</p>
-                    <p><strong className="text-[#2F261C]">Email:</strong> info@supremetruckinginsurance.com</p>
+                    <p><strong className="text-[#2F261C]">Email:</strong> <a href="mailto:info@supremetruckinginsurance.com">info@supremetruckinginsurance.com</a></p>
                   </div>
                 </div>
               </Section>
@@ -200,6 +201,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

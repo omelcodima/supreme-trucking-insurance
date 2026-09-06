@@ -1,4 +1,4 @@
-import { sendLeadEmail } from "./email";
+import { sendLeadEmail, type EmailAttachment } from "./email";
 
 export const leadNotificationEmail = process.env.LEAD_NOTIFICATION_EMAIL || "info@supremetruckinginsurance.com";
 
@@ -13,6 +13,7 @@ type LeadEmailInput = {
   contactEmail?: string;
   subject: string;
   text: string;
+  attachments?: EmailAttachment[];
 };
 
 type CustomerEmailInput = {
@@ -50,6 +51,7 @@ export async function sendInternalLeadNotification({
   contactEmail,
   subject,
   text,
+  attachments,
 }: LeadEmailInput) {
   return sendLeadEmail({
     to: leadNotificationEmail,
@@ -57,6 +59,7 @@ export async function sendInternalLeadNotification({
     text,
     replyTo: contactEmail,
     tags: tags(leadType, company),
+    attachments,
   });
 }
 
@@ -76,7 +79,8 @@ export async function sendCustomerAutoReply({ to, subject, text, leadType }: Cus
 }
 
 export async function scheduleQuoteFollowUps({ to, name, company, source }: FollowUpInput) {
-  if (!to) return;
+  // Agent-submitted requests must not enroll the agency inbox in customer follow-ups.
+  if (!to || to.trim().toLowerCase() === leadNotificationEmail.trim().toLowerCase()) return;
 
   const greeting = name ? `Hi ${name},` : "Hi,";
   const companyLine = company ? ` for ${company}` : "";

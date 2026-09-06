@@ -51,7 +51,7 @@ async function sendContactNotification(data: ContactPayload) {
     leadType: "contact",
     company: data.company,
     contactEmail: data.email,
-    subject: `Website contact message: ${data.company}`,
+    subject: `Website contact message: ${data.company || data.firstName}`,
     text: formatContactEmail(data),
   });
 }
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       message: String(json.message || "").trim(),
     };
 
-    if (!data.firstName || !data.lastName || !data.phone || !data.email || !data.company || !data.message) {
+    if (!data.firstName || !data.phone || !data.email || !data.message) {
       return NextResponse.json(
         { detail: "Please complete all required fields before sending your message." },
         { status: 400 },

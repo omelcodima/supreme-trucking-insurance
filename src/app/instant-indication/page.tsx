@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const inputClass =
   "w-full rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-4 py-3 text-[#2F261C] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent transition-all";
@@ -35,13 +35,8 @@ const initialForm: EstimateForm = {
   radius: "",
 };
 
-const processingSteps = [
-  "Reviewing the DOT number you entered",
-  "Reading state and unit count from U.S. DOT data",
-  "Checking radius and cargo factors",
-  "Building the indication range",
-  "Preparing the next-step quote checklist",
-];
+const processingStepCount = 5;
+const cargoLabels: Record<string, string> = { general: "general freight", reefer: "reefer", "car-hauler": "car hauler", flatbed: "flatbed", "hot-shot": "hot shot" };
 
 const processingDurationMs = 5600;
 
@@ -83,7 +78,7 @@ function inferOperation(carrier: DotCarrier | null, trucks: number) {
 }
 
 function operationLabel(operation: string) {
-  if (operation === "new-authority") return "New authority";
+  if (operation === "new-authority") return "Recently registered DOT";
   if (operation === "fleet") return "Fleet";
   return "Owner operator / small fleet";
 }
@@ -118,6 +113,15 @@ function calculateEstimate(form: EstimateForm, carrier: DotCarrier | null) {
 }
 
 export default function InstantIndicationPage() {
+  const submissionLock = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    abortRef.current?.abort();
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  }, []);
   const [form, setForm] = useState(initialForm);
   const [processing, setProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState(0);
@@ -139,6 +143,10 @@ export default function InstantIndicationPage() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    const controller = new AbortController();
+    abortRef.current = controller;
     setProcessing(true);
     setProcessingStep(0);
     setShowResult(false);
@@ -146,13 +154,15 @@ export default function InstantIndicationPage() {
     setDotLookupStatus(form.dot.trim() ? "loading" : "idle");
     const startedAt = Date.now();
 
-    const interval = window.setInterval(() => {
-      setProcessingStep((step) => Math.min(step + 1, processingSteps.length - 1));
-    }, processingDurationMs / processingSteps.length);
+    intervalRef.current = setInterval(() => {
+      setProcessingStep((step) => Math.min(step + 1, processingStepCount - 1));
+    }, processingDurationMs / processingStepCount);
 
     if (form.dot.trim()) {
       try {
-        const response = await fetch(`/api/dot-lookup?dot=${encodeURIComponent(form.dot.trim())}`);
+        const response = await fetch(`/api/dot-lookup?dot=${encodeURIComponent(form.dot.trim())}`, {
+          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(12_000)]),
+        });
         const data = await response.json();
 
         if (data.ok && data.carrier?.legalName) {
@@ -166,13 +176,15 @@ export default function InstantIndicationPage() {
           setDotLookupStatus("error");
         }
       } catch {
+        if (controller.signal.aborted) return;
         setDotLookupStatus("error");
       }
     }
 
     const remainingDelay = Math.max(0, processingDurationMs - (Date.now() - startedAt));
-    window.setTimeout(() => {
-      window.clearInterval(interval);
+    timeoutRef.current = setTimeout(() => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      submissionLock.current = false;
       setProcessing(false);
       setShowResult(true);
     }, remainingDelay);
@@ -184,7 +196,7 @@ export default function InstantIndicationPage() {
       return `Matched DOT to "${carrier.legalName}" from U.S. DOT records.`;
     }
     if (dotLookupStatus === "missing-key") {
-      return "U.S. DOT lookup needs access connected. The indication can still continue from your answers.";
+      return "DOT lookup is temporarily unavailable. Your estimate uses general assumptions.";
     }
     if (dotLookupStatus === "not-found") {
       return "No DOT company match came back. The indication can still continue from your answers.";
@@ -227,8 +239,8 @@ export default function InstantIndicationPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className={labelClass}>DOT number</label>
-                <input name="dot" value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
+                <label htmlFor="indication-dot" className={labelClass}>DOT number</label>
+                <input id="indication-dot" name="dot" disabled={processing} value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
                 <p className="mt-2 text-xs leading-5 text-[#7B6B59]">
                   {dotHelperText()}
                 </p>
@@ -236,8 +248,8 @@ export default function InstantIndicationPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className={labelClass}>Cargo type</label>
-                  <select name="cargo" required value={form.cargo} onChange={handleChange} className={inputClass}>
+                  <label htmlFor="indication-cargo" className={labelClass}>Cargo type</label>
+                  <select id="indication-cargo" name="cargo" disabled={processing} required value={form.cargo} onChange={handleChange} className={inputClass}>
                     <option value="">Select...</option>
                     <option value="general">General freight</option>
                     <option value="reefer">Reefer</option>
@@ -247,10 +259,10 @@ export default function InstantIndicationPage() {
                   </select>
                 </div>
                 <div>
-                  <label className={labelClass}>Typical radius</label>
-                  <select name="radius" required value={form.radius} onChange={handleChange} className={inputClass}>
+                  <label htmlFor="indication-radius" className={labelClass}>Typical radius</label>
+                  <select id="indication-radius" name="radius" disabled={processing} required value={form.radius} onChange={handleChange} className={inputClass}>
                     <option value="">Select...</option>
-                    <option value="long-haul">Long haul / interstate</option>
+                    <option value="long-haul">Long haul</option>
                     <option value="local">Local</option>
                   </select>
                 </div>
@@ -261,7 +273,7 @@ export default function InstantIndicationPage() {
                 disabled={processing}
                 className="w-full rounded-xl bg-[#f97316] px-6 py-4 text-lg font-black text-white shadow-lg transition-colors hover:bg-orange-600 disabled:cursor-wait disabled:opacity-75"
               >
-                {processing ? processingSteps[processingStep] : "Get instant indication"}
+                {processing ? "Preparing your estimate..." : "Get instant indication"}
               </button>
             </form>
           </div>
@@ -279,20 +291,20 @@ export default function InstantIndicationPage() {
                 <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
                   Building indication
                 </p>
-                <h2 className="mt-3 text-2xl font-black text-[#2F261C]">
-                  {processingSteps[processingStep]}
+                <h2 className="mt-3 text-2xl font-black text-[#2F261C]" role="status">
+                  {dotLookupStatus === "loading" ? "Looking up your DOT record" : "Preparing your estimate"}
                 </h2>
-                <div className="mt-6 w-full max-w-xl overflow-hidden rounded-full bg-[#E7DED2]">
+                <div role="progressbar" aria-label="Preparing estimate" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.min(95, Math.round(((processingStep + 1) / processingStepCount) * 100))} className="mt-6 w-full max-w-xl overflow-hidden rounded-full bg-[#E7DED2]">
                   <div
                     className="h-3 rounded-full bg-[#f97316] transition-all duration-700 ease-out"
-                    style={{ width: `${((processingStep + 1) / processingSteps.length) * 100}%` }}
+                    style={{ width: `${Math.min(95, ((processingStep + 1) / processingStepCount) * 100)}%` }}
                   />
                 </div>
                 <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-[#7B6B59]">
-                  {Math.round(((processingStep + 1) / processingSteps.length) * 100)}%
+                  {Math.min(95, Math.round(((processingStep + 1) / processingStepCount) * 100))}%
                 </p>
                 <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
-                  This is an estimate workflow using your answers. It is not a live carrier approval or bindable quote.
+                  Illustrative estimate, not live carrier pricing or approval.
                 </p>
               </div>
             ) : showResult ? (
@@ -333,7 +345,8 @@ export default function InstantIndicationPage() {
                   </strong>
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#7B6B59]">
-                  Based on {estimate.state}, {operationLabel(estimate.operation).toLowerCase()}, {form.cargo || "selected cargo"}, and {form.radius || "selected radius"}.
+                  {cargoLabels[form.cargo] || "Selected cargo"}, {form.radius === "long-haul" ? "long haul" : "local"}.
+                  {carrier ? ` DOT record: ${estimate.state}.` : " No DOT match: assumes one truck; fleet details are unverified."}
                 </p>
                 <div className="mt-6 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-5 text-sm leading-6 text-[#5A4B3B]">
                   This is a quick indication based on broad assumptions. Final pricing depends on filings, drivers, garaging, radius,
@@ -357,7 +370,7 @@ export default function InstantIndicationPage() {
                 </div>
                 <h2 className="text-2xl font-black text-[#2F261C]">Your indication will appear here.</h2>
                 <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
-                  Complete the quick questions and the site will show a clear estimate range with a next step.
+                  Enter your DOT number, cargo type, and radius to get started.
                 </p>
               </div>
             )}

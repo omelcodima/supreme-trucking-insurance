@@ -21,7 +21,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function SmsTermsPage() {
   return (
-    <main className="bg-[#FAF7F2] text-[#2F261C]">
+    <div className="bg-[#FAF7F2] text-[#2F261C]">
       <section className="border-b border-[#E7DED2] bg-[#F7F3EC]">
         <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
           <div className="max-w-3xl">
@@ -164,8 +164,8 @@ export default function SmsTermsPage() {
                   <p>Vancouver, WA 98684</p>
                   <div className="mt-4 space-y-1">
                     <p><strong className="text-[#2F261C]">Phone:</strong> (360) 936-7196</p>
-                    <p><strong className="text-[#2F261C]">Email:</strong> info@supremetruckinginsurance.com</p>
-                    <p><strong className="text-[#2F261C]">Website:</strong> supremetruckinginsurance.com</p>
+                    <p><strong className="text-[#2F261C]">Email:</strong> <a href="mailto:info@supremetruckinginsurance.com">info@supremetruckinginsurance.com</a></p>
+                    <p className="[overflow-wrap:anywhere]"><strong className="text-[#2F261C]">Website:</strong> <Link href="/">supremetruckinginsurance.com</Link></p>
                   </div>
                 </div>
               </Section>
@@ -173,6 +173,6 @@ export default function SmsTermsPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

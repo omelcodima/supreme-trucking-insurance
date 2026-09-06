@@ -29,14 +29,14 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: "Is trucking commercial auto the same as generic commercial auto?",
-    a: "No. Generic commercial auto is built for service fleets and contractor vans. Trucking commercial auto is built around FMCSA filings, radius, cargo, and how the truck is dispatched — and it is the policy the MCS-90 endorsement attaches to. If you need trucking insurance for the whole operation, start on the homepage; this page is the liability layer.",
+    a: "Trucking operations need a policy reviewed for their vehicles, operating radius, dispatch arrangements, and applicable filings. We help you compare those details alongside cargo and physical damage coverage.",
   },
   {
     q: "What sits next to primary liability?",
     a: "Cargo for the freight in your care, physical damage for your truck and trailer, bobtail or non-trucking liability for off-dispatch driving, and the MCS-90 endorsement with the BMC-91 filing when the authority requires it. Markets will not treat these as one interchangeable product.",
   },
   {
-    q: "Who is this page for?",
+    q: "Who needs this coverage?",
     a: "Owner-operators who need primary liability to run, small fleets shopping structure rather than a headline rate, and new authority that needs filings before the first load.",
   },
   {
@@ -79,7 +79,7 @@ export default function CommercialAutoInsurancePage() {
         sectionTitle="Trucking commercial auto vs generic commercial auto"
         intro={[
           "Generic commercial auto is built for service fleets and contractor vans. Trucking commercial auto is built around FMCSA filings, radius, cargo, and how the truck is dispatched. It sits next to cargo, physical damage, bobtail, and the MCS-90 / BMC-91 filings the file may need — and we shop trucking markets for that stack.",
-          "Markets will not treat these as one interchangeable product. If you need trucking insurance for the whole operation, start on the homepage; this page is the liability layer: commercial auto / primary liability.",
+          "Tell us what you haul, where you operate, and when you need coverage. We will help you compare the coverages your operation needs.",
         ]}
         listTitle="What sits next to primary liability"
         listItems={[
@@ -98,7 +98,7 @@ export default function CommercialAutoInsurancePage() {
         immersiveHero
         primaryCtaLabel="Start Quote"
         ctaTitle="Start with the DOT"
-        ctaDescription="Send the DOT and MC on the quote form or call (360) 936-7196. We review the operation, then shop trucking-focused markets for the liability layer and the rest of the stack."
+        ctaDescription="Send your DOT or MC number, or call (360) 936-7196. We will review your operation and available coverage options."
         ctaButtonLabel="Start Quote"
       />
     </>

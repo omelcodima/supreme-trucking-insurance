@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/careers" },
   title: "Careers | Supreme Trucking Insurance",
   description:
     "Careers and partnership opportunities with Supreme Trucking Insurance for licensed agents, producers, service staff, and trucking insurance specialists.",

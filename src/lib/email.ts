@@ -1,3 +1,5 @@
+export type EmailAttachment = { filename: string; content: string; content_type: string };
+
 type SendLeadEmailInput = {
   to: string | string[];
   subject: string;
@@ -5,6 +7,7 @@ type SendLeadEmailInput = {
   replyTo?: string;
   scheduledAt?: string;
   tags?: Array<{ name: string; value: string }>;
+  attachments?: EmailAttachment[];
 };
 
 function htmlEscape(value: string) {
@@ -19,7 +22,7 @@ function textToHtml(text: string) {
   return `<pre style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;line-height:1.5;color:#1f2933">${htmlEscape(text)}</pre>`;
 }
 
-export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, tags }: SendLeadEmailInput) {
+export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, tags, attachments }: SendLeadEmailInput) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM || "Supreme Trucking Insurance <quotes@supremetruckinginsurance.com>";
 
@@ -44,12 +47,12 @@ export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, t
       ...(replyTo ? { reply_to: replyTo } : {}),
       ...(scheduledAt ? { scheduledAt } : {}),
       ...(tags?.length ? { tags } : {}),
+      ...(attachments?.length ? { attachments } : {}),
     }),
   });
 
   if (!response.ok) {
-    const detail = await response.text().catch(() => "");
-    throw new Error(`Resend email failed with status ${response.status}${detail ? `: ${detail}` : ""}`);
+    throw Object.assign(new Error("Email provider rejected the notification."), { status: response.status });
   }
 
   return response.json().catch(() => ({ ok: true }));
