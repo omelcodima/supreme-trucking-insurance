@@ -82,8 +82,8 @@ export default function HomePage() {
                 Your business. The right starting point.
               </h2>
             </div>
-            <Link href="/cargo" className="text-link">
-              Cargo coverage
+            <Link href="/services" className="text-link">
+              Explore coverage
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>

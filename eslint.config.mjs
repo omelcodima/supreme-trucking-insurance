@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     ".vercel/**",
     "out/**",
     "build/**",
+    "output/playwright/**",
+    ".playwright-cli/**",
     "next-env.d.ts",
   ]),
 ]);

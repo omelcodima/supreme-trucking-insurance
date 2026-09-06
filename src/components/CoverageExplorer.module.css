@@ -1,0 +1,141 @@
+.explorer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 44px;
+}
+
+.visual { min-width: 0; }
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 54px;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 650;
+  transition: color 160ms, border-color 160ms;
+}
+
+.tabs button[aria-selected="true"] { color: var(--cta); border-color: var(--cta); }
+.tabs button:hover { background: #f5f7f6; }
+.tabs svg { flex: none; }
+
+.scene { position: relative; aspect-ratio: 3 / 2; isolation: isolate; }
+.scene > img { width: 100%; height: 100%; object-fit: contain; }
+
+.hotspot {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid #9ea9a4;
+  color: #344a40;
+  background: #fff;
+  box-shadow: 0 3px 12px #17282018;
+  transition: color 160ms, background 160ms, box-shadow 160ms;
+}
+
+.hotspot[data-point="truck"] { left: 79%; top: 48%; }
+.hotspot[data-point="cargo"] { left: 33%; top: 44%; }
+.hotspot[data-point="liability"] { left: 55%; top: 77%; }
+.hotspot[aria-pressed="true"] { color: #fff; background: var(--cta); border-color: var(--cta); box-shadow: 0 0 0 7px #c94b0015; }
+.hotspot:hover { box-shadow: 0 0 0 7px #c94b0020; }
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  width: max-content;
+  max-width: 160px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  background: #202e27;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.4;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms;
+}
+
+.hotspot:hover .tooltip, .hotspot:focus-visible .tooltip { visibility: visible; opacity: 1; }
+
+.equipmentLine, .cargoOutline, .liabilityLine {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms;
+}
+
+.equipmentLine { inset: 68% 4% auto; height: 8px; border: 1px solid var(--cta); border-top: 0; }
+.cargoOutline { left: 3%; top: 33.5%; width: 62%; height: 23%; border: 2px solid #c34a03; border-radius: 2px; background: #ea78320a; }
+.liabilityLine { left: 25%; top: 77%; width: 61%; border-top: 1px dashed #c34a03; }
+.scene[data-coverage="truck"] .equipmentLine,
+.scene[data-coverage="cargo"] .cargoOutline,
+.scene[data-coverage="liability"] .liabilityLine { opacity: 1; }
+
+.sceneCaption {
+  position: absolute;
+  bottom: 8%;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.visualNote { border-top: 1px solid var(--border-soft); padding-top: 16px; font-size: 12px; color: var(--text-subtle); }
+
+/* All panels share a grid cell so their measured content reserves a stable height. */
+.panels { display: grid; min-width: 0; border-left: 1px solid var(--border-soft); padding-left: 34px; }
+.panel { grid-area: 1 / 1; display: flex; flex-direction: column; visibility: hidden; min-width: 0; }
+.panel[data-active="true"] { visibility: visible; }
+.panelEyebrow { display: flex; justify-content: space-between; gap: 12px; color: var(--text-subtle); font-size: 11px; font-weight: 650; margin: 8px 0 16px; }
+.panelEyebrow > :last-child { white-space: nowrap; color: var(--cta); }
+.panel h2 { font-size: 28px; font-weight: 750; line-height: 1.2; }
+.description { margin-top: 16px; color: var(--text-muted); font-size: 15px; line-height: 1.75; }
+.examples { display: grid; gap: 14px; margin-block: 24px; font-size: 13px; line-height: 1.6; }
+.examples li { display: flex; gap: 10px; }
+.examples svg { flex: none; color: #2e7557; margin-top: 2px; }
+.distinction { padding-top: 18px; border-top: 1px solid var(--border-soft); color: var(--text-subtle); font-size: 12px; line-height: 1.7; }
+.actions { display: flex; flex-direction: column; align-items: start; gap: 17px; margin-top: auto; padding-top: 24px; }
+.actions svg { flex: none; }
+
+@media (max-width: 960px) {
+  .explorer { grid-template-columns: 1fr; gap: 28px; }
+  .visual { max-width: 540px; width: 100%; margin-inline: auto; }
+  .panels { border-left: 0; padding-left: 0; }
+  .panel h2 { font-size: 27px; }
+  .description { max-width: 640px; }
+  .examples { gap: 12px; }
+  .visualNote { display: none; }
+}
+
+@media (max-width: 600px) {
+  .tabs button { gap: 7px; font-size: 13px; min-height: 50px; }
+  .explorer { gap: 12px; }
+  .sceneCaption { bottom: 0; font-size: 11px; }
+  .panelEyebrow { margin-top: 14px; }
+  .panel h2 { font-size: 25px; }
+  .hotspot[data-point="liability"] { top: 79%; }
+  .tooltip { max-width: 120px; }
+  .actions > :first-child { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs button, .hotspot, .tooltip, .equipmentLine, .cargoOutline, .liabilityLine { transition: none; }
+}

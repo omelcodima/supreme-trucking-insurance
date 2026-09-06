@@ -23,6 +23,7 @@ const staticRoutes = [
   "/privacy-policy",
   "/quote",
   "/reviews",
+  "/services",
   "/sms-terms-and-conditions",
   "/trucking-insurance",
 ];

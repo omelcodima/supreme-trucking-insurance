@@ -49,6 +49,7 @@ export default function SiteFooter() {
           <h2>Explore</h2>
           <div className="footer-explore">
             {[
+              ["/services", "Coverage overview"],
               ["/owner-operator", "Owner operators"],
               ["/fleet", "Fleets"],
               ["/new-venture", "New authority"],

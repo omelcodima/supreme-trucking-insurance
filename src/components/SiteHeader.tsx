@@ -9,6 +9,11 @@ import BrandLogo from "./BrandLogo";
 type NavigationLink = { href: string; label: string; detail?: string };
 const services: NavigationLink[] = [
   {
+    href: "/services",
+    label: "Coverage overview",
+    detail: "Your truck, cargo, and liability.",
+  },
+  {
     href: "/owner-operator",
     label: "Owner operators",
     detail: "Your truck. Your business.",

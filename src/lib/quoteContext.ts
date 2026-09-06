@@ -2,6 +2,7 @@ export const coverageOptions = [
   "Primary Liability Only",
   "Primary Liability + Cargo",
   "Motor Truck Cargo",
+  "Physical Damage Only",
   "Full Coverage (Liability + Physical Damage + Cargo)",
   "Bobtail / Non-Trucking",
   "Occupational Accident",
