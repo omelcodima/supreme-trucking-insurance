@@ -467,6 +467,7 @@
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">City</span><input data-field="city" value="{{ form.city }}" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none"></label>
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">State</span>
                   <select data-field="state" value="{{ form.state }}" style="width:100%;padding:11px 9px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none;background:#fff;cursor:pointer">
+                    <option value="">Select...</option>
                     <sc-for list="{{ usStates }}" as="s" hint-placeholder-count="5"><option value="{{ s }}">{{ s }}</option></sc-for>
                   </select>
                 </label>
@@ -496,6 +497,7 @@
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:17px 20px">
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">Radius of operation</span>
                   <select data-field="radius" value="{{ form.radius }}" style="width:100%;padding:11px 9px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none;background:#fff;cursor:pointer">
+                    <option value="">Select...</option>
                     <option value="Local (0-50 mi)">Local (0–50 mi)</option><option value="Intermediate (51-200 mi)">Intermediate (51–200 mi)</option><option value="Long haul (201-500 mi)">Long haul (201–500 mi)</option><option value="Nationwide (500+ mi)">Nationwide (500+ mi)</option>
                   </select>
                 </label>
@@ -538,6 +540,7 @@
                   <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">City</span><input data-field="garagingCity" value="{{ form.garagingCity }}" placeholder="City" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none"></label>
                   <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">State</span>
                     <select data-field="garagingState" value="{{ form.garagingState }}" style="width:100%;padding:11px 9px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none;background:#fff;cursor:pointer">
+                      <option value="">Select...</option>
                       <sc-for list="{{ usStates }}" as="s" hint-placeholder-count="5"><option value="{{ s }}">{{ s }}</option></sc-for>
                     </select>
                   </label>
@@ -627,6 +630,7 @@
                     <label style="display:block"><span style="display:block;font-size:11px;font-weight:600;color:#7c8a82;margin-bottom:5px">License #</span><input data-field="drivers" data-index="{{ $index }}" data-key="lic" value="{{ d.lic }}" style="width:100%;padding:10px 11px;border:1.5px solid #e2e6e1;border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:12.5px;outline:none"></label>
                     <label style="display:block"><span style="display:block;font-size:11px;font-weight:600;color:#7c8a82;margin-bottom:5px">State</span>
                       <select data-field="drivers" data-index="{{ $index }}" data-key="licState" value="{{ d.licState }}" style="width:100%;padding:10px 5px;border:1.5px solid #e2e6e1;border-radius:9px;font:inherit;font-size:13px;outline:none;background:#fff;cursor:pointer">
+                        <option value="">Select...</option>
                         <sc-for list="{{ usStates }}" as="s" hint-placeholder-count="5"><option value="{{ s }}">{{ s }}</option></sc-for>
                       </select>
                     </label>
@@ -813,14 +817,14 @@ class Component extends DCLogic {
     super(props);
     const blank = {
       lookupValue:'', lookupKind:'USDOT',
-      legalName:'', dba:'', street:'', city:'', state:'OH', zip:'', phone:'', email:'', ein:'',
+      legalName:'', dba:'', street:'', city:'', state:'', zip:'', phone:'', email:'', ein:'',
       usdot:'', since:'',
-      radius:'Nationwide (500+ mi)', mileage:'', receipts:'',
+      radius:'', mileage:'', receipts:'',
       eldProvider:'', eldProviderOther:'',
       dashCamSystem:'', dashCamSystemOther:'',
-      garagingAddressMode:'Same as company address', garagingStreet:'', garagingCity:'', garagingState:'OH', garagingZip:'',
+      garagingAddressMode:'Same as company address', garagingStreet:'', garagingCity:'', garagingState:'', garagingZip:'',
       units2026_2027:'', units2025_2026:'', units2024_2025:'', units2023_2024:'', futurePlans:'',
-      states:['OH','PA','NY','IN','IL','MI','KY','WV'],
+      states:[],
       alCsl:'$1,000,000', cargoLimit:'$100,000', cargoDed:'$1,000', reeferDed:'$2,500',
       gl:'$1,000,000 / $2,000,000', trailerInt:'$50,000', physDed:'$1,000', ntl:'$1,000,000',
       agentEmail:'info@supremetruckinginsurance.com',
@@ -1034,7 +1038,7 @@ class Component extends DCLogic {
   }
 
   // ---------- add / remove ----------
-  onAddDriver = ()=>{ this.setState(s=>({drivers:[...s.drivers,{name:'',dob:'',lic:'',licState:'OH',exp:'',scanned:false,flash:''}]})); this.scheduleSave(); }
+  onAddDriver = ()=>{ this.setState(s=>({drivers:[...s.drivers,{name:'',dob:'',lic:'',licState:'',exp:'',scanned:false,flash:''}]})); this.scheduleSave(); }
   onRemoveDriver = (e)=>{ const i=+e.currentTarget.dataset.index; this.setState(s=>({drivers:s.drivers.filter((_,j)=>j!==i)})); this.scheduleSave(); }
   onAddEquipment = ()=>{ this.setState(s=>({equipment:[...s.equipment,{vin:'',year:'',make:'',model:'',gvw:'',acv:'',type:'Tractor',typeOther:'',status:'idle'}]})); this.scheduleSave(); }
   onRemoveEquipment = (e)=>{ const i=+e.currentTarget.dataset.index; this.setState(s=>({equipment:s.equipment.filter((_,j)=>j!==i)})); this.scheduleSave(); }
@@ -1079,7 +1083,7 @@ class Component extends DCLogic {
   onStartFresh = ()=>{
     if(!confirm('Clear all entered data and start over?')) return;
     try{ localStorage.removeItem('supreme_trucking_app_v1'); }catch(e){}
-    const freshForm={...this.state.form,agentEmail:'info@supremetruckinginsurance.com',legalName:'',dba:'',street:'',city:'',zip:'',phone:'',email:'',ein:'',usdot:'',since:'',mileage:'',receipts:'',lookupValue:'',eldProvider:'',eldProviderOther:'',dashCamSystem:'',dashCamSystemOther:'',garagingAddressMode:'Same as company address',garagingStreet:'',garagingCity:'',garagingState:this.state.form.state||'OH',garagingZip:'',units2026_2027:'',units2025_2026:'',units2024_2025:'',units2023_2024:'',futurePlans:''};
+    const freshForm={...this.state.form,agentEmail:'info@supremetruckinginsurance.com',legalName:'',dba:'',street:'',city:'',state:'',states:[],radius:'',zip:'',phone:'',email:'',ein:'',usdot:'',since:'',mileage:'',receipts:'',lookupValue:'',eldProvider:'',eldProviderOther:'',dashCamSystem:'',dashCamSystemOther:'',garagingAddressMode:'Same as company address',garagingStreet:'',garagingCity:'',garagingState:'',garagingZip:'',units2026_2027:'',units2025_2026:'',units2024_2025:'',units2023_2024:'',futurePlans:''};
     this._submittedPayload=null;
     this.setState({step:0,form:freshForm,unitHistory:this.defaultUnitHistory(freshForm),saferStatus:'idle',saferApplied:false,saferCarrier:null,saferError:'',drivers:this.seedDrivers(),equipment:this.seedEquipment(),commodities:[{name:'General freight',otherName:'',pct:'',max:''}],claims:[{carrier:'',policy:'',num:'0',amt:'$0',details:''}],submitted:false});
   }
@@ -1103,36 +1107,50 @@ class Component extends DCLogic {
     return rows.map(r=>r.year+' '+(r.label||'units')+': '+(r.units||'-')+' units').join('; ');
   }
 
+  enteredRows(){
+    const has=(row,keys)=>keys.some(key=>String(row[key]??'').trim());
+    // Empty editable rows are placeholders, not reported drivers, units or claim history.
+    return {
+      drivers:this.state.drivers.filter(row=>has(row,['name','dob','lic','licState','exp'])),
+      equipment:this.state.equipment.filter(row=>has(row,['vin','year','make','model','gvw','acv','typeOther']) || (row.type && row.type!=='Tractor')),
+      claims:this.state.claims.filter(row=>has(row,['carrier','policy','details']) || Number(row.num)>0 || Number(String(row.amt||'').replace(/[$,]/g,''))>0),
+    };
+  }
+
   buildSummary(){
     const s=this.state, f=s.form, L=[];
+    const entered=this.enteredRows();
     L.push('TRUCKING INSURANCE APPLICATION');
     L.push('======================================');
     L.push('Insured: '+(f.legalName||'-')+(f.dba?'  (DBA '+f.dba+')':''));
-    L.push('Address: '+f.street+', '+f.city+', '+f.state+' '+f.zip);
+    L.push('Address: '+([f.street,f.city,f.state,f.zip].filter(Boolean).join(', ')||'Not provided'));
     L.push('Phone: '+f.phone+'   Email: '+f.email);
     L.push('USDOT: '+f.usdot+'   EIN: '+f.ein+'   In business since: '+f.since);
     L.push('');
     L.push('OPERATIONS');
-    L.push('Radius: '+f.radius+'   Annual mileage: '+f.mileage+'   Gross receipts: '+f.receipts);
+    L.push('Radius: '+(f.radius||'Not provided')+'   Annual mileage: '+f.mileage+'   Gross receipts: '+f.receipts);
     L.push('ELD provider: '+this.labelWithOther(f.eldProvider,f.eldProviderOther)+'   Dash cam system: '+this.labelWithOther(f.dashCamSystem,f.dashCamSystemOther));
     L.push('Garaging address: '+this.garagingAddress(f));
     L.push('Historical unit count: '+this.unitHistoryText(f));
     if(f.futurePlans) L.push('Future plans / notes: '+f.futurePlans);
-    L.push('States: '+f.states.join(', '));
+    L.push('States: '+(f.states.join(', ')||'Not provided'));
     L.push('Commodities: '+s.commodities.map(c=>this.commodityLabel(c)+' ('+c.pct+'%)').join('; '));
     L.push('');
-    L.push('DRIVERS ('+s.drivers.length+')');
-    s.drivers.forEach((d,i)=>L.push('  '+(i+1)+'. '+(d.name||'-')+' — Lic '+d.lic+' ('+d.licState+'), '+d.exp+(d.dob?', DOB '+d.dob:'')));
+    L.push('DRIVERS ('+entered.drivers.length+' entered)');
+    if(!entered.drivers.length) L.push('Not provided.');
+    entered.drivers.forEach((d,i)=>L.push('  '+(i+1)+'. '+(d.name||'-')+' — Lic '+d.lic+' ('+d.licState+'), '+d.exp+(d.dob?', DOB '+d.dob:'')));
     L.push('');
-    L.push('EQUIPMENT ('+s.equipment.length+')');
-    s.equipment.forEach((e,i)=>L.push('  '+(i+1)+'. '+[e.year,e.make,e.model].filter(Boolean).join(' ')+' — VIN '+e.vin+', GVW '+e.gvw+', '+this.equipmentTypeLabel(e)));
+    L.push('EQUIPMENT ('+entered.equipment.length+' entered)');
+    if(!entered.equipment.length) L.push('Not provided.');
+    entered.equipment.forEach((e,i)=>L.push('  '+(i+1)+'. '+[e.year,e.make,e.model].filter(Boolean).join(' ')+' — VIN '+e.vin+', GVW '+e.gvw+', ACV '+(e.acv||'Not provided')+', '+this.equipmentTypeLabel(e)));
     L.push('');
     L.push('COVERAGES');
     L.push('Auto Liability: '+f.alCsl+'   General Liability: '+f.gl+'   Non-Trucking: '+f.ntl);
     L.push('Cargo: '+f.cargoLimit+' ('+f.cargoDed+' ded)   Phys Damage ded: '+f.physDed+'   Trailer Interchange: '+f.trailerInt);
     L.push('');
     L.push('PRIOR COVERAGE / CLAIMS');
-    s.claims.forEach((c,i)=>L.push('  '+(i+1)+'. '+c.carrier+' — Policy '+c.policy+', '+c.num+' claims, '+c.amt+'  '+c.details));
+    if(!entered.claims.length) L.push('Not provided; this does not indicate a claim-free history.');
+    entered.claims.forEach((c,i)=>L.push('  '+(i+1)+'. '+c.carrier+' — Policy '+c.policy+', '+c.num+' claims, '+c.amt+'  '+c.details));
     return L.join('\n');
   }
   onEmailBack = ()=>{
@@ -1140,6 +1158,7 @@ class Component extends DCLogic {
   }
   onDownloadPdf = ()=>{
     const f=this.state.form;
+    const entered=this.enteredRows();
     const esc=t=>String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const html='<html><head><title>Trucking Insurance Application — '+esc(f.legalName)+'</title>'
       +'<style>body{font-family:Arial,Helvetica,sans-serif;color:#16221c;margin:36px;font-size:12px}'
@@ -1161,15 +1180,16 @@ class Component extends DCLogic {
       +'<div class="kv"><b>Future plans</b> '+esc(f.futurePlans||'')+'</div>'
       +'<div class="kv"><b>States</b> '+esc(f.states.join(', '))+'</div>'
       +'<div class="kv"><b>Commodities</b> '+esc(this.state.commodities.map(c=>this.commodityLabel(c)+' ('+c.pct+'%)').join('; '))+'</div>'
-      +'<h2>Drivers ('+this.state.drivers.length+')</h2><table><tr><th>#</th><th>Name</th><th>License</th><th>State</th><th>Experience</th></tr>'
-      +this.state.drivers.map((d,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(d.name)+'</td><td>'+esc(d.lic)+'</td><td>'+esc(d.licState)+'</td><td>'+esc(d.exp)+'</td></tr>').join('')+'</table>'
-      +'<h2>Equipment ('+this.state.equipment.length+')</h2><table><tr><th>#</th><th>Year</th><th>Make</th><th>Model</th><th>VIN</th><th>GVW</th><th>Type</th></tr>'
-      +this.state.equipment.map((e,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(e.year)+'</td><td>'+esc(e.make)+'</td><td>'+esc(e.model)+'</td><td>'+esc(e.vin)+'</td><td>'+esc(e.gvw)+'</td><td>'+esc(this.equipmentTypeLabel(e))+'</td></tr>').join('')+'</table>'
+      +'<h2>Drivers ('+entered.drivers.length+' entered)</h2><table><tr><th>#</th><th>Name</th><th>License</th><th>State</th><th>Experience</th></tr>'
+      +entered.drivers.map((d,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(d.name)+'</td><td>'+esc(d.lic)+'</td><td>'+esc(d.licState)+'</td><td>'+esc(d.exp)+'</td></tr>').join('')+'</table>'
+      +'<h2>Equipment ('+entered.equipment.length+' entered)</h2><table><tr><th>#</th><th>Year</th><th>Make</th><th>Model</th><th>VIN</th><th>GVW</th><th>Type</th></tr>'
+      +entered.equipment.map((e,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(e.year)+'</td><td>'+esc(e.make)+'</td><td>'+esc(e.model)+'</td><td>'+esc(e.vin)+'</td><td>'+esc(e.gvw)+'</td><td>'+esc(this.equipmentTypeLabel(e))+'</td></tr>').join('')+'</table>'
       +'<h2>Coverages</h2>'
       +'<div class="kv"><b>Auto Liability</b> '+esc(f.alCsl)+'</div><div class="kv"><b>Cargo</b> '+esc(f.cargoLimit)+' ('+esc(f.cargoDed)+' ded)</div>'
       +'<div class="kv"><b>Phys Damage ded</b> '+esc(f.physDed)+'</div><div class="kv"><b>General Liability</b> '+esc(f.gl)+'</div>'
       +'<h2>Prior Coverage / Claims</h2><table><tr><th>Carrier</th><th>Policy #</th><th>Claims</th><th>Amt paid</th><th>Details</th></tr>'
-      +this.state.claims.map(c=>'<tr><td>'+esc(c.carrier)+'</td><td>'+esc(c.policy)+'</td><td>'+esc(c.num)+'</td><td>'+esc(c.amt)+'</td><td>'+esc(c.details)+'</td></tr>').join('')+'</table>'
+      +entered.claims.map(c=>'<tr><td>'+esc(c.carrier)+'</td><td>'+esc(c.policy)+'</td><td>'+esc(c.num)+'</td><td>'+esc(c.amt)+'</td><td>'+esc(c.details)+'</td></tr>').join('')+'</table>'
+      +(!entered.claims.length?'<p>Claim history not provided.</p>':'')
       +'</body></html>';
     const w=window.open('','_blank');
     if(!w){ this.setState({sentVia:'pdfblocked'}); return; }
@@ -1188,9 +1208,7 @@ class Component extends DCLogic {
       form:{...this.state.form,agentEmail:this.state.form.agentEmail||'info@supremetruckinginsurance.com'},
       commodities:this.state.commodities,
       unitHistory:this.state.unitHistory,
-      drivers:this.state.drivers,
-      equipment:this.state.equipment,
-      claims:this.state.claims,
+      ...this.enteredRows(),
     };
     const body=JSON.stringify(payload);
     if(body===this._submittedPayload){ this.setState({sentVia:'submitEmail'}); return; }
@@ -1212,6 +1230,7 @@ class Component extends DCLogic {
   // ---------- render ----------
   renderVals(){
     const s=this.state; const keys=this.stepKeys();
+    const entered=this.enteredRows();
     const meta=[
       {label:'Carrier Lookup',owner:'Agent'},
       {label:'Insured Info',owner:'Agent'},
@@ -1286,11 +1305,11 @@ class Component extends DCLogic {
 
     const reviewCards=[
       {title:'Insured',step:1,rows:[{k:'Legal name',v:s.form.legalName||'—'},{k:'Location',v:(s.form.city?s.form.city+', '+s.form.state:'—')},{k:'USDOT',v:s.form.usdot||'—'},{k:'EIN',v:s.form.ein||'—'}]},
-      {title:'Operations',step:2,rows:[{k:'Radius',v:s.form.radius},{k:'States',v:s.form.states.length+' states'},{k:'ELD',v:this.labelWithOther(s.form.eldProvider,s.form.eldProviderOther)||'—'},{k:'Dash cam',v:this.labelWithOther(s.form.dashCamSystem,s.form.dashCamSystemOther)||'—'},{k:'Garaging',v:this.garagingAddress(s.form)},{k:'Unit history',v:this.unitHistoryText(s.form)}]},
-      {title:'Drivers',step:3,rows:[{k:'Total drivers',v:s.drivers.length},{k:'States',v:[...new Set(s.drivers.map(d=>d.licState))].length}]},
-      {title:'Equipment',step:4,rows:[{k:'Units',v:s.equipment.length},{k:'VINs decoded',v:decodedCount+' / '+s.equipment.length},{k:'Makes',v:[...new Set(s.equipment.map(e=>e.make).filter(Boolean))].join(', ')||'—'}]},
+      {title:'Operations',step:2,rows:[{k:'Radius',v:s.form.radius||'Not provided'},{k:'States',v:s.form.states.length?s.form.states.length+' states':'Not provided'},{k:'ELD',v:this.labelWithOther(s.form.eldProvider,s.form.eldProviderOther)||'—'},{k:'Dash cam',v:this.labelWithOther(s.form.dashCamSystem,s.form.dashCamSystemOther)||'—'},{k:'Garaging',v:this.garagingAddress(s.form)},{k:'Unit history',v:this.unitHistoryText(s.form)}]},
+      {title:'Drivers',step:3,rows:[{k:'Drivers entered',v:entered.drivers.length},{k:'States',v:[...new Set(entered.drivers.map(d=>d.licState).filter(Boolean))].length}]},
+      {title:'Equipment',step:4,rows:[{k:'Units entered',v:entered.equipment.length},{k:'VINs decoded',v:decodedCount+' / '+entered.equipment.length},{k:'Makes',v:[...new Set(entered.equipment.map(e=>e.make).filter(Boolean))].join(', ')||'—'}]},
       {title:'Coverages',step:5,rows:[{k:'Auto Liability',v:s.form.alCsl},{k:'Cargo',v:s.form.cargoLimit},{k:'Phys Dmg Ded',v:s.form.physDed}]},
-      {title:'Claim History',step:6,rows:[{k:'Prior carriers',v:s.claims.length},{k:'Total claims',v:s.claims.reduce((a,c)=>a+(parseInt(c.num)||0),0)}]},
+      {title:'Claim History',step:6,rows:[{k:'Prior records entered',v:entered.claims.length},{k:'Claims reported',v:entered.claims.length?entered.claims.reduce((a,c)=>a+(parseInt(c.num)||0),0):'Not provided'}]},
     ];
 
     const show={}; keys.forEach((k,i)=>show[k]=(i===s.step));
@@ -1343,7 +1362,7 @@ class Component extends DCLogic {
       onAddCommodity:this.onAddCommodity, onRemoveCommodity:this.onRemoveCommodity,
 
       // drivers
-      drivers, driverCountLabel:`${s.drivers.length} drivers on file`,
+      drivers, driverCountLabel:`${entered.drivers.length} drivers entered`,
       onAddDriver:this.onAddDriver, onRemoveDriver:this.onRemoveDriver,
 
       // equipment
