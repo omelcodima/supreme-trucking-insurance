@@ -26,3 +26,10 @@ Lancer supplies a reversed white wordmark, so its image is presented on a dark b
 - No horizontal overflow at 320, 390, 894, or 1440 pixels. All 24 images load (12 markets plus an accessibility-hidden duplicate for the loop).
 - Reduced motion displays the 12 markets once, without animation or a redundant pause control. Desktop and mobile screenshots were visually reviewed.
 - Local screenshots are in `output/playwright/`, excluded from Git and deployment uploads.
+
+## Production release
+
+- Published commit `8fc72b9` to https://supremetruckinginsurance.com/ on September 6, 2026.
+- Vercel deployment: `dpl_ZVxRwpR9mybmwpy6iwnS5vFe56Df` (READY).
+- Public-site checks: all logos load, leftward motion/pause/keyboard/hover controls pass, no mobile horizontal overflow, no browser errors or warnings.
+- Source remains on local branch `codex/site-experience-cleanup`. GitHub authentication still needs reconnecting before these changes and the preceding site redesign can be pushed; avoid deploying the older remote main over this release.
