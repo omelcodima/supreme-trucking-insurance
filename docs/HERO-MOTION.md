@@ -26,3 +26,10 @@ A clean road plate was generated with the built-in image tool, but automatic for
 ## Source sync
 
 The working branch is `codex/site-experience-cleanup`. GitHub authentication is still invalid as checked during this work; source commits must be pushed after authentication is restored. Avoid deploying older remote main over the current homepage and prior site redesign.
+
+## Production release
+
+- Live at https://supremetruckinginsurance.com/; deployed source `d82a957` (hero implementation `f30bd85`).
+- Vercel deployment `dpl_BasQRcjJJpKtK6k6X3kZArbvcD1F`, status READY, September 6, 2026.
+- Re-ran the complete pixel/interaction/responsive/fallback/quote-navigation browser check against the public domain. All passed with no page errors. Scroll reversal returned the sampled pixels within a mean channel difference of 0.002.
+- During the remote build an Airtable read used the existing last-known-good published-post fallback. Blog integration was not changed in this release.
