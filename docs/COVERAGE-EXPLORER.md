@@ -63,3 +63,17 @@ Final prompt:
 Working branch: `codex/site-experience-cleanup`. GitHub authentication remains
 invalid as checked September 6. The source must be pushed after reconnection;
 do not deploy an older remote main over this branch's production changes.
+
+## Production release
+
+- Live URL: https://supremetruckinginsurance.com/services
+- Source commit: `c8065e1`.
+- Vercel deployment: `dpl_13u358GBvCj2qPzChRia6Pp5P9gH`, production, READY.
+- Deployment URL: https://supreme-trucking-insurance-pw6osotyx-supreme-insurance-agency.vercel.app
+- Remote production build completed successfully on September 6, 2026.
+- Repeated the complete browser check against the public domain: all six
+  viewport sizes, selection, stable layout, image rendering, keyboard navigation,
+  reduced motion, quote prefill for all three options, menu/homepage links,
+  canonical, and sitemap pass with no page exceptions or first-party HTTP errors.
+- A separate touch-enabled mobile browser check passed hotspot and tab tapping.
+- Production browser report: `output/playwright/coverage-production-report.json`.
