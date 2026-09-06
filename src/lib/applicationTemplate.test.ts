@@ -70,6 +70,10 @@ test("published application bundle matches the readable template", () => {
   assert.equal(JSON.parse(serialized), template);
 });
 
+test("future plans binds the textarea value instead of serializing a template object", () => {
+  assert.match(template, /<textarea data-field="futurePlans" value="\{\{ form\.futurePlans \}\}"[^>]*><\/textarea>/);
+});
+
 test("new applications have empty unit counts and require real contact details", async () => {
   let calls = 0;
   const app = createApplication(async () => {

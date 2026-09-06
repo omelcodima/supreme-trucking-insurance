@@ -11,10 +11,11 @@
 - Added page-specific canonical URLs for COI, Careers, and Privacy; COI has its own title and description. Removed nested main elements from legal pages without changing legal provisions.
 - Long email and website addresses wrap on narrow screens, including Contact and legal pages.
 - The delivered test exposed legacy defaults in the full application. New/reset forms no longer assume Ohio, an eight-state operation, or nationwide radius. Empty editable rows are excluded from submitted/reviewed/printed drivers, equipment and claim history; missing claim history is explicitly unknown, not claim-free. Existing saved client choices are preserved. Equipment ACV is included in the emailed summary/PDF.
+- Fixed Future plans textarea binding so an empty field shows its placeholder instead of `[object Object]` and saved notes restore correctly.
 
 ## Local Verification
 
-- Lint and production build pass; 90 unit tests pass, including empty-row exclusion, partial records, zero-loss prior policies, preservation of saved choices, and explicit reset.
+- Lint and production build pass; 91 unit tests pass, including textarea binding, empty-row exclusion, partial records, zero-loss prior policies, preservation of saved choices, and explicit reset.
 - Browser audit: 21 routes at 320 and 1440 pixels (42 layouts), with no horizontal overflow, missing images, unlabeled fields, invalid phone links, or JavaScript errors.
 - Metadata audit: all 122 sitemap URLs have the expected canonical URL, title, description, and single H1.
 - Route audit: 122 sitemap URLs and 107 unique internal links passed HTTP/link checks.
