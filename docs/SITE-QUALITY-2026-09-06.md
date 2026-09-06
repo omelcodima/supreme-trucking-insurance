@@ -43,4 +43,23 @@
 - Production log review showed successful HTTP 200 requests, an existing Airtable dependency deprecation warning and an unconfigured optional lead webhook notice. No email failure was recorded. This is a point-in-time check, not continuous monitoring; no new drain or monitor was configured.
 - The later empty-default/row correction is tested with mocked submissions to avoid sending extra real messages. Email provider and PDF-generation code are unchanged from the actual-delivery test.
 
-Final corrective deployment and browser verification are pending at this point in the record.
+## Final Deploy Result
+
+- URL: https://supremetruckinginsurance.com
+- Target: production
+- Status: READY; verified September 6, 2026
+- Source commit: `dce96aa` (includes `61bf61e` default/empty-row correction)
+- Deployment: `dpl_2AcFqAQUdgjbmQda9yryKNkvEVYh`
+- Deployment URL: https://supreme-trucking-insurance-qppxt29cu-supreme-insurance-agency.vercel.app
+- Framework: Next.js 16.3.3
+- Build duration: approximately 11 seconds
+- Post-deploy checks: the full lead regression passed again across six widths; the new defaults/textarea/persistence/clean-payload checks passed at 320, 390 and 1440 pixels. No browser JavaScript errors. All final regression POSTs were mocked; the two real delivery tests above were not repeated.
+- Post-deploy observability: no error-level logs returned for the final deployment in the checked ten-minute window. No new monitoring or log drains were set up.
+- Source through `dce96aa` is on GitHub main. This final verification record is a local documentation-only commit; it does not change the deployed application.
+- Local production preview remains available at http://localhost:3108/quote.
+- Temporary production verification environment file was removed. Production API keys and mail-provider configuration were not changed.
+
+## Remaining Owner Inputs
+
+1. Approve a separate Supreme Trucking Insurance Google Analytics account (or identify the correct existing account). The currently visible old account belongs to a different project. Any Google terms must be accepted by the owner. GA4 reporting is not active yet.
+2. Supply genuine client video reviews with permission to publish. No testimonials were invented.
