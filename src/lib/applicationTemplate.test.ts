@@ -24,7 +24,7 @@ interface Application {
 }
 
 function createApplication(
-  deliver: (body: string) => Promise<{ ok: boolean }>,
+  deliver: (body: string) => Promise<{ ok: boolean; json?: () => Promise<unknown> }>,
 ) {
   class DCLogic {
     state: Record<string, unknown> = {};
@@ -41,7 +41,10 @@ function createApplication(
   }
   const Component = runInNewContext(`${logic}\nComponent`, {
     DCLogic,
-    fetch: (_url: string, options: { body: string }) => deliver(options.body),
+    fetch: async (_url: string, options: { body: string }) => {
+      const response = await deliver(options.body);
+      return { ...response, json: response.json || (async () => ({ ok: response.ok })) };
+    },
   }) as new (props: object) => Application;
   return new Component({});
 }
@@ -104,4 +107,37 @@ test("a failed application can be retried without losing data", async () => {
   await app.onSubmitOnline();
   assert.equal(calls, 2);
   assert.equal(app.state.sentVia, "submitEmail");
+});
+
+test("HTTP success without an explicit acceptance never completes an application", async () => {
+  for (const json of [async () => ({ ok: false }), async () => ({}), async () => { throw new Error("Not JSON"); }]) {
+    const app = createApplication(async () => ({ ok: true, json }));
+    app.state.form.legalName = "TEST ONLY";
+    app.state.form.email = "test@example.invalid";
+    await app.onSubmitOnline();
+    assert.equal(app.state.sentVia, "submitError");
+    assert.equal(app.state.form.legalName, "TEST ONLY");
+  }
+});
+
+test("embedded application reports acceptance, not just an HTTP success", async () => {
+  const bundle = readFileSync(new URL("../../public/quote-application.html", import.meta.url), "utf8");
+  const instrumentation = [...bundle.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+    .map((match) => match[1]).find((script) => script.includes("const originalFetch = window.fetch.bind(window)"));
+  assert.ok(instrumentation);
+  for (const [status, body, phase] of [[200, '{"ok":true}', "success"], [200, '{"ok":false}', "error"], [200, "bad json", "error"], [502, '{"ok":true}', "error"]] as const) {
+    const messages: { phase: string }[] = [];
+    const window = {
+      fetch: async () => new Response(body, { status }),
+      location: { href: "https://example.test/quote-application.html", origin: "https://example.test" },
+      parent: { postMessage: (message: { phase: string }) => messages.push(message) },
+    };
+    runInNewContext(instrumentation, { window, URL, Request });
+    const fetch = window.fetch as typeof globalThis.fetch;
+    const response = await fetch("/api/full-application", { method: "POST" });
+    assert.equal(await response.text(), body, "Instrumentation must not consume the caller's response");
+    assert.deepEqual(messages.map((message) => message.phase), ["attempt", phase]);
+    await fetch("/api/dot-lookup?dot=95050");
+    assert.equal(messages.length, 2, "Registry lookups are not application attempts");
+  }
 });

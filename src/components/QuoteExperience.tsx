@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import { measureLeadCreated } from "@/lib/openaiAds";
 import { coverageOptions, validCoverage } from "@/lib/quoteContext";
+import QuickDotLookup from "@/components/QuickDotLookup";
+import { clearConfirmedCompany, type QuickCarrier } from "@/lib/quickDotLookup";
+import { trackLeadForm } from "@/lib/leadAnalytics";
 
 export default function QuoteExperience({
   coverage,
@@ -31,6 +34,8 @@ export default function QuoteExperience({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [confirmedCarrier, setConfirmedCarrier] = useState<QuickCarrier | null>(null);
+  const submissionLock = useRef(false);
   const operationNames: Record<string, string> = {
     fleet: "Fleet insurance",
     "owner-operator": "Owner operator insurance",
@@ -80,7 +85,9 @@ export default function QuoteExperience({
   }
   async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (submitting) return;
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    trackLeadForm("quick_quote", "attempt");
     setSubmitting(true);
     setError("");
     try {
@@ -98,21 +105,24 @@ export default function QuoteExperience({
         }),
       });
       const result = await response.json().catch(() => null);
-      if (!response.ok)
+      if (!response.ok || result?.ok !== true)
         throw new Error(
           result?.detail ||
             "We could not send your request. Please try again or call (360) 936-7196.",
         );
       measureLeadCreated();
+      trackLeadForm("quick_quote", "success");
       setSubmitted(true);
       panel.current?.scrollIntoView({ block: "start", behavior: "instant" });
     } catch (error) {
+      trackLeadForm("quick_quote", "error");
       setError(
         error instanceof Error
           ? error.message
           : "Please try again or call (360) 936-7196.",
       );
     } finally {
+      submissionLock.current = false;
       setSubmitting(false);
     }
   }
@@ -211,11 +221,25 @@ export default function QuoteExperience({
                   onSubmit={submit}
                   className="quote-form"
                   aria-label="Quick quote request"
+                  data-analytics-form="quick_quote"
                 >
                   <h2>
                     {operationName || "Request a trucking insurance quote"}
                   </h2>
                   <p className="form-note">Required fields are marked *.</p>
+                  <QuickDotLookup
+                    dot={form.dot}
+                    confirmed={confirmedCarrier}
+                    disabled={submitting}
+                    onDotChange={(dot) => {
+                      setForm((current) => ({ ...current, dot, company: clearConfirmedCompany(current.company, confirmedCarrier) }));
+                      setConfirmedCarrier(null);
+                    }}
+                    onConfirm={(carrier) => {
+                      setConfirmedCarrier(carrier);
+                      setForm((current) => ({ ...current, dot: carrier.dotNumber, company: carrier.legalName }));
+                    }}
+                  />
                   <fieldset disabled={submitting} className="quote-fields">
                     <legend className="sr-only">
                       Contact and company details
@@ -227,25 +251,24 @@ export default function QuoteExperience({
                         ["phone", "Phone number", "tel", "tel"],
                         ["email", "Email address", "email", "email"],
                         ["company", "Company name", "organization", "text"],
-                        ["dot", "USDOT number (optional)", "off", "text"],
                       ] as const
                     ).map(([name, label, autoComplete, type]) => (
-                      <div className="form-field" key={name}>
+                      <div className={`form-field${name === "company" ? " field-wide" : ""}`} key={name}>
                         <label htmlFor={`quote-${name}`}>
                           {label}
-                          {name !== "dot" ? " *" : ""}
+                          {" *"}
                         </label>
                         <input
                           id={`quote-${name}`}
                           name={name}
                           type={type}
                           autoComplete={autoComplete}
-                          required={name !== "dot"}
-                          inputMode={name === "dot" ? "numeric" : undefined}
+                          required
                           value={form[name]}
-                          onChange={(e) =>
-                            setForm({ ...form, [name]: e.target.value })
-                          }
+                          onChange={(e) => {
+                            setForm({ ...form, [name]: e.target.value });
+                            if (name === "company" && e.target.value !== confirmedCarrier?.legalName) setConfirmedCarrier(null);
+                          }}
                         />
                       </div>
                     ))}
@@ -375,7 +398,7 @@ export default function QuoteExperience({
             {fullLoaded && (
               <iframe
                 ref={iframe}
-                src="/quote-application.html?embed=1&v=20260905"
+                src="/quote-application.html?embed=1&v=20260906"
                 title="Full trucking insurance application"
                 className="full-application-frame"
                 style={{ height: frameHeight }}

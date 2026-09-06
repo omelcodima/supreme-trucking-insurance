@@ -3,6 +3,15 @@
   let previousHeight = 0;
   let previousStep = "";
   let queued = false;
+  let started = false;
+  function trackStart(event) {
+    if (started || !(event.target instanceof Element) || !event.target.closest(".application-root")) return;
+    if (!event.target.matches("input, select, textarea")) return;
+    started = true;
+    window.parent.postMessage({ type: "supreme:application-analytics", phase: "start" }, location.origin);
+  }
+  document.addEventListener("input", trackStart);
+  document.addEventListener("change", trackStart);
   function sync() {
     queued = false;
     const root = document.querySelector(".application-root");

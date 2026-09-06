@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect } from "react";
+import { isLeadFormId, trackLeadForm } from "@/lib/leadAnalytics";
 
 declare global {
   interface Window {
@@ -24,7 +25,7 @@ function eventNameForLink(href: string) {
 
 export default function Analytics() {
   useEffect(() => {
-    if (!measurementId) return;
+    const startedForms = new WeakSet<HTMLFormElement>();
 
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
@@ -35,33 +36,29 @@ export default function Analytics() {
       const eventName = eventNameForLink(href);
       if (!eventName) return;
 
-      window.gtag?.("event", eventName, {
-        link_url: href,
-        link_text: link.textContent?.trim().slice(0, 80) || "",
-      });
+      try {
+        const destination = href.startsWith("tel:") ? "phone" : href.startsWith("mailto:") ? "email" : new URL(href, location.origin).pathname;
+        window.gtag?.("event", eventName, { link_destination: destination });
+      } catch { /* Tracking must never interrupt navigation. */ }
     };
 
-    const handleSubmit = (event: SubmitEvent) => {
-      const form = event.target as HTMLFormElement | null;
-      const pagePath = window.location.pathname;
-      const eventName = pagePath.includes("coi-request")
-        ? "coi_form_submit"
-        : pagePath.includes("quote")
-          ? "quote_form_submit"
-          : "lead_form_submit";
-
-      window.gtag?.("event", eventName, {
-        page_path: pagePath,
-        form_id: form?.id || "",
-      });
+    const handleStart = (event: Event) => {
+      if (!(event.target instanceof Element)) return;
+      const form = event.target.closest<HTMLFormElement>("form[data-analytics-form]");
+      const id = form?.dataset.analyticsForm;
+      if (!form || !isLeadFormId(id) || startedForms.has(form)) return;
+      startedForms.add(form);
+      trackLeadForm(id, "start");
     };
 
     document.addEventListener("click", handleClick);
-    document.addEventListener("submit", handleSubmit);
+    document.addEventListener("input", handleStart);
+    document.addEventListener("change", handleStart);
 
     return () => {
       document.removeEventListener("click", handleClick);
-      document.removeEventListener("submit", handleSubmit);
+      document.removeEventListener("input", handleStart);
+      document.removeEventListener("change", handleStart);
     };
   }, []);
 

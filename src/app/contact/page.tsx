@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { trackLeadForm } from "@/lib/leadAnalytics";
 
 const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
 export default function ContactPage() {
+  const submissionLock = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
@@ -29,6 +31,9 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    trackLeadForm("contact", "attempt");
     setSubmitting(true);
 
     try {
@@ -51,15 +56,18 @@ export default function ContactPage() {
 
       const result = await response.json().catch(() => null);
 
-      if (!response.ok) {
+      if (!response.ok || result?.ok !== true) {
         throw new Error(result?.detail || result?.message || "We could not send your message. Please try again.");
       }
 
+      trackLeadForm("contact", "success");
       setSubmitted(true);
     } catch (error) {
+      trackLeadForm("contact", "error");
       console.error("Contact form error:", error);
       alert(error instanceof Error ? error.message : "Please try again or call (360) 936-7196.");
     } finally {
+      submissionLock.current = false;
       setSubmitting(false);
     }
   };
@@ -132,7 +140,7 @@ export default function ContactPage() {
               <>
                 <h3 className="text-2xl font-black text-[#2F261C] mb-2">Send a message</h3>
                 <p className="text-[#7B6B59] mb-6 text-sm">Tell us how we can help and include the best way to reach you.</p>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4" data-analytics-form="contact">
                   <div>
                     <label className={labelClass}>Name *</label>
                     <input name="name" required value={form.firstName + ' ' + form.lastName} onChange={handleChange} className={inputClass} placeholder="Your full name" />

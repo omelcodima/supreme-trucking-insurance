@@ -1198,7 +1198,8 @@ class Component extends DCLogic {
     this.setState({sentVia:'submitting',validationMessage:''});
     try{
       const res=await fetch('/api/full-application',{method:'POST',headers:{'Content-Type':'application/json'},body});
-      if(!res.ok) throw new Error('submit failed');
+      const result=await res.json().catch(()=>null);
+      if(!res.ok || !result || result.ok!==true) throw new Error('submit failed');
       this._submittedPayload=body;
       this.setState(s=>({sentVia:'submitEmail',form:{...s.form,agentEmail:s.form.agentEmail||'info@supremetruckinginsurance.com'}}));
     }catch(e){

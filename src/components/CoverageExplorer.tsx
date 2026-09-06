@@ -99,7 +99,15 @@ export default function CoverageExplorer() {
             {coverageExplorerItems.find((item) => item.id === selected)?.subject}
           </p>
         </div>
-        <p className={styles.visualNote}>Different risks. Different layers of coverage.</p>
+        <div className={styles.scenarioPicker}>
+          <label htmlFor="coverage-scenario">Example situations</label>
+          <select id="coverage-scenario" value={selected} onChange={(event) => {
+            const item = coverageExplorerItems.find((item) => item.id === event.target.value);
+            if (item) setSelected(item.id);
+          }}>
+            {coverageExplorerItems.map((item) => <option key={item.id} value={item.id}>{item.scenarioLabel}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className={styles.panels}>
@@ -121,6 +129,10 @@ export default function CoverageExplorer() {
             </div>
             <h2>{item.title}</h2>
             <p className={styles.description}>{item.description}</p>
+            <div className={styles.scenario}>
+              <h3>Example situation</h3>
+              <p>{item.scenario}</p>
+            </div>
             <ul className={styles.examples}>
               {item.examples.map((example) => (
                 <li key={example}><Check size={17} aria-hidden="true" />{example}</li>

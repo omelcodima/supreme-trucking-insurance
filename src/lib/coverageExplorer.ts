@@ -4,6 +4,8 @@ export const coverageExplorerItems = [
     label: "Truck",
     subject: "Your equipment",
     title: "Physical damage",
+    scenarioLabel: "My truck is damaged",
+    scenario: "Your insured truck hits a barrier. Collision coverage may help with repairs, subject to the policy and deductible. Damage to freight is a separate question.",
     description:
       "Your truck is your livelihood. Physical damage coverage can help repair or replace insured equipment after a covered loss.",
     examples: [
@@ -22,6 +24,8 @@ export const coverageExplorerItems = [
     label: "Cargo",
     subject: "The freight you haul",
     title: "Motor truck cargo",
+    scenarioLabel: "The freight is damaged",
+    scenario: "Freight is damaged during a collision. Cargo coverage may respond to your liability for that loss, depending on the commodities, limits, and exclusions in your policy.",
     description:
       "Every load carries responsibility. Cargo insurance can help cover your liability for covered loss or damage to freight you transport.",
     examples: [
@@ -40,6 +44,8 @@ export const coverageExplorerItems = [
     label: "Liability",
     subject: "Your responsibility to others",
     title: "Primary auto liability",
+    scenarioLabel: "Someone else's vehicle is damaged",
+    scenario: "Your truck damages another vehicle and you are legally responsible. Primary auto liability may respond to that covered claim, not the repair of your own truck.",
     description:
       "When an accident affects someone else, primary auto liability can help cover bodily injury or property damage you are legally responsible for.",
     examples: [

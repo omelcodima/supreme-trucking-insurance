@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { trackLeadForm } from "@/lib/leadAnalytics";
 
 type StatusState = {
   type: "idle" | "success" | "error";
@@ -25,6 +26,7 @@ const initialForm = {
 };
 
 export default function CoiRequestPage() {
+  const submissionLock = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<StatusState>({ type: "idle", title: "", body: "" });
@@ -36,6 +38,9 @@ export default function CoiRequestPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submissionLock.current) return;
+    submissionLock.current = true;
+    trackLeadForm("coi_request", "attempt");
     setSubmitting(true);
     setStatus({ type: "idle", title: "", body: "" });
 
@@ -50,10 +55,11 @@ export default function CoiRequestPage() {
 
       const result = await response.json().catch(() => null);
 
-      if (!response.ok) {
+      if (!response.ok || result?.ok !== true) {
         throw new Error(result?.detail || result?.message || "We could not send your COI request. Please try again.");
       }
 
+      trackLeadForm("coi_request", "success");
       setSubmitted(true);
       setStatus({
         type: "success",
@@ -63,12 +69,14 @@ export default function CoiRequestPage() {
           "Thanks! Your COI request was received. We will review it and send the certificate as soon as possible.",
       });
     } catch (error) {
+      trackLeadForm("coi_request", "error");
       setStatus({
         type: "error",
         title: "Could not send COI request",
         body: error instanceof Error ? error.message : "Please try again or call (360) 936-7196.",
       });
     } finally {
+      submissionLock.current = false;
       setSubmitting(false);
     }
   };
@@ -107,7 +115,7 @@ export default function CoiRequestPage() {
                 <h2 className="mb-2 text-2xl font-black text-[#2F261C] md:text-3xl">Certificate of Insurance Request</h2>
                 <p className="mb-8 text-sm text-[#7B6B59]">Fields marked with * are required.</p>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" data-analytics-form="coi_request">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label className={labelClass}>Trucking Company Name *</label>

@@ -9,6 +9,8 @@ test("coverage explorer has three distinct coverage layers", () => {
   for (const item of coverageExplorerItems) {
     assert.equal(item.examples.length, 3);
     assert.ok(item.distinction.length > 30);
+    assert.ok(item.scenarioLabel.length > 0);
+    assert.ok(item.scenario.includes("may"));
     if (item.detailHref) assert.ok(item.detailHref.startsWith("/"));
   }
 });
