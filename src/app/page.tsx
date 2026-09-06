@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Phone, Check, ExternalLink } from "lucide-react";
 import StateFinder from "@/components/StateFinder";
 import PromoPlayer from "@/components/PromoPlayer";
+import MarketMarquee from "@/components/MarketMarquee";
 import { featuredBlogPosts } from "@/lib/blogPosts";
 import { statePages } from "@/lib/statePages";
 import { googleBusinessUrl } from "@/lib/socialProfiles";
@@ -29,12 +30,6 @@ const operations = [
     href: "/new-venture",
     image: "/images/new-authority-card-v2.jpg",
   },
-];
-const markets = [
-  { name: "Progressive Commercial", image: "/images/markets/progressive.svg" },
-  { name: "Great West", image: "/images/markets/greatwest.svg" },
-  { name: "Northland", image: "/images/markets/northland.svg" },
-  { name: "Canal", image: "/images/markets/canal.png" },
 ];
 
 export default function HomePage() {
@@ -76,26 +71,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section className="market-band" aria-label="Trucking insurance markets">
-        <div className="site-container">
-          <p>Trucking markets include</p>
-          <div className="market-logos">
-            {markets.map((m) => (
-              <Image
-                key={m.name}
-                src={m.image}
-                alt={m.name}
-                width={180}
-                height={52}
-              />
-            ))}
-          </div>
-          <small>
-            Market access and eligibility depend on your operation, state, and
-            underwriting.
-          </small>
-        </div>
-      </section>
+      <MarketMarquee />
       <section className="site-section">
         <div className="site-container">
           <div className="section-header">
