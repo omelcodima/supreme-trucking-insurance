@@ -4,6 +4,7 @@ import { ArrowRight, Phone, Check, ExternalLink } from "lucide-react";
 import StateFinder from "@/components/StateFinder";
 import PromoPlayer from "@/components/PromoPlayer";
 import MarketMarquee from "@/components/MarketMarquee";
+import HeroScene from "@/components/HeroScene";
 import { featuredBlogPosts } from "@/lib/blogPosts";
 import { statePages } from "@/lib/statePages";
 import { googleBusinessUrl } from "@/lib/socialProfiles";
@@ -44,14 +45,14 @@ export default function HomePage() {
           sizes="100vw"
           className="home-hero-image"
         />
+        <HeroScene />
         <div className="home-hero-shade" />
         <div className="site-container home-hero-inner">
           <div className="home-hero-copy">
             <p className="hero-kicker">For the business behind the wheel</p>
             <h1>
-              Supreme
-              <br />
-              Trucking Insurance.
+              <span className="hero-brand-name">Supreme</span>
+              <span className="hero-brand-category">Trucking Insurance.</span>
             </h1>
             <p>
               Independent agents. Trucking-focused markets. Clear answers for
