@@ -437,7 +437,23 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .footer-secondary summary { min-height: 34px; font-weight: 600; }
 .footer-directory { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; padding-block: 20px; }
 .footer-legal { display: flex; justify-content: space-between; gap: 16px; padding-top: 12px; }
-.footer-legal > div { display: flex; gap: 20px; }
+.footer-legal > div { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.analytics-settings-link { color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.analytics-settings-link:hover { text-decoration: underline; }
+.analytics-consent { position: fixed; inset: auto 0 0; z-index: 60; border-top: 1px solid var(--border-strong); background: #fff; padding: 18px 0 max(18px, env(safe-area-inset-bottom)); box-shadow: 0 -4px 24px #16282012; max-height: 60svh; overflow-y: auto; }
+.analytics-consent-inner { display: flex; align-items: center; gap: 24px; }
+.analytics-consent h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+.analytics-consent p { max-width: 780px; font-size: 13px; line-height: 1.6; margin: 0; color: var(--text-muted); }
+.analytics-consent a { text-decoration: underline; }
+.analytics-consent-actions { display: flex; flex-shrink: 0; gap: 10px; }
+.analytics-consent button { min-height: 44px; padding: 10px 16px; border: 1px solid var(--border-strong); border-radius: 6px; background: #fff; color: var(--text-strong); font-size: 14px; font-weight: 600; cursor: pointer; }
+.analytics-consent button:hover { background: #f2f4f3; }
+body:has(.analytics-consent) { padding-bottom: var(--analytics-banner-height, 220px); }
+body:has(.analytics-consent) :is(.mobile-actions, .indication-shortcut) { visibility: hidden; }
+@media (max-width: 767px) {
+  .analytics-consent-inner { flex-direction: column; align-items: stretch; gap: 12px; }
+  .analytics-consent-actions button { flex: 1; }
+}
 .indication-shortcut { position: fixed; right: 22px; bottom: 22px; z-index: 35; display: flex; align-items: center; gap: 10px; padding: 12px 18px; background: #fff; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 18px #16282015; }
 .indication-shortcut svg { color: var(--cta); }
 @media (max-width: 1200px) { .header-phone { display: none; } }

@@ -106,6 +106,12 @@ export default function PrivacyPolicyPage() {
                     <li>General analytics and diagnostic information</li>
                   </ul>
                 </div>
+                <div id="google-analytics" className="scroll-mt-28">
+                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">D. Google Analytics</h3>
+                  <p>With your permission, we use Google Analytics to measure website visits and whether requests are successfully submitted. This uses analytics cookies. Our Google Analytics events do not include your application answers, contact details, DOT number, or VIN. We remove URL query parameters and fragments from the page addresses sent to Google Analytics and do not enable Google advertising personalization.</p>
+                  <p>Google Analytics does not load until you allow it. You can decline or withdraw permission using Analytics preferences in the footer. We also keep Google Analytics off when your browser sends Global Privacy Control or Do Not Track. This preference applies to Google Analytics, not to the information you submit to request our services or to other third-party services on the site.</p>
+                  <p>Learn more about <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="underline">how Google uses data from partner sites</a>.</p>
+                </div>
               </Section>
 
               <Section title="2. How We Use Your Information">

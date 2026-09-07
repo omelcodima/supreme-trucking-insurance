@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BrandLogo from "./BrandLogo";
+import AnalyticsPreferences from "./AnalyticsPreferences";
 import { classPages } from "@/lib/classPages";
 import { featuredStatePages } from "@/lib/statePages";
 import { googleBusinessUrl, socialProfiles } from "@/lib/socialProfiles";
@@ -92,6 +93,7 @@ export default function SiteFooter() {
           <p>© 2026 Supreme Trucking Insurance</p>
           <div>
             <Link href="/privacy-policy">Privacy</Link>
+            <AnalyticsPreferences />
             <Link href="/sms-terms-and-conditions">SMS Terms</Link>
             <Link href="/careers">Careers</Link>
           </div>
