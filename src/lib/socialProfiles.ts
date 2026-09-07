@@ -1,6 +1,9 @@
 export const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
+// Copied from this Business Profile's "Ask for reviews" dialog.
+export const googleReviewUrl = "https://g.page/r/CQeR52LtjVOEEBM/review";
+
 export const socialProfiles = [
   {
     label: "Facebook",

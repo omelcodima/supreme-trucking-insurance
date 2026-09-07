@@ -58,9 +58,12 @@ test("Airtable reads abort before a stalled upstream can exhaust a page build", 
       fetch: asFetch(
         async (_input, init) =>
           await new Promise<Response>((_resolve, reject) => {
-            init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), {
-              once: true,
-            });
+            // A mocked fetch has no socket to keep AbortSignal.timeout alive.
+            const deadline = setTimeout(() => reject(new Error("Expected abort signal")), 1_000);
+            init?.signal?.addEventListener("abort", () => {
+              clearTimeout(deadline);
+              reject(init.signal?.reason);
+            }, { once: true });
           }),
       ),
     }),

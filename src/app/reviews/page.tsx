@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ExternalLink } from "lucide-react";
-import { googleBusinessUrl } from "@/lib/socialProfiles";
+import Image from "next/image";
+import { ArrowRight, Download } from "lucide-react";
+import GoogleReviews from "@/components/GoogleReviews";
+import { googleReviewUrl } from "@/lib/socialProfiles";
 import { breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -34,20 +36,19 @@ export default function ReviewsPage() {
               Read client feedback on our Google Business profile, or share your
               experience working with Supreme.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href={googleBusinessUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button-primary"
-              >
-                Read reviews on Google
-                <ExternalLink size={17} aria-hidden="true" />
+          </div>
+          <GoogleReviews />
+          <div className="review-qr-band">
+            <a href={googleReviewUrl} target="_blank" rel="noopener noreferrer" aria-label="Leave a review for Supreme Trucking Insurance on Google">
+              <Image src="/downloads/supreme-google-review-qr.png" alt="QR code for Supreme's Google review page" width={144} height={144} unoptimized />
+            </a>
+            <div>
+              <h2>Share your experience</h2>
+              <p>Your feedback helps other trucking businesses get to know Supreme.</p>
+              <a href="/downloads/supreme-google-review-qr.png" download="Supreme-Google-Review-QR.png" className="text-link">
+                <Download size={16} aria-hidden="true" />
+                Download review QR code
               </a>
-              <Link href="/about" className="button-secondary">
-                Meet your agent
-                <ArrowRight size={17} aria-hidden="true" />
-              </Link>
             </div>
           </div>
         </div>

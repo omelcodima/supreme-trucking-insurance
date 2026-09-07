@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, Check, ExternalLink } from "lucide-react";
+import { ArrowRight, Phone, Check } from "lucide-react";
+import GoogleReviews from "@/components/GoogleReviews";
 import StateFinder from "@/components/StateFinder";
 import PromoPlayer from "@/components/PromoPlayer";
 import MarketMarquee from "@/components/MarketMarquee";
 import HeroScene from "@/components/HeroScene";
 import { featuredBlogPosts } from "@/lib/blogPosts";
 import { statePages } from "@/lib/statePages";
-import { googleBusinessUrl } from "@/lib/socialProfiles";
 
 const operations = [
   {
@@ -176,17 +176,8 @@ export default function HomePage() {
               ))}
             </ol>
           </div>
-          <div className="google-line">
-            <p>Get to know Supreme through our Google Business profile.</p>
-            <a
-              href={googleBusinessUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-link"
-            >
-              View on Google
-              <ExternalLink size={15} aria-hidden="true" />
-            </a>
+          <div className="home-review-block">
+            <GoogleReviews />
           </div>
         </div>
       </section>
