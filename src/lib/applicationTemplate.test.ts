@@ -253,3 +253,25 @@ test("both application submit paths include the same valid optional SMS choice",
   assert.equal(JSON.parse(bodies[2]).smsConsent.accepted, false);
   assert.equal(JSON.parse(bodies[2]).smsConsent.mobile, "");
 });
+
+test("full application cannot be used while template handlers are still unbound", () => {
+  assert.match(template, /class="application-root" inert aria-busy="true"/);
+  const bridge = readFileSync(new URL("../../public/application-bridge.js", import.meta.url), "utf8");
+  for (const ready of [false, true]) {
+    const root = {
+      inert: true,
+      querySelector: (selector: string) => ({ textContent: ready ? (selector.startsWith("footer") ? "Continue" : "Company") : "{{ onNext }}" }),
+      hasAttribute: () => true,
+      removeAttribute: () => {},
+    };
+    const window: { parent?: unknown; addEventListener: () => void } = { addEventListener: () => {} };
+    window.parent = window;
+    runInNewContext(bridge, {
+      window,
+      document: { querySelector: () => root, addEventListener: () => {}, body: {}, documentElement: {} },
+      MutationObserver: class { observe() {} }, ResizeObserver: class { observe() {} },
+      requestAnimationFrame: (callback: () => void) => callback(),
+    });
+    assert.equal(root.inert, !ready, "Readiness protection also applies outside an iframe");
+  }
+});

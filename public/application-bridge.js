@@ -1,11 +1,11 @@
 (() => {
-  if (window.parent === window) return;
+  const embedded = window.parent !== window;
   let previousHeight = 0;
   let previousStep = "";
   let queued = false;
   let started = false;
   function trackStart(event) {
-    if (started || !(event.target instanceof Element) || !event.target.closest(".application-root")) return;
+    if (!embedded || started || !(event.target instanceof Element) || !event.target.closest(".application-root")) return;
     if (!event.target.matches("input, select, textarea")) return;
     started = true;
     window.parent.postMessage({ type: "supreme:application-analytics", phase: "start" }, location.origin);
@@ -18,9 +18,18 @@
     if (
       !root ||
       !root.querySelector("header") ||
-      root.querySelector("header")?.textContent?.includes("{{")
+      root.querySelector("header")?.textContent?.includes("{{") ||
+      !root.querySelector("footer button:last-child")?.textContent?.trim() ||
+      root.querySelector("footer button:last-child")?.textContent?.includes("{{")
     )
       return;
+    // The standalone runtime briefly exposes unbound template handlers. Keep
+    // both pointer and keyboard input inert until the first render is complete.
+    if (root.hasAttribute("inert")) {
+      root.inert = false;
+      root.removeAttribute("aria-busy");
+    }
+    if (!embedded) return;
     const height = Math.ceil(root.getBoundingClientRect().height + 2);
     if (height > 100 && height !== previousHeight) {
       previousHeight = height;
