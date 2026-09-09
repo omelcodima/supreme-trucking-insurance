@@ -22,7 +22,7 @@
     "postcss": "8.5.26",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "sharp": "0.35.3",
+    "sharp": "0.35.4",
     "three": "^0.185.1"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
   },
   "overrides": {
     "next": {
-      "sharp": "0.35.3"
+      "sharp": "0.35.4"
     }
   }
 }
