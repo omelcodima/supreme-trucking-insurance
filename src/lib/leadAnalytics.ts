@@ -1,5 +1,5 @@
 export const APPLICATION_ANALYTICS_MESSAGE = "supreme:application-analytics";
-export const leadFormIds = ["quick_quote", "full_application", "contact", "coi_request"] as const;
+export const leadFormIds = ["quick_quote", "full_application", "contact", "coi_request", "instant_indication"] as const;
 export type LeadFormId = (typeof leadFormIds)[number];
 export type LeadPhase = "start" | "attempt" | "error" | "success";
 
@@ -10,7 +10,7 @@ export function isLeadFormId(value: unknown): value is LeadFormId {
 export function leadAnalyticsEvent(formId: LeadFormId, phase: LeadPhase) {
   const successEvent = formId === "coi_request"
     ? "coi_request_received"
-    : formId === "contact" ? "contact_request_received" : "generate_lead";
+    : formId === "contact" ? "contact_request_received" : formId === "instant_indication" ? "indication_request_received" : "generate_lead";
   return {
     name: phase === "success" ? successEvent : `lead_form_${phase}`,
     parameters: { form_id: formId, submission_result: phase === "success" ? "accepted" : phase },

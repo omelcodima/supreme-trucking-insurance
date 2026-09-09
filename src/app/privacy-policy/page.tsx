@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
               We respect your privacy and are committed to protecting the information you share with us when you request a quote, upload documents, or contact our team.
             </p>
             <div className="mt-6 inline-flex items-center rounded-full border border-[#DED3C4] bg-white/70 px-4 py-2 text-sm text-[#7B6B59]">
-              Effective Date: April 5, 2026
+              Updated: September 9, 2026
             </div>
           </div>
         </div>
@@ -114,6 +114,12 @@ export default function PrivacyPolicyPage() {
                 </div>
               </Section>
 
+              <div id="instant-indication" className="scroll-mt-28">
+                <Section title="Instant Indication Requests">
+                  <p>When you click Get instant indication, the details you submit are emailed to our team even if you do not continue to a full application. They include your DOT number and operating choices, a public DOT company match when available, the illustrative range, submission time, and an approximate device, browser and operating-system category. Device information is not used to identify you. We do not include raw IP addresses or a unique device fingerprint in this notification.</p>
+                  <p>Contact details are optional. If you select agent follow-up and provide a name, phone or email, we use those details to respond about this estimate. This does not enroll you in automated marketing or text messages. Typing into the indication form without submitting it does not send those entries to our team. Technical request information may be used briefly for abuse prevention.</p>
+                </Section>
+              </div>
               <Section title="2. How We Use Your Information">
                 <p>We may use your information to:</p>
                 <ul className="list-disc pl-6 space-y-1">

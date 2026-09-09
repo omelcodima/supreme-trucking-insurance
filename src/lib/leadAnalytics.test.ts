@@ -9,6 +9,7 @@ test("a lead conversion requires a success phase on a quote form", () => {
   for (const form of ["quick_quote", "full_application"] as const) assert.equal(leadAnalyticsEvent(form, "success").name, "generate_lead");
   assert.equal(leadAnalyticsEvent("coi_request", "success").name, "coi_request_received");
   assert.equal(leadAnalyticsEvent("contact", "success").name, "contact_request_received");
+  assert.equal(leadAnalyticsEvent("instant_indication", "success").name, "indication_request_received");
 });
 
 test("analytics parameters contain only a form identifier and outcome", () => {

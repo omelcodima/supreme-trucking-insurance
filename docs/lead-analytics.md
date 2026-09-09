@@ -20,12 +20,15 @@ Do not insert an arbitrary ID or reuse another project's property. Do not put pr
 
 | Event | When it fires | `form_id` |
 | --- | --- | --- |
-| `lead_form_start` | First input/change in a mounted form | `quick_quote`, `full_application`, `contact`, `coi_request` |
+| `lead_form_start` | First input/change in a mounted form | `quick_quote`, `full_application`, `contact`, `coi_request`, `instant_indication` |
 | `lead_form_attempt` | Client begins a validated submission request | Same |
 | `lead_form_error` | Request fails or response does not explicitly accept it | Same |
 | `generate_lead` | Quote API responds with HTTP success AND JSON `ok: true` | `quick_quote`, `full_application` |
 | `contact_request_received` | Contact API explicitly accepts the request | `contact` |
 | `coi_request_received` | COI API explicitly accepts the request | `coi_request` |
+| `indication_request_received` | Indication API returns HTTP success, `ok: true`, and `notification: accepted` | `instant_indication` |
+
+Instant Indication is a separate, lower-intent request. It never emits `generate_lead` and does not count as a completed quote application. Its operational email is sent only after the visitor presses the submit button; GA start events are consent-gated, contain no field contents, and do not trigger email.
 
 Only `form_id` and `submission_result` accompany form events. No contact names, email addresses, telephone numbers, DOT numbers, VINs, or free-text answers are sent in these events. Link events contain a destination path or generic `phone`/`email` label, not raw mail or telephone addresses.
 

@@ -7,13 +7,16 @@ test("email sends a PDF attachment and keeps unsafe text escaped", async () => {
   process.env.RESEND_API_KEY = "test-key";
   const original = globalThis.fetch;
   let payload: Record<string, unknown> = {};
+  let requestHeaders: Headers | undefined;
   globalThis.fetch = async (_input, init) => {
     payload = JSON.parse(String(init?.body));
+    requestHeaders = new Headers(init?.headers);
     return Response.json({ id: "test-message" });
   };
   try {
     const attachment = { filename: "application.pdf", content: "JVBERi0=", content_type: "application/pdf" };
-    await sendLeadEmail({ to: "info@example.com", subject: "Test", text: "<script>not markup</script>", attachments: [attachment] });
+    await sendLeadEmail({ to: "info@example.com", subject: "Test", text: "<script>not markup</script>", attachments: [attachment], idempotencyKey: "indication/test" });
+    assert.equal(requestHeaders?.get("Idempotency-Key"), "indication/test");
     assert.deepEqual(payload.attachments, [attachment]);
     assert.match(String(payload.html), /&lt;script&gt;/);
     assert.doesNotMatch(String(payload.html), /<script>/);

@@ -8,6 +8,7 @@ type SendLeadEmailInput = {
   scheduledAt?: string;
   tags?: Array<{ name: string; value: string }>;
   attachments?: EmailAttachment[];
+  idempotencyKey?: string;
 };
 
 function htmlEscape(value: string) {
@@ -22,7 +23,7 @@ function textToHtml(text: string) {
   return `<pre style="font-family:Arial,Helvetica,sans-serif;white-space:pre-wrap;line-height:1.5;color:#1f2933">${htmlEscape(text)}</pre>`;
 }
 
-export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, tags, attachments }: SendLeadEmailInput) {
+export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, tags, attachments, idempotencyKey }: SendLeadEmailInput) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM || "Supreme Trucking Insurance <quotes@supremetruckinginsurance.com>";
 
@@ -37,6 +38,7 @@ export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, t
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
       "User-Agent": "supreme-trucking-insurance/1.0",
+      ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
     },
     body: JSON.stringify({
       from,

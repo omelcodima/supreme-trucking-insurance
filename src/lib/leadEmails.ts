@@ -14,6 +14,7 @@ type LeadEmailInput = {
   subject: string;
   text: string;
   attachments?: EmailAttachment[];
+  idempotencyKey?: string;
 };
 
 type CustomerEmailInput = {
@@ -52,6 +53,7 @@ export async function sendInternalLeadNotification({
   subject,
   text,
   attachments,
+  idempotencyKey,
 }: LeadEmailInput) {
   return sendLeadEmail({
     to: leadNotificationEmail,
@@ -60,6 +62,7 @@ export async function sendInternalLeadNotification({
     replyTo: contactEmail,
     tags: tags(leadType, company),
     attachments,
+    idempotencyKey,
   });
 }
 

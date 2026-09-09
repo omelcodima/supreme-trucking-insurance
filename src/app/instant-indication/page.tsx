@@ -1,382 +1,191 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Check, Circle, FileCheck2, LoaderCircle, Mail, Phone, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { cargoLabel, cargoOptions, indicationCurrency, indicationNoticeVersion, radiusLabel, radiusOptions, type IndicationEstimate, type IndicationInput, type IndicationLookup } from "@/lib/instantIndication";
+import { trackLeadForm } from "@/lib/leadAnalytics";
 
-const inputClass =
-  "w-full rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-4 py-3 text-[#2F261C] focus:outline-none focus:ring-2 focus:ring-[#f97316] focus:border-transparent transition-all";
-const labelClass = "mb-1.5 block text-sm font-semibold text-[#5A4B3B]";
+const initialForm = { dot: "", cargo: "", radius: "", contactRequested: false, name: "", phone: "", email: "" };
+type Outcome = { lookup: IndicationLookup; estimate: IndicationEstimate; accepted: boolean };
 
-type EstimateForm = {
-  dot: string;
-  cargo: string;
-  radius: string;
-};
-
-type DotLookupStatus = "idle" | "loading" | "matched" | "missing-key" | "not-found" | "error";
-
-type DotCarrier = {
-  legalName: string;
-  dbaName?: string;
-  dotNumber?: string;
-  city?: string;
-  state?: string;
-  powerUnits?: string;
-  totalDrivers?: string;
-  statusCode?: string;
-  addDate?: string;
-  carrierOperation?: string;
-  classDef?: string;
-};
-
-const initialForm: EstimateForm = {
-  dot: "",
-  cargo: "",
-  radius: "",
-};
-
-const processingStepCount = 5;
-const cargoLabels: Record<string, string> = { general: "general freight", reefer: "reefer", "car-hauler": "car hauler", flatbed: "flatbed", "hot-shot": "hot shot" };
-
-const processingDurationMs = 5600;
-
-function roundToHundred(value: number) {
-  return Math.round(value / 100) * 100;
-}
-
-function currency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function readPositiveNumber(value?: string) {
-  const parsed = Number.parseInt(value || "", 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
-}
-
-function isRecentDot(addDate?: string) {
-  if (!addDate || addDate.length < 8) return false;
-
-  const year = Number.parseInt(addDate.slice(0, 4), 10);
-  const month = Number.parseInt(addDate.slice(4, 6), 10) - 1;
-  const day = Number.parseInt(addDate.slice(6, 8), 10);
-  const issuedAt = new Date(year, month, day);
-
-  if (Number.isNaN(issuedAt.getTime())) return false;
-
-  const months18 = 1000 * 60 * 60 * 24 * 548;
-  return Date.now() - issuedAt.getTime() < months18;
-}
-
-function inferOperation(carrier: DotCarrier | null, trucks: number) {
-  if (isRecentDot(carrier?.addDate)) return "new-authority";
-  if (trucks >= 11) return "fleet";
-  return "owner-operator";
-}
-
-function operationLabel(operation: string) {
-  if (operation === "new-authority") return "Recently registered DOT";
-  if (operation === "fleet") return "Fleet";
-  return "Owner operator / small fleet";
-}
-
-function calculateEstimate(form: EstimateForm, carrier: DotCarrier | null) {
-  const trucks = readPositiveNumber(carrier?.powerUnits) || 1;
-  const operation = inferOperation(carrier, trucks);
-  let perTruck = 7200;
-
-  if (operation === "new-authority") perTruck *= 1.22;
-  if (operation === "fleet") perTruck *= 0.9;
-  if (form.cargo === "reefer") perTruck *= 1.1;
-  if (form.cargo === "car-hauler") perTruck *= 1.16;
-  if (form.cargo === "flatbed") perTruck *= 1.08;
-  if (form.cargo === "hot-shot") perTruck *= 0.95;
-  if (form.radius === "long-haul") perTruck *= 1.15;
-  if (["CA", "TX", "FL", "IL"].includes(carrier?.state || "")) perTruck *= 1.07;
-
-  const midpoint = roundToHundred(perTruck);
-  const low = roundToHundred(midpoint * 0.88);
-  const high = roundToHundred(midpoint * 1.16);
-
-  return {
-    trucks,
-    low,
-    high,
-    totalLow: low * trucks,
-    totalHigh: high * trucks,
-    state: carrier?.state || "DOT state unavailable",
-    operation,
-  };
+function readOutcome(value: unknown, success: boolean): Outcome | null {
+  if (!value || typeof value !== "object") return null;
+  const data = value as { ok?: boolean; notification?: string; estimate?: IndicationEstimate; lookup?: IndicationLookup };
+  if (!data.estimate || !Number.isFinite(data.estimate.low) || !Number.isFinite(data.estimate.high) || data.estimate.low <= 0 || data.estimate.high < data.estimate.low || !data.lookup) return null;
+  return { estimate: data.estimate, lookup: data.lookup, accepted: success && data.ok === true && data.notification === "accepted" };
 }
 
 export default function InstantIndicationPage() {
-  const submissionLock = useRef(false);
-  const abortRef = useRef<AbortController | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => () => {
-    abortRef.current?.abort();
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  }, []);
   const [form, setForm] = useState(initialForm);
   const [processing, setProcessing] = useState(false);
-  const [processingStep, setProcessingStep] = useState(0);
-  const [showResult, setShowResult] = useState(false);
-  const [dotLookupStatus, setDotLookupStatus] = useState<DotLookupStatus>("idle");
-  const [carrier, setCarrier] = useState<DotCarrier | null>(null);
+  const [outcome, setOutcome] = useState<Outcome | null>(null);
+  const [error, setError] = useState("");
+  const [period, setPeriod] = useState<"annual" | "monthly">("annual");
+  const mounted = useRef(true);
+  const lock = useRef(false);
+  const pending = useRef<IndicationInput | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+  const honeypot = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; if (timer.current) clearTimeout(timer.current); };
+  }, []);
 
-  const estimate = useMemo(() => calculateEstimate(form, carrier), [form, carrier]);
+  function change(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const target = event.target;
+    const next = { ...form, [target.name]: target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value };
+    if (!next.contactRequested) { next.name = ""; next.phone = ""; next.email = ""; }
+    setForm(next);
+    setOutcome(null);
+    setError("");
+    pending.current = null;
+  }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const nextForm = { ...form, [event.target.name]: event.target.value };
-    setForm(nextForm);
-    setShowResult(false);
-    if (event.target.name === "dot") {
-      setCarrier(null);
-      setDotLookupStatus("idle");
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
+  async function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (submissionLock.current) return;
-    submissionLock.current = true;
-    const controller = new AbortController();
-    abortRef.current = controller;
+    if (lock.current || outcome?.accepted) return;
+    if (form.contactRequested && (!form.name.trim() || (!form.phone.trim() && !form.email.trim()))) {
+      setError("Add your name and a phone number or email for follow-up.");
+      return;
+    }
+    lock.current = true;
     setProcessing(true);
-    setProcessingStep(0);
-    setShowResult(false);
-    setCarrier(null);
-    setDotLookupStatus(form.dot.trim() ? "loading" : "idle");
+    setOutcome(null);
+    setError("");
     const startedAt = Date.now();
-
-    intervalRef.current = setInterval(() => {
-      setProcessingStep((step) => Math.min(step + 1, processingStepCount - 1));
-    }, processingDurationMs / processingStepCount);
-
-    if (form.dot.trim()) {
-      try {
-        const response = await fetch(`/api/dot-lookup?dot=${encodeURIComponent(form.dot.trim())}`, {
-          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(12_000)]),
-        });
-        const data = await response.json();
-
-        if (data.ok && data.carrier?.legalName) {
-          setCarrier(data.carrier);
-          setDotLookupStatus("matched");
-        } else if (data.reason === "missing_key") {
-          setDotLookupStatus("missing-key");
-        } else if (data.reason === "not_found" || data.reason === "invalid_dot") {
-          setDotLookupStatus("not-found");
-        } else {
-          setDotLookupStatus("error");
-        }
-      } catch {
-        if (controller.signal.aborted) return;
-        setDotLookupStatus("error");
-      }
-    }
-
-    const remainingDelay = Math.max(0, processingDurationMs - (Date.now() - startedAt));
-    timeoutRef.current = setTimeout(() => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      submissionLock.current = false;
+    const data = pending.current ?? { ...form, requestId: crypto.randomUUID(), submittedAt: new Date().toISOString(), noticeVersion: indicationNoticeVersion };
+    pending.current = data;
+    trackLeadForm("instant_indication", "attempt");
+    if (window.matchMedia("(max-width: 800px)").matches) resultRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
+    let result: Outcome | null = null;
+    let detail = "We could not confirm your request was sent. Please retry or call (360) 936-7196.";
+    try {
+      // Send only on submit. keepalive can finish this small request after navigation.
+      const response = await fetch("/api/instant-indication", {
+        method: "POST", keepalive: true, signal: AbortSignal.timeout(22_000),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, website: honeypot.current?.value || "" }),
+      });
+      const body = await response.json();
+      result = readOutcome(body, response.ok);
+      if (!response.ok && typeof body.detail === "string") detail = body.detail;
+    } catch { /* Retain the same request ID and values for a safe retry. */ }
+    trackLeadForm("instant_indication", result?.accepted ? "success" : "error");
+    if (!mounted.current) return;
+    timer.current = setTimeout(() => {
+      lock.current = false;
       setProcessing(false);
-      setShowResult(true);
-    }, remainingDelay);
-  };
+      setOutcome(result);
+      setError(result?.accepted ? "" : detail);
+      resultRef.current?.focus({ preventScroll: true });
+    }, Math.max(0, 5600 - (Date.now() - startedAt)));
+  }
 
-  const dotHelperText = () => {
-    if (dotLookupStatus === "loading") return "Looking for DOT company details while the estimate is prepared.";
-    if (dotLookupStatus === "matched" && carrier) {
-      return `Matched DOT to "${carrier.legalName}" from U.S. DOT records.`;
-    }
-    if (dotLookupStatus === "missing-key") {
-      return "DOT lookup is temporarily unavailable. Your estimate uses general assumptions.";
-    }
-    if (dotLookupStatus === "not-found") {
-      return "No DOT company match came back. The indication can still continue from your answers.";
-    }
-    if (dotLookupStatus === "error") {
-      return "DOT lookup is unavailable right now. The indication can still continue from your answers.";
-    }
-    return "Enter your USDOT number to look up your company.";
-  };
+  const amount = (value: number) => indicationCurrency(period === "annual" ? value : value / 12);
 
   return (
-    <>
-      <section className="section-shell">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 pb-14 pt-14 md:pb-18 md:pt-18 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <span className="eyebrow mb-5">Instant indication</span>
-            <h1 className="text-4xl font-black leading-tight tracking-normal text-[#2F261C] md:text-6xl">
-              Quick trucking insurance indication.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-[#5A4B3B]">
-              Enter a few details and get a rough annual range per truck. This is not a bindable quote, approval, or carrier offer.
-            </p>
-          </div>
-
-          <div className="card-premium rounded-[1.8rem] p-6 md:p-8">
-            <div className="mb-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7B6B59]">3 quick inputs</p>
-                <h2 className="mt-2 text-2xl font-black text-[#2F261C]">Build my indication</h2>
+    <section className="site-section indication-page">
+      <div className="site-container">
+        <header className="indication-heading">
+          <p className="section-kicker">Instant indication</p>
+          <h1 className="section-heading">Truck insurance estimate.</h1>
+          <p className="section-description">Start with a planning range. Get personal help when you are ready.</p>
+        </header>
+        <div className="indication-workspace">
+          <form onSubmit={submit} data-analytics-form="instant_indication" className="indication-form">
+            <div className="indication-panel-heading"><h2>Your operation</h2><Truck size={22} aria-hidden="true" /></div>
+            <fieldset disabled={processing}>
+              <legend className="sr-only">Trucking operation and optional contact details</legend>
+              <div className="form-field">
+                <label htmlFor="indication-dot">USDOT number <span>(optional)</span></label>
+                <input id="indication-dot" name="dot" value={form.dot} onChange={change} inputMode="numeric" pattern="[0-9]{2,9}" maxLength={9} placeholder="USDOT number" />
+                <p className="indication-help">Company details come from the public U.S. DOT census. No DOT yet? Leave this blank.</p>
               </div>
-              <div className="hidden h-12 w-12 items-center justify-center rounded-2xl bg-[#f97316] text-white shadow-lg sm:flex">
-                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6">
-                  <path
-                    fill="currentColor"
-                    d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 4h10V4H7v2Zm1 4h2V8H8v2Zm4 0h2V8h-2v2Zm4 0h1V8h-1v2Zm-8 4h2v-2H8v2Zm4 0h2v-2h-2v2Zm4 0h1v-2h-1v2Zm-8 4h2v-2H8v2Zm4 0h2v-2h-2v2Zm4 0h1v-2h-1v2Z"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label htmlFor="indication-dot" className={labelClass}>DOT number</label>
-                <input id="indication-dot" name="dot" disabled={processing} value={form.dot} onChange={handleChange} className={inputClass} placeholder="1234567" inputMode="numeric" />
-                <p className="mt-2 text-xs leading-5 text-[#7B6B59]">
-                  {dotHelperText()}
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="indication-cargo" className={labelClass}>Cargo type</label>
-                  <select id="indication-cargo" name="cargo" disabled={processing} required value={form.cargo} onChange={handleChange} className={inputClass}>
-                    <option value="">Select...</option>
-                    <option value="general">General freight</option>
-                    <option value="reefer">Reefer</option>
-                    <option value="car-hauler">Car hauler</option>
-                    <option value="flatbed">Flatbed</option>
-                    <option value="hot-shot">Hot shot</option>
+              <div className="indication-fields">
+                <div className="form-field">
+                  <label htmlFor="indication-cargo">Cargo type</label>
+                  <select id="indication-cargo" name="cargo" value={form.cargo} onChange={change} required>
+                    <option value="">Select cargo</option>
+                    {cargoOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                   </select>
                 </div>
-                <div>
-                  <label htmlFor="indication-radius" className={labelClass}>Typical radius</label>
-                  <select id="indication-radius" name="radius" disabled={processing} required value={form.radius} onChange={handleChange} className={inputClass}>
-                    <option value="">Select...</option>
-                    <option value="long-haul">Long haul</option>
-                    <option value="local">Local</option>
+                <div className="form-field">
+                  <label htmlFor="indication-radius">Typical radius</label>
+                  <select id="indication-radius" name="radius" value={form.radius} onChange={change} required>
+                    <option value="">Select radius</option>
+                    {radiusOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                   </select>
                 </div>
               </div>
-
-              <button
-                type="submit"
-                disabled={processing}
-                className="w-full rounded-xl bg-[#f97316] px-6 py-4 text-lg font-black text-white shadow-lg transition-colors hover:bg-orange-600 disabled:cursor-wait disabled:opacity-75"
-              >
-                {processing ? "Preparing your estimate..." : "Get instant indication"}
+              <div className="indication-contact">
+                <label className="indication-contact-toggle" htmlFor="indication-follow-up">
+                  <input id="indication-follow-up" name="contactRequested" type="checkbox" checked={form.contactRequested} onChange={change} />
+                  <span>I would like an agent to follow up about this estimate.</span>
+                </label>
+                <p className="indication-help">Optional. You can see the range without sharing contact details.</p>
+                {form.contactRequested && <div className="indication-contact-fields">
+                  <div className="form-field"><label htmlFor="indication-name">Your name</label><input id="indication-name" name="name" autoComplete="name" maxLength={100} required value={form.name} onChange={change} /></div>
+                  <div className="indication-fields">
+                    <div className="form-field"><label htmlFor="indication-phone">Phone</label><input id="indication-phone" name="phone" type="tel" autoComplete="tel" maxLength={30} value={form.phone} onChange={change} required={!form.email} /></div>
+                    <div className="form-field"><label htmlFor="indication-email">Email</label><input id="indication-email" name="email" type="email" autoComplete="email" maxLength={254} value={form.email} onChange={change} required={!form.phone} /></div>
+                  </div>
+                  <p className="indication-help">Provide a phone number or email. This requests follow-up about this estimate, not marketing texts.</p>
+                </div>}
+              </div>
+              <div className="indication-honeypot" aria-hidden="true"><label htmlFor="indication-website">Website</label><input id="indication-website" name="website" ref={honeypot} autoComplete="off" tabIndex={-1} /></div>
+              <p className="indication-notice">By clicking below, you send these details and an approximate device/browser category to Supreme, even if you do not complete a full application. <Link href="/privacy-policy#instant-indication">Privacy details</Link></p>
+              <button type="submit" className="button-primary indication-submit" disabled={processing || outcome?.accepted}>
+                {processing ? <><LoaderCircle className="indication-spinner" size={18} aria-hidden="true" /> Preparing your estimate</> : outcome?.accepted ? <><Check size={18} aria-hidden="true" /> Request sent</> : <>{error ? "Retry indication request" : "Get instant indication"}{error ? <RotateCcw size={18} aria-hidden="true" /> : <ArrowRight size={18} aria-hidden="true" />}</>}
               </button>
-            </form>
-          </div>
-        </div>
-      </section>
+            </fieldset>
+            <p className="indication-help indication-limit"><ShieldCheck size={16} aria-hidden="true" /> Planning only. Not a bindable quote or carrier offer.</p>
+          </form>
 
-      <section className="section-soft py-12 md:py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="card-premium rounded-[1.8rem] p-6 md:p-8">
-            {processing ? (
-              <div className="flex min-h-72 flex-col items-center justify-center text-center">
-                <div className="mb-5 grid h-16 w-16 place-items-center rounded-3xl bg-[#FFF3E8] text-[#f97316]">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#F8C49A] border-t-[#f97316]" />
-                </div>
-                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
-                  Building indication
-                </p>
-                <h2 className="mt-3 text-2xl font-black text-[#2F261C]" role="status">
-                  {dotLookupStatus === "loading" ? "Looking up your DOT record" : "Preparing your estimate"}
-                </h2>
-                <div role="progressbar" aria-label="Preparing estimate" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.min(95, Math.round(((processingStep + 1) / processingStepCount) * 100))} className="mt-6 w-full max-w-xl overflow-hidden rounded-full bg-[#E7DED2]">
-                  <div
-                    className="h-3 rounded-full bg-[#f97316] transition-all duration-700 ease-out"
-                    style={{ width: `${Math.min(95, ((processingStep + 1) / processingStepCount) * 100)}%` }}
-                  />
-                </div>
-                <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-[#7B6B59]">
-                  {Math.min(95, Math.round(((processingStep + 1) / processingStepCount) * 100))}%
-                </p>
-                <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
-                  Illustrative estimate, not live carrier pricing or approval.
-                </p>
+          <div ref={resultRef} className={`indication-result ${processing ? "is-processing" : ""}`} tabIndex={-1} aria-label="Indication result">
+            {processing ? <div className="indication-processing" role="status">
+              <p className="section-kicker">Preparing your indication</p>
+              <h2>{form.dot ? "Looking up your operation." : "Putting your details together."}</h2>
+              <div className="indication-road" aria-hidden="true"><Truck className="indication-road-truck" size={48} /><span /></div>
+              <div className="indication-progress" role="progressbar" aria-label="Preparing estimate and sending request"><span /></div>
+              <ul className="indication-stages">
+                <li><Check size={18} aria-hidden="true" /> Operating details provided</li>
+                <li>{form.dot ? <LoaderCircle size={18} className="indication-spinner" aria-hidden="true" /> : <Circle size={18} aria-hidden="true" />}{form.dot ? "Public DOT lookup and budget preparation" : "Budget preparation without a DOT record"}</li>
+                <li><Mail size={18} aria-hidden="true" /> Sending this request to Supreme</li>
+              </ul>
+              <p className="indication-help">This checks a public company record when a DOT is provided. It does not request live carrier prices or approval.</p>
+            </div> : outcome ? <>
+              <div className="indication-result-heading"><p className="section-kicker">Illustrative planning range</p><FileCheck2 size={24} aria-hidden="true" /></div>
+              <div className="indication-period" role="group" aria-label="Budget period">
+                <button type="button" aria-pressed={period === "annual"} onClick={() => setPeriod("annual")}>Annual</button>
+                <button type="button" aria-pressed={period === "monthly"} onClick={() => setPeriod("monthly")}>Monthly equivalent</button>
               </div>
-            ) : showResult ? (
-              <>
-                <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">Non-binding indication</p>
-                {carrier && (
-                  <div className="mt-4 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm leading-6 text-[#5A4B3B]">
-                    <span className="font-black text-[#2F261C]">DOT match:</span> &ldquo;{carrier.legalName}&rdquo;
-                    {carrier.dbaName ? ` DBA ${carrier.dbaName}` : ""}
-                    {carrier.city || carrier.state ? (
-                      <span>
-                        {" "}
-                        - {[carrier.city, carrier.state].filter(Boolean).join(", ")}
-                      </span>
-                    ) : null}
-                    {carrier.powerUnits ? (
-                      <span className="mt-1 block text-xs uppercase tracking-[0.14em] text-[#7B6B59]">
-                        {carrier.powerUnits} power unit{carrier.powerUnits === "1" ? "" : "s"}
-                        {carrier.totalDrivers ? ` / ${carrier.totalDrivers} driver${carrier.totalDrivers === "1" ? "" : "s"}` : ""}
-                        {carrier.statusCode === "A" ? " / Active DOT record" : ""}
-                        {` / ${operationLabel(estimate.operation)}`}
-                      </span>
-                    ) : null}
-                  </div>
-                )}
-                {!carrier && dotLookupStatus !== "idle" && (
-                  <div className="mt-4 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-4 text-sm leading-6 text-[#5A4B3B]">
-                    {dotHelperText()}
-                  </div>
-                )}
-                <h2 className="mt-3 text-3xl font-black text-[#2F261C]">
-                  {currency(estimate.low)} - {currency(estimate.high)} per truck
-                </h2>
-                <p className="mt-3 text-[#5A4B3B]">
-                  Estimated annual indication for {estimate.trucks} truck{estimate.trucks === 1 ? "" : "s"}:{" "}
-                  <strong className="text-[#2F261C]">
-                    {currency(estimate.totalLow)} - {currency(estimate.totalHigh)}
-                  </strong>
-                </p>
-                <p className="mt-2 text-sm leading-6 text-[#7B6B59]">
-                  {cargoLabels[form.cargo] || "Selected cargo"}, {form.radius === "long-haul" ? "long haul" : "local"}.
-                  {carrier ? ` DOT record: ${estimate.state}.` : " No DOT match: assumes one truck; fleet details are unverified."}
-                </p>
-                <div className="mt-6 rounded-2xl border border-[#DED3C4] bg-[#FFFDF9] p-5 text-sm leading-6 text-[#5A4B3B]">
-                  This is a quick indication based on broad assumptions. Final pricing depends on filings, drivers, garaging, radius,
-                  commodities, losses, vehicle details, and carrier underwriting.
-                </div>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <Link href="/quote" className="rounded-xl bg-[#f97316] px-6 py-4 text-center font-black text-white shadow-lg hover:bg-orange-600">
-                    Continue to full quote
-                  </Link>
-                  <a href="tel:+13609367196" className="rounded-xl border border-[#DED3C4] bg-[#FFFDF9] px-6 py-4 text-center font-black text-[#2F261C] hover:border-[#f97316] hover:text-[#f97316]">
-                    Call (360) 936-7196
-                  </a>
-                </div>
-              </>
-            ) : (
-              <div className="flex min-h-72 flex-col items-center justify-center text-center">
-                <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#FFF3E8] text-[#f97316]">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-8 w-8">
-                    <path fill="currentColor" d="M4 19h16v2H4v-2Zm2-3h2V8H6v8Zm5 0h2V3h-2v13Zm5 0h2v-6h-2v6Z" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-black text-[#2F261C]">Your indication will appear here.</h2>
-                <p className="mt-3 max-w-md text-sm leading-6 text-[#5A4B3B]">
-                  Enter your DOT number, cargo type, and radius to get started.
-                </p>
-              </div>
-            )}
+              <h2 className="indication-price"><span>{amount(outcome.estimate.low)}</span><span aria-hidden="true">–</span><span className="sr-only">to</span><span>{amount(outcome.estimate.high)}</span></h2>
+              <p className="indication-price-label">per truck · {period === "annual" ? "per year" : "annual estimate divided by 12, not a payment quote"}</p>
+              <p className="indication-context">{cargoLabel(form.cargo)} · {radiusLabel(form.radius)}</p>
+              {outcome.lookup.carrier ? <dl className="indication-record">
+                <div><dt>Company in DOT record</dt><dd>{outcome.lookup.carrier.legalName}</dd></div>
+                <div><dt>Home state</dt><dd>{outcome.lookup.carrier.state || "Not confirmed"}</dd></div>
+                <div><dt>Power units on record</dt><dd>{outcome.estimate.trucks ?? "Not confirmed"}</dd></div>
+              </dl> : <p className="indication-record-note">{outcome.lookup.status === "not-requested" ? "No DOT provided." : outcome.lookup.status === "not-found" ? "No matching DOT company was found." : "DOT lookup is temporarily unavailable."} Company, state and unit count are unconfirmed. The range uses general assumptions.</p>}
+              {outcome.estimate.totalLow !== null && outcome.estimate.totalHigh !== null && <p className="indication-record-note">Annual fleet planning range for {outcome.estimate.trucks} reported power units: <strong>{indicationCurrency(outcome.estimate.totalLow)} to {indicationCurrency(outcome.estimate.totalHigh)}</strong>.</p>}
+              <details className="indication-assumptions"><summary>What this range means</summary>
+                <p>This is an illustrative model, not a live quote or a statistical range of carrier offers. Coverage limits, cargo coverage, vehicle values, deductibles, driver history and losses have not been priced. A DOT registration date does not confirm insurance or operating experience.</p>
+                <p>For context only, Progressive reports a 2025 average of $926 a month per power unit for for-hire transport policies with no violations, covering liability and physical damage. That is not a Supreme quote or a complete coverage package. <a href="https://www.progressivecommercial.com/commercial-auto-insurance/truck-insurance/commercial-truck-insurance-cost/" target="_blank" rel="noopener noreferrer">Read the source</a>.</p>
+              </details>
+              {outcome.accepted && <p className="indication-received" role="status"><Check size={18} aria-hidden="true" /><span>{form.contactRequested ? "Your estimate request and contact details were sent to Supreme for follow-up." : "Your estimate request was sent to Supreme. No callback was requested."}</span></p>}
+              <Link href="/quote" className="button-primary indication-continue">Get a personalized quote <ArrowRight size={18} aria-hidden="true" /></Link>
+              <a href="tel:+13609367196" className="indication-call"><Phone size={16} aria-hidden="true" /> (360) 936-7196</a>
+            </> : <div className="indication-empty">
+              <div className="indication-image"><Image src="/images/hero-premium.jpg" alt="Commercial truck on the open highway" fill sizes="(min-width: 900px) 560px, 100vw" /></div>
+              <div className="indication-empty-copy"><p className="section-kicker">A starting point, not a promise</p><h2>Know your next step.</h2><p>A planning range for your operation, with a trucking specialist ready to help you turn it into a real quote.</p><ul><li><Check size={17} aria-hidden="true" /> Public DOT company lookup</li><li><Check size={17} aria-hidden="true" /> No full application required here</li><li><Check size={17} aria-hidden="true" /> Contact details are optional</li></ul></div>
+            </div>}
+            {!processing && error && <p className="indication-error" role="alert">{error}</p>}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
