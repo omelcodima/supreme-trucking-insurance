@@ -2,11 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
+import { smsDisclosure } from "./smsConsent.ts";
 
 const template = readFileSync(
   new URL("../application/template.html", import.meta.url),
   "utf8",
-);
+).replace("__SMS_DISCLOSURE_JSON__", JSON.stringify(smsDisclosure));
 const logic = template.match(
   /<script type="text\/x-dc"[^>]*>([\s\S]*?)<\/script>/,
 )?.[1];
@@ -22,11 +23,18 @@ interface Application {
     unitHistory: { units: string }[];
     sentVia: string | null;
     validationMessage: string;
+    role: string;
+    smsAccepted: boolean;
+    smsMobile: string;
+    smsError: string;
   };
   onSubmitOnline(): Promise<void>;
   buildSummary(): string;
   onStartFresh(): void;
   componentDidMount(): void;
+  onSmsMobile(event: { target: { value: string } }): void;
+  onRoleClick(event: { currentTarget: { dataset: { role: string } } }): void;
+  onNext(): void;
 }
 
 function createApplication(
@@ -208,4 +216,40 @@ test("embedded application reports acceptance, not just an HTTP success", async 
     await fetch("/api/dot-lookup?dot=95050");
     assert.equal(messages.length, 2, "Registry lookups are not application attempts");
   }
+});
+
+test("full application consent is never restored from draft or retained on reset, number or role change", () => {
+  const app = createApplication(async () => ({ ok: true }), { smsAccepted: true, smsMobile: "3605550123", form: { legalName: "TEST" } });
+  app.componentDidMount();
+  assert.equal(app.state.smsAccepted, false); assert.equal(app.state.smsMobile, "");
+  app.state.smsAccepted = true;
+  app.onSmsMobile({ target: { value: "3605550124" } });
+  assert.equal(app.state.smsAccepted, false);
+  app.state.smsAccepted = true;
+  app.onRoleClick({ currentTarget: { dataset: { role: "Agent" } } });
+  assert.equal(app.state.smsAccepted, false); assert.equal(app.state.smsMobile, "");
+  app.state.smsAccepted = true;
+  app.onStartFresh();
+  assert.equal(app.state.smsAccepted, false);
+});
+
+test("both application submit paths include the same valid optional SMS choice", async () => {
+  const bodies: string[] = [];
+  const app = createApplication(async body => { bodies.push(body); return { ok: true }; });
+  app.state.form.legalName = "TEST"; app.state.form.email = "test@example.invalid";
+  app.state.smsAccepted = true; app.state.smsMobile = "123";
+  await app.onSubmitOnline();
+  assert.equal(bodies.length, 0); assert.match(app.state.smsError, /mobile number/);
+  app.state.smsMobile = "(360) 555-0123";
+  await app.onSubmitOnline();
+  assert.deepEqual(JSON.parse(bodies[0]).smsConsent, { accepted: true, mobile: "+13605550123", version: smsDisclosure.version });
+  assert.equal(JSON.parse(bodies[0]).submitterRole, "Customer");
+  app.state.form.legalName = "TEST FINISH"; app.state.step = 7;
+  app.onNext();
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.deepEqual(JSON.parse(bodies[1]).smsConsent, JSON.parse(bodies[0]).smsConsent);
+  app.state.role = "Agent"; app.state.form.legalName = "TEST AGENT";
+  await app.onSubmitOnline();
+  assert.equal(JSON.parse(bodies[2]).smsConsent.accepted, false);
+  assert.equal(JSON.parse(bodies[2]).smsConsent.mobile, "");
 });

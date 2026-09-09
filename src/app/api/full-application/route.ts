@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
+import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
 import { getQuotesTable } from "../../../../lib/airtable";
 import {
   leadNotificationEmail,
@@ -18,7 +20,10 @@ type FullApplicationPayload = {
   drivers?: unknown[];
   equipment?: unknown[];
   claims?: unknown[];
+  smsConsent?: unknown;
+  submitterRole?: unknown;
 };
+type ValidatedApplication = Required<Omit<FullApplicationPayload, "smsConsent" | "submitterRole">> & { smsConsent: SmsConsentRecord };
 
 function value(data: Record<string, unknown> | undefined, key: string) {
   const raw = data?.[key];
@@ -34,7 +39,7 @@ function splitName(name: string) {
   };
 }
 
-async function saveFullApplication(data: Required<FullApplicationPayload>) {
+async function saveFullApplication(data: ValidatedApplication) {
   const form = data.form;
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactName = value(form, "contactName") || legalName;
@@ -45,6 +50,7 @@ async function saveFullApplication(data: Required<FullApplicationPayload>) {
     `Notification email: ${leadNotificationEmail}`,
     "",
     data.summary,
+    formatSmsConsent(data.smsConsent),
   ]
     .filter(Boolean)
     .join("\n");
@@ -70,7 +76,7 @@ async function sendWebhook(payload: FullApplicationPayload) {
       method: "POST",
       signal: AbortSignal.timeout(10_000),
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "full_application", notificationEmail: leadNotificationEmail, ...payload }),
+      body: JSON.stringify({ type: "full_application", notificationEmail: leadNotificationEmail, ...payload, smsConsent: undefined }),
     });
 
     if (!response.ok) console.error(`Full application webhook failed with status: ${response.status}`);
@@ -83,7 +89,7 @@ function formatCount(label: string, items: unknown[]) {
   return `${label}: ${items.length}`;
 }
 
-function formatFullApplicationEmail(data: Required<FullApplicationPayload>) {
+function formatFullApplicationEmail(data: ValidatedApplication) {
   const form = data.form;
   const legalName = value(form, "legalName") || "Not provided";
   const contactName = value(form, "contactName") || "Not provided";
@@ -111,10 +117,12 @@ function formatFullApplicationEmail(data: Required<FullApplicationPayload>) {
     data.summary || "No summary was provided.",
     "",
     "Submitted from: supremetruckinginsurance.com/quote full application",
+    "",
+    formatSmsConsent(data.smsConsent),
   ].join("\n");
 }
 
-async function sendFullApplicationNotification(data: Required<FullApplicationPayload>) {
+async function sendFullApplicationNotification(data: ValidatedApplication) {
   const form = data.form;
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactEmail = value(form, "email");
@@ -131,7 +139,7 @@ async function sendFullApplicationNotification(data: Required<FullApplicationPay
   });
 }
 
-async function sendFullApplicationCustomerEmails(data: Required<FullApplicationPayload>) {
+async function sendFullApplicationCustomerEmails(data: ValidatedApplication) {
   const form = data.form;
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactEmail = value(form, "email");
@@ -167,6 +175,10 @@ async function sendFullApplicationCustomerEmails(data: Required<FullApplicationP
 export async function POST(request: Request) {
   try {
     const json = (await request.json()) as FullApplicationPayload;
+    let smsConsent;
+    try { smsConsent = validateSmsConsent(json?.smsConsent, json?.submitterRole === "Customer"); } catch (error) {
+      return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
+    }
     const summary = String(json.summary || "").trim();
     if (summary.length > 120_000) {
       return NextResponse.json({ detail: "The application is too long. Please shorten the notes and try again." }, { status: 400 });
@@ -177,13 +189,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ detail: "Please complete the application before submitting." }, { status: 400 });
     }
 
-    const data: Required<FullApplicationPayload> = {
+    const data: ValidatedApplication = {
       summary,
       form,
       commodities: Array.isArray(json.commodities) ? json.commodities : [],
       drivers: Array.isArray(json.drivers) ? json.drivers : [],
       equipment: Array.isArray(json.equipment) ? json.equipment : [],
       claims: Array.isArray(json.claims) ? json.claims : [],
+      smsConsent: createSmsConsentRecord(smsConsent, "full_application", randomUUID(), new Date().toISOString()),
     };
 
     await deliverLeadWithFallback([

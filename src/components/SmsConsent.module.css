@@ -1,0 +1,11 @@
+.section { min-width: 0; margin: 24px 0; padding: 18px 0 0; border: 0; border-top: 1px solid #dfe5e3; color: #455550; font-size: 13px; line-height: 1.6; }
+.section legend { padding: 0 10px 0 0; font-size: 14px; font-weight: 700; color: #202625; }
+.section .mobile { display: grid; gap: 6px; margin-bottom: 14px; font-weight: 600; }
+.section .mobile input { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #b9c6c1; border-radius: 6px; background: #fff; color: #202625; font: inherit; font-size: 16px; }
+.section .choice { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; font-weight: 400; line-height: 1.6; cursor: pointer; }
+.section .choice input { flex: 0 0 18px; width: 18px; height: 18px; min-height: 18px; padding: 0; margin: 3px 0 0; accent-color: #c94c05; }
+.section p { margin: 10px 0 0; font: inherit; }
+.section a { color: #914005; text-decoration: underline; text-underline-offset: 3px; }
+.section input:focus-visible, .section a:focus-visible { outline: 2px solid #007c83; outline-offset: 3px; }
+.section:disabled { opacity: .65; }
+:global(.indication-form) .section { margin: 0; }

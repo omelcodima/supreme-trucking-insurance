@@ -35,7 +35,7 @@ export default function SmsTermsPage() {
               other insurance-related communications.
             </p>
             <div className="mt-6 inline-flex items-center rounded-full border border-[#DED3C4] bg-white/70 px-4 py-2 text-sm text-[#7B6B59]">
-              Effective Date: May 19, 2026
+              Effective Date: September 9, 2026
             </div>
           </div>
         </div>
@@ -81,26 +81,32 @@ export default function SmsTermsPage() {
                   <li>Policy, renewal, billing, or underwriting follow-up</li>
                   <li>Appointment reminders, call-back requests, and customer support responses</li>
                 </ul>
+                <p>These service messages require permission appropriate to the request. Separately, if you select our optional marketing SMS consent, Supreme Trucking Insurance may send recurring automated text messages about insurance quotes, renewal options and related insurance offers. That choice does not authorize unrelated offers or marketing by other businesses.</p>
                 <p>Messages may include text, phone numbers, links, images, or other media.</p>
               </Section>
 
               <Section title="2. Consent and Opt-In">
                 <p>
-                  You may opt in by submitting a website form, requesting a quote, contacting our
-                  office, providing your mobile number during a service interaction, or otherwise
-                  asking us to communicate with you by text.
+                  Simply requesting a quote, entering a phone number, requesting a callback or
+                  submitting an application does not give marketing SMS permission. To opt in on
+                  our website, enter your mobile number, select the separate unchecked marketing
+                  SMS checkbox and submit the form. This is your electronic agreement to the
+                  displayed disclosure. Only the subscriber or authorized user may give permission
+                  for that number; an agent cannot opt in on behalf of the customer.
                 </p>
                 <p>
-                  Consent to receive text messages is not required to purchase insurance products or
-                  services. You may choose to communicate with us by phone or email instead.
+                  Consent is optional and is not a condition of purchasing insurance, requesting a
+                  quote or viewing an estimate. You may choose phone or email instead. Permission
+                  to respond to a specific text conversation is not ongoing marketing permission.
+                  We retain the submitted choice, mobile number, disclosure version and text,
+                  source form, reference and receipt-time evidence with the request.
                 </p>
               </Section>
 
               <Section title="3. Message Frequency">
                 <p>
-                  Message frequency varies based on your request and service activity. Typical volume
-                  is approximately 0-6 messages per month, but additional messages may be sent during
-                  active quote, renewal, certificate, underwriting, or document follow-up.
+                  Message frequency varies based on the messaging program you opt into and your
+                  requests. No fixed number of messages is promised.
                 </p>
               </Section>
 
@@ -115,9 +121,12 @@ export default function SmsTermsPage() {
               <Section title="5. Opt-Out Instructions">
                 <p>
                   You may opt out of SMS/MMS messages at any time by replying <strong className="text-[#2F261C]">STOP</strong> to any text message from us.
-                  After you opt out, you may receive one final confirmation message. Opting out of
-                  text messages does not prevent us from contacting you by phone, email, or mail when
-                  needed for active business, policy, or legal purposes.
+                  You may also withdraw permission by calling (360) 936-7196, emailing
+                  info@supremetruckinginsurance.com or otherwise clearly asking us to stop.
+                  We honor reasonable opt-out requests. You may receive one final non-promotional
+                  confirmation. An opt-out is not permission for other marketing contact. Leaving
+                  the checkbox unchecked on a later application does not itself submit an
+                  unsubscribe request; please use one of these opt-out methods.
                 </p>
               </Section>
 
@@ -141,7 +150,10 @@ export default function SmsTermsPage() {
                 <p>
                   We may collect and use your mobile number, opt-in details, message status, and
                   message content to send communications, support compliance records, respond to your
-                  requests, and improve service. We do not sell your personal information.
+                  requests, and improve service. We do not sell your personal information or share
+                  mobile numbers, SMS opt-in data or consent with third parties or affiliates for
+                  their own marketing. Service providers may process the information only as needed
+                  to support our communications and recordkeeping.
                 </p>
                 <p>
                   For more detail about how we collect, use, and protect information, please review
@@ -152,8 +164,9 @@ export default function SmsTermsPage() {
               <Section title="9. Changes to These Terms">
                 <p>
                   We may update these SMS/MMS Terms & Conditions from time to time. Updated terms
-                  will be posted on this page with a revised effective date. Continued participation
-                  in text messaging after updates means you accept the revised terms.
+                  will be posted on this page with a revised effective date. Updating these terms
+                  does not expand an existing consent to new senders, channels or marketing purposes.
+                  We will request new permission where required.
                 </p>
               </Section>
 

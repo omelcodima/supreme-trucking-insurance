@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
               <div id="instant-indication" className="scroll-mt-28">
                 <Section title="Instant Indication Requests">
                   <p>When you click Get instant indication, the details you submit are emailed to our team even if you do not continue to a full application. They include your DOT number and operating choices, a public DOT company match when available, the illustrative range, submission time, and an approximate device, browser and operating-system category. Device information is not used to identify you. We do not include raw IP addresses or a unique device fingerprint in this notification.</p>
-                  <p>Contact details are optional. If you select agent follow-up and provide a name, phone or email, we use those details to respond about this estimate. This does not enroll you in automated marketing or text messages. Typing into the indication form without submitting it does not send those entries to our team. Technical request information may be used briefly for abuse prevention.</p>
+                  <p>Contact details are optional. If you select agent follow-up and provide a name, phone or email, we use those details to respond about this estimate. That choice does not enroll you in automated marketing or text messages. Marketing SMS permission, if you want to give it, is a separate optional checkbox and mobile-number field. Typing into the indication form without submitting it does not send those entries to our team. Technical request information may be used briefly for abuse prevention.</p>
                 </Section>
               </div>
               <Section title="2. How We Use Your Information">
@@ -146,6 +146,7 @@ export default function PrivacyPolicyPage() {
                   <li>Other parties when necessary to protect rights, prevent fraud, or comply with legal obligations</li>
                 </ul>
                 <p>We share only the information reasonably necessary for the applicable purpose.</p>
+                <p>Mobile numbers, SMS opt-in data and consent are not sold or shared with third parties or affiliates for their own marketing. Service providers may process them only as needed to support our communications and recordkeeping.</p>
               </Section>
 
               <Section title="4. Communications and Marketing">
@@ -159,7 +160,8 @@ export default function PrivacyPolicyPage() {
                   <li>Important business communications</li>
                 </ul>
                 <p>We may also send marketing or promotional communications where permitted by law. You may opt out of marketing emails at any time by following the unsubscribe instructions in the message or by contacting us directly.</p>
-                <p>Message and data rates may apply for text messages. Consent to receive text messages is not required to purchase insurance.</p>
+                <p>Marketing text messages from Supreme Trucking Insurance about quotes, renewal options and related insurance offers require your separate optional SMS consent. Entering a phone number or submitting a quote or callback request does not provide that permission. We keep the submitted choice, SMS number, exact disclosure and version, source form, reference and receipt-time evidence in our agency records and notification emails. This checkbox does not grant permission for marketing calls or other businesses to market to you.</p>
+                <p>Message frequency varies; message and data rates may apply. SMS consent is not a condition of purchasing insurance, requesting a quote or viewing an estimate. Reply STOP to opt out or HELP for help. You can also ask us to stop by phone or email. See our <Link href="/sms-terms-and-conditions" className="underline">SMS Terms</Link> for details.</p>
               </Section>
 
               <Section title="5. Data Security">

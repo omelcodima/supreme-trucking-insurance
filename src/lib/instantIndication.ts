@@ -1,3 +1,5 @@
+import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentChoice } from "./smsConsent.ts";
+
 export const indicationNoticeVersion = "2026-09-09";
 export const cargoOptions = [
   ["general", "General freight"], ["reefer", "Reefer"], ["car-hauler", "Car hauler"],
@@ -16,6 +18,7 @@ export type IndicationInput = {
   requestId: string;
   submittedAt: string;
   noticeVersion: string;
+  smsConsent?: SmsConsentChoice;
 };
 
 export type IndicationCarrier = {
@@ -42,6 +45,7 @@ export function validateIndication(value: unknown, now = Date.now()): Indication
     name: field("name", 100), phone: field("phone", 30), email: field("email", 254),
     requestId: field("requestId", 36), submittedAt: field("submittedAt", 30),
     noticeVersion: field("noticeVersion", 10), contactRequested: raw.contactRequested === true,
+    smsConsent: validateSmsConsent(raw.smsConsent),
   };
   if (data.dot && !/^\d{2,9}$/.test(data.dot)) throw new Error("Enter a valid USDOT number or leave it blank.");
   if (!cargoOptions.some(([key]) => key === data.cargo) || !radiusOptions.some(([key]) => key === data.radius)) {
@@ -105,7 +109,7 @@ export function formatIndicationEmail(data: IndicationInput, lookup: IndicationL
   const estimate = calculateIndication(data, lookup.carrier);
   return [
     "INSTANT INDICATION REQUEST - NOT A FULL APPLICATION",
-    data.contactRequested ? "FOLLOW-UP REQUESTED by the visitor for this estimate." : "NO CALLBACK REQUEST. Visitor identity/contact details were not provided.",
+    data.contactRequested ? "FOLLOW-UP REQUESTED by the visitor for this estimate." : "NO CALLBACK REQUEST. No contact details were provided for an agent callback.",
     "",
     `Name supplied by visitor: ${data.name || "Not provided"}`,
     `Phone supplied by visitor: ${data.phone || "Not provided"}`,
@@ -130,5 +134,9 @@ export function formatIndicationEmail(data: IndicationInput, lookup: IndicationL
     "Source: https://supremetruckinginsurance.com/instant-indication",
     "Submitted when Get instant indication was pressed. The visitor may or may not continue to a full application.",
     "No marketing sequence, SMS enrollment, or customer auto-reply was started.",
+    "",
+    // Provider-stamped receipt headers supply a trusted time without changing
+    // the idempotent email body each time the same request is retried.
+    formatSmsConsent(createSmsConsentRecord(validateSmsConsent(data.smsConsent), "instant_indication", data.requestId, null)),
   ].join("\n");
 }

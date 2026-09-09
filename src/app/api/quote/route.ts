@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
+import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
 import { getQuotesTable } from "../../../../lib/airtable";
 import {
   leadNotificationEmail,
@@ -19,6 +21,7 @@ type QuotePayload = {
   dot: string;
   coverageType: string;
   notes: string;
+  smsConsent: SmsConsentRecord;
 };
 
 async function saveQuoteToAirtable(data: QuotePayload) {
@@ -32,7 +35,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
     Company: data.company,
     "DOT Number": data.dot || "",
     "Coverage Type": data.coverageType,
-    Notes: [`Notification email: ${leadNotificationEmail}`, data.notes || ""].filter(Boolean).join("\n"),
+    Notes: [`Notification email: ${leadNotificationEmail}`, data.notes || "", formatSmsConsent(data.smsConsent)].filter(Boolean).join("\n\n"),
   } as Record<string, string>);
 
   return record;
@@ -52,7 +55,8 @@ async function sendWebhook(data: QuotePayload) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data, notificationEmail: leadNotificationEmail }),
+      // Keep consent evidence with the agency, not the generic lead webhook.
+      body: JSON.stringify({ ...data, smsConsent: undefined, notificationEmail: leadNotificationEmail }),
     });
 
     if (!webhookResponse.ok) {
@@ -79,6 +83,8 @@ function formatQuoteEmail(data: QuotePayload) {
     data.notes || "None",
     "",
     `Submitted from: supremetruckinginsurance.com/quote`,
+    "",
+    formatSmsConsent(data.smsConsent),
   ].join("\n");
 }
 
@@ -124,6 +130,10 @@ async function sendQuoteCustomerEmails(data: QuotePayload) {
 export async function POST(request: Request) {
   try {
     const json = (await request.json()) as Partial<QuotePayload>;
+    let smsConsent;
+    try { smsConsent = validateSmsConsent(json?.smsConsent); } catch (error) {
+      return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
+    }
     const data: QuotePayload = {
       firstName: String(json.firstName || "").trim(),
       lastName: String(json.lastName || "").trim(),
@@ -133,6 +143,7 @@ export async function POST(request: Request) {
       dot: String(json.dot || "").trim(),
       coverageType: String(json.coverageType || "").trim(),
       notes: String(json.notes || "").trim(),
+      smsConsent: createSmsConsentRecord(smsConsent, "quick_quote", randomUUID(), new Date().toISOString()),
     };
 
     if (!data.firstName || !data.lastName || !data.phone || !data.email || !data.company || !data.coverageType) {

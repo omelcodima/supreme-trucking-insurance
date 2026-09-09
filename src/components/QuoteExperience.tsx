@@ -14,6 +14,8 @@ import { coverageOptions, validCoverage } from "@/lib/quoteContext";
 import QuickDotLookup from "@/components/QuickDotLookup";
 import { clearConfirmedCompany, type QuickCarrier } from "@/lib/quickDotLookup";
 import { trackLeadForm } from "@/lib/leadAnalytics";
+import SmsConsent from "@/components/SmsConsent";
+import { emptySmsConsent, validateSmsConsent } from "@/lib/smsConsent";
 
 export default function QuoteExperience({
   coverage,
@@ -34,6 +36,7 @@ export default function QuoteExperience({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [smsConsent, setSmsConsent] = useState({ ...emptySmsConsent });
   const [confirmedCarrier, setConfirmedCarrier] = useState<QuickCarrier | null>(null);
   const submissionLock = useRef(false);
   const operationNames: Record<string, string> = {
@@ -86,6 +89,10 @@ export default function QuoteExperience({
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (submissionLock.current) return;
+    try { validateSmsConsent(smsConsent); } catch (error) {
+      setError(error instanceof Error ? error.message : "Please review the SMS consent.");
+      return;
+    }
     submissionLock.current = true;
     trackLeadForm("quick_quote", "attempt");
     setSubmitting(true);
@@ -96,6 +103,7 @@ export default function QuoteExperience({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          smsConsent: validateSmsConsent(smsConsent),
           notes: [
             operationName ? `Operation: ${operationName}` : "",
             form.notes,
@@ -305,6 +313,7 @@ export default function QuoteExperience({
                       />
                     </div>
                   </fieldset>
+                  <SmsConsent id="quote-sms" value={smsConsent} onChange={setSmsConsent} disabled={submitting} />
                   {error && (
                     <div className="form-error" role="alert">
                       <strong>Request not sent</strong>

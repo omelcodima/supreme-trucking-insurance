@@ -757,6 +757,22 @@
                 </div>
               </sc-for>
             </div>
+            <sc-if value="{{ smsCustomer }}">
+              <fieldset class="sms-consent" disabled="{{ smsDisabled }}" style="border:0;border-top:1px solid #dfe5e3;margin:24px 0;padding:18px 0;color:#455550;font-size:13px;line-height:1.6;min-width:0">
+                <legend style="font-size:14px;font-weight:700;color:#202625;padding-right:10px">{{ smsDisclosure.title }}</legend>
+                <label for="application-sms-mobile" style="display:block;font-weight:600;margin-bottom:14px">Your mobile number for text offers
+                  <input id="application-sms-mobile" name="smsMobile" type="tel" autocomplete="off" inputmode="tel" maxlength="30" value="{{ smsMobile }}" oninput="{{ onSmsMobile }}" placeholder="Optional: (360) 555-0123" style="display:block;box-sizing:border-box;width:100%;min-height:44px;margin-top:6px;padding:10px 12px;border:1px solid #b9c6c1;border-radius:6px;background:#fff;color:#202625;font:inherit;font-size:16px">
+                </label>
+                <label for="application-sms-consent" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+                  <input id="application-sms-consent" name="smsMarketingConsent" type="checkbox" autocomplete="off" checked="{{ smsAccepted }}" onchange="{{ onSmsConsent }}" aria-describedby="application-sms-conditions" style="flex:0 0 18px;width:18px;height:18px;margin:3px 0 0;accent-color:#c94c05">
+                  <span>{{ smsDisclosure.agreement }}</span>
+                </label>
+                <p id="application-sms-conditions" style="margin:10px 0">{{ smsDisclosure.conditions }}</p>
+                <p style="margin:10px 0"><a href="{{ smsDisclosure.termsUrl }}" target="_blank" rel="noopener noreferrer" style="color:#914005;text-decoration:underline">SMS Terms</a> and <a href="{{ smsDisclosure.privacyUrl }}" target="_blank" rel="noopener noreferrer" style="color:#914005;text-decoration:underline">Privacy Policy</a>.</p>
+                <sc-if value="{{ smsError }}"><p role="alert" style="color:#942626">{{ smsError }}</p></sc-if>
+              </fieldset>
+            </sc-if>
+            <sc-if value="{{ smsAgent }}"><p style="font-size:13px;color:#455550;margin:20px 0">SMS marketing permission must come directly from the customer. Submitting as an agent does not provide that permission.</p></sc-if>
             <div style="background:#fff;border:1px solid #e9ece8;border-radius:16px;padding:24px 26px">
               <h3 style="font-size:17px;font-weight:800;color:#10261b;margin:0 0 3px">Send this application back</h3>
               <p style="font-size:13.5px;color:#73807a;margin:0 0 18px">Submit the completed application directly to Supreme Trucking Insurance at info@supremetruckinginsurance.com.</p>
@@ -815,6 +831,7 @@
 class Component extends DCLogic {
   constructor(props){
     super(props);
+    this.smsDisclosure=__SMS_DISCLOSURE_JSON__;
     const blank = {
       lookupValue:'', lookupKind:'USDOT',
       legalName:'', dba:'', street:'', city:'', state:'', zip:'', phone:'', email:'', ein:'',
@@ -843,6 +860,7 @@ class Component extends DCLogic {
       equipment: this.seedEquipment(),
       claims:[{carrier:'',policy:'',num:'0',amt:'$0',details:''}],
       submitted:false,
+      smsAccepted:false, smsMobile:'', smsError:'',
       validationMessage:'',
       sentVia:null,
       onlyMethod:'all',
@@ -881,7 +899,7 @@ class Component extends DCLogic {
           if(nextForm.eldProvider==='Select...') nextForm.eldProvider='';
           if(nextForm.dashCamSystem==='Select...') nextForm.dashCamSystem='';
           const unitHistory=(saved.unitHistory&&saved.unitHistory.length)?saved.unitHistory:this.defaultUnitHistory(nextForm);
-          return {...s,...saved,role:'Customer',form:nextForm,unitHistory};
+          return {...s,...saved,role:'Customer',form:nextForm,unitHistory,smsAccepted:false,smsMobile:'',smsError:''};
         });
       }
     }catch(e){}
@@ -1072,7 +1090,9 @@ class Component extends DCLogic {
   onStepClick = (e)=>{ this.setState({step:+e.currentTarget.dataset.index}); this.scheduleSave(); }
   onNext = ()=>{ if(this.state.step>=this.stepKeys().length-1){ this.onSubmitOnline(); return; } this.setState(s=>({step:Math.min(s.step+1,this.stepKeys().length-1)})); this.scheduleSave(); }
   onPrev = ()=>{ this.setState(s=>({step:Math.max(s.step-1,0)})); this.scheduleSave(); }
-  onRoleClick = (e)=>{ this.setState({role:e.currentTarget.dataset.role}); }
+  onRoleClick = (e)=>{ if(this._submitting) return; this.setState({role:e.currentTarget.dataset.role,smsAccepted:false,smsMobile:'',smsError:''}); }
+  onSmsMobile = (e)=>{ if(this._submitting) return; this.setState({smsMobile:e.target.value,smsAccepted:false,smsError:''}); }
+  onSmsConsent = (e)=>{ if(this._submitting) return; this.setState({smsAccepted:this.state.role==='Customer'&&e.target.checked,smsError:''}); }
   onChoiceClick = (e)=>{
     const f=e.currentTarget.dataset.field, val=e.currentTarget.dataset.value;
     if(!f) return;
@@ -1085,7 +1105,7 @@ class Component extends DCLogic {
     try{ localStorage.removeItem('supreme_trucking_app_v1'); }catch(e){}
     const freshForm={...this.state.form,agentEmail:'info@supremetruckinginsurance.com',legalName:'',dba:'',street:'',city:'',state:'',states:[],radius:'',zip:'',phone:'',email:'',ein:'',usdot:'',since:'',mileage:'',receipts:'',lookupValue:'',eldProvider:'',eldProviderOther:'',dashCamSystem:'',dashCamSystemOther:'',garagingAddressMode:'Same as company address',garagingStreet:'',garagingCity:'',garagingState:'',garagingZip:'',units2026_2027:'',units2025_2026:'',units2024_2025:'',units2023_2024:'',futurePlans:''};
     this._submittedPayload=null;
-    this.setState({step:0,form:freshForm,unitHistory:this.defaultUnitHistory(freshForm),saferStatus:'idle',saferApplied:false,saferCarrier:null,saferError:'',drivers:this.seedDrivers(),equipment:this.seedEquipment(),commodities:[{name:'General freight',otherName:'',pct:'',max:''}],claims:[{carrier:'',policy:'',num:'0',amt:'$0',details:''}],submitted:false});
+    this.setState({step:0,form:freshForm,unitHistory:this.defaultUnitHistory(freshForm),saferStatus:'idle',saferApplied:false,saferCarrier:null,saferError:'',drivers:this.seedDrivers(),equipment:this.seedEquipment(),commodities:[{name:'General freight',otherName:'',pct:'',max:''}],claims:[{carrier:'',policy:'',num:'0',amt:'$0',details:''}],submitted:false,smsAccepted:false,smsMobile:'',smsError:''});
   }
   onSubmit = ()=>{ this.setState({submitted:true}); }
 
@@ -1199,11 +1219,20 @@ class Component extends DCLogic {
   }
   onSubmitOnline = async ()=>{
     if(this._submitting) return;
+    const accepted=this.state.role==='Customer'&&this.state.smsAccepted===true;
+    const mobile=String(this.state.smsMobile||'');
+    const digits=mobile.replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');
+    if(accepted && (mobile.length>30 || !/^\+?[\d() .-]+$/.test(mobile) || !/^[2-9]\d{2}[2-9]\d{6}$/.test(digits))){
+      this.setState({smsError:'Enter a valid 10-digit US mobile number for SMS, or leave SMS consent unchecked.'});
+      return;
+    }
     if(!String(this.state.form.legalName||'').trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(this.state.form.email||'').trim())){
       this.setState({step:1,validationMessage:'Please enter your company legal name and a valid contact email before submitting.'});
       return;
     }
     const payload={
+      smsConsent:{accepted,mobile:accepted?'+1'+digits:'',version:this.smsDisclosure.version},
+      submitterRole:this.state.role,
       summary:this.buildSummary(),
       form:{...this.state.form,agentEmail:this.state.form.agentEmail||'info@supremetruckinginsurance.com'},
       commodities:this.state.commodities,
@@ -1217,7 +1246,10 @@ class Component extends DCLogic {
     try{
       const res=await fetch('/api/full-application',{method:'POST',headers:{'Content-Type':'application/json'},body});
       const result=await res.json().catch(()=>null);
-      if(!res.ok || !result || result.ok!==true) throw new Error('submit failed');
+      if(!res.ok || !result || result.ok!==true){
+        if(res.status===400&&result&&typeof result.detail==='string') this.setState({smsError:result.detail});
+        throw new Error('submit failed');
+      }
       this._submittedPayload=body;
       this.setState(s=>({sentVia:'submitEmail',form:{...s.form,agentEmail:s.form.agentEmail||'info@supremetruckinginsurance.com'}}));
     }catch(e){
@@ -1322,6 +1354,9 @@ class Component extends DCLogic {
 
     return {
       steps, show,
+      smsDisclosure:this.smsDisclosure, smsCustomer:s.role==='Customer', smsAgent:s.role==='Agent',
+      smsAccepted:s.smsAccepted, smsMobile:s.smsMobile, smsError:s.smsError, smsDisabled:s.sentVia==='submitting',
+      onSmsMobile:this.onSmsMobile, onSmsConsent:this.onSmsConsent,
       validationMessage:s.validationMessage,
       progressBarStyle:`height:100%;width:${Math.max(pct,4)}%;background:linear-gradient(90deg,#c94c05,#e98a40);border-radius:6px;transition:width .4s ease`,
       progressLabel:`Step ${s.step+1} of ${keys.length} · ${pct}% complete`,

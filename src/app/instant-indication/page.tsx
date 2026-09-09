@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Circle, FileCheck2, LoaderCircle, Mail, Phone, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { cargoLabel, cargoOptions, indicationCurrency, indicationNoticeVersion, radiusLabel, radiusOptions, type IndicationEstimate, type IndicationInput, type IndicationLookup } from "@/lib/instantIndication";
 import { trackLeadForm } from "@/lib/leadAnalytics";
+import SmsConsent from "@/components/SmsConsent";
+import { emptySmsConsent, validateSmsConsent } from "@/lib/smsConsent";
 
 const initialForm = { dot: "", cargo: "", radius: "", contactRequested: false, name: "", phone: "", email: "" };
 type Outcome = { lookup: IndicationLookup; estimate: IndicationEstimate; accepted: boolean };
@@ -19,6 +21,7 @@ function readOutcome(value: unknown, success: boolean): Outcome | null {
 
 export default function InstantIndicationPage() {
   const [form, setForm] = useState(initialForm);
+  const [smsConsent, setSmsConsent] = useState({ ...emptySmsConsent });
   const [processing, setProcessing] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [error, setError] = useState("");
@@ -47,6 +50,10 @@ export default function InstantIndicationPage() {
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (lock.current || outcome?.accepted) return;
+    try { validateSmsConsent(smsConsent); } catch (error) {
+      setError(error instanceof Error ? error.message : "Please review the SMS consent.");
+      return;
+    }
     if (form.contactRequested && (!form.name.trim() || (!form.phone.trim() && !form.email.trim()))) {
       setError("Add your name and a phone number or email for follow-up.");
       return;
@@ -56,7 +63,7 @@ export default function InstantIndicationPage() {
     setOutcome(null);
     setError("");
     const startedAt = Date.now();
-    const data = pending.current ?? { ...form, requestId: crypto.randomUUID(), submittedAt: new Date().toISOString(), noticeVersion: indicationNoticeVersion };
+    const data = pending.current ?? { ...form, smsConsent: validateSmsConsent(smsConsent), requestId: crypto.randomUUID(), submittedAt: new Date().toISOString(), noticeVersion: indicationNoticeVersion };
     pending.current = data;
     trackLeadForm("instant_indication", "attempt");
     if (window.matchMedia("(max-width: 800px)").matches) resultRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
@@ -135,6 +142,9 @@ export default function InstantIndicationPage() {
                   <p className="indication-help">Provide a phone number or email. This requests follow-up about this estimate, not marketing texts.</p>
                 </div>}
               </div>
+              <SmsConsent id="indication-sms" value={smsConsent} disabled={processing} onChange={(value) => {
+                setSmsConsent(value); setOutcome(null); setError(""); pending.current = null;
+              }} />
               <div className="indication-honeypot" aria-hidden="true"><label htmlFor="indication-website">Website</label><input id="indication-website" name="website" ref={honeypot} autoComplete="off" tabIndex={-1} /></div>
               <p className="indication-notice">By clicking below, you send these details and an approximate device/browser category to Supreme, even if you do not complete a full application. <Link href="/privacy-policy#instant-indication">Privacy details</Link></p>
               <button type="submit" className="button-primary indication-submit" disabled={processing || outcome?.accepted}>
