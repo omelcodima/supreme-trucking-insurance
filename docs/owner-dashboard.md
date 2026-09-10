@@ -33,8 +33,11 @@ Private `.env.owner-neon.local` and `.env.owner-runtime.local` hold local provis
 settings, are gitignored and mode 0600. The migration URL stays local. No secret
 values belong in source control or chat.
 
-GA reporting access is still missing; the existing consent-gated GA4 website tag
-does not confer reporting access. Airtable and email notifications remain separate;
+GA reporting Viewer access and the server credential are configured. The Data API
+is enabled and live aggregate reports were verified on September 10, 2026;
+deployment of the reporting extension is pending (see below).
+The existing consent-gated GA4 website tag does not itself
+confer reporting access. Airtable and email notifications remain separate;
 their recipient is unchanged. Automated SMS sending and provider STOP sync are not
 enabled. Independent backups, restore testing and retention procedures remain
 operational follow-up work, not a completed legal archive.
@@ -104,6 +107,47 @@ are **not** part of this initial workspace. The list is not a list of all visito
    **only** GA4 property `553019966`. Store its JSON credential server-side. The
    website's measurement ID does not confer reporting access. Key rotation and
    API-access review remain operational responsibilities.
+
+### Traffic reporting extension (2026-09-10)
+
+Traffic includes daily sessions (with an accessible daily-data table), traffic
+channels, landing pages, countries/states, devices and selected click/form events
+for 7, 28 or 90 complete days. Dates use the GA4 property timezone and exclude today.
+Breakdowns are capped at 25 rows; the daily series includes every day in the period.
+Privacy thresholds and reporting limits remain visible. GA4 processing delays and
+analytics-consent coverage mean these are not complete counts of all site visitors.
+
+The adapter uses only standard dimensions, so an unregistered `form_id` custom
+dimension cannot break the batch. Seven reports are split into batches of five and
+two. Credentials stay server-only and the OAuth scope is `analytics.readonly`.
+Unavailable/incomplete reports are not displayed as successful zero-traffic reports.
+
+Connection preparation: an unbilled Google Cloud project named
+`Supreme Website Reports` (`named-foundry-508203-j7`, project number `41100975146`)
+was created in the owner's account. With the owner's approval, service account
+`supreme-ga-reporter@named-foundry-508203-j7.iam.gserviceaccount.com` received Viewer
+access to property `553019966` only, with cost and revenue metrics restricted.
+No Cloud IAM role, Gmail access or account-wide Analytics access was granted.
+Its JSON credential is saved as sensitive `GA_REPORTING_CREDENTIALS` in Vercel
+Production. The local copy is mode 0600 inside gitignored `output/private/` (0700);
+never commit it or expose it in browser code, logs or chat. Existing Google and
+email credentials were not changed.
+
+The owner approved continuing after the Google APIs Terms of Service prompt.
+On September 10, 2026, the Google Cloud console showed the Data API as Enabled.
+The actual server adapter successfully returned connected reports for 7, 28 and
+90 complete days, with the expected daily-series lengths and property timezone
+`America/Los_Angeles`. These were read-only requests and did not create analytics
+events, leads or messages. Vercel metadata confirms that the credential is
+sensitive and Production-only. Deployment and production Traffic verification
+are the remaining steps; the saved variable is not active in the old deployment.
+
+After incorporating the existing 48-state service-area update without changing
+it, local verification passed: 138 unit tests, lint, TypeScript and production build.
+The authenticated synthetic-data browser check covered the daily chart/table,
+channels, 7/28/90-day filters and unavailable state at 320/390/768/1440px, with
+no external trackers or real messages. Live GA4 verification subsequently passed
+as described above; this extension has not been deployed yet.
 
 | Variable | Purpose |
 | --- | --- |

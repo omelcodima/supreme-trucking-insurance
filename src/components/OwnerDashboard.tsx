@@ -86,6 +86,13 @@ const count = (value?: number) =>
   value == null ? "--" : value.toLocaleString("en-US");
 const gaUrl =
   "https://analytics.google.com/analytics/web/#/p553019966/reports/intelligenthome";
+const calendarDate = (value: string) =>
+  new Date(`${value}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 async function api(body: Record<string, unknown>) {
   const response = await fetch("/api/admin", {
@@ -139,6 +146,50 @@ function Breakdown({
           ))}
         </ul>
       )}
+    </section>
+  );
+}
+
+function DailyTraffic({ rows }: { rows: NonNullable<OwnerAnalytics["daily"]> }) {
+  const max = Math.max(0, ...rows.map((row) => row.count));
+  return (
+    <section className={styles.dailyTraffic} aria-labelledby="daily-traffic-heading">
+      <h2 id="daily-traffic-heading">Daily sessions</h2>
+      <figure className={styles.chart}>
+        <div className={styles.chartScale} aria-hidden="true">{count(max)}</div>
+        <div className={styles.chartBars} aria-hidden="true">
+          {rows.map((row) => (
+            <div
+              key={row.date}
+              title={`${calendarDate(row.date)}: ${count(row.count)} sessions`}
+              className={styles.chartColumn}
+            >
+              <span style={{ height: `${(row.count / Math.max(1, max)) * 100}%` }} />
+            </div>
+          ))}
+        </div>
+        <figcaption className={styles.chartDates}>
+          <span>{calendarDate(rows[0].date)}</span>
+          <span>{calendarDate(rows[rows.length - 1].date)}</span>
+        </figcaption>
+      </figure>
+      <details className={styles.dailyData}>
+        <summary>Daily data</summary>
+        <div className={styles.tableWrap}>
+          <table>
+            <caption className={styles.caption}>Sessions by date</caption>
+            <thead><tr><th scope="col">Date</th><th scope="col">Sessions</th></tr></thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.date}>
+                  <th scope="row">{calendarDate(row.date)}</th>
+                  <td>{count(row.count)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
     </section>
   );
 }
@@ -598,13 +649,24 @@ export default function OwnerDashboard({
                   )}
                 </section>
                 <p className={styles.caption}>
-                  Through yesterday in the GA4 property timezone. Top 25 rows
-                  per report.
+                  {analytics.startDate && analytics.endDate
+                    ? `${calendarDate(analytics.startDate)} to ${calendarDate(analytics.endDate)}. `
+                    : "Through yesterday. "}
+                  GA4 timezone: {analytics.timeZone || "property timezone"}.
+                  {" "}Google data may still be processing. Breakdowns show up to 25 rows.
                   {analytics.limited
                     ? " Google applied reporting limits or privacy thresholds."
                     : ""}
                 </p>
+                <a href={gaUrl} target="_blank" rel="noreferrer" className={styles.analyticsLink}>
+                  Open Google Analytics <ExternalLink size={16} />
+                </a>
+                {!!analytics.daily?.length && <DailyTraffic rows={analytics.daily} />}
                 <div className={styles.breakdowns}>
+                  <Breakdown
+                    title="Traffic channels / sessions"
+                    rows={analytics.channels}
+                  />
                   <Breakdown
                     title="Landing pages / sessions"
                     rows={analytics.pages}
