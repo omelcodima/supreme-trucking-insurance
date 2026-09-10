@@ -11,9 +11,10 @@ type Props = {
   confirmed: QuickCarrier | null;
   onDotChange: (value: string) => void;
   onConfirm: (carrier: QuickCarrier) => void;
+  idPrefix?: string;
 };
 
-export default function QuickDotLookup({ dot, disabled, confirmed, onDotChange, onConfirm }: Props) {
+export default function QuickDotLookup({ dot, disabled, confirmed, onDotChange, onConfirm, idPrefix = "quote-dot" }: Props) {
   const [noDot, setNoDot] = useState(false);
   const [candidate, setCandidate] = useState<QuickCarrier | null>(null);
   const [pending, setPending] = useState(false);
@@ -74,7 +75,7 @@ export default function QuickDotLookup({ dot, disabled, confirmed, onDotChange, 
   return (
     <div className={styles.lookup}>
       <div className={styles.labelRow}>
-        <label htmlFor="quote-dot">USDOT number (optional)</label>
+        <label htmlFor={idPrefix}>USDOT number (optional)</label>
         <label className={styles.noDot}>
           <input type="checkbox" checked={noDot} disabled={disabled} onChange={(event) => {
             setNoDot(event.target.checked);
@@ -85,14 +86,14 @@ export default function QuickDotLookup({ dot, disabled, confirmed, onDotChange, 
       </div>
       {!noDot && <div className={styles.searchRow}>
         <input
-          id="quote-dot"
+          id={idPrefix}
           name="dot"
           inputMode="numeric"
           autoComplete="off"
           maxLength={9}
           value={dot}
           disabled={disabled}
-          aria-describedby={error ? "quote-dot-error" : "quote-dot-help"}
+          aria-describedby={error ? `${idPrefix}-error` : `${idPrefix}-help`}
           onChange={(event) => changeDot(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") { event.preventDefault(); void lookup(); }
@@ -103,12 +104,12 @@ export default function QuickDotLookup({ dot, disabled, confirmed, onDotChange, 
           {pending ? "Searching..." : "Find company"}
         </button>
       </div>}
-      <p id="quote-dot-help" className={styles.help}>
+      <p id={`${idPrefix}-help`} className={styles.help}>
         {noDot ? "Enter your company and contact details below." : "Company information from the U.S. DOT registry. Confirm the match before using it."}
       </p>
       <div aria-live="polite" aria-atomic="true">
         {pending && <p className={styles.help}>Looking up your company...</p>}
-        {error && <p id="quote-dot-error" className={styles.error}>{error}</p>}
+        {error && <p id={`${idPrefix}-error`} className={styles.error}>{error}</p>}
       </div>
       {candidate && <div className={styles.result}>
         <div>

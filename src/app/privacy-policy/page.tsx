@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
               We respect your privacy and are committed to protecting the information you share with us when you request a quote, upload documents, or contact our team.
             </p>
             <div className="mt-6 inline-flex items-center rounded-full border border-[#DED3C4] bg-white/70 px-4 py-2 text-sm text-[#7B6B59]">
-              Updated: September 9, 2026
+              Updated: September 10, 2026
             </div>
           </div>
         </div>
@@ -118,6 +118,13 @@ export default function PrivacyPolicyPage() {
                 <Section title="Instant Indication Requests">
                   <p>When you click Get instant indication, the details you submit are emailed to our team even if you do not continue to a full application. They include your DOT number and operating choices, a public DOT company match when available, the illustrative range, submission time, and an approximate device, browser and operating-system category. Device information is not used to identify you. We do not include raw IP addresses or a unique device fingerprint in this notification.</p>
                   <p>Contact details are optional. If you select agent follow-up and provide a name, phone or email, we use those details to respond about this estimate. That choice does not enroll you in automated marketing or text messages. Marketing SMS permission, if you want to give it, is a separate optional checkbox and mobile-number field. Typing into the indication form without submitting it does not send those entries to our team. Technical request information may be used briefly for abuse prevention.</p>
+                </Section>
+              </div>
+              <div id="website-assistant" className="scroll-mt-28">
+                <Section title="Website AI Assistant">
+                  <p>The optional AI assistant answers general questions about our services and quote preparation. After you agree to AI processing and send a question, that message and limited recent conversation context are processed through Vercel AI Gateway and an OpenAI model to generate a response. AI responses may be inaccurate and do not provide a quote, bind coverage, or replace an agent&apos;s review.</p>
+                  <p>Do not put sensitive personal information, driver documents, payment details or passwords into chat. We attempt to remove common email, phone, VIN and Social Security number patterns before AI processing, but this is not complete anonymization. The website does not save chat transcripts to its lead database or analytics. Conversation text is kept in the open page until you clear it or reload; service providers may process and retain request information under their applicable terms and privacy practices.</p>
+                  <p>The separate quote and callback forms send the information you confirm to our agency and its intake systems, not to the AI model. Asking a chat question alone does not submit a quote request, authorize a callback, or give marketing SMS permission. Document uploads and customer portal access are not available inside this chat. We use temporary, pseudonymous request counters to limit abuse and AI usage.</p>
                 </Section>
               </div>
               <Section title="2. How We Use Your Information">

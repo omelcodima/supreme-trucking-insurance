@@ -8,6 +8,7 @@ import * as smsConsent from "./smsConsent.ts";
 import * as instantIndication from "./instantIndication.ts";
 import { deliverLeadWithFallback } from "./leadDelivery.ts";
 import type { GrakbotHandoff } from "./grakbotHandoff.ts";
+import { validateAssistantMessages } from "./websiteAssistant.ts";
 
 // Execute the actual route handlers with all persistence/network edges replaced.
 // No environment keys, customer emails, CRM writes or live API calls are used.
@@ -15,6 +16,8 @@ function routeHarness(route: string, failEmail = false) {
   const sent: Array<{ grakbot: GrakbotHandoff; attachments?: unknown[] }> = [];
   let customerMessages = 0;
   let stored = 0;
+  let modelCalls = 0;
+  let followUps = 0;
   const mocks: Record<string, unknown> = {
     "next/server": { NextResponse: Response, userAgent: () => ({ isBot: false, device: {}, browser: { name: "Test browser" }, os: { name: "Test OS" } }) },
     "node:crypto": crypto,
@@ -30,6 +33,8 @@ function routeHarness(route: string, failEmail = false) {
     "@/lib/instantIndication": instantIndication,
     "@/lib/indicationLookup": { lookupIndicationCarrier: async () => ({ status: "not-requested", carrier: null }) },
     "@/lib/indicationRateLimit": { allowIndicationRequest: () => true },
+    "@/lib/websiteAssistant": { validateAssistantMessages, answerWebsiteQuestion: async () => { modelCalls++; return { answer: "Test answer", topic: "cargo" }; } },
+    "@/lib/assistantRateLimit": { guardAssistant: async () => failEmail ? Response.json({ detail: "Usage limit" }, { status: 429 }) : null },
   };
   const email = {
     leadNotificationEmail: "info@supremetruckinginsurance.com",
@@ -39,7 +44,7 @@ function routeHarness(route: string, failEmail = false) {
       return { id: "test-only-message" };
     },
     sendCustomerAutoReply: async () => { customerMessages++; },
-    scheduleQuoteFollowUps: async () => {},
+    scheduleQuoteFollowUps: async () => { followUps++; },
   };
   mocks["../../../lib/leadEmails"] = email;
   mocks["@/lib/leadEmails"] = email;
@@ -48,7 +53,7 @@ function routeHarness(route: string, failEmail = false) {
   const exports: { POST?: (request: Request) => Promise<Response> } = {};
   runInNewContext(code, {
     exports, Buffer, TextEncoder, AbortSignal, Request, Response, URL,
-    process: { env: {} },
+    process: { env: { AI_GATEWAY_API_KEY: "test-only" } },
     console: { warn() {}, error() {} },
     require: (name: string) => { if (!(name in mocks)) throw new Error(`Unexpected dependency: ${name}`); return mocks[name]; },
     fetch: () => { throw new Error("Network access is forbidden in route tests"); },
@@ -57,6 +62,8 @@ function routeHarness(route: string, failEmail = false) {
     sent,
     get stored() { return stored; },
     get customerMessages() { return customerMessages; },
+    get modelCalls() { return modelCalls; },
+    get followUps() { return followUps; },
     submit: (payload: unknown) => exports.POST!(new Request(`https://example.invalid/api/${route}`, {
       method: "POST", headers: { "Content-Type": "application/json", Origin: "https://example.invalid" }, body: JSON.stringify(payload),
     })),
@@ -113,4 +120,35 @@ test("indication without follow-up sends a record-only handoff and no customer e
   assert.equal(harness.sent[0].grakbot.contactRequested, false);
   assert.equal(harness.sent[0].grakbot.contact.email, "");
   assert.equal(harness.customerMessages, 0);
+});
+
+test("assistant callback requires contact confirmation and sends no quote follow-up sequence", async () => {
+  const harness = routeHarness("quote");
+  const payload = { ...quickQuote, entryPoint: "website_assistant", contactMode: "callback" };
+  assert.equal((await harness.submit(payload)).status, 400);
+  assert.equal(harness.stored, 0);
+  assert.equal((await harness.submit({ ...payload, assistantContactConsent: true })).status, 200);
+  assert.equal(harness.sent[0].grakbot.submission.contactMode, "callback");
+  assert.equal(harness.sent[0].grakbot.consent.status, "not_provided");
+  assert.equal(harness.followUps, 0);
+  assert.equal(harness.customerMessages, 1);
+});
+
+test("assistant answers without writing a lead or sending emails", async () => {
+  const harness = routeHarness("assistant");
+  const response = await harness.submit({ consent: true, messages: [{ role: "user", content: "What is cargo?" }] });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(harness.modelCalls, 1);
+  assert.equal(harness.stored, 0);
+  assert.equal(harness.sent.length, 0);
+  assert.equal(harness.customerMessages, 0);
+});
+
+test("assistant rejects missing consent and honors the budget before calling a model", async () => {
+  const harness = routeHarness("assistant", true);
+  const messages = [{ role: "user", content: "What is cargo?" }];
+  assert.equal((await harness.submit({ messages })).status, 400);
+  assert.equal((await harness.submit({ consent: true, messages })).status, 429);
+  assert.equal(harness.modelCalls, 0);
 });

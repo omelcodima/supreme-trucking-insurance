@@ -15,6 +15,10 @@ as its default. Never take the recipient from a visitor's form fields.
 - Each email includes one `supreme-intake-v1.json` attachment, with a server-issued
   request ID and content-based revision ID. The full application retains its PDF.
 - The website sends one agency notification, not a second duplicate to Grakbot.
+- The website AI assistant's quote/callback form uses the same quick-quote
+  channel. `untrusted_submission.entryPoint` is `website_assistant` and
+  `contactMode` is `quote` or `callback`. A callback is a request to call, not
+  permission to enroll in quote reminders. Ordinary chat messages are not leads.
 - A quote submission succeeds only when Resend returns an email acceptance ID.
   Acceptance is not delivery, mailbox processing, or a confirmed CRM write.
 - Resend idempotency suppresses identical sends within its provider window.
@@ -85,7 +89,8 @@ file does not configure Grakbot, grant CRM access, or enable portal invitations.
 - A website listener for acknowledgements. Reply emails currently do NOT update
   the owner dashboard; no automatic `CRM created` status is implemented.
 - RenewRig's customer continuation portal and invitation mechanism.
-- The proposed website chat UI, attachment intake and AI question workflow.
+- Chat attachment intake. The AI question UI and explicit quote/callback form
+  are implemented; see `website-assistant.md`. Neither has CRM or portal access.
 
 ## Verification before enabling bot actions
 

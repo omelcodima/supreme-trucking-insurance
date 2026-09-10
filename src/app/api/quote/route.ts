@@ -24,6 +24,8 @@ type QuotePayload = {
   coverageType: string;
   notes: string;
   smsConsent: SmsConsentRecord;
+  entryPoint?: "website_assistant";
+  contactMode?: "quote" | "callback";
 };
 
 async function saveQuoteToAirtable(data: QuotePayload) {
@@ -80,6 +82,7 @@ function formatQuoteEmail(data: QuotePayload) {
     `Company: ${data.company}`,
     `DOT Number: ${data.dot || "Not provided"}`,
     `Coverage Type: ${data.coverageType}`,
+    ...(data.entryPoint ? [`Entry point: Website AI assistant`, `Contact request: ${data.contactMode}`] : []),
     "",
     "Notes:",
     data.notes || "None",
@@ -102,13 +105,20 @@ async function sendQuoteEmail(data: QuotePayload) {
       contactRequested: true,
       contact: { name: `${data.firstName} ${data.lastName}`, email: data.email, phone: data.phone },
       company: { name: data.company, dot: data.dot },
-      submission: { coverageType: data.coverageType, notes: data.notes },
+      submission: { coverageType: data.coverageType, notes: data.notes, ...(data.entryPoint ? { entryPoint: data.entryPoint, contactMode: data.contactMode } : {}) },
     },
   });
 }
 
 async function sendQuoteCustomerEmails(data: QuotePayload) {
   const name = [data.firstName, data.lastName].filter(Boolean).join(" ");
+
+  if (data.contactMode === "callback") {
+    await sendCustomerAutoReply({ to: data.email, leadType: "callback_request",
+      subject: "We received your callback request",
+      text: `Hi ${data.firstName},\n\nSupreme Trucking Insurance received your request for a call about ${data.company}. Our team will review it and follow up. For urgent questions, call (360) 936-7196.\n\nThis is a request receipt, not a quote or confirmation of coverage.` });
+    return;
+  }
 
   await sendCustomerAutoReply({
     to: data.email,
@@ -140,7 +150,10 @@ export async function POST(request: Request) {
   const limited = await guardOwnerIntake(request);
   if (limited) return limited;
   try {
-    const json = JSON.parse(await readLimitedText(request, 65536)) as Partial<QuotePayload> & { submissionId?: unknown };
+    const json = JSON.parse(await readLimitedText(request, 65536)) as Partial<QuotePayload> & { submissionId?: unknown; assistantContactConsent?: unknown };
+    if (json.entryPoint === "website_assistant" && (json.assistantContactConsent !== true || !["quote", "callback"].includes(json.contactMode || ""))) {
+      return NextResponse.json({ detail: "Please confirm that you want our team to contact you about this request." }, { status: 400 });
+    }
     let smsConsent;
     try { smsConsent = validateSmsConsent(json?.smsConsent); } catch (error) {
       return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
@@ -155,6 +168,7 @@ export async function POST(request: Request) {
       coverageType: String(json.coverageType || "").trim(),
       notes: String(json.notes || "").trim(),
       smsConsent: createSmsConsentRecord(smsConsent, "quick_quote", randomUUID(), new Date().toISOString()),
+      ...(json.entryPoint === "website_assistant" ? { entryPoint: "website_assistant" as const, contactMode: json.contactMode } : {}),
     };
 
     if (!data.firstName || !data.lastName || !data.phone || !data.email || !data.company || !data.coverageType) {
@@ -164,10 +178,15 @@ export async function POST(request: Request) {
       );
     }
 
+    if (data.entryPoint && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ||
+      !/^(?:1)?\d{10}$/.test(data.phone.replace(/\D/g, "")) || (data.dot && !/^\d{2,9}$/.test(data.dot)))) {
+      return NextResponse.json({ detail: "Please check your email, US phone number and optional USDOT number." }, { status: 400 });
+    }
+
     data.smsConsent = await captureOwnerLead({ source: "quick_quote",
       submissionId: typeof json.submissionId === "string" ? json.submissionId.slice(0,100) : data.smsConsent.reference,
       name: `${data.firstName} ${data.lastName}`, company: data.company, phone: data.phone, email: data.email,
-      dot: data.dot, state: "", contactRequested: true, request: { coverage: data.coverageType, notes: data.notes }, smsConsent: data.smsConsent,
+      dot: data.dot, state: "", contactRequested: true, request: { coverage: data.coverageType, notes: data.notes, ...(data.entryPoint ? { entryPoint: data.entryPoint, contactMode: data.contactMode || "quote" } : {}) }, smsConsent: data.smsConsent,
     });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveQuoteToAirtable(data) },
