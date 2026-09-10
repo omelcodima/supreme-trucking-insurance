@@ -1,4 +1,4 @@
-import { stateDeepDives, type StateDeepDive } from "@/lib/stateDeepDives";
+import { stateDeepDives, type StateDeepDive } from "./stateDeepDives.ts";
 
 export type StatePage = {
   slug: string;
@@ -378,7 +378,15 @@ export const statePages: StatePage[] = [...priorityStatePages, ...additionalStat
   deepDive: stateDeepDives[page.slug],
 }));
 
-export const featuredStatePages = statePages.slice(0, 12);
+// The owner confirmed the agency serves 48 states, excluding Alaska and Hawaii.
+// Keep all 50 routes available so existing links can show an honest availability notice.
+export const unservedStateSlugs = ["alaska", "hawaii"] as const;
+
+export const servedStatePages = statePages.filter(
+  (state) => !unservedStateSlugs.some((slug) => slug === state.slug),
+);
+
+export const featuredStatePages = servedStatePages.slice(0, 12);
 
 export function getStatePage(slug: string) {
   return statePages.find((state) => state.slug === slug);

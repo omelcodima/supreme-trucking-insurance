@@ -36,6 +36,12 @@ interface Application {
   onSmsMobile(event: { target: { value: string } }): void;
   onRoleClick(event: { currentTarget: { dataset: { role: string } } }): void;
   onNext(): void;
+  renderVals(): {
+    usStates: string[];
+    companyStateOptions: { value: string; label: string; disabled: boolean }[];
+    unavailableCompanyState: string;
+    stateChips: { code: string }[];
+  };
 }
 
 function createApplication(
@@ -82,6 +88,68 @@ test("published application bundle matches the readable template", () => {
 
 test("future plans binds the textarea value instead of serializing a template object", () => {
   assert.match(template, /<textarea data-field="futurePlans" value="\{\{ form\.futurePlans \}\}"[^>]*><\/textarea>/);
+});
+
+test("company state choices are limited to 48 states without limiting operational or license states", () => {
+  const app = createApplication(async () => ({ ok: true }));
+  const values = app.renderVals();
+  assert.equal(values.companyStateOptions.length, 48);
+  assert.ok(values.companyStateOptions.every(option => !option.disabled && option.value !== "AK" && option.value !== "HI" && option.label === option.value));
+  assert.equal(values.usStates.length, 50);
+  assert.equal(values.stateChips.length, 50);
+  for (const code of ["AK", "HI"]) {
+    assert.ok(values.usStates.includes(code));
+    assert.ok(values.stateChips.some(state => state.code === code));
+  }
+  assert.match(template, /<select data-field="state"[\s\S]*?list="\{\{ companyStateOptions \}\}"[\s\S]*?<\/select>/);
+  assert.match(template, /<sc-for list="\{\{ companyStateOptions \}\}" as="s"[^>]*><option value="\{\{ s\.value \}\}" label="\{\{ s\.label \}\}" disabled="\{\{ s\.disabled \}\}">/, "Native option labels remain accessible when the renderer wraps interpolated text in a span");
+  assert.match(template, /<select data-field="garagingState"[\s\S]*?list="\{\{ usStates \}\}"[\s\S]*?<\/select>/);
+  assert.match(template, /<select data-field="drivers"[^>]*data-key="licState"[\s\S]*?list="\{\{ usStates \}\}"[\s\S]*?<\/select>/);
+});
+
+test("excluded company states remain visible in drafts and block both application submission paths", async () => {
+  for (const state of ["AK", "HI", "Alaska", " hawaii "]) {
+    let calls = 0;
+    const app = createApplication(async () => { calls++; return { ok: true }; }, {
+      form: { legalName: "TEST ONLY", email: "test@example.invalid", state, states: ["AK", "HI"], garagingState: "HI" },
+    });
+    app.componentDidMount();
+    const values = app.renderVals();
+    assert.equal(values.companyStateOptions.filter(option => !option.disabled).length, 48);
+    assert.deepEqual({ ...values.companyStateOptions.find(option => option.value === state) }, { value: state, label: `${state} — not served`, disabled: true });
+    assert.ok(values.unavailableCompanyState === "Alaska" || values.unavailableCompanyState === "Hawaii");
+    await app.onSubmitOnline();
+    app.state.step = 7;
+    app.onNext();
+    assert.equal(calls, 0);
+    assert.equal(app.state.step, 1);
+    assert.match(app.state.validationMessage, /excluding Alaska and Hawaii/);
+    assert.equal(app.state.form.state, state);
+    assert.equal((app.state.form.states as string[]).join(","), "AK,HI");
+    assert.equal(app.state.form.garagingState, "HI");
+    app.state.form.state = "WA";
+    assert.equal(app.renderVals().companyStateOptions.length, 48);
+    assert.equal(app.renderVals().unavailableCompanyState, "");
+    assert.ok(!app.renderVals().companyStateOptions.some(option => option.value === state));
+  }
+});
+
+test("a served company may report Alaska and Hawaii operations, garaging or driver licenses", async () => {
+  let submitted = "";
+  const app = createApplication(async body => { submitted = body; return { ok: true }; });
+  app.state.form.legalName = "TEST ONLY";
+  app.state.form.email = "test@example.invalid";
+  app.state.form.state = "WA";
+  app.state.form.states = ["AK", "HI"];
+  app.state.form.garagingState = "AK";
+  app.state.drivers[0].licState = "HI";
+  await app.onSubmitOnline();
+  const payload = JSON.parse(submitted);
+  assert.equal(payload.form.state, "WA");
+  assert.deepEqual(payload.form.states, ["AK", "HI"]);
+  assert.equal(payload.form.garagingState, "AK");
+  assert.equal(payload.drivers[0].licState, "HI");
+  assert.equal(app.state.sentVia, "submitEmail");
 });
 
 test("new applications have empty unit counts and require real contact details", async () => {

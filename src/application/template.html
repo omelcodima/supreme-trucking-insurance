@@ -457,6 +457,7 @@
             <div style="background:#fff;border:1px solid #e9ece8;border-radius:16px;padding:28px 30px">
               <h2 style="font-size:20px;font-weight:800;color:#10261b;margin:0 0 4px;letter-spacing:-.01em">Insured Information</h2>
               <p style="font-size:13.5px;color:#73807a;margin:0 0 24px">The named insured and contact details for this policy.</p>
+              <p style="font-size:13.5px;color:#5b6b62;margin:0 0 20px">We serve trucking businesses based in 48 states, excluding Alaska and Hawaii. This describes our agency service area, not a policy's coverage territory.</p>
               <div style="display:grid;grid-template-columns:2fr 1fr;gap:17px 20px">
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">Legal name *</span><input data-field="legalName" value="{{ form.legalName }}" placeholder="Company legal name" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none"></label>
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">DBA</span><input data-field="dba" value="{{ form.dba }}" placeholder="Doing business as" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none"></label>
@@ -468,11 +469,12 @@
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">State</span>
                   <select data-field="state" value="{{ form.state }}" style="width:100%;padding:11px 9px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none;background:#fff;cursor:pointer">
                     <option value="">Select...</option>
-                    <sc-for list="{{ usStates }}" as="s" hint-placeholder-count="5"><option value="{{ s }}">{{ s }}</option></sc-for>
+                    <sc-for list="{{ companyStateOptions }}" as="s" hint-placeholder-count="5"><option value="{{ s.value }}" label="{{ s.label }}" disabled="{{ s.disabled }}">{{ s.label }}</option></sc-for>
                   </select>
                 </label>
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">ZIP</span><input data-field="zip" value="{{ form.zip }}" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font:inherit;font-size:14px;outline:none"></label>
               </div>
+              <sc-if value="{{ unavailableCompanyState }}"><p role="status" style="font-size:13.5px;color:#942626;margin:14px 0 0">Your company state ({{ unavailableCompanyState }}) is outside our agency service area. Your saved or imported information is unchanged, but we cannot accept an application for a business based in Alaska or Hawaii.</p></sc-if>
               <div style="height:17px"></div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:17px 20px">
                 <label style="display:block"><span style="display:block;font-size:12px;font-weight:600;color:#5b6b62;margin-bottom:6px">Phone</span><input data-field="phone" value="{{ form.phone }}" style="width:100%;padding:11px 13px;border:1.5px solid #e2e6e1;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;outline:none"></label>
@@ -1218,8 +1220,16 @@ class Component extends DCLogic {
     setTimeout(()=>{ try{ w.print(); }catch(e){} },400);
     this.setState({sentVia:'pdf'});
   }
+  unavailableBusinessState(){
+    const state=String(this.state.form.state||'').trim().toUpperCase();
+    return state==='AK'||state==='ALASKA'?'Alaska':state==='HI'||state==='HAWAII'?'Hawaii':'';
+  }
   onSubmitOnline = async ()=>{
     if(this._submitting) return;
+    if(this.unavailableBusinessState()){
+      this.setState({step:1,validationMessage:'We serve trucking businesses based in 48 states, excluding Alaska and Hawaii. We cannot accept this application because the company is based outside our agency service area. Your information has been kept unchanged.'});
+      return;
+    }
     const accepted=this.state.role==='Customer'&&this.state.smsAccepted===true;
     const mobile=String(this.state.smsMobile||'');
     const digits=mobile.replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');
@@ -1288,6 +1298,9 @@ class Component extends DCLogic {
 
     const pct=Math.round((s.step)/(keys.length-1)*100);
     const usStates=['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+    const companyStateOptions=usStates.filter(code=>code!=='AK'&&code!=='HI').map(code=>({value:code,label:code,disabled:false}));
+    const unavailableCompanyState=this.unavailableBusinessState();
+    if(unavailableCompanyState) companyStateOptions.push({value:s.form.state,label:String(s.form.state)+' — not served',disabled:true});
 
     const stateChips=usStates.map(code=>{
       const on=s.form.states.includes(code);
@@ -1369,7 +1382,7 @@ class Component extends DCLogic {
       saveLabel:s.saveLabel, saveDotStyle:`width:8px;height:8px;border-radius:50%;background:${s.saveDot}`,
       onStartFresh:this.onStartFresh,
       onStepClick:this.onStepClick, onFormChange:this.onFormChange,
-      form:s.form, usStates,
+      form:s.form, usStates, companyStateOptions, unavailableCompanyState,
 
       // lookup
       onRunSafer:this.onRunSafer, onUseSafer:this.onUseSafer, onSkipLookup:this.onSkipLookup, onLookupKindClick:this.onLookupKindClick,

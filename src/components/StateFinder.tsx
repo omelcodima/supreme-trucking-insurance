@@ -34,7 +34,7 @@ export default function StateFinder({
         </Link>
       </div>
       <Link href="/trucking-insurance" className="text-link mt-4">
-        Browse all states
+        Browse the 48 states we serve
       </Link>
     </div>
   );

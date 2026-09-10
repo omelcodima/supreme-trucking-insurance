@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
-import { statePages } from "@/lib/statePages";
+import { servedStatePages } from "@/lib/statePages";
+import { serviceAreaSummary } from "@/lib/serviceArea";
 import { classPages } from "@/lib/classPages";
 
 export const metadata: Metadata = {
   title: "Trucking Insurance by State | Supreme Trucking Insurance",
   description:
-    "Find commercial trucking insurance pages by state for owner-operators, fleets, new authorities, cargo, and physical damage coverage.",
+    "Trucking insurance help for businesses in 48 states, excluding Alaska and Hawaii. Find your state and explore owner-operator, fleet, and cargo options.",
   alternates: {
     canonical: "/trucking-insurance",
   },
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     siteName,
     title: "Trucking Insurance by State",
     description:
-      "Find commercial trucking insurance pages by state for owner-operators, fleets, new authorities, cargo, and physical damage.",
+      serviceAreaSummary,
     images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
   },
 };
@@ -27,7 +28,7 @@ export default function TruckingInsuranceStatesPage() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Trucking Insurance by State",
-    itemListElement: statePages.map((state, index) => ({
+    itemListElement: servedStatePages.map((state, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: `${state.name} Trucking Insurance`,
@@ -50,7 +51,7 @@ export default function TruckingInsuranceStatesPage() {
             Find trucking insurance help by state.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
-            Supreme helps trucking operations in most states where licensed. Choose your state to start with owner-operator, fleet, new authority, cargo, and physical damage insurance information.
+            {serviceAreaSummary} Choose your state to start with owner-operator, fleet, new authority, cargo, and physical damage insurance information.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -102,9 +103,9 @@ export default function TruckingInsuranceStatesPage() {
 
       <section className="section-soft py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
-          <span className="eyebrow mb-4">By state</span>
+          <span className="eyebrow mb-4">48 states served</span>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {statePages.map((state) => (
+            {servedStatePages.map((state) => (
               <Link
                 key={state.slug}
                 href={`/trucking-insurance/${state.slug}`}

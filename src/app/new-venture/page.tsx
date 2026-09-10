@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "New Authority Insurance | Supreme Trucking Insurance",
-  description: "Insurance guidance for new authority trucking companies. Market options, filing support, and clear updates. Licensed in most states.",
+  description: "New authority trucking insurance guidance and filing support. Serving businesses in 48 states, excluding Alaska and Hawaii. Start your quote with Supreme.",
   alternates: {
     canonical: "/new-venture",
   },

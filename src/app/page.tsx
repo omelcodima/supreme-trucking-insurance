@@ -7,7 +7,8 @@ import PromoPlayer from "@/components/PromoPlayer";
 import MarketMarquee from "@/components/MarketMarquee";
 import HeroScene from "@/components/HeroScene";
 import { featuredBlogPosts } from "@/lib/blogPosts";
-import { statePages } from "@/lib/statePages";
+import { servedStatePages } from "@/lib/statePages";
+import { serviceAreaSummary } from "@/lib/serviceArea";
 
 const operations = [
   {
@@ -189,12 +190,12 @@ export default function HomePage() {
             </p>
             <h2 className="section-heading">Trucking insurance by state.</h2>
             <p className="section-description">
-              Local requirements and market options for your operation.
-              Available in most states where licensed.
+              {serviceAreaSummary} Explore local requirements and market options
+              for your operation.
             </p>
           </div>
           <StateFinder
-            states={[...statePages]
+            states={[...servedStatePages]
               .sort((a, b) => a.name.localeCompare(b.name))
               .map(({ name, slug }) => ({ name, slug }))}
           />

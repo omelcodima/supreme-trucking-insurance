@@ -9,6 +9,7 @@ import SiteActions from "@/components/SiteActions";
 import { OPENAI_ADS_PIXEL_ID } from "@/lib/openaiAds";
 import { defaultOgImage, siteName, siteUrl } from "@/lib/seo";
 import { organizationSameAs } from "@/lib/socialProfiles";
+import { servedStateAreas } from "@/lib/serviceArea";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,7 +23,7 @@ const organizationJsonLd = {
   logo: "https://supremetruckinginsurance.com/logo.png",
   telephone: "+1-360-936-7196",
   email: "info@supremetruckinginsurance.com",
-  areaServed: "United States",
+  areaServed: servedStateAreas,
   sameAs: organizationSameAs,
   knowsAbout: [
     "Commercial truck insurance",
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Trucking Insurance for Owner-Operators and Fleets | Supreme",
   description:
-    "Trucking insurance and commercial truck insurance for owner-operators, fleets, and new authority. Shop trucking markets. Start a quote or call (360) 936-7196.",
+    "Trucking insurance for owner-operators, fleets, and new authority. Serving businesses in 48 states, excluding Alaska and Hawaii. Start a quote with Supreme.",
   keywords: [
     "trucking insurance",
     "commercial truck insurance",
@@ -55,14 +56,14 @@ export const metadata: Metadata = {
     siteName,
     title: "Supreme Trucking Insurance",
     description:
-      "Commercial trucking insurance for owner-operators, fleets, new authority, cargo, and physical damage.",
+      "Commercial trucking insurance for owner-operators, fleets, and new authority. Serving 48 states, excluding Alaska and Hawaii.",
     images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Supreme Trucking Insurance",
     description:
-      "Commercial trucking insurance for owner-operators, fleets, new authority, cargo, and physical damage.",
+      "Commercial trucking insurance for owner-operators, fleets, and new authority. Serving 48 states, excluding Alaska and Hawaii.",
     images: [defaultOgImage],
   },
   icons: {

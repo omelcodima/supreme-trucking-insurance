@@ -5,6 +5,7 @@ import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { quoteHrefForPath } from "@/lib/quoteContext";
 import { googleBusinessUrl } from "@/lib/socialProfiles";
 import { absoluteUrl, breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
+import { servedStateAreas } from "@/lib/serviceArea";
 
 type QA = { q: string; a: string };
 type QuickFact = { label: string; value: string };
@@ -72,10 +73,7 @@ export default function SubpageLayout({
         serviceType,
         description,
         url: absoluteUrl(canonicalPath),
-        areaServed: {
-          "@type": "Country",
-          name: "United States",
-        },
+        areaServed: servedStateAreas,
         provider: {
           "@id": absoluteUrl("/#insurance-agency"),
         },

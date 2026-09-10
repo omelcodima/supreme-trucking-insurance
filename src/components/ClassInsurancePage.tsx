@@ -5,6 +5,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 import { classPages, getClassPage } from "@/lib/classPages";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
 import { featuredStatePages } from "@/lib/statePages";
+import { servedStateAreas } from "@/lib/serviceArea";
 
 /** The sister directory: which carriers and wholesalers write a given class. */
 const CARRIERLENS_URL = "https://www.carrierlens.app";
@@ -56,7 +57,7 @@ export function ClassInsurancePage({ slug }: { slug: string }) {
       url: "https://supremetruckinginsurance.com",
       telephone: "+1-360-936-7196",
     },
-    areaServed: "United States",
+    areaServed: servedStateAreas,
     url: pageUrl,
     description: page.metaDescription,
   };

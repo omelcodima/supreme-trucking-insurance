@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { featuredBestAgencyPages } from "@/lib/bestAgencyPages";
+import { servedStateAreas } from "@/lib/serviceArea";
 
 export const metadata: Metadata = {
   title: "Best Truck Insurance Agency for Owner-Operators, Fleets & New Authorities",
@@ -86,10 +87,7 @@ export default function BestTruckInsuranceAgencyHubPage() {
       url: "https://supremetruckinginsurance.com",
       telephone: "+1-360-936-7196",
     },
-    areaServed: {
-      "@type": "Country",
-      name: "United States",
-    },
+    areaServed: servedStateAreas,
     url: pageUrl,
     description:
       "Guidance for owner-operators, fleets, and new authorities comparing trucking insurance agencies for commercial truck insurance, cargo, filings, and physical damage.",

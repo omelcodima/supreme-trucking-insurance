@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SubpageLayout from "@/components/SubpageLayout";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
+import { servedStateAreas } from "@/lib/serviceArea";
 
 /**
  * Trucking commercial auto / primary liability only. The head terms
@@ -57,7 +58,7 @@ export default function CommercialAutoInsurancePage() {
       url: "https://supremetruckinginsurance.com",
       telephone: "+1-360-936-7196",
     },
-    areaServed: "United States",
+    areaServed: servedStateAreas,
     url: absoluteUrl("/commercial-auto-insurance"),
     description: DESCRIPTION,
   };

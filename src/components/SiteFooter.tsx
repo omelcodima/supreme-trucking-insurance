@@ -4,6 +4,7 @@ import AnalyticsPreferences from "./AnalyticsPreferences";
 import { classPages } from "@/lib/classPages";
 import { featuredStatePages } from "@/lib/statePages";
 import { googleBusinessUrl, socialProfiles } from "@/lib/socialProfiles";
+import { serviceAreaSummary } from "@/lib/serviceArea";
 
 export default function SiteFooter() {
   return (
@@ -12,8 +13,8 @@ export default function SiteFooter() {
         <div>
           <BrandLogo />
           <p className="mt-5 max-w-sm text-sm leading-6">
-            Trucking insurance for owner operators, fleets, and new authority.
-            Licensed in most states.
+            Trucking insurance for owner operators, fleets, and new authority.{" "}
+            {serviceAreaSummary}
           </p>
           <p className="language-note mt-4">
             English · Russian · Ukrainian · Romanian
@@ -86,7 +87,7 @@ export default function SiteFooter() {
                 {s.name}
               </Link>
             ))}
-            <Link href="/trucking-insurance">All states</Link>
+            <Link href="/trucking-insurance">All 48 states we serve</Link>
           </div>
         </details>
         <div className="footer-legal">

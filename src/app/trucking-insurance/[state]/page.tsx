@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
-import { featuredStatePages, getStatePage, statePages } from "@/lib/statePages";
+import { featuredStatePages, getStatePage, statePages, unservedStateSlugs } from "@/lib/statePages";
+import { serviceAreaSummary } from "@/lib/serviceArea";
 import { classPages } from "@/lib/classPages";
 
 type Props = {
@@ -28,6 +29,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!state) {
     return {};
+  }
+
+  if (unservedStateSlugs.some((slug) => slug === state.slug)) {
+    const title = `${state.name}: Not Currently Served | Supreme`;
+    const description = `Supreme Trucking Insurance does not currently serve businesses based in ${state.name}. ${serviceAreaSummary}`;
+    return {
+      title,
+      description,
+      alternates: { canonical: `/trucking-insurance/${state.slug}` },
+      robots: { index: false, follow: true },
+      openGraph: { title, description, url: absoluteUrl(`/trucking-insurance/${state.slug}`) },
+      twitter: { title, description },
+    };
   }
 
   return {
@@ -59,6 +73,26 @@ export default async function StateInsurancePage({ params }: Props) {
 
   if (!state) {
     notFound();
+  }
+
+  if (unservedStateSlugs.some((slug) => slug === state.slug)) {
+    return (
+      <section className="site-section">
+        <div className="site-container">
+          <p className="section-kicker">Agency service availability</p>
+          <h1 className="section-heading">We do not currently serve {state.name}.</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8">
+            Supreme Trucking Insurance does not currently offer agency services to trucking businesses based in {state.name}. {serviceAreaSummary}
+          </p>
+          <p className="mt-4 max-w-3xl leading-7">
+            This describes where our agency accepts business. It does not change or define the coverage territory of any insurance policy.
+          </p>
+          <Link href="/trucking-insurance" className="button-primary mt-8">
+            View the 48 states we serve
+          </Link>
+        </div>
+      </section>
+    );
   }
 
   const relatedStates = featuredStatePages.filter((item) => item.slug !== state.slug).slice(0, 5);
