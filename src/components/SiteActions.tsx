@@ -6,7 +6,7 @@ import { Calculator, Phone, ArrowRight } from "lucide-react";
 import { quoteHrefForPath } from "@/lib/quoteContext";
 
 export default function SiteActions() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   if (
     ["/quote", "/instant-indication", "/coi-request", "/contact"].includes(
       pathname,

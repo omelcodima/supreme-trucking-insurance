@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
+import { captureOwnerLead } from "@/lib/ownerDatabase";
+import { guardOwnerIntake, readLimitedText, RequestSizeError } from "@/lib/ownerIntake";
 import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
 import { getQuotesTable } from "../../../../lib/airtable";
 import {
@@ -128,8 +130,10 @@ async function sendQuoteCustomerEmails(data: QuotePayload) {
 }
 
 export async function POST(request: Request) {
+  const limited = await guardOwnerIntake(request);
+  if (limited) return limited;
   try {
-    const json = (await request.json()) as Partial<QuotePayload>;
+    const json = JSON.parse(await readLimitedText(request, 65536)) as Partial<QuotePayload> & { submissionId?: unknown };
     let smsConsent;
     try { smsConsent = validateSmsConsent(json?.smsConsent); } catch (error) {
       return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
@@ -153,6 +157,11 @@ export async function POST(request: Request) {
       );
     }
 
+    data.smsConsent = await captureOwnerLead({ source: "quick_quote",
+      submissionId: typeof json.submissionId === "string" ? json.submissionId.slice(0,100) : data.smsConsent.reference,
+      name: `${data.firstName} ${data.lastName}`, company: data.company, phone: data.phone, email: data.email,
+      dot: data.dot, state: "", contactRequested: true, request: { coverage: data.coverageType, notes: data.notes }, smsConsent: data.smsConsent,
+    });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveQuoteToAirtable(data) },
       { name: "email", deliver: () => sendQuoteEmail(data) },
@@ -168,6 +177,7 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (error) {
+    if (error instanceof RequestSizeError) return NextResponse.json({ detail: "Request is too large." }, { status: 413 });
     console.error("Error in POST /api/quote:", error);
     return NextResponse.json(
       { detail: "We could not send your quote request notification right now. Please try again or call (360) 936-7196." },

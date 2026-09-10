@@ -1105,6 +1105,7 @@ class Component extends DCLogic {
     try{ localStorage.removeItem('supreme_trucking_app_v1'); }catch(e){}
     const freshForm={...this.state.form,agentEmail:'info@supremetruckinginsurance.com',legalName:'',dba:'',street:'',city:'',state:'',states:[],radius:'',zip:'',phone:'',email:'',ein:'',usdot:'',since:'',mileage:'',receipts:'',lookupValue:'',eldProvider:'',eldProviderOther:'',dashCamSystem:'',dashCamSystemOther:'',garagingAddressMode:'Same as company address',garagingStreet:'',garagingCity:'',garagingState:'',garagingZip:'',units2026_2027:'',units2025_2026:'',units2024_2025:'',units2023_2024:'',futurePlans:''};
     this._submittedPayload=null;
+    this._ownerSubmissionId=null;
     this.setState({step:0,form:freshForm,unitHistory:this.defaultUnitHistory(freshForm),saferStatus:'idle',saferApplied:false,saferCarrier:null,saferError:'',drivers:this.seedDrivers(),equipment:this.seedEquipment(),commodities:[{name:'General freight',otherName:'',pct:'',max:''}],claims:[{carrier:'',policy:'',num:'0',amt:'$0',details:''}],submitted:false,smsAccepted:false,smsMobile:'',smsError:''});
   }
   onSubmit = ()=>{ this.setState({submitted:true}); }
@@ -1231,6 +1232,7 @@ class Component extends DCLogic {
       return;
     }
     const payload={
+      submissionId:this._ownerSubmissionId||(this._ownerSubmissionId=crypto.randomUUID()),
       smsConsent:{accepted,mobile:accepted?'+1'+digits:'',version:this.smsDisclosure.version},
       submitterRole:this.state.role,
       summary:this.buildSummary(),

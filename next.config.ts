@@ -2,6 +2,17 @@ import type { NextConfig } from "next";
 import { BLOG_CONSOLIDATIONS } from "./src/lib/blogConsolidations";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    const privateHeaders = [
+      { key: "Cache-Control", value: "private, no-store" },
+      { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+      { key: "Referrer-Policy", value: "no-referrer" },
+      { key: "X-Frame-Options", value: "DENY" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'" },
+    ];
+    return ["/admin/:path*", "/api/admin/:path*", "/api/owner-auth/:path*"].map(source => ({ source, headers: privateHeaders }));
+  },
   async redirects() {
     return [
       ...Object.entries(BLOG_CONSOLIDATIONS).map(([source, destination]) => ({

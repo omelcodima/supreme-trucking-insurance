@@ -39,6 +39,7 @@ export default function QuoteExperience({
   const [smsConsent, setSmsConsent] = useState({ ...emptySmsConsent });
   const [confirmedCarrier, setConfirmedCarrier] = useState<QuickCarrier | null>(null);
   const submissionLock = useRef(false);
+  const ownerSubmissionId = useRef<string | null>(null);
   const operationNames: Record<string, string> = {
     fleet: "Fleet insurance",
     "owner-operator": "Owner operator insurance",
@@ -103,6 +104,7 @@ export default function QuoteExperience({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          submissionId: ownerSubmissionId.current ??= crypto.randomUUID(),
           smsConsent: validateSmsConsent(smsConsent),
           notes: [
             operationName ? `Operation: ${operationName}` : "",

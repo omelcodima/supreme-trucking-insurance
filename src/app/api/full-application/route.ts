@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
+import { captureOwnerLead } from "@/lib/ownerDatabase";
+import { guardOwnerIntake, readLimitedText, RequestSizeError } from "@/lib/ownerIntake";
 import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
 import { getQuotesTable } from "../../../../lib/airtable";
 import {
@@ -22,8 +24,9 @@ type FullApplicationPayload = {
   claims?: unknown[];
   smsConsent?: unknown;
   submitterRole?: unknown;
+  submissionId?: unknown;
 };
-type ValidatedApplication = Required<Omit<FullApplicationPayload, "smsConsent" | "submitterRole">> & { smsConsent: SmsConsentRecord };
+type ValidatedApplication = Required<Omit<FullApplicationPayload, "smsConsent" | "submitterRole" | "submissionId">> & { smsConsent: SmsConsentRecord };
 
 function value(data: Record<string, unknown> | undefined, key: string) {
   const raw = data?.[key];
@@ -173,8 +176,10 @@ async function sendFullApplicationCustomerEmails(data: ValidatedApplication) {
 }
 
 export async function POST(request: Request) {
+  const limited = await guardOwnerIntake(request);
+  if (limited) return limited;
   try {
-    const json = (await request.json()) as FullApplicationPayload;
+    const json = JSON.parse(await readLimitedText(request, 1024 * 1024)) as FullApplicationPayload;
     let smsConsent;
     try { smsConsent = validateSmsConsent(json?.smsConsent, json?.submitterRole === "Customer"); } catch (error) {
       return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
@@ -199,6 +204,12 @@ export async function POST(request: Request) {
       smsConsent: createSmsConsentRecord(smsConsent, "full_application", randomUUID(), new Date().toISOString()),
     };
 
+    data.smsConsent = await captureOwnerLead({ source: "full_application",
+      submissionId: typeof json.submissionId === "string" ? json.submissionId.slice(0,100) : data.smsConsent.reference,
+      name: value(form, "contactName"), company: value(form, "legalName"), phone: value(form, "phone"), email: value(form, "email"),
+      dot: value(form, "usdot") || value(form, "lookupValue"), state: value(form, "state"), contactRequested: true,
+      request: { type: "Full trucking application", document: "Original application remains in the agency email/PDF archive." }, smsConsent: data.smsConsent,
+    });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveFullApplication(data) },
       { name: "email", deliver: () => sendFullApplicationNotification(data) },
@@ -210,6 +221,7 @@ export async function POST(request: Request) {
       message: "Application received. Our team will review it and follow up with next steps.",
     });
   } catch (error) {
+    if (error instanceof RequestSizeError) return NextResponse.json({ detail: "Request is too large." }, { status: 413 });
     console.error("Error in POST /api/full-application:", error);
     return NextResponse.json(
       { detail: "We could not submit the full application right now. Please try again or call (360) 936-7196." },

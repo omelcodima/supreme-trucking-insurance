@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
+import { webcrypto } from "node:crypto";
 import { smsDisclosure } from "./smsConsent.ts";
 
 const template = readFileSync(
@@ -56,6 +57,7 @@ function createApplication(
   }
   const Component = runInNewContext(`${logic}\nComponent`, {
     DCLogic,
+    crypto: webcrypto,
     confirm: () => true,
     localStorage: { getItem: () => saved ? JSON.stringify(saved) : null, removeItem: () => {} },
     fetch: async (_url: string, options: { body: string }) => {

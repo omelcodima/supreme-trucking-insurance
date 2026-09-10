@@ -35,6 +35,11 @@ long-term consent archive.
 
 ## Before sending any marketing SMS
 
+A private owner workspace and PostgreSQL ledger are prepared in
+`docs/owner-dashboard.md`. They have been verified locally but are not connected
+to production storage yet. Do not treat that implementation as an active archive
+until the database, access controls, backups and production checks are complete.
+
 - Confirm the office SMS provider, registered brand, sending number, campaign
   approval, and acceptable insurance use case. No SMS provider is connected here.
 - Have the actual disclosure, privacy terms and campaign reviewed for applicable
