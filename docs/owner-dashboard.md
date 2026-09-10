@@ -2,8 +2,10 @@
 
 ## Current delivery status
 
-Implemented and verified locally and against the dedicated Neon database;
-production publication is pending the final commit. `OWNER_EMAILS`,
+Published at `https://supremetruckinginsurance.com/admin` from implementation commit
+`8904991f718fdebbe6a0327b795dceceef859e49` on September 9, 2026 (Pacific time).
+Vercel deployment `dpl_4FqqgQ88u4Tf6d3TX3p9fcADLNcV` reached READY and owns the
+production domain. `OWNER_EMAILS`,
 `OWNER_DATABASE_URL`, `OWNER_AUTH_SECRET` and `OWNER_AUTH_URL` are saved as sensitive
 Vercel Production settings. The approved owner address is not stored in source code.
 
@@ -169,6 +171,18 @@ Primary references:
 - https://better-auth.com/docs/concepts/rate-limit
 
 ## Verification
+
+Release checks passed: 126 unit tests, lint, production build, dependency audit
+(zero reported production vulnerabilities), local PostgreSQL and browser end-to-end
+checks, concurrent rate limits, and cloud rollback-only capture. Desktop/mobile
+private pages at 320/390/768/1440px were exercised locally. Live-domain checks
+confirmed configured sign-in, unauthenticated/cross-origin denial, no-store/noindex
+headers, no third-party tracking requests on login, mobile layout, and rejection of
+invalid/oversize public submissions. No production test leads were retained and no
+customer messages were sent by these tests. Successful production owner sign-in
+requires the owner's real email code; local OTP sign-in/logout was fully exercised
+with mocked email. These checks do not establish Outlook delivery or live Google
+reporting access.
 
 `npm test`, `npm run lint`, `npm run build`. `scripts/verify-owner-store.mts`
 requires an isolated localhost PostgreSQL database with `qa` in its name and refuses
