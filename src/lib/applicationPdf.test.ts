@@ -18,6 +18,15 @@ test("long applications paginate", async () => {
   assert.ok(document.getPages().every(page => page.getWidth() === 612 && page.getHeight() === 792));
 });
 
+test("PDF retry with the same receipt time has identical bytes", async () => {
+  const timestamp = "2026-09-10T12:00:00.000Z";
+  const first = await createApplicationPdf("Test only application", timestamp);
+  const second = await createApplicationPdf("Test only application", timestamp);
+  assert.deepEqual(first, second);
+  const document = await PDFDocument.load(first);
+  assert.equal(document.getCreationDate()?.toISOString(), timestamp);
+});
+
 test("PDF line wrapping handles unbroken long values within margins", async () => {
   const document = await PDFDocument.create();
   const font = await document.embedFont(StandardFonts.Helvetica);

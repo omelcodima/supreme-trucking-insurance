@@ -32,8 +32,13 @@ export function wrapPdfLine(text: string, font: PDFFont, maxWidth: number) {
   return lines;
 }
 
-export async function createApplicationPdf(text: string) {
+export async function createApplicationPdf(text: string, receivedAt?: string) {
   const document = await PDFDocument.create();
+  // Stable metadata keeps a retry's attachment identical for email idempotency.
+  if (receivedAt) {
+    document.setCreationDate(new Date(receivedAt));
+    document.setModificationDate(new Date(receivedAt));
+  }
   document.registerFontkit(fontkit);
   const fontBytes = await readFile(path.join(process.cwd(), "src/assets/fonts/NotoSans-Regular.ttf"));
   const font = await document.embedFont(fontBytes, { subset: true });

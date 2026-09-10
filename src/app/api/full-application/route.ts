@@ -130,7 +130,7 @@ async function sendFullApplicationNotification(data: ValidatedApplication) {
   const legalName = value(form, "legalName") || "Full trucking application";
   const contactEmail = value(form, "email");
   const text = formatFullApplicationEmail(data);
-  const pdf = await createApplicationPdf(text);
+  const pdf = await createApplicationPdf(text, data.smsConsent.receivedAt ?? undefined);
 
   return sendInternalLeadNotification({
     leadType: "full_application",
@@ -139,6 +139,13 @@ async function sendFullApplicationNotification(data: ValidatedApplication) {
     subject: `Full application submitted: ${legalName}`,
     text,
     attachments: [{ filename: "Supreme-Trucking-Application.pdf", content: pdf.toString("base64"), content_type: "application/pdf" }],
+    grakbot: {
+      consent: data.smsConsent,
+      contactRequested: true,
+      contact: { name: value(form, "contactName"), email: contactEmail, phone: value(form, "phone") },
+      company: { name: legalName, dot: value(form, "usdot") || (value(form, "lookupKind") === "USDOT" ? value(form, "lookupValue") : "") },
+      submission: { form, summary: data.summary, commodities: data.commodities, drivers: data.drivers, equipment: data.equipment, claims: data.claims },
+    },
   });
 }
 
@@ -212,12 +219,13 @@ export async function POST(request: Request) {
     });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveFullApplication(data) },
-      { name: "email", deliver: () => sendFullApplicationNotification(data) },
+      { name: "email", required: true, deliver: () => sendFullApplicationNotification(data) },
     ]);
     await Promise.all([sendWebhook(data), sendFullApplicationCustomerEmails(data)]);
 
     return NextResponse.json({
       ok: true,
+      handoff: "email_accepted",
       message: "Application received. Our team will review it and follow up with next steps.",
     });
   } catch (error) {

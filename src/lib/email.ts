@@ -57,5 +57,9 @@ export async function sendLeadEmail({ to, subject, text, replyTo, scheduledAt, t
     throw Object.assign(new Error("Email provider rejected the notification."), { status: response.status });
   }
 
-  return response.json().catch(() => ({ ok: true }));
+  const receipt = await response.json().catch(() => null);
+  if (typeof receipt?.id !== "string" || !receipt.id.trim()) {
+    throw new Error("Email provider did not confirm acceptance.");
+  }
+  return receipt;
 }

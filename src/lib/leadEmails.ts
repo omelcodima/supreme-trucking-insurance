@@ -1,4 +1,5 @@
-import { sendLeadEmail, type EmailAttachment } from "./email";
+import { sendLeadEmail, type EmailAttachment } from "./email.ts";
+import { buildGrakbotHandoff, grakbotSubjectPrefix, type GrakbotHandoff } from "./grakbotHandoff.ts";
 
 export const leadNotificationEmail = process.env.LEAD_NOTIFICATION_EMAIL || "info@supremetruckinginsurance.com";
 
@@ -15,6 +16,7 @@ type LeadEmailInput = {
   text: string;
   attachments?: EmailAttachment[];
   idempotencyKey?: string;
+  grakbot?: GrakbotHandoff;
 };
 
 type CustomerEmailInput = {
@@ -54,15 +56,17 @@ export async function sendInternalLeadNotification({
   text,
   attachments,
   idempotencyKey,
+  grakbot,
 }: LeadEmailInput) {
+  const handoff = grakbot ? buildGrakbotHandoff(grakbot) : null;
   return sendLeadEmail({
     to: leadNotificationEmail,
-    subject,
-    text,
+    subject: handoff ? `${grakbotSubjectPrefix} ${subject.replace(/[\r\n\u0000]/g, " ").slice(0, 180)}` : subject,
+    text: handoff ? `${handoff.introduction}\n${text}` : text,
     replyTo: contactEmail,
     tags: tags(leadType, company),
-    attachments,
-    idempotencyKey,
+    attachments: handoff ? [...(attachments || []), handoff.attachment] : attachments,
+    idempotencyKey: handoff?.idempotencyKey || idempotencyKey,
   });
 }
 

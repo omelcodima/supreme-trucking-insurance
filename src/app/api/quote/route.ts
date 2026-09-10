@@ -97,6 +97,13 @@ async function sendQuoteEmail(data: QuotePayload) {
     contactEmail: data.email,
     subject: `New quote request: ${data.company}`,
     text: formatQuoteEmail(data),
+    grakbot: {
+      consent: data.smsConsent,
+      contactRequested: true,
+      contact: { name: `${data.firstName} ${data.lastName}`, email: data.email, phone: data.phone },
+      company: { name: data.company, dot: data.dot },
+      submission: { coverageType: data.coverageType, notes: data.notes },
+    },
   });
 }
 
@@ -164,13 +171,14 @@ export async function POST(request: Request) {
     });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveQuoteToAirtable(data) },
-      { name: "email", deliver: () => sendQuoteEmail(data) },
+      { name: "email", required: true, deliver: () => sendQuoteEmail(data) },
     ]);
     await Promise.all([sendWebhook(data), sendQuoteCustomerEmails(data)]);
 
     return NextResponse.json(
       {
         ok: true,
+        handoff: "email_accepted",
         message:
           "Thanks! Your request was received successfully. We will review your file and follow up as soon as possible. If you have immediate questions, please call us at (360) 936-7196.",
       },

@@ -1,6 +1,7 @@
 export type LeadDeliveryChannel = {
   name: string;
   deliver: () => Promise<unknown>;
+  required?: boolean;
 };
 
 export type LeadDeliveryResult = {
@@ -10,7 +11,7 @@ export type LeadDeliveryResult = {
 
 export class LeadDeliveryUnavailableError extends Error {
   constructor(channels: string[]) {
-    super(`Every lead delivery channel failed: ${channels.join(", ")}`);
+    super(`Required lead delivery was unavailable: ${channels.join(", ")}`);
     this.name = "LeadDeliveryUnavailableError";
   }
 }
@@ -48,7 +49,7 @@ export async function deliverLeadWithFallback(channels: LeadDeliveryChannel[]): 
     console.error("Lead delivery channel failed.", failure);
   });
 
-  if (delivered.length === 0) {
+  if (delivered.length === 0 || channels.some(channel => channel.required && !delivered.includes(channel.name))) {
     throw new LeadDeliveryUnavailableError(failed.map(({ name, code }) => `${name}:${code}`));
   }
 

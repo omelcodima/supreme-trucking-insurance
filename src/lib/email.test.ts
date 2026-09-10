@@ -20,6 +20,8 @@ test("email sends a PDF attachment and keeps unsafe text escaped", async () => {
     assert.deepEqual(payload.attachments, [attachment]);
     assert.match(String(payload.html), /&lt;script&gt;/);
     assert.doesNotMatch(String(payload.html), /<script>/);
+    globalThis.fetch = async () => Response.json({ ok: true });
+    await assert.rejects(sendLeadEmail({ to: "info@example.com", subject: "Test", text: "Test" }), /did not confirm acceptance/);
     globalThis.fetch = async () => new Response("private recipient or credential", { status: 403 });
     await assert.rejects(sendLeadEmail({ to: "info@example.com", subject: "Test", text: "Test" }), error => {
       assert.doesNotMatch(String(error), /private recipient|credential/);

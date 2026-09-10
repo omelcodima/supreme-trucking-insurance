@@ -64,3 +64,10 @@ test("rejects a lead only when every durable delivery channel fails", async () =
     ),
   );
 });
+
+test("a required Grakbot email failure is not hidden by an Airtable success", async () => {
+  await withoutErrorLogging(() => assert.rejects(deliverLeadWithFallback([
+    { name: "airtable", deliver: async () => ({ id: "stored" }) },
+    { name: "email", required: true, deliver: async () => { throw new Error("provider unavailable"); } },
+  ]), LeadDeliveryUnavailableError));
+});

@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   };
   const key = `indication/${data.requestId}/${createHash("sha256").update(JSON.stringify(data)).digest("hex").slice(0, 24)}`;
   try {
-    await captureOwnerLead({ source: "instant_indication", submissionId: key, name: data.name, company: lookup.carrier?.legalName || "",
+    const consent = await captureOwnerLead({ source: "instant_indication", submissionId: key, name: data.name, company: lookup.carrier?.legalName || "",
       phone: data.phone, email: data.email, dot: data.dot, state: lookup.carrier?.state || "", contactRequested: data.contactRequested,
       request: { cargo: data.cargo, radius: data.radius, device: device.type, browser: device.browser, os: device.os, lookup: lookup.status },
       smsConsent: createSmsConsentRecord(data.smsConsent ?? emptySmsConsent, "instant_indication", randomUUID(), new Date().toISOString()),
@@ -51,6 +51,13 @@ export async function POST(request: Request) {
       leadType: "instant_indication", company: lookup.carrier?.legalName || "Unconfirmed company", contactEmail: data.email,
       subject: `Instant indication${data.contactRequested ? " - follow-up requested" : ""}: ${data.dot ? `DOT ${data.dot}` : "No DOT"}`,
       text: formatIndicationEmail(data, lookup, device), idempotencyKey: key,
+      grakbot: {
+        consent,
+        contactRequested: data.contactRequested,
+        contact: { name: data.name, email: data.email, phone: data.phone },
+        company: { name: lookup.carrier?.legalName || "", dot: data.dot },
+        submission: { input: data, device, lookupStatus: lookup.status, carrier: lookup.carrier },
+      },
     });
     if (typeof receipt?.id !== "string" || !receipt.id) throw new Error("Missing email provider receipt.");
     return json({ ok: true, lookup, estimate, notification: "accepted" });
