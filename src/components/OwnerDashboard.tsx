@@ -368,6 +368,10 @@ export default function OwnerDashboard({
               {item.name}
             </button>
           ))}
+          <button onClick={() => window.location.assign("/admin/design")}>
+            <ExternalLink size={18} />
+            Website design
+          </button>
         </nav>
         <div className={styles.account}>
           <span>{ownerEmail}</span>

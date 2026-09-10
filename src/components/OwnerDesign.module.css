@@ -1,0 +1,25 @@
+.page { margin: -8px; min-height: 100vh; background: #f6f4f0; color: #242b2a; font: 16px/1.6 Arial, sans-serif; }
+.page * { box-sizing: border-box; }
+.container { max-width: 1120px; padding: 32px 28px 64px; margin: auto; }
+.header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding-bottom: 40px; }
+.page a { color: #244e40; text-underline-offset: 4px; }
+.eyebrow { color: #775239; font-size: 12px; letter-spacing: .15em; font-weight: 700; }
+.page h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.15; margin: 16px 0; letter-spacing: -.04em; }
+.intro { max-width: 760px; color: #53615c; }
+.current { margin: 28px 0 0; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.card { border: 2px solid #d9ded8; background: white; border-radius: 12px; overflow: hidden; }
+.card[data-selected="true"] { border-color: #ae4e24; }
+.card img { display: block; width: 100%; height: auto; aspect-ratio: 600/338; object-fit: cover; }
+.copy { padding: 24px; }
+.copy h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; font-size: 24px; margin: 0; }
+.copy h2 span { font-size: 12px; letter-spacing: 0; font-weight: 600; color: #98451d; background: #fff1e8; padding: 3px 10px; border-radius: 20px; }
+.copy p { color: #53615c; min-height: 76px; }
+.page button { font: inherit; font-weight: 700; padding: 12px 22px; color: white; background: #a5441e; border: 0; border-radius: 6px; cursor: pointer; }
+.page button:hover:not(:disabled) { background: #813313; }
+.page button:disabled { cursor: default; background: #e9ece7; color: #637169; }
+.page :focus-visible { outline: 3px solid #126da1; outline-offset: 4px; }
+.status { color: #17633d; min-height: 26px; margin: 12px 0; }
+.error { color: #922713; padding: 12px; border: 1px solid #d99b8b; }
+.note { color: #65716a; font-size: 14px; margin-top: 24px; }
+@media (max-width: 650px) { .grid { grid-template-columns: 1fr; } .container { padding: 24px 18px 40px; } .header { padding-bottom: 24px; } .copy p { min-height: 0; } }

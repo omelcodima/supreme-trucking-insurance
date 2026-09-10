@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import GoogleReviews from "@/components/GoogleReviews";
 import StateFinder from "@/components/StateFinder";
-import PromoPlayer from "@/components/PromoPlayer";
 import MarketMarquee from "@/components/MarketMarquee";
-import HeroScene from "@/components/HeroScene";
+import HomeHero from "@/components/HomeHero";
+import { publicHomepageVariant } from "@/lib/homepageDesign";
 import { featuredBlogPosts } from "@/lib/blogPosts";
 import { servedStatePages } from "@/lib/statePages";
 import { serviceAreaSummary } from "@/lib/serviceArea";
@@ -34,45 +34,14 @@ const operations = [
   },
 ];
 
-export default function HomePage() {
+// Keep public HTML cached; owner changes invalidate only this page immediately.
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const variant = await publicHomepageVariant();
   return (
     <>
-      <section className="home-hero">
-        <Image
-          src="/images/hero-premium.jpg"
-          alt="A tractor-trailer on the open highway"
-          fill
-          priority
-          sizes="100vw"
-          className="home-hero-image"
-        />
-        <HeroScene />
-        <div className="home-hero-shade" />
-        <div className="site-container home-hero-inner">
-          <div className="home-hero-copy">
-            <p className="hero-kicker">For the business behind the wheel</p>
-            <h1>
-              <span className="hero-brand-name">Supreme</span>
-              <span className="hero-brand-category">Trucking Insurance.</span>
-            </h1>
-            <p>
-              Independent agents. Trucking-focused markets. Clear answers for
-              owner operators, fleets, and new authority.
-            </p>
-            <div className="hero-buttons">
-              <Link href="/quote" className="button-primary">
-                Get a Free Quote
-                <ArrowRight size={18} aria-hidden="true" />
-              </Link>
-              <a href="tel:+13609367196" className="hero-call">
-                <Phone size={17} aria-hidden="true" />
-                (360) 936-7196
-              </a>
-            </div>
-            <PromoPlayer />
-          </div>
-        </div>
-      </section>
+      <HomeHero variant={variant} />
       <MarketMarquee />
       <section className="site-section">
         <div className="site-container">
