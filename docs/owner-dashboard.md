@@ -2,10 +2,10 @@
 
 ## Current delivery status
 
-Published at `https://supremetruckinginsurance.com/admin` from implementation commit
-`8904991f718fdebbe6a0327b795dceceef859e49` on September 9, 2026 (Pacific time).
-Vercel deployment `dpl_4FqqgQ88u4Tf6d3TX3p9fcADLNcV` reached READY and owns the
-production domain. `OWNER_EMAILS`,
+Published at `https://supremetruckinginsurance.com/admin`; the Traffic extension
+was deployed from commit `c9218bbf8390dc132f96e6dcd3c9568c764fdfca` on September 10,
+2026 (Pacific time). Vercel deployment `dpl_Dr7Mm482t4NUrRsuSYg66f7SSXRN` reached
+READY and was verified as the production-domain deployment. `OWNER_EMAILS`,
 `OWNER_DATABASE_URL`, `OWNER_AUTH_SECRET` and `OWNER_AUTH_URL` are saved as sensitive
 Vercel Production settings. The approved owner address is not stored in source code.
 
@@ -34,8 +34,9 @@ settings, are gitignored and mode 0600. The migration URL stays local. No secret
 values belong in source control or chat.
 
 GA reporting Viewer access and the server credential are configured. The Data API
-is enabled and live aggregate reports were verified on September 10, 2026;
-deployment of the reporting extension is pending (see below).
+is enabled and live aggregate reports were verified on September 10, 2026.
+The reporting extension is deployed. The final authenticated production Traffic
+screen check awaits a fresh owner sign-in code because the old session expired.
 The existing consent-gated GA4 website tag does not itself
 confer reporting access. Airtable and email notifications remain separate;
 their recipient is unchanged. Automated SMS sending and provider STOP sync are not
@@ -139,15 +140,21 @@ The actual server adapter successfully returned connected reports for 7, 28 and
 90 complete days, with the expected daily-series lengths and property timezone
 `America/Los_Angeles`. These were read-only requests and did not create analytics
 events, leads or messages. Vercel metadata confirms that the credential is
-sensitive and Production-only. Deployment and production Traffic verification
-are the remaining steps; the saved variable is not active in the old deployment.
+sensitive and Production-only. The subsequent deployment reached READY with the
+new environment configuration. The actual adapter was verified directly against
+Google; authenticated production Traffic verification is still pending a fresh
+owner sign-in code and must not be reported as completed.
 
 After incorporating the existing 48-state service-area update without changing
 it, local verification passed: 138 unit tests, lint, TypeScript and production build.
 The authenticated synthetic-data browser check covered the daily chart/table,
 channels, 7/28/90-day filters and unavailable state at 320/390/768/1440px, with
 no external trackers or real messages. Live GA4 verification subsequently passed
-as described above; this extension has not been deployed yet.
+as described above. Post-deployment checks confirmed no-store/noindex private
+pages, an unauthenticated `/api/admin` response of 401 and cross-origin rejection
+of 403. The deployment-scoped error-log scan returned zero error records. These
+checks created no leads or messages. One sign-in code was separately requested
+through the normal owner login UI for final authenticated verification.
 
 | Variable | Purpose |
 | --- | --- |
