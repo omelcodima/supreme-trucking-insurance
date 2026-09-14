@@ -14,6 +14,7 @@ import {
   normalizeGeneratedBlogParagraph,
   normalizeGeneratedBlogSectionBody,
 } from "@/lib/blogText";
+import { generateFirstUniqueBlogPost } from "@/lib/blogCandidateSelection";
 import { findNearDuplicateBlogTopic } from "@/lib/blogTopicSimilarity";
 
 export const maxDuration = 180;
@@ -474,38 +475,51 @@ export async function GET(request: Request) {
       topicDuplicatesFiltered: unusedSourceCandidates.length - candidates.length,
     });
 
-    const source = candidates.find((item) => sourceScore(item) > 0) || candidates[0];
-
-    if (!source) {
+    if (candidates.length === 0) {
       return NextResponse.json({ ok: true, message: "No new trucking source items found." });
     }
 
-    console.info("Blog automation stage: content generation started.", {
-      sourceUrl: source.url,
-    });
-    const generatedPost = await retryMalformedBlogGeneration(
-      (attempt) => generatePost(source, attempt),
-      {
-        onRetry: ({ attempt, error }) => {
-          console.warn("Blog automation stage: retrying malformed generated content.", {
-            attempt,
-            reason: error.message,
-          });
-        },
+    const selected = await generateFirstUniqueBlogPost({
+      sources: candidates,
+      existingTitles: existingTopicTitles,
+      maxAttempts: 3,
+      generate: async (candidate) => {
+        console.info("Blog automation stage: content generation started.", {
+          sourceUrl: candidate.url,
+        });
+        const post = await retryMalformedBlogGeneration(
+          (attempt) => generatePost(candidate, attempt),
+          {
+            onRetry: ({ attempt, error }) => {
+              console.warn("Blog automation stage: retrying malformed generated content.", {
+                attempt,
+                reason: error.message,
+              });
+            },
+          },
+        );
+        console.info("Blog automation stage: content generation completed.", {
+          slug: post.slug,
+        });
+        return post;
       },
-    );
-    console.info("Blog automation stage: content generation completed.", {
-      slug: generatedPost.slug,
+      onDuplicate: ({ attempt, source: duplicateSource, existingTitle }) => {
+        console.warn("Blog automation stage: generated topic overlaps existing post; trying next source.", {
+          attempt,
+          sourceUrl: duplicateSource.url,
+          existingTitle,
+        });
+      },
     });
-    const generatedTopicDuplicate = findNearDuplicateBlogTopic(
-      generatedPost.title,
-      existingTopicTitles,
-    );
-    if (generatedTopicDuplicate) {
-      throw new Error(
-        `Generated blog topic overlaps an existing post: ${generatedTopicDuplicate.existingTitle}`,
-      );
+
+    if (!selected) {
+      return NextResponse.json({
+        ok: true,
+        message: "No unique trucking topic generated from the bounded source set.",
+      });
     }
+
+    const { source, post: generatedPost } = selected;
     let slug = generatedPost.slug;
     let suffix = 2;
     while (existingSlugs.has(slug)) {
