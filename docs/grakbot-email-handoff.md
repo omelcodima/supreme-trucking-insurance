@@ -12,8 +12,11 @@ as its default. Never take the recipient from a visitor's form fields.
 
 - Quick quote, full application and instant indication notifications use the
   subject prefix `[SUPREME-INTAKE v1]`.
-- Each email includes one `supreme-intake-v1.json` attachment, with a server-issued
-  request ID and content-based revision ID. The full application retains its PDF.
+- As of September 15, 2026, the owner requested PDF-only intake attachments.
+  Full applications retain their existing `Supreme-Trucking-Application.pdf`.
+  Quick quotes, assistant requests and indications receive `Supreme-Intake.pdf`.
+  No `supreme-intake-v1.json` is generated or sent. The email still includes the
+  server-issued request and revision IDs, but it is not the former JSON protocol.
 - The website sends one agency notification, not a second duplicate to Grakbot.
 - The website AI assistant's quote/callback form uses the same quick-quote
   channel. `untrusted_submission.entryPoint` is `website_assistant` and
@@ -27,10 +30,14 @@ as its default. Never take the recipient from a visitor's form fields.
   Without that store, the current routes generate new IDs on retries; do not
   depend on email deduplication alone in a deployment without the owner database.
 
-## Grakbot setup instructions
+## Former Grakbot JSON setup (not active with PDF-only emails)
 
-These are proposed instructions for the bot owner to configure. Creating this
-file does not configure Grakbot, grant CRM access, or enable portal invitations.
+The instructions below document the previous proposed JSON protocol only. Do
+not enable this parser for current PDF-only emails: its required attachment is
+no longer supplied. Grakbot integration needs a separately verified PDF intake
+workflow or a private structured channel. Do not silently weaken authentication,
+deduplication or customer-access checks to compensate. Creating this file does
+not configure Grakbot, grant CRM access, or enable portal invitations.
 
 1. Process only NEW website intake messages in the designated agency mailbox.
    Require a trusted mailbox-provider authentication result for the verified

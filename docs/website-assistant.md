@@ -35,8 +35,9 @@ not establish identity or grant access to existing customer records.
 
 The form requires contact confirmation and submits to `/api/quote`, including
 `entryPoint=website_assistant` and `contactMode`. The existing server recipient
-defaults to `info@supremetruckinginsurance.com`. The owner dashboard and structured
-Grakbot email receive the request. Success requires email-provider acceptance;
+defaults to `info@supremetruckinginsurance.com`. The owner dashboard and intake
+email receive the request. Intake email includes a readable PDF, not JSON.
+Success requires email-provider acceptance;
 that is not proof of inbox delivery or Grakbot processing.
 
 No marketing SMS permission is inferred. Callback requests receive a transactional

@@ -3,6 +3,7 @@ import test from "node:test";
 import { buildGrakbotHandoff, type GrakbotHandoff } from "./grakbotHandoff.ts";
 import { sendInternalLeadNotification, leadNotificationEmail } from "./leadEmails.ts";
 import { createSmsConsentRecord, emptySmsConsent } from "./smsConsent.ts";
+import { PDFDocument } from "pdf-lib";
 
 const intake = (): GrakbotHandoff => ({
   consent: createSmsConsentRecord(emptySmsConsent, "quick_quote", "11111111-1111-4111-8111-111111111111", "2026-09-10T12:00:00.000Z"),
@@ -14,7 +15,9 @@ const intake = (): GrakbotHandoff => ({
 
 test("handoff preserves structured intake and does not claim a CRM write or marketing authority", () => {
   const result = buildGrakbotHandoff(intake());
-  assert.deepEqual(JSON.parse(Buffer.from(result.attachment.content, "base64").toString()), result.envelope);
+  assert.equal("attachment" in result, false);
+  assert.doesNotMatch(result.introduction, /\.json/);
+  assert.match(result.idempotencyKey, /^supreme-intake-pdf\//);
   assert.equal(result.envelope.crm_status, "not_confirmed");
   assert.equal(result.envelope.action, "review_quote_request");
   assert.equal(result.envelope.consent.marketing_sending_authorized, false);
@@ -28,8 +31,8 @@ test("identical retries have stable keys; corrected data and new requests have d
   const original = buildGrakbotHandoff(data);
   const reordered = { ...data, submission: { notes: "Test only", coverageType: "Cargo" } };
   assert.equal(original.idempotencyKey, buildGrakbotHandoff(reordered).idempotencyKey);
-  assert.equal(original.attachment.content, buildGrakbotHandoff(reordered).attachment.content);
-  assert.equal(original.attachment.content, buildGrakbotHandoff(data).attachment.content);
+  assert.deepEqual(original.envelope, buildGrakbotHandoff(reordered).envelope);
+  assert.deepEqual(original.envelope, buildGrakbotHandoff(data).envelope);
   assert.notEqual(original.idempotencyKey, buildGrakbotHandoff({ ...data, submission: { notes: "Correction" } }).idempotencyKey);
   assert.notEqual(original.idempotencyKey, buildGrakbotHandoff({ ...data, consent: { ...data.consent, reference: "22222222-2222-4222-8222-222222222222" } }).idempotencyKey);
 });
@@ -55,7 +58,7 @@ test("SMS opt-in evidence is not automatic sending permission", () => {
   assert.equal(result.envelope.consent.marketing_calls, "not_recorded");
 });
 
-test("one agency email carries the handoff JSON alongside the full application PDF", async () => {
+test("intake emails contain readable PDFs without JSON; full application PDF is preserved", async () => {
   const previous = process.env.RESEND_API_KEY;
   process.env.RESEND_API_KEY = "test-only";
   const original = globalThis.fetch;
@@ -78,15 +81,31 @@ test("one agency email carries the handoff JSON alongside the full application P
     assert.doesNotMatch(String(sent[0].body.subject), /[\r\n]/);
     const attachments = sent[0].body.attachments as Array<{ filename: string; content: string }>;
     assert.deepEqual(attachments[0], pdf);
-    assert.equal(attachments[1].filename, "supreme-intake-v1.json");
-    const envelope = JSON.parse(Buffer.from(attachments[1].content, "base64").toString());
-    assert.equal(envelope.untrusted_submission.details.form.eldProvider, "Test");
+    assert.equal(attachments.length, 1);
+    assert.doesNotMatch(String(sent[0].body.text), /\.json/);
     assert.equal(sent[0].headers.get("Idempotency-Key"), buildGrakbotHandoff(data).idempotencyKey);
     assert.doesNotMatch(String(sent[0].body.html), /<script>/);
 
     await sendInternalLeadNotification({ leadType: "contact", subject: "Contact", text: "Test only" });
     assert.equal(sent[1].body.subject, "Contact");
     assert.equal(sent[1].body.attachments, undefined);
+
+    for (const source of ["quick_quote", "instant_indication"] as const) {
+      const request = intake();
+      request.consent.source = source;
+      const input = { leadType: source, subject: "Test intake", text: "Company: Test carrier\nContact: Test only\nCargo: General freight", grakbot: request,
+        attachments: [{ filename: "legacy.json", content: "e30=", content_type: "application/json" }] };
+      await sendInternalLeadNotification(input);
+      const first = sent.at(-1)!.body.attachments as Array<{ filename: string; content: string; content_type: string }>;
+      assert.equal(first.length, 1);
+      assert.equal(first[0].filename, "Supreme-Intake.pdf");
+      assert.equal(first[0].content_type, "application/pdf");
+      const bytes = Buffer.from(first[0].content, "base64");
+      assert.equal(bytes.subarray(0, 5).toString(), "%PDF-");
+      assert.equal((await PDFDocument.load(bytes)).getPageCount(), 1);
+      await sendInternalLeadNotification(input);
+      assert.deepEqual(sent.at(-1)!.body.attachments, first);
+    }
   } finally {
     globalThis.fetch = original;
     if (previous === undefined) delete process.env.RESEND_API_KEY;

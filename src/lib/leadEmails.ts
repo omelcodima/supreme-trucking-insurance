@@ -1,5 +1,6 @@
 import { sendLeadEmail, type EmailAttachment } from "./email.ts";
 import { buildGrakbotHandoff, grakbotSubjectPrefix, type GrakbotHandoff } from "./grakbotHandoff.ts";
+import { createApplicationPdf } from "./applicationPdf.ts";
 
 export const leadNotificationEmail = process.env.LEAD_NOTIFICATION_EMAIL || "info@supremetruckinginsurance.com";
 
@@ -59,13 +60,30 @@ export async function sendInternalLeadNotification({
   grakbot,
 }: LeadEmailInput) {
   const handoff = grakbot ? buildGrakbotHandoff(grakbot) : null;
+  let readableAttachments = attachments;
+  if (handoff) {
+    readableAttachments = (attachments || []).filter(attachment =>
+      attachment.content_type !== "application/json" && !/\.json$/i.test(attachment.filename));
+    // Keep the full application's existing PDF; other intake types need a PDF
+    // of their human-readable notification, not a dump of the machine envelope.
+    if (!readableAttachments.some(attachment => attachment.content_type === "application/pdf" && /\.pdf$/i.test(attachment.filename))) {
+      const pdf = await createApplicationPdf([
+        subject,
+        `Received: ${handoff.envelope.received_at || "Not recorded"}`,
+        `Request ID: ${handoff.envelope.request_id}`,
+        "",
+        text,
+      ].join("\n"), handoff.envelope.received_at ?? undefined);
+      readableAttachments.push({ filename: "Supreme-Intake.pdf", content: pdf.toString("base64"), content_type: "application/pdf" });
+    }
+  }
   return sendLeadEmail({
     to: leadNotificationEmail,
     subject: handoff ? `${grakbotSubjectPrefix} ${subject.replace(/[\r\n\u0000]/g, " ").slice(0, 180)}` : subject,
     text: handoff ? `${handoff.introduction}\n${text}` : text,
     replyTo: contactEmail,
     tags: tags(leadType, company),
-    attachments: handoff ? [...(attachments || []), handoff.attachment] : attachments,
+    attachments: readableAttachments,
     idempotencyKey: handoff?.idempotencyKey || idempotencyKey,
   });
 }
