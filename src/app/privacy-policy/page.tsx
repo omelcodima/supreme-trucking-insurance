@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
               We respect your privacy and are committed to protecting the information you share with us when you request a quote, upload documents, or contact our team.
             </p>
             <div className="mt-6 inline-flex items-center rounded-full border border-[#DED3C4] bg-white/70 px-4 py-2 text-sm text-[#7B6B59]">
-              Updated: September 10, 2026
+              Updated: September 17, 2026
             </div>
           </div>
         </div>
@@ -120,6 +120,10 @@ export default function PrivacyPolicyPage() {
                   <p>Contact details are optional. If you select agent follow-up and provide a name, phone or email, we use those details to respond about this estimate. That choice does not enroll you in automated marketing or text messages. Marketing SMS permission, if you want to give it, is a separate optional checkbox and mobile-number field. Typing into the indication form without submitting it does not send those entries to our team. Technical request information may be used briefly for abuse prevention.</p>
                 </Section>
               </div>
+              <Section title="Regional Homepage">
+                <p>Our hosting provider may supply an approximate country and state based on your connection. We use only that coarse region to suggest a homepage scene and wording. This feature does not request GPS access, store your IP address in our lead database, or determine your business location, insurance eligibility, or pricing. Network routing and VPNs can make the suggestion inaccurate.</p>
+                <p>You can choose a different state or the national view. We save only a state you explicitly select in this tab&apos;s session storage; the automatic location suggestion is not saved there. Regional pictures are hosted by us, so this feature does not send your visit to an external image provider.</p>
+              </Section>
               <div id="website-assistant" className="scroll-mt-28">
                 <Section title="Website AI Assistant">
                   <p>The optional AI assistant answers general questions about our services and quote preparation. After you agree to AI processing and send a question, that message and limited recent conversation context are processed through Vercel AI Gateway and an OpenAI model to generate a response. AI responses may be inaccurate and do not provide a quote, bind coverage, or replace an agent&apos;s review.</p>
