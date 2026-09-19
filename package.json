@@ -9,7 +9,7 @@
     "build:application": "node scripts/build-quote-application.mjs",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test src/lib/*.test.ts",
+    "test": "node --experimental-strip-types --test src/lib/*.test.ts && node --test scripts/*.test.mjs",
     "health:lead-routes": "node scripts/verify-lead-routes.mjs",
     "health:seo-routes": "node scripts/verify-seo-routes.mjs"
   },

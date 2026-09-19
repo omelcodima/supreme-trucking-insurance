@@ -2,11 +2,16 @@
 
 import { readFile } from "node:fs/promises";
 
+import { verifyCanonicalHostRedirect } from "./verify-canonical-host-redirect.mjs";
+
 const baseUrl = new URL(process.argv[2] || process.env.SEO_BASE_URL || "https://supremetruckinginsurance.com");
 const origin = baseUrl.origin;
 const sitemapUrl = new URL("/sitemap.xml", baseUrl).href;
 const concurrency = Number.parseInt(process.env.SEO_AUDIT_CONCURRENCY || "8", 10);
 const userAgent = "Supreme-SEO-Health/1.0";
+const canonicalAliasOrigin =
+  process.env.SEO_ALIAS_BASE_URL || "https://www.supremetruckinginsurance.com";
+const canonicalAliasPaths = ["/", "/blog", "/robots.txt", "/sitemap.xml"];
 const publishedSnapshot = JSON.parse(
   await readFile(new URL("../src/data/publishedBlogSnapshot.json", import.meta.url), "utf8"),
 );
@@ -163,6 +168,15 @@ const missingBlogArticlesFromSitemap = internalChecks
   })
   .map((route) => ({ url: route.url, referencedBy: route.referencedBy }));
 
+const canonicalHostRedirect = await verifyCanonicalHostRedirect({
+  canonicalOrigin: origin,
+  aliasOrigin: canonicalAliasOrigin,
+  paths: canonicalAliasPaths,
+});
+const canonicalHostRedirectIssues = canonicalHostRedirect.checks.filter(
+  (check) => !check.preservesPath,
+);
+
 const report = {
   ok:
     duplicateSitemapUrls.length === 0 &&
@@ -171,7 +185,8 @@ const report = {
     brokenInternalLinks.length === 0 &&
     blogArticleCountFloorMet &&
     missingBlogSnapshotSentinels.length === 0 &&
-    missingBlogArticlesFromSitemap.length === 0,
+    missingBlogArticlesFromSitemap.length === 0 &&
+    canonicalHostRedirect.ok,
   checkedAt: new Date().toISOString(),
   baseUrl: origin,
   sitemapStatus: sitemapResponse.status,
@@ -187,12 +202,15 @@ const report = {
   latestSnapshotArticleUrl,
   missingBlogSnapshotSentinelCount: missingBlogSnapshotSentinels.length,
   missingBlogArticleFromSitemapCount: missingBlogArticlesFromSitemap.length,
+  canonicalHostRedirectOk: canonicalHostRedirect.ok,
+  canonicalHostRedirectIssueCount: canonicalHostRedirectIssues.length,
   duplicateSitemapUrls,
   sitemapIssues,
   internalRedirects,
   brokenInternalLinks,
   missingBlogSnapshotSentinels,
   missingBlogArticlesFromSitemap,
+  canonicalHostRedirectIssues,
 };
 
 console.log(JSON.stringify(report, null, 2));
