@@ -3,12 +3,18 @@ import test from "node:test";
 
 import {
   BLOG_IMAGE_PUBLIC_PREFIX,
-  buildHiggsfieldBlogPrompt,
+  OPENAI_BLOG_IMAGE_MODEL,
+  OPENAI_BLOG_IMAGE_PROVIDER,
+  OPENAI_BLOG_IMAGE_SIZE,
+  buildOpenAiBlogPrompt,
+  buildOpenAiImageRequest,
+  decodeOpenAiImageResponse,
   getStableBlogImagePath,
   getStableBlogImageUrl,
-  isScheduledHiggsfieldUpgrade,
-  needsHiggsfieldUpgrade,
-} from "./blogHiggsfield.ts";
+  isRepositoryBackedBlogImage,
+  isScheduledOpenAiUpgrade,
+  needsOpenAiUpgrade,
+} from "./blogHero.ts";
 
 const post = {
   title: "Precision Fireworks HOS Exemption Request: What It Signals for Trucking Fleets",
@@ -20,11 +26,12 @@ const post = {
     "Modern semi tractor at a secured pyrotechnics distribution facility during a pre-trip inspection.",
 };
 
-test("builds a subject-specific premium editorial image prompt", () => {
-  const prompt = buildHiggsfieldBlogPrompt(post);
+test("builds a subject-specific premium OpenAI editorial image prompt", () => {
+  const prompt = buildOpenAiBlogPrompt(post);
 
   assert.match(prompt, /Precision Fireworks HOS Exemption Request/);
   assert.match(prompt, /secured pyrotechnics distribution facility/);
+  assert.match(prompt, /OpenAI GPT Image/i);
   assert.match(prompt, /premium photorealistic editorial photograph/i);
   assert.match(prompt, /16:9/);
   assert.match(prompt, /no text/i);
@@ -36,7 +43,7 @@ test("builds a subject-specific premium editorial image prompt", () => {
 });
 
 test("makes E-mirror replacement geometry explicit after a literal QA failure", () => {
-  const prompt = buildHiggsfieldBlogPrompt({
+  const prompt = buildOpenAiBlogPrompt({
     title: "FMCSA Reviews ClearView E-Mirror Exemption",
     intro: "The camera monitor system would replace the two traditional rear-vision mirrors.",
     sourceTitle: "Application for Exemption From Transit Solutions, LLC",
@@ -52,7 +59,7 @@ test("makes E-mirror replacement geometry explicit after a literal QA failure", 
 });
 
 test("normalizes control characters and caps untrusted article context", () => {
-  const prompt = buildHiggsfieldBlogPrompt({
+  const prompt = buildOpenAiBlogPrompt({
     title: `Truck\u0000 Safety   Update ${"x".repeat(4_000)}`,
     intro: "Line one\n\nLine two",
     sourceTitle: "Official\tNotice",
@@ -62,6 +69,32 @@ test("normalizes control characters and caps untrusted article context", () => {
   assert.doesNotMatch(prompt, /[\u0000-\u001f\u007f]/);
   assert.doesNotMatch(prompt, /\s{2,}/);
   assert.ok(prompt.length <= 2_500);
+});
+
+test("builds exactly one high-quality 16:9 GPT Image request", () => {
+  const request = buildOpenAiImageRequest("A modern truck at a safety inspection lane");
+
+  assert.equal(request.model, OPENAI_BLOG_IMAGE_MODEL);
+  assert.equal(request.n, 1);
+  assert.equal(request.size, OPENAI_BLOG_IMAGE_SIZE);
+  assert.equal(request.quality, "high");
+  assert.equal(request.output_format, "png");
+  assert.equal(request.background, "opaque");
+  assert.equal(request.stream, false);
+  assert.equal("response_format" in request, false);
+});
+
+test("decodes one base64 Gateway image and rejects ambiguous responses", () => {
+  const encoded = Buffer.from("image-bytes").toString("base64");
+  const decoded = decodeOpenAiImageResponse({ data: [{ b64_json: encoded, revised_prompt: " revised prompt " }] });
+
+  assert.deepEqual(decoded.bytes, Buffer.from("image-bytes"));
+  assert.equal(decoded.revisedPrompt, "revised prompt");
+  assert.throws(() => decodeOpenAiImageResponse({ data: [] }), /exactly one image/i);
+  assert.throws(() => decodeOpenAiImageResponse({ data: [{ url: "https://example.com/image.png" }] }), /base64 image data/i);
+  assert.throws(() => decodeOpenAiImageResponse({ data: [{ b64_json: encoded }, { b64_json: encoded }] }), /exactly one image/i);
+  assert.throws(() => decodeOpenAiImageResponse({ data: [{ b64_json: "not valid!" }] }), /invalid or oversized/i);
+  assert.throws(() => decodeOpenAiImageResponse({ data: [{ b64_json: encoded }] }, 2), /invalid or oversized|too large/i);
 });
 
 test("returns stable repository and production URLs for a safe slug", () => {
@@ -83,36 +116,45 @@ test("rejects unsafe slugs instead of allowing path traversal", () => {
   }
 });
 
-test("upgrades Pexels and unknown images but keeps a verified Higgsfield asset", () => {
+test("upgrades non-OpenAI images but keeps a verified OpenAI repository asset", () => {
   const slug = "sample-post";
   const stableUrl = getStableBlogImageUrl(slug);
 
-  assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "Pexels", imageUrl: "https://images.pexels.com/a.jpg" }), true);
-  assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "", imageUrl: "" }), true);
-  assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "Higgsfield", imageUrl: stableUrl }), false);
-  assert.equal(needsHiggsfieldUpgrade({ slug, imageProvider: "Higgsfield", imageUrl: "https://temporary.example/image.jpg" }), true);
+  assert.equal(needsOpenAiUpgrade({ slug, imageProvider: "Pexels", imageUrl: "https://images.pexels.com/a.jpg" }), true);
+  assert.equal(needsOpenAiUpgrade({ slug, imageProvider: "Higgsfield", imageUrl: stableUrl }), true);
+  assert.equal(needsOpenAiUpgrade({ slug, imageProvider: OPENAI_BLOG_IMAGE_PROVIDER, imageUrl: stableUrl }), false);
+  assert.equal(needsOpenAiUpgrade({ slug, imageProvider: OPENAI_BLOG_IMAGE_PROVIDER, imageUrl: "https://temporary.example/image.jpg" }), true);
+});
+
+test("recognizes current OpenAI and historical Higgsfield assets as repository-backed", () => {
+  const slug = "sample-post";
+  const stableUrl = getStableBlogImageUrl(slug);
+
+  assert.equal(isRepositoryBackedBlogImage({ slug, imageProvider: OPENAI_BLOG_IMAGE_PROVIDER, imageUrl: stableUrl }), true);
+  assert.equal(isRepositoryBackedBlogImage({ slug, imageProvider: "Higgsfield", imageUrl: stableUrl }), true);
+  assert.equal(isRepositoryBackedBlogImage({ slug, imageProvider: "Pexels", imageUrl: stableUrl }), false);
 });
 
 test("scheduled runs generate only for a post published today", () => {
   const today = "2026-08-05";
 
   assert.equal(
-    isScheduledHiggsfieldUpgrade(
+    isScheduledOpenAiUpgrade(
       { slug: "today-post", date: today, imageProvider: "Pexels", imageUrl: "https://images.pexels.com/a.jpg" },
       today,
     ),
     true,
   );
   assert.equal(
-    isScheduledHiggsfieldUpgrade(
+    isScheduledOpenAiUpgrade(
       { slug: "old-post", date: "2026-08-03", imageProvider: "Pexels", imageUrl: "https://images.pexels.com/b.jpg" },
       today,
     ),
     false,
   );
   assert.equal(
-    isScheduledHiggsfieldUpgrade(
-      { slug: "today-done", date: today, imageProvider: "Higgsfield", imageUrl: getStableBlogImageUrl("today-done") },
+    isScheduledOpenAiUpgrade(
+      { slug: "today-done", date: today, imageProvider: OPENAI_BLOG_IMAGE_PROVIDER, imageUrl: getStableBlogImageUrl("today-done") },
       today,
     ),
     false,
