@@ -64,6 +64,6 @@ export const blogSearchTitles: Record<string, string> = {
 
 export function getPostSearchTitle(post: { slug: string; title: string }) {
   const title = Object.hasOwn(blogSearchTitles, post.slug) ? blogSearchTitles[post.slug] : post.title;
-  const branded = `${title} | Supreme Trucking Insurance`;
-  return branded.length <= 60 ? branded : title;
+  return buildBlogMetadataTitle(title);
 }
+import { buildBlogMetadataTitle } from "./blogSeoQuality.ts";

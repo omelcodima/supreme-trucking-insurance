@@ -19,8 +19,8 @@ test("branding is appended only when the entire search title fits", () => {
     "Cargo Insurance | Supreme Trucking Insurance");
   const title = "Owner Operator Truck Insurance Checklist";
   assert.equal(getPostSearchTitle({ slug: "new", title }), title);
-  const longTitle = "A future editorial headline that should not be blindly truncated and lose its meaning";
-  assert.equal(getPostSearchTitle({ slug: "new", title: longTitle }), longTitle);
+  const longTitle = "A future editorial headline that exceeds the available search title length";
+  assert.ok(getPostSearchTitle({ slug: "new", title: longTitle }).length <= 60);
 });
 
 test("published snapshot and guides have concise search titles without changing visible headlines", () => {
