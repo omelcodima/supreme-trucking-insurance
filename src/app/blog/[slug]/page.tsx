@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
 
-// Airtable descriptions run long; search engines cut them around 155 characters.
-function clampDescription(text: string) {
-  if (text.length <= 155) return text;
-  const cut = text.slice(0, 152);
-  return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
-}
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BlogVisual } from "@/components/BlogVisual";
@@ -14,6 +8,7 @@ import { blogPosts } from "@/lib/blogPosts";
 import { getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { getPostImageAlt, getPostTags, getRelatedServiceLinks } from "@/lib/blogSeo";
+import { buildBlogMetadataTitle, clampBlogMetaDescription } from "@/lib/blogSeoQuality";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -37,10 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tags = getPostTags(post);
   const imageAltText = getPostImageAlt(post);
   const postImage = absoluteUrl(post.imageUrl || defaultOgImage);
+  const metadataTitle = buildBlogMetadataTitle(post.title);
+  const metaDescription = clampBlogMetaDescription(post.description);
 
   return {
-    title: post.title.length > 40 ? post.title : `${post.title} | Supreme Trucking Insurance`,
-    description: clampDescription(post.description),
+    title: metadataTitle,
+    description: metaDescription,
     keywords: tags,
     alternates: {
       canonical: `/blog/${post.slug}`,
@@ -49,16 +46,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       url: absoluteUrl(`/blog/${post.slug}`),
       siteName,
-      title: post.title,
-      description: post.description,
+      title: metadataTitle,
+      description: metaDescription,
       publishedTime: post.date,
       modifiedTime: post.date,
       images: [{ url: postImage, width: 1200, height: 630, alt: imageAltText }],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.description,
+      title: metadataTitle,
+      description: metaDescription,
       images: [postImage],
     },
   };
