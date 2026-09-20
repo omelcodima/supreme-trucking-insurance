@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
@@ -147,6 +148,9 @@ export default function QuoteExperience({
               Start with a quick request, or send your full application for a
               more detailed review.
             </p>
+            <Link href="/quote-checklist" className="text-link mt-3">
+              What to have ready <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
           <a href="tel:+13609367196" className="text-link">
             <Phone size={17} aria-hidden="true" />

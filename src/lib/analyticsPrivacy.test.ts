@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { analyticsPageContext, resolveAnalyticsConsent } from "./analyticsPrivacy.ts";
+import { analyticsEventForLink, analyticsPageContext, resolveAnalyticsConsent } from "./analyticsPrivacy.ts";
+
+test("quote preparation links do not count as quote clicks", () => {
+  for (const href of ["/quote-checklist", "/quote-checklist#documents", "/blog/quote-comparison"]) assert.equal(analyticsEventForLink(href), "");
+  for (const href of ["/quote", "/quote?coverage=cargo", "/quote#form", "https://supremetruckinginsurance.com/quote"]) assert.equal(analyticsEventForLink(href), "quote_click");
+  assert.equal(analyticsEventForLink("tel:+13609367196"), "phone_click");
+  assert.equal(analyticsEventForLink("mailto:info@supremetruckinginsurance.com"), "email_click");
+});
 
 test("analytics defaults to off until an explicit valid choice", () => {
   for (const input of [null, undefined, "", "true", "yes", {}, "unknown"]) assert.equal(resolveAnalyticsConsent(input), "pending");

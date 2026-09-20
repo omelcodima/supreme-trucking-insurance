@@ -22,6 +22,7 @@ export type OwnerAnalytics = {
   devices?: { label: string; count: number }[];
   events?: { label: string; count: number }[];
   channels?: { label: string; count: number }[];
+  aiReferrals?: { label: string; count: number }[];
   daily?: { date: string; count: number }[];
   timeZone?: string;
   startDate?: string;
@@ -153,6 +154,23 @@ export async function readOwnerAnalytics(
         limit: days,
         orderBys: [{ dimension: { dimensionName: "date" }, desc: false }],
       },
+      {
+        dateRanges: [{ startDate, endDate }],
+        dimensions: [{ name: "sessionSource" }],
+        metrics: [{ name: "sessions" }],
+        dimensionFilter: {
+          filter: {
+            fieldName: "sessionSource",
+            stringFilter: {
+              matchType: "FULL_REGEXP",
+              value: "(.*\\.)?(chatgpt\\.com|chat\\.openai\\.com|claude\\.ai)",
+              caseSensitive: false,
+            },
+          },
+        },
+        limit: 25,
+        orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
+      },
     ]));
     const rows = (index: number) =>
       (reports[index].rows ?? []).map((row) => ({
@@ -182,6 +200,7 @@ export async function readOwnerAnalytics(
       devices: rows(3),
       events: rows(4),
       channels: rows(5),
+      aiReferrals: rows(7),
       daily: dates.map((date) => ({ date, count: dailyCounts.get(date) ?? 0 })),
       timeZone,
       startDate,

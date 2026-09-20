@@ -33,10 +33,10 @@ function load(relativePath: string): Record<string, unknown> {
 }
 
 test("service pages retain quote context and emit one visible FAQ schema", () => {
-  for (const path of ["/cargo", "/commercial-auto-insurance", "/physical-damage-insurance", "/owner-operator", "/fleet", "/new-venture"]) {
+  for (const path of ["/cargo", "/commercial-auto-insurance", "/physical-damage-insurance", "/owner-operator", "/fleet", "/new-venture", "/quote-checklist"]) {
     const page = load(`src/app${path}/page.tsx`);
     const html = renderToStaticMarkup(React.createElement(page.default as React.ComponentType));
-    const quoteLinks = [...html.matchAll(/href="(\/quote[^\"]*)"/g)].map(match => match[1].replaceAll("&amp;", "&"));
+    const quoteLinks = [...html.matchAll(/href="(\/quote(?:\?[^\"]*)?)"/g)].map(match => match[1].replaceAll("&amp;", "&"));
     assert.equal(quoteLinks.length, 3, path);
     assert.ok(quoteLinks.every(href => href === quoteHrefForPath(path)), path);
     assert.equal([...html.matchAll(/<h1\b/g)].length, 1, path);
@@ -49,6 +49,24 @@ test("service pages retain quote context and emit one visible FAQ schema", () =>
     assert.ok(metadata.title.length <= 60, path);
     assert.ok(metadata.description.length <= 160, path);
   }
+});
+
+test("agency identity is visible and matches the shared structured facts", () => {
+  const page = load("src/app/about/page.tsx");
+  const html = renderToStaticMarkup(React.createElement(page.default as React.ComponentType));
+  const { agencyFacts } = load("src/lib/agencyFacts.ts") as { agencyFacts: { legalName: string; hours: string; visits: string; address: { streetAddress: string; postalCode: string } } };
+  for (const value of [agencyFacts.legalName, agencyFacts.address.streetAddress, agencyFacts.address.postalCode, agencyFacts.hours, agencyFacts.visits]) assert.ok(html.includes(value), value);
+  assert.match(html, /insurance agency, not an insurance carrier/);
+  assert.match(html, /href="\/quote-checklist"/);
+  const layout = readFileSync("src/app/layout.tsx", "utf8");
+  assert.match(layout, /legalName: agencyFacts.legalName/);
+  assert.match(layout, /address: agencyFacts.address/);
+  assert.match(layout, /availableLanguage: agencyFacts.languages/);
+  assert.doesNotMatch(layout, /taxID|vatID|aggregateRating/);
+});
+
+test("quote checklist is discoverable and does not masquerade as a quote submission", () => {
+  for (const file of ["src/app/sitemap.ts", "src/components/SiteFooter.tsx", "src/components/QuoteExperience.tsx", "src/components/CoverageGuide.tsx"]) assert.ok(readFileSync(file, "utf8").includes('"/quote-checklist"'), file);
 });
 
 test("new physical damage guide is linked from the coverage explorer and sitemap", () => {

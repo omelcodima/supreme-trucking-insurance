@@ -23,6 +23,7 @@ const staticRoutes = [
   "/physical-damage-insurance",
   "/privacy-policy",
   "/quote",
+  "/quote-checklist",
   "/reviews",
   "/services",
   "/sms-terms-and-conditions",

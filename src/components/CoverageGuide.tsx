@@ -46,6 +46,9 @@ export default function CoverageGuide({ title, sections, documents, related, sou
             <ul className="mt-5 list-disc space-y-3 pl-5 text-[#515c59]">
               {documents.map((document) => <li key={document}>{document}</li>)}
             </ul>
+            <Link href="/quote-checklist" className="text-link mt-5">
+              Full quote preparation checklist <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
           <nav aria-label="Related insurance coverage" className="md:border-l md:border-[#dce3df] md:pl-10">
             <h2 className="text-2xl font-bold">Complete your coverage picture</h2>

@@ -56,6 +56,7 @@ export default function SiteFooter() {
               ["/fleet", "Fleets"],
               ["/new-venture", "New authority"],
               ["/cargo", "Cargo insurance"],
+              ["/quote-checklist", "Quote checklist"],
               ["/coi-request", "COI Request"],
               ["/instant-indication", "Instant indication"],
               ["/about", "About Supreme"],

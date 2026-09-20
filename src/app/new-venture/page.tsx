@@ -1,4 +1,5 @@
 import SubpageLayout from "@/components/SubpageLayout";
+import CoverageGuide from "@/components/CoverageGuide";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function NewVenturePage() {
   return (
     <SubpageLayout
       eyebrow="New authority"
-      title="New Venture Insurance"
+      title="New Authority Trucking Insurance"
       description="Just got your MC number? We help new authority trucking companies prepare coverage, filings, and the details carrier markets need to review."
       image="/images/new-authority-card-v2.jpg"
       sectionTitle="Prepare to haul with the right coverage"
@@ -24,7 +25,7 @@ export default function NewVenturePage() {
       listTitle="Coverage and filing needs to review"
       listItems={[
         "Primary liability for FMCSA compliance",
-        "BMC-91 filing support",
+        "BMC-91 / BMC-91X filing coordination, as applicable",
         "Motor truck cargo",
         "Physical damage",
         "Bobtail / non-trucking",
@@ -48,6 +49,32 @@ export default function NewVenturePage() {
         { label: "Common needs", value: "Primary liability, cargo, physical damage, and filings" },
         { label: "Start with", value: "DOT or MC number, vehicles, drivers, garaging, and freight" },
       ]}
-    />
+    >
+      <CoverageGuide
+        title="From quote request to your first load"
+        sections={[
+          { title: "1. Describe the planned operation", text: "Confirm your legal name, business and garaging addresses, drivers, equipment, freight, and routes. Explain whether you will haul under your own authority or lease onto another carrier; the insurance needs differ." },
+          { title: "2. Review the coverage proposal", text: "Compare limits, deductibles, exclusions, payment terms, and any broker or shipper requirements. A preliminary indication is not a bound policy, and not every insurer accepts every new venture." },
+          { title: "3. Coordinate the required filings", text: "After carrier approval, confirm the coverage effective date and who will submit the required insurance filings. FMCSA requires the applicable proof of financial responsibility on file before granting authority; the legal name and address must match the registration." },
+          { title: "4. Verify before you dispatch", text: "Check your operating-authority status with FMCSA and confirm active coverage for the proposed work. A DOT or MC number, quote, or certificate alone is not proof that all requirements to operate have been met. Insurance filings do not replace other registration obligations." },
+        ]}
+        documents={[
+          "Legal business name, addresses, and DOT or MC number if issued",
+          "Driver list with relevant commercial driving experience",
+          "Truck and trailer VINs, values, ownership, and garaging",
+          "Planned commodities, load values, routes, and estimated mileage",
+          "Broker or shipper requirements and planned start date",
+        ]}
+        related={[
+          { label: "Commercial auto liability", href: "/commercial-auto-insurance" },
+          { label: "Cargo coverage for your freight", href: "/cargo" },
+          { label: "Owner-operator insurance", href: "/owner-operator" },
+        ]}
+        sources={[
+          { label: "FMCSA: insurance filing requirements", href: "https://www.fmcsa.dot.gov/registration/insurance-filing-requirements" },
+          { label: "FMCSA: operating authority and status checks", href: "https://www.fmcsa.dot.gov/registration/get-mc-number-authority-operate" },
+        ]}
+      />
+    </SubpageLayout>
   );
 }

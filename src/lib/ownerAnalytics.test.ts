@@ -71,7 +71,7 @@ for (const days of [7, 28, 90]) {
           return Response.json(firstBatch());
         }
         assert.equal(calls, 2);
-        assert.equal(body.requests.length, 2);
+        assert.equal(body.requests.length, 3);
         assert.deepEqual(body.requests[0].dimensions, [{ name: "sessionDefaultChannelGroup" }]);
         assert.equal(body.requests[0].limit, 25);
         const daily = body.requests[1];
@@ -79,9 +79,21 @@ for (const days of [7, 28, 90]) {
         assert.deepEqual(daily.dimensions, [{ name: "date" }]);
         assert.deepEqual(daily.orderBys, [{ dimension: { dimensionName: "date" }, desc: false }]);
         expectedEnd = daily.dateRanges[0].endDate;
+        const ai = body.requests[2];
+        assert.deepEqual(ai.dimensions, [{ name: "sessionSource" }]);
+        assert.deepEqual(ai.metrics, [{ name: "sessions" }]);
+        assert.deepEqual(ai.dateRanges, daily.dateRanges);
+        assert.equal(ai.limit, 25);
+        const filter = ai.dimensionFilter.filter;
+        assert.equal(filter.fieldName, "sessionSource");
+        assert.equal(filter.stringFilter.matchType, "FULL_REGEXP");
+        const sourcePattern = new RegExp(`^(?:${filter.stringFilter.value})$`, "i");
+        for (const source of ["chatgpt.com", "chat.openai.com", "claude.ai", "www.claude.ai", "CHATGPT.COM"]) assert.ok(sourcePattern.test(source), source);
+        for (const source of ["google", "direct", "evilclaude.ai", "claude.ai.example.com", "chatgpt.com.evil"]) assert.ok(!sourcePattern.test(source), source);
         return Response.json({ reports: [
           { rows: [row("Organic Search", "18")] },
           { rows: [row(expectedEnd.replaceAll("-", ""), "18")] },
+          { rows: [row("chatgpt.com", "2"), row("claude.ai", "1")] },
         ] });
       };
       const data = await readOwnerAnalytics(days);
@@ -91,6 +103,7 @@ for (const days of [7, 28, 90]) {
       assert.ok(!JSON.stringify(data).includes("private"));
       assert.deepEqual(data.totals, [12, 18, 25, 3]);
       assert.deepEqual(data.channels, [{ label: "Organic Search", count: 18 }]);
+      assert.deepEqual(data.aiReferrals, [{ label: "chatgpt.com", count: 2 }, { label: "claude.ai", count: 1 }]);
       assert.equal(data.daily?.length, days);
       assert.equal(data.daily?.[0].count, 0);
       assert.deepEqual(data.daily?.at(-1), { date: expectedEnd, count: 18 });
@@ -116,6 +129,7 @@ test("a valid empty report can show zero traffic, but retains threshold warnings
     assert.deepEqual(data.totals, [0, 0, 0, 0]);
     assert.ok(data.daily?.every((day) => day.count === 0));
     assert.deepEqual(data.channels, []);
+    assert.deepEqual(data.aiReferrals, []);
   });
 });
 
@@ -171,7 +185,7 @@ test("failed or malformed Google batches never become zero-traffic success", asy
         }
         if (fault === "denied") return Response.json({ error: "secret upstream response" }, { status: 403 });
         if (fault === "incomplete") return Response.json({ reports: [{}] });
-        return Response.json({ reports: [{}, { rows: fault === "date" ? [row("19990101")] : [] }] });
+        return Response.json({ reports: [{}, { rows: fault === "date" ? [row("19990101")] : [] }, {}] });
       };
       assert.deepEqual(await readOwnerAnalytics(7), { status: "unavailable", days: 7 }, fault);
     }

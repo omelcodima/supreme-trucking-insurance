@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { isLeadFormId, trackLeadForm } from "@/lib/leadAnalytics";
-import { ANALYTICS_SETTINGS_EVENT, analyticsPageContext, clearAnalyticsCookies, readAnalyticsConsent, saveAnalyticsConsent, subscribeAnalyticsConsent } from "@/lib/analyticsPrivacy";
+import { ANALYTICS_SETTINGS_EVENT, analyticsEventForLink, analyticsPageContext, clearAnalyticsCookies, readAnalyticsConsent, saveAnalyticsConsent, subscribeAnalyticsConsent } from "@/lib/analyticsPrivacy";
 
 declare global {
   interface Window {
@@ -18,16 +18,6 @@ declare global {
 const configuredId = process.env.NEXT_PUBLIC_GA_ID;
 const measurementId = configuredId && /^G-[A-Z0-9]+$/.test(configuredId) ? configuredId : undefined;
 const deniedConsent = { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" };
-
-function eventNameForLink(href: string) {
-  if (href.startsWith("tel:")) return "phone_click";
-  if (href.startsWith("mailto:")) return "email_click";
-  if (href.includes("/quote")) return "quote_click";
-  if (href.includes("/instant-indication")) return "instant_indication_click";
-  if (href.includes("/coi-request")) return "coi_request_click";
-  if (href.includes("google.com")) return "google_business_click";
-  return "";
-}
 
 export default function Analytics() {
   const pathname = usePathname();
@@ -102,7 +92,7 @@ export default function Analytics() {
       const href = link?.getAttribute("href");
       if (!link || !href) return;
 
-      const eventName = eventNameForLink(href);
+      const eventName = analyticsEventForLink(href);
       if (!eventName) return;
 
       try {

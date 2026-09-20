@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight, Phone, Mail, ExternalLink } from "lucide-react";
 import { googleBusinessUrl } from "@/lib/socialProfiles";
 import { breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
+import { agencyFacts } from "@/lib/agencyFacts";
+import { serviceAreaSummary } from "@/lib/serviceArea";
 
 export const metadata = {
   title: "Meet Dmitri Omelco | Supreme Trucking Insurance",
@@ -68,6 +70,54 @@ export default function AboutPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="site-section border-t border-[#dce1df]">
+        <div className="site-container grid gap-10 md:grid-cols-2">
+          <div>
+            <p className="section-kicker">Our agency</p>
+            <h2 className="text-3xl font-bold">Supreme Trucking Insurance</h2>
+            <p className="mt-5 leading-7 text-[#515c59]">{agencyFacts.description}</p>
+            <p className="mt-4 leading-7 text-[#515c59]">
+              Supreme Trucking Insurance is the brand of {agencyFacts.legalName}.
+              We are an insurance agency, not an insurance carrier. We help prepare
+              your submission and compare available options; the insurer determines
+              eligibility, pricing, and policy terms.
+            </p>
+            <p className="mt-4 leading-7 text-[#515c59]">
+              {serviceAreaSummary} Availability depends on the operation, state,
+              and insurer. Our service area is not a policy&apos;s coverage territory.
+            </p>
+            <Link href="/trucking-insurance" className="text-link mt-5">
+              States we serve <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          </div>
+          <dl className="divide-y divide-[#dce1df]">
+            <div className="pb-5">
+              <dt className="font-bold">Vancouver office</dt>
+              <dd className="mt-2 leading-7 text-[#515c59]">
+                {agencyFacts.address.streetAddress}<br />
+                {agencyFacts.address.addressLocality}, {agencyFacts.address.addressRegion} {agencyFacts.address.postalCode}
+                <p className="mt-2">{agencyFacts.visits}</p>
+              </dd>
+            </div>
+            <div className="py-5">
+              <dt className="font-bold">Business hours</dt>
+              <dd className="mt-2 text-[#515c59]">{agencyFacts.hours}</dd>
+            </div>
+            <div className="py-5">
+              <dt className="font-bold">Languages</dt>
+              <dd className="mt-2 text-[#515c59]">{agencyFacts.languages.join(", ")}</dd>
+            </div>
+            <div className="pt-5">
+              <dt className="font-bold">Preparing for a quote</dt>
+              <dd className="mt-2">
+                <Link href="/quote-checklist" className="text-link">
+                  Documents and details to have ready <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              </dd>
+            </div>
+          </dl>
         </div>
       </section>
       <section className="site-section section-soft">

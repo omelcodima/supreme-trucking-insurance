@@ -4,6 +4,16 @@ export const ANALYTICS_SETTINGS_EVENT = "supreme:analytics-settings";
 export type AnalyticsConsent = "pending" | "granted" | "denied" | "blocked";
 let sessionChoice: "granted" | "denied" | undefined;
 
+export function analyticsEventForLink(href: string) {
+  if (href.startsWith("tel:")) return "phone_click";
+  if (href.startsWith("mailto:")) return "email_click";
+  if (/\/quote(?:[?#]|$)/.test(href)) return "quote_click";
+  if (href.includes("/instant-indication")) return "instant_indication_click";
+  if (href.includes("/coi-request")) return "coi_request_click";
+  if (href.includes("google.com")) return "google_business_click";
+  return "";
+}
+
 export function resolveAnalyticsConsent(value: unknown, globalPrivacyControl = false, doNotTrack: string | null = null): AnalyticsConsent {
   if (globalPrivacyControl || doNotTrack === "1") return "blocked";
   return value === "granted" || value === "denied" ? value : "pending";

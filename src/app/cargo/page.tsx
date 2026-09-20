@@ -56,8 +56,10 @@ export default function CargoPage() {
         sections={[
           { title: "Match the limit to the freight", text: "Share a typical load and your highest-value load. Ask whether a commodity has a lower sublimit, and how the deductible would apply. A higher certificate limit does not remove exclusions." },
           { title: "Make special cargo explicit", text: "Temperature-controlled goods, vehicles, electronics, and other specialized freight need a specific conversation. Describe the cargo accurately before a market reviews the submission." },
-          { title: "Review a real claim scenario", text: "Ask your agent to walk through a stolen trailer, damaged freight during unloading, or a failed refrigeration unit. Check which policy wording would apply rather than relying on the coverage name." },
+          { title: "Separate cargo from trailer damage", text: "Freight inside a trailer and the trailer itself are different insurance exposures. Ask which coverage addresses each, especially when hauling a trailer you do not own. Cargo insurance does not replace physical damage or trailer interchange coverage." },
           { title: "Keep the contract with the quote", text: "Send the insurance requirements from your broker or shipper. Your agent can compare them with the proposed coverage; a certificate is evidence of insurance, not a replacement for the policy." },
+          { title: "Compare more than the premium", text: "Put the proposed cargo limit, deductible, covered commodities, sublimits, and key exclusions beside each other. Two quotes with the same headline limit can still offer different protection. Ask for the applicable forms and endorsements before deciding." },
+          { title: "Ask about stops and transfers", text: "Describe overnight parking, storage, and any handoff to another carrier. Ask how the proposed policy treats unattended loads, time in storage, and freight in another carrier's custody. Do not assume those situations are included." },
         ]}
         documents={[
           "DOT or MC number, if available, and legal business name",

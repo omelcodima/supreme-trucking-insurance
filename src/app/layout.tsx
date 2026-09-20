@@ -10,6 +10,7 @@ import { OPENAI_ADS_PIXEL_ID } from "@/lib/openaiAds";
 import { defaultOgImage, siteName, siteUrl } from "@/lib/seo";
 import { organizationSameAs } from "@/lib/socialProfiles";
 import { servedStateAreas } from "@/lib/serviceArea";
+import { agencyFacts } from "@/lib/agencyFacts";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,11 +19,21 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "InsuranceAgency",
   "@id": "https://supremetruckinginsurance.com/#insurance-agency",
-  name: "Supreme Trucking Insurance",
+  name: agencyFacts.name,
+  legalName: agencyFacts.legalName,
+  description: agencyFacts.description,
   url: "https://supremetruckinginsurance.com",
-  logo: "https://supremetruckinginsurance.com/logo.png",
-  telephone: "+1-360-936-7196",
-  email: "info@supremetruckinginsurance.com",
+  logo: "https://supremetruckinginsurance.com/images/supreme-brand-mark.png",
+  telephone: agencyFacts.telephone,
+  email: agencyFacts.email,
+  address: agencyFacts.address,
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "Quotes and policy service",
+    telephone: agencyFacts.telephone,
+    email: agencyFacts.email,
+    availableLanguage: agencyFacts.languages,
+  },
   areaServed: servedStateAreas,
   sameAs: organizationSameAs,
   knowsAbout: [

@@ -670,7 +670,16 @@ export default function OwnerDashboard({
                   Open Google Analytics <ExternalLink size={16} />
                 </a>
                 {!!analytics.daily?.length && <DailyTraffic rows={analytics.daily} />}
+                <p className={styles.caption}>
+                  ChatGPT and Claude referrals count sessions with those sources in GA4,
+                  not AI mentions or recommendations. Visits without analytics consent
+                  or an identifiable source may be missing.
+                </p>
                 <div className={styles.breakdowns}>
+                  <Breakdown
+                    title="ChatGPT and Claude / referral sessions"
+                    rows={analytics.aiReferrals}
+                  />
                   <Breakdown
                     title="Traffic channels / sessions"
                     rows={analytics.channels}
