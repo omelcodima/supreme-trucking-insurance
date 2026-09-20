@@ -113,7 +113,7 @@ export default function ContactPage() {
                 </a>,
                 "Business profile, directions, and search listing",
               ],
-              ["Business hours", <span key="time" className="text-[#2F261C] font-semibold">Monday–Friday, 8 AM–6 PM Pacific</span>, "Messages are answered during business hours"],
+              ["Business hours", <span key="time" className="text-[#2F261C] font-semibold">Monday–Friday, 8 AM–5 PM Pacific</span>, "Messages are answered during business hours"],
               ["Service area", <span key="states" className="text-[#2F261C] font-semibold">Serving trucking businesses in 48 states — excluding Alaska and Hawaii.</span>, "Agency service availability, not a policy coverage territory"],
             ].map(([title, value, note]) => (
               <div key={title as string} className="card-premium rounded-[1.5rem] p-6">
