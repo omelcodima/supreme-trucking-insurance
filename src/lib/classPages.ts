@@ -33,7 +33,7 @@ export const classPages: ClassPage[] = [
     name: "Dump truck insurance",
     metaTitle: "Dump Truck Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Dump truck insurance for owner-operators and aggregate fleets: liability, physical damage, and the site and radius details carriers ask about. Multiple markets, fast quotes.",
+      "Compare dump truck insurance for owner-operators and aggregate fleets. Review liability, physical damage, job sites, and operating radius with Supreme.",
     eyebrow: "Dump trucks",
     title: "Dump truck insurance for haulers who work the site, not the interstate.",
     description:
@@ -85,7 +85,7 @@ export const classPages: ClassPage[] = [
     name: "Hotshot insurance",
     metaTitle: "Hotshot Trucking Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Hotshot insurance for pickup-and-gooseneck operators: primary liability, cargo, and physical damage for the truck and trailer. Non-CDL and CDL hotshots, new authority welcome.",
+      "Explore hotshot insurance for pickups and gooseneck trailers. Review liability, cargo, physical damage, and new-authority needs with Supreme.",
     eyebrow: "Hotshot",
     title: "Hotshot insurance for the pickup and the trailer behind it.",
     description:
@@ -137,7 +137,7 @@ export const classPages: ClassPage[] = [
     name: "Box truck insurance",
     metaTitle: "Box Truck Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Box truck insurance for local delivery, moving, expediting, and final-mile operators: liability, cargo, physical damage, and the coverages contracts require. Fast quotes from multiple markets.",
+      "Compare box truck insurance for delivery, moving, and final-mile work. Review liability, cargo, physical damage, and contract requirements with Supreme.",
     eyebrow: "Box trucks",
     title: "Box truck insurance for delivery, moving, and final-mile work.",
     description:
@@ -189,7 +189,7 @@ export const classPages: ClassPage[] = [
     name: "Reefer truck insurance",
     metaTitle: "Reefer Truck Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Refrigerated trucking insurance: motor truck cargo with reefer breakdown coverage, spoilage, liability, and physical damage for reefer units. Markets that write temperature-controlled freight.",
+      "Explore reefer truck insurance for refrigerated freight. Discuss cargo, breakdown, spoilage, liability, and physical damage options with Supreme.",
     eyebrow: "Refrigerated freight",
     title: "Reefer truck insurance that covers the load when the unit fails.",
     description:
@@ -241,7 +241,7 @@ export const classPages: ClassPage[] = [
     name: "Hazmat trucking insurance",
     metaTitle: "Hazmat Trucking Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Hazmat trucking insurance: $1M and $5M liability limits under federal rules, pollution liability, cargo, and the MCS-90. Markets that write hazardous materials and hazardous waste haulers.",
+      "Review hazmat trucking insurance with Supreme: liability limits, pollution liability, cargo, and MCS-90 needs for hazardous-material haulers.",
     eyebrow: "Hazardous materials",
     title: "Hazmat trucking insurance at the limits the federal rules require.",
     description:
@@ -293,7 +293,7 @@ export const classPages: ClassPage[] = [
     name: "Tow truck insurance",
     metaTitle: "Tow Truck Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Tow truck insurance for wreckers, rollbacks, and roadside operators: on-hook towing, garagekeepers, liability, and physical damage. Motor club and rotation contract requirements handled.",
+      "Compare tow truck insurance for wreckers and rollbacks. Discuss on-hook towing, garagekeepers, liability, and physical damage options with Supreme.",
     eyebrow: "Towing & recovery",
     title: "Tow truck insurance for the vehicle on the hook and the one in your yard.",
     description:
@@ -345,7 +345,7 @@ export const classPages: ClassPage[] = [
     name: "NEMT insurance",
     metaTitle: "NEMT Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Non-emergency medical transportation insurance: commercial auto liability at broker-required limits, general liability, and coverage for wheelchair vans and ambulettes. Markets that write NEMT.",
+      "Explore NEMT insurance for wheelchair vans and ambulettes. Review commercial auto, general liability, and broker-required limits with Supreme.",
     eyebrow: "Non-emergency medical transportation",
     title: "NEMT insurance for wheelchair vans, ambulettes, and medical transport fleets.",
     description:
@@ -501,7 +501,7 @@ export const classPages: ClassPage[] = [
     name: "Car hauler insurance",
     metaTitle: "Car Hauler Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Car hauler insurance for auto transporters: liability, cargo for vehicles in transit, physical damage, and the loading claims that make this class its own market.",
+      "Compare car hauler insurance for auto transporters. Review liability, cargo for vehicles in transit, physical damage, and loading risks with Supreme.",
     eyebrow: "Auto haulers",
     title: "Car hauler insurance for the vehicles on your trailer.",
     description:
@@ -553,7 +553,7 @@ export const classPages: ClassPage[] = [
     name: "Cargo van insurance",
     metaTitle: "Cargo Van Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Commercial cargo van and Sprinter van insurance for expediters, couriers, and delivery contractors: liability, cargo, physical damage, and contract certificates.",
+      "Cargo van and Sprinter insurance for couriers and delivery contractors. Review liability, cargo, physical damage, and certificates with Supreme.",
     eyebrow: "Cargo vans & Sprinters",
     title: "Cargo van insurance for expediting, courier, and delivery work.",
     description:
@@ -657,7 +657,7 @@ export const classPages: ClassPage[] = [
     name: "Amazon Relay insurance requirements",
     metaTitle: "Amazon Relay Insurance Requirements | Supreme Trucking",
     metaDescription:
-      "The insurance Amazon Relay requires from carriers — liability, cargo, general liability, and certificate details — and how to get a policy that passes the check.",
+      "Review Amazon Relay insurance requirements, including liability, cargo, and certificate details. Prepare your coverage request with Supreme.",
     eyebrow: "Guide",
     title: "Amazon Relay insurance requirements, and how to meet them.",
     description:

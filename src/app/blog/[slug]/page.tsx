@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-// Airtable descriptions run long; search engines cut them around 155 characters.
+// Keep search snippets concise without changing the full article description.
 function clampDescription(text: string) {
   if (text.length <= 155) return text;
   const cut = text.slice(0, 152);
@@ -14,6 +14,7 @@ import { blogPosts } from "@/lib/blogPosts";
 import { getAnyBlogPost } from "@/lib/allBlogPosts";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName } from "@/lib/seo";
 import { getPostImageAlt, getPostTags, getRelatedServiceLinks } from "@/lib/blogSeo";
+import { getPostSearchTitle } from "@/lib/blogSearchTitles";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const postImage = absoluteUrl(post.imageUrl || defaultOgImage);
 
   return {
-    title: post.title.length > 40 ? post.title : `${post.title} | Supreme Trucking Insurance`,
+    title: getPostSearchTitle(post),
     description: clampDescription(post.description),
     keywords: tags,
     alternates: {
@@ -250,9 +251,9 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
 
             <div className="card-premium rounded-[1.4rem] p-5">
-              <p className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
+              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
                 Related reading
-              </p>
+              </h2>
               <div className="mt-4 grid gap-3">
                 {relatedPosts.map((item) => (
                   <Link

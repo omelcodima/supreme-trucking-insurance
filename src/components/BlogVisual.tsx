@@ -415,9 +415,9 @@ export function BlogVisual({
               {sourceName ? "Original news brief" : "Insurance insight"}
             </p>
             {isHero ? (
-              <h3 className="mt-3 max-w-3xl text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] md:text-5xl">
+              <p className="mt-3 max-w-3xl text-3xl font-black leading-tight text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)] md:text-5xl">
                 {title}
-              </h3>
+              </p>
             ) : null}
           </div>
         </div>

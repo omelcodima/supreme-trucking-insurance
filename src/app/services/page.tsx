@@ -5,7 +5,7 @@ import CoverageExplorer from "@/components/CoverageExplorer";
 import { defaultOgImage, siteName } from "@/lib/seo";
 import styles from "./services.module.css";
 
-const title = "Truck, Cargo & Liability Coverage | Supreme Trucking Insurance";
+const title = "Truck, Cargo & Liability Insurance | Supreme";
 const description =
   "Understand the difference between physical damage, motor truck cargo, and primary auto liability. Find a starting point for your trucking insurance quote.";
 

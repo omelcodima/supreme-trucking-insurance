@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { trackLeadForm } from "@/lib/leadAnalytics";
@@ -123,6 +124,9 @@ export default function ContactPage() {
                 </div>
               </div>
             ))}
+            <Link href="/links" className="text-link">
+              Quick links and official social profiles
+            </Link>
           </div>
 
           <div className="card-premium rounded-[1.75rem] p-8">

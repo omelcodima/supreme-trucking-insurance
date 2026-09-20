@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import Link from "next/link";
 import { BlogVisual } from "@/components/BlogVisual";
 import { getAllBlogPosts } from "@/lib/allBlogPosts";
@@ -12,64 +13,73 @@ import {
 import { getPostImageAlt } from "@/lib/blogSeo";
 import { ArrowLeft, ArrowRight, Search } from "lucide-react";
 import { blogPosts as guides } from "@/lib/blogPosts";
-import { selectArticles } from "@/lib/blogLibrary";
+import { articleLibraryHref, articleListingSeo, selectArticles } from "@/lib/blogLibrary";
 
 export const revalidate = 21600;
 
-export const metadata: Metadata = {
-  title: "Trucking Insurance Blog | Supreme Trucking Insurance",
-  description:
-    "Practical trucking insurance guides for owner-operators, fleets, new authorities, cargo coverage, and commercial truck insurance pricing.",
-  keywords: [
-    "trucking insurance",
-    "commercial truck insurance",
-    "FMCSA updates",
-    "owner-operator insurance",
-    "fleet insurance",
-    "cargo insurance",
-    "new authority insurance",
-  ],
-  alternates: {
-    canonical: "/blog",
-  },
-  openGraph: {
-    type: "website",
-    url: absoluteUrl("/blog"),
-    siteName,
-    title: "Trucking Insurance Blog",
-    description:
-      "Practical trucking insurance guides for owner-operators, fleets, new authorities, cargo coverage, and pricing.",
-    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
-  },
+type BlogIndexProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function BlogIndexPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+const getLibraryPosts = cache(async () => {
+  const guideSlugs = new Set(guides.map((post) => post.slug));
+  return (await getAllBlogPosts()).map((post) => ({
+    ...post,
+    kind: guideSlugs.has(post.slug) ? ("guides" as const) : ("news" as const),
+  }));
+});
+
+async function getLibraryView(searchParams: BlogIndexProps["searchParams"]) {
   const params = await searchParams;
-  const value = (key: string) =>
-    typeof params[key] === "string" ? (params[key] as string) : "";
+  const value = (key: string) => typeof params[key] === "string" ? params[key] : "";
   const filters = {
     q: value("q").slice(0, 200),
     category: value("category"),
     type: value("type"),
     page: value("page"),
   };
-  const guideSlugs = new Set(guides.map((p) => p.slug));
-  const allPosts = (await getAllBlogPosts()).map((post) => ({
-    ...post,
-    kind: guideSlugs.has(post.slug) ? ("guides" as const) : ("news" as const),
-  }));
-  const categories = [...new Set(allPosts.map((post) => post.category))].sort();
-  const result = selectArticles(allPosts, filters);
+  const allPosts = await getLibraryPosts();
+  return {
+    filters,
+    result: selectArticles(allPosts, filters),
+    categories: [...new Set(allPosts.map((post) => post.category))].sort(),
+  };
+}
+
+export async function generateMetadata({ searchParams }: BlogIndexProps): Promise<Metadata> {
+  const { filters, result } = await getLibraryView(searchParams);
+  const { title, description, canonical, robots } = articleListingSeo(filters, result.page);
+  return {
+    title,
+    description,
+    robots,
+    keywords: [
+      "trucking insurance",
+      "commercial truck insurance",
+      "FMCSA updates",
+      "owner-operator insurance",
+      "fleet insurance",
+      "cargo insurance",
+      "new authority insurance",
+    ],
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      type: "website",
+      url: absoluteUrl(canonical),
+      siteName,
+      title,
+      description,
+      images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
+    },
+  };
+}
+
+export default async function BlogIndexPage({ searchParams }: BlogIndexProps) {
+  const { filters, categories, result } = await getLibraryView(searchParams);
   function href(changes: Partial<typeof filters>) {
-    const search = new URLSearchParams();
-    Object.entries({ ...filters, ...changes }).forEach(([key, val]) => {
-      if (val && !(key === "page" && val === "1")) search.set(key, val);
-    });
-    return search.size ? `/blog?${search}` : "/blog";
+    return articleLibraryHref({ ...filters, ...changes });
   }
   const list = {
     "@context": "https://schema.org",
