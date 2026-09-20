@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Calculator, FileText, LoaderCircle, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
 import { assistantLinks, type AssistantMessage, type AssistantTopic } from "@/lib/assistantLinks";
+import { buildAssistantConversation } from "@/lib/assistantConversation";
 import AssistantIntake from "./AssistantIntake";
 import styles from "./WebsiteAssistant.module.css";
 
@@ -56,7 +57,7 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
     setError("");
     const controller = new AbortController();
     request.current = controller;
-    const outgoing: AssistantMessage[] = [...messages.slice(-4).map(({ role, content }) => ({ role, content })), { role: "user", content: question.trim() }];
+    const outgoing = buildAssistantConversation(messages, question);
     try {
       const response = await fetch("/api/assistant", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ consent, messages: outgoing }), signal: controller.signal });
@@ -96,14 +97,17 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
           <div hidden={mode !== "chat"}>
             <div className={styles.greeting}><h3>How can we help?</h3><p>Ask about trucking coverage, quote preparation or your next step.</p></div>
             {!messages.length && <div className={styles.suggestions}>
-              {["What do I need for a quote?", "How is cargo different from liability?", "I have a new trucking authority."].map(text =>
+              {["I'd like a trucking insurance quote.", "How is cargo different from liability?", "I have a new trucking authority."].map(text =>
                 <button type="button" key={text} onClick={() => { setQuestion(text); input.current?.focus(); }}>{text}</button>)}
             </div>}
             <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions" className={styles.messages}>
               {messages.map((message, index) => <div key={index} className={message.role === "user" ? styles.userMessage : styles.aiMessage}>
                 <span>{message.role === "user" ? "You" : "Supreme AI"}</span>
                 <p>{message.content}</p>
-                {message.topic && <a href={assistantLinks[message.topic].href} onClick={close}>{assistantLinks[message.topic].label}</a>}
+                {message.topic === "quote" && index === messages.length - 1 ? <div className={styles.quoteActions}>
+                  <a href={assistantLinks.quote.href} onClick={close}><FileText size={16} aria-hidden="true" />Complete full application</a>
+                  <button type="button" onClick={() => setMode("callback")}><Phone size={15} aria-hidden="true" />Request a call</button>
+                </div> : message.topic && message.topic !== "quote" && <a href={assistantLinks[message.topic].href} onClick={close}>{assistantLinks[message.topic].label}</a>}
               </div>)}
             </div>
             {pending && <p className={styles.pending} role="status"><LoaderCircle size={17} className={styles.spinner} aria-hidden="true" />Preparing an answer...</p>}

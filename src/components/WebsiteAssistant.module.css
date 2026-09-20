@@ -32,6 +32,11 @@
 .messages a { display: inline-block; margin-top: 10px; font-size: 12px; }
 .userMessage { border-left: 3px solid #d4e6eb; padding-left: 12px; }
 .aiMessage { padding-right: 8px; }
+.quoteActions { display: grid; gap: 8px; margin-top: 14px; }
+.quoteActions a, .quoteActions button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; margin: 0; padding: 10px 12px; border-radius: 5px; font-size: 13px; line-height: 1.5; font-weight: 650; text-align: center; }
+.quoteActions a { background: #bd4c0d; color: #fff; text-decoration: none; }
+.quoteActions button { background: #fff; color: #20382f; border: 1px solid #c6d4cc; }
+.quoteActions svg { flex: none; }
 .pending { display: flex; align-items: center; gap: 8px; margin-top: 20px; font-size: 13px; color: #62766b; }
 .error { font-size: 13px; line-height: 1.55; color: #a12629; margin-block: 14px; padding: 12px; border-left: 3px solid #bf3c39; background: #fff4f4; overflow-wrap: anywhere; }
 .composer { border-top: 1px solid #dce5e1; padding: 12px 18px; flex: none; background: #fcfdfc; }
