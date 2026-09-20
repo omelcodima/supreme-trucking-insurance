@@ -56,9 +56,8 @@ export async function answerWebsiteQuestion(messages: AssistantMessage[], apiKey
     signal: AbortSignal.timeout(20_000),
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "openai/gpt-5.4-mini",
+      model: "openai/gpt-4.1-mini",
       max_completion_tokens: 1400,
-      reasoning_effort: "low",
       stream: false,
       messages: [{ role: "system", content: assistantInstructions }, ...messages.map(message => ({ ...message, content: redactAssistantMessage(message.content) }))],
       response_format: { type: "json_schema", json_schema: { name: "website_answer", strict: true, schema: {

@@ -8,7 +8,9 @@ dialog and in site navigation. The mobile quote/call bar is preserved.
 
 - Visitor must agree to AI processing before a question is sent.
 - POST `/api/assistant` calls the existing Vercel AI Gateway using the server-only
-  `AI_GATEWAY_API_KEY`, model `openai/gpt-5.4-mini`.
+  `AI_GATEWAY_API_KEY`, model `openai/gpt-4.1-mini`. Verified with the current
+  account on September 20, 2026. The previous GPT-5.4 mini request was rejected
+  because it required purchased Gateway credits; no billing settings were changed.
 - Requires same-origin JSON, bounded alternating user/assistant messages, the
   existing owner database and `OWNER_AUTH_SECRET`. No new database migration.
 - `WEBSITE_CHAT_ENABLED=false` disables model calls without disabling forms.
@@ -16,7 +18,8 @@ dialog and in site navigation. The mobile quote/call bar is preserved.
   100 attempts/day, 40/15 minutes globally, 12/15 minutes per hashed client IP.
   Attempts include provider failures. This is a call limit, not a dollar guarantee.
 - Maximum 1,400 output tokens and a 20-second provider timeout. The browser
-  sends at most two prior exchanges. No model tools, browsing, CRM or email access.
+  sends at most four prior exchanges, dropping whole oldest turns to stay within
+  8,000 characters. No model tools, browsing, CRM or email access.
 - Common email/phone/VIN/SSN patterns are removed before model transmission.
   This is best-effort, not guaranteed anonymization. The UI requests that visitors
   not include personal identifiers or sensitive documents.
@@ -26,6 +29,10 @@ dialog and in site navigation. The mobile quote/call bar is preserved.
 - Answers are displayed as text, never model-generated HTML. Navigation targets
   come from a fixed local allowlist. Answers are informational, not a quote,
   coverage determination or assurance of eligibility.
+- Quote guidance asks one missing operational question at a time (business state,
+  power units, cargo) and invites the full application when ready. The latest quote
+  answer has direct Full application and Request a call actions. Chat is optional;
+  neither answering a question nor opening the application submits a lead.
 
 ## Confirmed contact requests
 

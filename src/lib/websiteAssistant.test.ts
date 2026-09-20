@@ -35,7 +35,8 @@ test("AI request uses trusted instructions, redacted context, bounded output and
   const result = await answerWebsiteQuestion([{ role: "user", content: "I need a quote. test@example.invalid" }], "fake-test-key", async (url, init) => {
     assert.equal(url, "https://ai-gateway.vercel.sh/v1/chat/completions");
     const body = JSON.parse(String(init?.body));
-    assert.equal(body.model, "openai/gpt-5.4-mini");
+    assert.equal(body.model, "openai/gpt-4.1-mini");
+    assert.equal(body.reasoning_effort, undefined);
     assert.equal(body.max_completion_tokens, 1400);
     assert.equal(body.tools, undefined);
     assert.equal(body.messages[0].role, "system");
