@@ -1,5 +1,5 @@
 /* Full navigation clears private UI state and separates the public tracking layout. */
-/* eslint-disable @next/next/no-location-assign-relative-destination, @next/next/no-html-link-for-pages */
+/* eslint-disable @next/next/no-html-link-for-pages */
 import Head from "next/head";
 import { useState, type FormEvent } from "react";
 import type { GetServerSideProps } from "next";
@@ -40,7 +40,7 @@ export default function OwnerLogin({ configured }: { configured: boolean }) {
             ? "The code could not be accepted. Check it or request a new code."
             : "Unable to send a code. Check your owner email or try again later.",
         );
-      if (sent) window.location.assign("/admin");
+      if (sent) window.location.assign(new URLSearchParams(window.location.search).get("next") === "assessments" ? "/admin/assessments" : "/admin");
       else setSent(true);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Sign-in unavailable.");

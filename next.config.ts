@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 import { BLOG_CONSOLIDATIONS } from "./src/lib/blogConsolidations";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/team-assessment": ["./src/lib/assessment/templates/index.html"],
+    "/admin/assessments": ["./src/lib/assessment/templates/reviewer.html"],
+  },
   async headers() {
     const privateHeaders = [
       { key: "Cache-Control", value: "private, no-store" },
@@ -11,7 +15,7 @@ const nextConfig: NextConfig = {
       { key: "X-Content-Type-Options", value: "nosniff" },
       { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'" },
     ];
-    return ["/admin/:path*", "/api/admin/:path*", "/api/owner-auth/:path*"].map(source => ({ source, headers: privateHeaders }));
+    return ["/admin/:path*", "/api/admin/:path*", "/api/owner-auth/:path*", "/team-assessment/:path*", "/api/team-assessment/:path*"].map(source => ({ source, headers: privateHeaders }));
   },
   async redirects() {
     return [
