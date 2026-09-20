@@ -162,8 +162,8 @@ body {
 
 /* Shared public-site controls and restrained page rhythm. */
 .about-profile { display: grid; grid-template-columns: 350px minmax(0,1fr); gap: 80px; align-items: center; margin-top: 40px; }
-.about-portrait { position: relative; aspect-ratio: 4/5; overflow: hidden; border-radius: 8px; background: #e9edeb; }
-.about-portrait img { object-fit: cover; object-position: center 30%; }
+.about-portrait { position: relative; aspect-ratio: 6/5; overflow: hidden; border-radius: 8px; background: #fff; }
+.about-portrait img { object-fit: contain; object-position: center; }
 .about-profile h2 { font-size: 34px; line-height: 1.2; font-weight: 750; margin-bottom: 22px; }
 .about-profile h2 ~ p { font-size: 16px; line-height: 1.8; color: var(--text-muted); margin-top: 14px; }
 .about-profile .language-note { font-size: 12px; }

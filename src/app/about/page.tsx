@@ -30,8 +30,8 @@ export default function AboutPage() {
           <div className="about-profile">
             <div className="about-portrait">
               <Image
-                src="/images/dmitri-omelco.png"
-                alt="Dmitri Omelco, Supreme Trucking Insurance"
+                src="/images/dmitri-omelco-illustrated.png"
+                alt="Illustrated portrait of Dmitri Omelco, Supreme Trucking Insurance"
                 fill
                 priority
                 sizes="(min-width: 800px) 350px, 80vw"
