@@ -18,12 +18,12 @@ export default function OwnerOperatorPage() {
       image="/images/owner-operator-card-v2.jpg"
       sectionTitle="Built for the solo trucker"
       intro={[
-        "As an owner operator, your truck is your business. One bad gap in coverage can become an expensive problem fast.",
-        "We work with multiple carriers so you get competitive options without spending hours calling around. We keep the process moving and update you as markets respond.",
+        "Start with one important distinction: do you run under your own authority or lease to another motor carrier? That changes which responsibilities you insure yourself and which you need to confirm in a lease.",
+        "Bring your lease or customer requirements, truck details, driver history, and the freight you haul. Supreme reviews available markets and explains the differences between liability, cargo, physical damage, and any supporting coverage.",
       ]}
       listTitle="Coverage we arrange"
       listItems={[
-        "Primary liability required by FMCSA",
+        "Primary liability for your operation",
         "Physical damage for your truck and equipment",
         "Motor truck cargo",
         "Bobtail / non-trucking liability",
@@ -31,9 +31,10 @@ export default function OwnerOperatorPage() {
         "General liability",
       ]}
       faqs={[
-        { q: "Do I need insurance if I'm leased to a carrier?", a: "Usually yes. You may still need bobtail or non-trucking coverage plus physical damage for your own truck." },
+        { q: "Do I need insurance if I'm leased to a carrier?", a: "Review the lease and the carrier's policy first. You may need non-trucking liability, bobtail, or physical damage separately, but these are not interchangeable. Off dispatch does not automatically mean personal use." },
         { q: "How fast can you get me covered?", a: "Timing depends on the market and file quality. We move quickly and keep you updated." },
-        { q: "What's the minimum required?", a: "That depends on what you haul. We make sure you meet FMCSA and broker requirements." },
+        { q: "What's the minimum required?", a: "Requirements depend on your authority, vehicles, freight, state, and contracts. Send those details so we can help compare the applicable requirements with the proposed policy." },
+        { q: "What should I send for a quote?", a: "Start with your DOT or MC number if issued, VINs and values, garaging address, drivers, freight, routes, and desired start date. Include your current policy and available loss runs if you have been insured before." },
       ]}
       primaryCtaLabel="Get your free quote"
       ctaTitle="Ready to get your quote?"

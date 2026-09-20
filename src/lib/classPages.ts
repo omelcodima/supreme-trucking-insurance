@@ -451,22 +451,22 @@ export const classPages: ClassPage[] = [
     metaDescription:
       "Bobtail and non-trucking liability insurance for owner-operators leased to a carrier: what each covers, what your lease requires, and how to get it quoted fast.",
     eyebrow: "Bobtail & non-trucking liability",
-    title: "Bobtail insurance for the miles you drive without a load.",
+    title: "Bobtail and non-trucking liability insurance",
     description:
-      "Leased to a carrier? Their policy covers you under dispatch. Bobtail and non-trucking liability cover the rest — deadheading home, running to the shop, the weekend.",
+      "Leased to a carrier? Review your lease, how you use the tractor, and the actual policy terms before choosing bobtail or non-trucking liability.",
     image: "/images/owner-operator-premium.jpg",
     sectionTitle: "Two coverages, one gap",
     intro: [
-      "Bobtail liability covers the tractor when you are driving without a trailer, whether or not you are under dispatch — typically the trip back after dropping a load. Non-trucking liability covers you when you are not working for the motor carrier at all: personal use, the drive to the mechanic, the weekend. Most leases require one or both, and most owner-operators need both, because the carrier's policy stops the moment you are off dispatch.",
-      "We write bobtail and non-trucking liability alongside physical damage for owner-operators leased to carriers of every size, and we read the lease so the certificate matches what your carrier requires.",
+      "Bobtail generally describes liability coverage for a tractor operated without a trailer. Non-trucking liability generally addresses personal, non-business use. They are not the same coverage: an empty truck or an off-dispatch trip can still serve a business purpose.",
+      "Send Supreme the lease and explain your actual trips, including travel between loads and for maintenance. We help review the required coverage and the available policy forms rather than assuming the carrier's policy stops at a particular dispatch status.",
     ],
     listTitle: "Coverage we arrange for leased-on owner-operators",
     listItems: [
       "Bobtail liability — driving the tractor without a trailer",
-      "Non-trucking liability — using the truck outside the carrier's dispatch",
-      "Physical damage on the tractor you own, which the carrier's policy does not cover",
-      "Occupational accident coverage, which many leases require in place of workers compensation",
-      "Trailer interchange, if you pull the carrier's trailers",
+      "Non-trucking liability for eligible personal, non-business use",
+      "Physical damage needs for your own tractor",
+      "Occupational accident or workers compensation requirements, reviewed separately",
+      "Trailer interchange or non-owned trailer needs, based on the agreement",
       "Certificates that name the motor carrier as the lease requires",
     ],
     quickFacts: [
@@ -477,11 +477,11 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "What is the difference between bobtail and non-trucking liability?",
-        a: "Bobtail liability applies when the tractor is driven without a trailer, even if you are under dispatch. Non-trucking liability applies when you are not under dispatch at all — personal use or errands — trailer or not. They overlap but neither replaces the other, which is why many leases ask for both.",
+        a: "Bobtail generally focuses on operating a tractor without a trailer; non-trucking liability generally focuses on personal, non-business use. The actual definitions and exclusions vary by policy. Do not use an off-dispatch status alone to decide whether a trip is covered.",
       },
       {
         q: "Does my motor carrier's insurance cover me?",
-        a: "Only while you are under dispatch for that carrier, and only for liability. It does not cover your tractor for physical damage and it does not cover you between loads. Bobtail, non-trucking liability, and physical damage fill those gaps.",
+        a: "That depends on the lease, the carrier's policy, and what the truck is doing. Ask for a review of business use, personal use, travel between loads, and damage to your own tractor. Do not assume either full coverage or a gap based only on dispatch status.",
       },
       {
         q: "How much does bobtail insurance cost?",
@@ -489,7 +489,7 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "I run under my own authority — do I need bobtail?",
-        a: "No. Under your own authority your primary liability policy covers the tractor with or without a trailer, on and off dispatch. Bobtail and non-trucking liability are for owner-operators leased to another carrier.",
+        a: "Start by reviewing your primary auto liability policy and how the truck is used. Bobtail and non-trucking liability are commonly discussed for leased operators; they are not replacements for the primary liability your own-authority operation may need.",
       },
     ],
     ctaTitle: "Get a bobtail quote",

@@ -57,7 +57,7 @@ export default function HomeHero({ variant }: { variant: HomepageVariant }) {
             <PromoPlayer />
           </div>
         </div>
-        {scene && <a className={styles.credit} href={`/image-credits#${scene.code}`}>{scene.landmark} · Photo credits</a>}
+        {scene && <a className={styles.credit} href={`/image-credits#${scene.code}`} aria-label={`${scene.name}: ${scene.landmark}. View photo credits`}>{scene.name} · {scene.landmark}</a>}
       </section>
       {cinematic && (
         <nav className="hero-operation-strip" aria-label="Find coverage for your business">

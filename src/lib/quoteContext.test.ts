@@ -6,6 +6,7 @@ test("cargo and bobtail links preselect an existing coverage", () => {
     "/cargo",
     "/bobtail-insurance",
     "/commercial-auto-insurance",
+    "/physical-damage-insurance",
   ]) {
     const coverage = new URL(
       quoteHrefForPath(path),

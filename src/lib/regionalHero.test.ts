@@ -12,7 +12,7 @@ test("every state has a distinct local photograph and recorded attribution", asy
   assert.equal(new Set(regional.regionScenes.map(scene => scene.asset)).size, 50);
   assert.deepEqual(regional.regionScenes.map(scene => scene.code).sort(), statePages.map(state => state.abbreviation).sort());
   for (const scene of regional.regionScenes) {
-    assert.match(scene.asset, /^\/images\/states\/[a-z]{2}\.webp$/);
+    assert.match(scene.asset, /^\/images\/states\/[a-z]{2}(?:-[a-f0-9]{8})?\.webp$/);
     assert.ok(scene.author && scene.license && scene.landmark);
     assert.equal(new URL(scene.source).hostname, "commons.wikimedia.org");
     const metadata = await sharp(`public${scene.asset}`).metadata();

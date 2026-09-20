@@ -85,6 +85,7 @@ export default async function HomePage() {
             </Link>
             <Link href="/cargo">Motor truck cargo</Link>
             <Link href="/bobtail-insurance">Bobtail / non-trucking</Link>
+            <Link href="/physical-damage-insurance">Physical damage</Link>
             <Link href="/new-venture">BMC-91 filings</Link>
           </div>
         </div>

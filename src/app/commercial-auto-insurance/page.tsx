@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import SubpageLayout from "@/components/SubpageLayout";
+import CoverageGuide from "@/components/CoverageGuide";
+import { quoteHrefForPath } from "@/lib/quoteContext";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
 import { servedStateAreas } from "@/lib/serviceArea";
 
@@ -10,7 +12,7 @@ import { servedStateAreas } from "@/lib/serviceArea";
  */
 const TITLE = "Commercial Auto Insurance for Trucking | Primary Liability";
 const DESCRIPTION =
-  "Trucking commercial auto and primary liability for owner-operators, small fleets, and new authority. Cargo, physical damage, bobtail, and MCS-90 sit next to it.";
+  "Compare primary liability for your trucking operation. Understand coverage, filings, and the information Supreme needs for a commercial auto quote.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -33,16 +35,16 @@ const faqs = [
     a: "Trucking operations need a policy reviewed for their vehicles, operating radius, dispatch arrangements, and applicable filings. We help you compare those details alongside cargo and physical damage coverage.",
   },
   {
-    q: "What sits next to primary liability?",
-    a: "Cargo for the freight in your care, physical damage for your truck and trailer, bobtail or non-trucking liability for off-dispatch driving, and the MCS-90 endorsement with the BMC-91 filing when the authority requires it. Markets will not treat these as one interchangeable product.",
+    q: "Does primary liability include cargo or damage to my truck?",
+    a: "Not by itself. Primary auto liability addresses covered injuries or property damage to others. Cargo and physical damage protect different exposures and need separate review in your quote.",
   },
   {
     q: "Who needs this coverage?",
-    a: "Owner-operators who need primary liability to run, small fleets shopping structure rather than a headline rate, and new authority that needs filings before the first load.",
+    a: "Carriers operating under their own authority need coverage suited to their operation and applicable requirements. If you lease to another carrier, review the lease and that carrier's coverage before deciding what you must arrange separately.",
   },
   {
     q: "How does the quote start?",
-    a: "DOT first. Send it on the quote form or call (360) 936-7196. We review the operation, then shop trucking-focused markets.",
+    a: "Share your DOT number if available, truck and driver details, freight, routes, and desired start date. You can also begin before a DOT number is issued and explain that you are preparing a new operation.",
   },
 ];
 
@@ -75,33 +77,49 @@ export default function CommercialAutoInsurancePage() {
       <SubpageLayout
         eyebrow="Primary liability for owner-operators, small fleets, and new authority"
         title="Commercial auto insurance for trucking operations"
-        description="Commercial auto on a trucking account is primary liability for the power units — not a van policy, not contractors’ commercial auto, and not personal auto with a box truck endorsement."
+        description="Start with liability for injuries or property damage to others, then build around your trucks, freight, drivers, and operating requirements."
         image="/images/highway-premium.jpg"
-        sectionTitle="Trucking commercial auto vs generic commercial auto"
+        sectionTitle="What primary liability does"
         intro={[
-          "Generic commercial auto is built for service fleets and contractor vans. Trucking commercial auto is built around FMCSA filings, radius, cargo, and how the truck is dispatched. It sits next to cargo, physical damage, bobtail, and the MCS-90 / BMC-91 filings the file may need — and we shop trucking markets for that stack.",
-          "Tell us what you haul, where you operate, and when you need coverage. We will help you compare the coverages your operation needs.",
+          "Primary auto liability can respond when your trucking operation is legally responsible for covered bodily injury or damage to someone else's property. It does not, by itself, insure your freight or repair your own truck.",
+          "Supreme reviews how you operate, not just the vehicle type. Your authority, lease arrangements, freight, radius, drivers, and customer contracts all help determine which coverage and filings to request.",
         ]}
         listTitle="What sits next to primary liability"
         listItems={[
           "Cargo — freight in your care",
           "Physical damage — your truck and trailer",
-          "Bobtail / non-trucking — off-dispatch liability",
-          "MCS-90 / BMC-91 — proof of financial responsibility and new-authority filings",
+          "Bobtail or non-trucking liability, depending on the lease and use",
+          "Applicable financial-responsibility endorsements and filings",
           "General liability, where a shipper or contract requires it",
         ]}
         faqs={faqs}
         quickFacts={[
           { label: "Who this is for", value: "Owner-operators, small fleets, and new authority that needs filings before the first load" },
-          { label: "Sits next to", value: "Cargo, physical damage, bobtail, and the MCS-90 / BMC-91 filings" },
-          { label: "Quote path", value: "DOT first — send it on the quote form or call (360) 936-7196" },
+          { label: "Separate review", value: "Cargo, your equipment, leased operations, and filings" },
+          { label: "Start with", value: "Business details, vehicles, drivers, freight, and routes" },
         ]}
         immersiveHero
         primaryCtaLabel="Start Quote"
-        ctaTitle="Start with the DOT"
+        primaryCtaHref={quoteHrefForPath("/commercial-auto-insurance")}
+        ctaTitle="Build a quote around your operation"
         ctaDescription="Send your DOT or MC number, or call (360) 936-7196. We will review your operation and available coverage options."
         ctaButtonLabel="Start Quote"
-      />
+      >
+        <CoverageGuide
+          title="Coverage and filings are different decisions"
+          sections={[
+            { title: "The legal minimum is not the whole contract", text: "Federal requirements vary by authority, vehicle, and cargo. State rules and customer contracts can add other requirements. Share the actual contract rather than assuming one limit works for every operation." },
+            { title: "Confirm the filing and effective date", text: "Where required, an insurer or financial-responsibility provider files proof with FMCSA. An MCS-90 is an endorsement, not the BMC-91 or BMC-91X filing. Requesting a quote does not activate insurance or operating authority." },
+          ]}
+          documents={["DOT or MC number, if issued, and business address", "Driver and vehicle schedules", "Freight types, radius, mileage, and garaging locations", "Current policy, available loss runs, and customer requirements"]}
+          related={[
+            { label: "Cargo for the freight you haul", href: "/cargo" },
+            { label: "Physical damage for trucks and trailers", href: "/physical-damage-insurance" },
+            { label: "New authority coverage and filings", href: "/new-venture" },
+          ]}
+          sources={[{ label: "FMCSA insurance filing requirements", href: "https://www.fmcsa.dot.gov/registration/insurance-filing-requirements" }]}
+        />
+      </SubpageLayout>
     </>
   );
 }

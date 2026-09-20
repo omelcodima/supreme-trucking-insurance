@@ -16,8 +16,8 @@ export const coverageExplorerItems = [
     distinction:
       "This is coverage for your equipment, not the freight inside it or your liability to others.",
     quoteCoverage: "Physical Damage Only",
-    detailHref: null,
-    detailLabel: null,
+    detailHref: "/physical-damage-insurance",
+    detailLabel: "Explore physical damage coverage",
   },
   {
     id: "cargo",

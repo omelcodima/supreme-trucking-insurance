@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { regionSceneSources, regionSceneFiles } from './region-scene-sources.mjs';
 
@@ -26,7 +27,7 @@ const scenes = [];
 await mkdir('public/images/states', { recursive: true });
 for (const [code, name, landmark, article] of regionSceneSources) {
   const previous = existing.find(scene => scene.code === code);
-  if (previous && (!regionSceneFiles[code] || regionSceneFiles[code] === previous.title)) { scenes.push(previous); continue; }
+  if (previous && (!regionSceneFiles[code] || regionSceneFiles[code] === previous.title)) { scenes.push({ ...previous, name, landmark }); continue; }
   try {
     let title = regionSceneFiles[code];
     if (!title) {
@@ -47,7 +48,8 @@ for (const [code, name, landmark, article] of regionSceneSources) {
     const downloadUrl = new URL(info.thumburl || info.url);
     downloadUrl.search = '';
     const bytes = await request(downloadUrl, false);
-    const asset = `/images/states/${code.toLowerCase()}.webp`;
+    const version = createHash('sha256').update(bytes).digest('hex').slice(0, 8);
+    const asset = `/images/states/${code.toLowerCase()}-${version}.webp`;
     await sharp(bytes).rotate().resize({ width: 1920, withoutEnlargement: true }).webp({ quality: 82 }).toFile(`public${asset}`);
     scenes.push({ code, name, landmark, asset, title: page.title, source: info.descriptionurl,
       author: plain(meta.Artist?.value) || 'See source photograph', license,
@@ -57,6 +59,6 @@ for (const [code, name, landmark, article] of regionSceneSources) {
     await pause(150);
   } catch (error) { console.error(`${code}: ${error.message}`); }
 }
-await writeFile(manifestPath, `${JSON.stringify(scenes.sort((a, b) => a.code.localeCompare(b.code)), null, 2)}\n`);
 console.log(`Prepared ${scenes.length}/50 scenes. Missing: ${regionSceneSources.filter(([code]) => !scenes.some(scene => scene.code === code)).map(([code]) => code).join(', ')}`);
 if (scenes.length !== 50) process.exitCode = 1;
+else await writeFile(manifestPath, `${JSON.stringify(scenes.sort((a, b) => a.code.localeCompare(b.code)), null, 2)}\n`);

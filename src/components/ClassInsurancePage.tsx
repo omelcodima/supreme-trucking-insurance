@@ -6,6 +6,7 @@ import { classPages, getClassPage } from "@/lib/classPages";
 import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript, siteName } from "@/lib/seo";
 import { featuredStatePages } from "@/lib/statePages";
 import { servedStateAreas } from "@/lib/serviceArea";
+import { quoteHrefForPath } from "@/lib/quoteContext";
 
 /** The sister directory: which carriers and wholesalers write a given class. */
 const CARRIERLENS_URL = "https://www.carrierlens.app";
@@ -87,6 +88,7 @@ export function ClassInsurancePage({ slug }: { slug: string }) {
         quickFacts={page.quickFacts}
         immersiveHero
         primaryCtaLabel="Get a free quote"
+        primaryCtaHref={quoteHrefForPath(`/${page.slug}`)}
         ctaTitle={page.ctaTitle}
         ctaDescription={page.ctaDescription}
         ctaButtonLabel="Get a Free Quote"

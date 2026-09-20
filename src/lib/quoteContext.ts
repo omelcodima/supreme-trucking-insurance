@@ -14,6 +14,7 @@ const serviceCoverage: Record<string, string> = {
   "/cargo": "Motor Truck Cargo",
   "/commercial-auto-insurance": "Primary Liability Only",
   "/bobtail-insurance": "Bobtail / Non-Trucking",
+  "/physical-damage-insurance": "Physical Damage Only",
 };
 
 export function quoteHrefForPath(path: string) {

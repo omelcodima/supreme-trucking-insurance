@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { quoteHrefForPath } from "@/lib/quoteContext";
 import { googleBusinessUrl } from "@/lib/socialProfiles";
-import { absoluteUrl, breadcrumbJsonLd, jsonLdScript } from "@/lib/seo";
+import { absoluteUrl, breadcrumbJsonLd, faqJsonLd, jsonLdScript } from "@/lib/seo";
 import { servedStateAreas } from "@/lib/serviceArea";
 
 type QA = { q: string; a: string };
@@ -24,6 +24,7 @@ type Props = {
   sideQuoteByline?: string;
   faqs?: QA[];
   extraSideCard?: ReactNode;
+  children?: ReactNode;
   primaryCtaLabel: string;
   primaryCtaHref?: string;
   ctaTitle: string;
@@ -48,6 +49,7 @@ export default function SubpageLayout({
   sideQuote,
   faqs = [],
   extraSideCard,
+  children,
   primaryCtaLabel,
   primaryCtaHref,
   ctaTitle,
@@ -93,6 +95,9 @@ export default function SubpageLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={jsonLdScript(serviceData)}
         />
+      ) : null}
+      {canonicalPath && faqs.length > 0 ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(faqJsonLd(faqs))} />
       ) : null}
       {immersiveHero ? (
         <>
@@ -142,7 +147,7 @@ export default function SubpageLayout({
               <div className="mx-auto grid max-w-6xl px-4 md:grid-cols-3 md:divide-x md:divide-[#E7DED2]">
                 {quickFacts.map((fact) => (
                   <div key={fact.label} className="border-b border-[#E7DED2] py-6 last:border-b-0 md:border-b-0 md:px-7 md:py-8 first:md:pl-0 last:md:pr-0">
-                    <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">{fact.label}</p>
+                    <p className="text-xs font-black uppercase text-[#c94c05]">{fact.label}</p>
                     <p className="mt-2 text-base font-bold leading-6 text-[#2F261C]">{fact.value}</p>
                   </div>
                 ))}
@@ -205,6 +210,7 @@ export default function SubpageLayout({
               </div>
             )}
 
+            {faqs.length > 0 ? <h2 className="text-xl font-bold">Common questions</h2> : null}
             {faqs.map((faq) => (
               <details key={faq.q} className="service-faq">
                 <summary>{faq.q}<ChevronDown size={17} aria-hidden="true" /></summary>
@@ -217,10 +223,13 @@ export default function SubpageLayout({
         </div>
       </section>
 
+      {children}
+
       <section className="site-section bg-[#e9f0ed] text-[#202625] text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-4">{ctaTitle}</h2>
           <p className="text-[#515c59] mb-8">{ctaDescription}</p>
+          <p className="mb-6 text-sm text-[#515c59]">A quote request does not bind coverage. Availability, limits, exclusions, and effective dates are subject to carrier approval and policy terms.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href={ctaHref} className="button-primary">
               {ctaButtonLabel}

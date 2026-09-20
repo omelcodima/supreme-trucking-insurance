@@ -18,10 +18,10 @@ export default function NewVenturePage() {
       image="/images/new-authority-card-v2.jpg"
       sectionTitle="Prepare to haul with the right coverage"
       intro={[
-        "Getting authority is exciting, but the clock starts immediately. You need the right filings and coverage in place before a single load moves.",
-        "We know which carriers work with new ventures and how to present your file so things move quickly instead of stalling out.",
+        "A new trucking business needs an insurance submission that clearly explains its drivers, equipment, freight, and routes. Previous driving experience can still be relevant even when the business itself is new.",
+        "We help organize your application and review available new-venture markets. Insurance approval, required filings, and operating-authority activation are separate steps; confirm each before operating.",
       ]}
-      listTitle="What's included"
+      listTitle="Coverage and filing needs to review"
       listItems={[
         "Primary liability for FMCSA compliance",
         "BMC-91 filing support",
@@ -30,13 +30,11 @@ export default function NewVenturePage() {
         "Bobtail / non-trucking",
         "Occupational accident",
       ]}
-      sideTitle="New venture success"
-      sideQuote="Just got my MC number and needed someone who understood new authority. Supreme made the next steps clear."
-      sideQuoteByline="James W., New Venture, Florida"
       faqs={[
-        { q: "What do I need to apply?", a: "Usually your DOT number, MC number, driver information, and vehicle details. We handle the rest." },
-        { q: "Will new authority cost more?", a: "Usually yes, but we shop multiple carriers to find the most realistic option available." },
-        { q: "How long until I can haul?", a: "Timing depends on the market, filings, and file quality. We move quickly and keep you updated." },
+        { q: "What do I need to apply?", a: "Provide your legal business name, DOT or MC number if issued, drivers and experience, VINs and equipment values, garaging, freight, radius, and planned start date. The carrier may request more information." },
+        { q: "Will new authority cost more?", a: "A new business has less operating history for a carrier to review. Rates and availability depend on the complete submission; we cannot promise a fixed price or savings before underwriting." },
+        { q: "How long until I can haul?", a: "Carrier review and filing timelines vary. A quote or certificate alone does not establish that your authority is active. Confirm coverage, effective dates, and required authority status before operating." },
+        { q: "Can I start without a DOT number?", a: "Yes, you can begin the conversation and explain that your authority is not yet issued. Your agent will identify the remaining information needed before a carrier can finalize coverage or filings." },
       ]}
       primaryCtaLabel="Start your quote"
       ctaTitle="Prepare your new authority submission"

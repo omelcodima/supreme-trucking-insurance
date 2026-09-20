@@ -20,6 +20,7 @@ const staticRoutes = [
   "/links",
   "/new-venture",
   "/owner-operator",
+  "/physical-damage-insurance",
   "/privacy-policy",
   "/quote",
   "/reviews",

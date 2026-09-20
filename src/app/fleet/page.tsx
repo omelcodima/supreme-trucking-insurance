@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Fleet Insurance | Supreme Trucking Insurance",
-  description: "Fleet insurance for 11 to 25+ trucks. One renewal, better rates, personal service. Get market options and clear guidance.",
+  description: "Compare trucking fleet insurance with Supreme. Review unit schedules, driver history, loss runs, coverage structure, and renewal options with an agent.",
   alternates: {
     canonical: "/fleet",
   },
@@ -14,12 +14,12 @@ export default function FleetPage() {
     <SubpageLayout
       eyebrow="Fleet insurance"
       title="Fleet Insurance"
-      description="Protecting fleets starting around 11 trucks, through 25 trucks and growing operations, with a simpler path to better fleet pricing."
+      description="Coverage planning for fleets starting around 11 trucks and growing, with an organized submission and a clear comparison of market options."
       image="/images/fleet-card-v2.jpg"
       sectionTitle="Simplify your fleet insurance"
       intro={[
         "Managing a fleet is already complex. Your insurance should not add another layer of chaos.",
-        "We help bundle your units into a cleaner policy structure with one renewal cycle, better visibility, and stronger shopping at renewal.",
+        "We review the unit schedule, drivers, garaging, routes, and loss history together. At renewal, compare limits, deductibles, exclusions, and payment terms alongside the premium, not just one headline number.",
       ]}
       listTitle="Fleet coverage options"
       listItems={[
@@ -30,13 +30,11 @@ export default function FleetPage() {
         "Non-owned trailer coverage",
         "Hired auto and supporting coverages",
       ]}
-      sideTitle="Client success story"
-      sideQuote="Fleet of 14 trucks. Supreme saved me over $18,000 at renewal by shopping my coverage properly."
-      sideQuoteByline="Carlos R., Fleet Owner, California"
       faqs={[
         { q: "What size fleet do you work with?", a: "We focus on fleets starting around 11 trucks, up to 25 trucks and more, where policy structure and renewal strategy start to matter more." },
-        { q: "Can you beat my current rate?", a: "Often yes. We shop multiple carriers and compare structure, not just headline premium." },
-        { q: "What if I add or remove trucks mid-term?", a: "We handle endorsements so your policy can keep up with how the fleet changes." },
+        { q: "Can you beat my current rate?", a: "A lower premium is not guaranteed. We request available market options and compare coverage, deductibles, and terms so you can make an informed decision." },
+        { q: "What if I add or remove trucks mid-term?", a: "Tell your agent before the change takes effect. We can request the appropriate endorsement and confirm the insurer's response; sending a request alone does not change coverage." },
+        { q: "What helps a fleet submission?", a: "Prepare a current unit and driver schedule, available loss runs, your existing policy, annual mileage, garaging locations, commodities, and projected unit count. Include ELD, dash-cam, maintenance, and driver-training details for the carrier to review." },
       ]}
       primaryCtaLabel="Get your fleet quote"
       ctaTitle="Let's shop your fleet coverage"
