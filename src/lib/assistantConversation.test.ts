@@ -41,4 +41,6 @@ test("quote guidance offers an application without demanding personal details or
   assert.match(assistantInstructions, /invite the visitor to complete the full application for agent review/);
   assert.match(assistantInstructions, /Do not collect personal contact details in chat/);
   assert.match(assistantInstructions, /NO tools, CRM access, email access or upload capability/);
+  assert.match(assistantInstructions, /Chat details are not copied into it/);
+  assert.match(assistantInstructions, /Never offer or claim to prepare, create, prefill, complete or submit an application yourself/);
 });
