@@ -4,11 +4,13 @@ import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, jsonLdScript, siteName }
 import { servedStatePages } from "@/lib/statePages";
 import { serviceAreaSummary } from "@/lib/serviceArea";
 import { classPages } from "@/lib/classPages";
+import LocationDirectory from "@/components/LocationDirectory";
+import { locationDirectory } from "@/lib/cityPages";
 
 export const metadata: Metadata = {
-  title: "Trucking Insurance by State | Supreme Trucking Insurance",
+  title: "Truck Insurance by State & City | Supreme Trucking Insurance",
   description:
-    "Trucking insurance help for businesses in 48 states, excluding Alaska and Hawaii. Find your state and explore owner-operator, fleet, and cargo options.",
+    "Find commercial truck insurance by state and city. Supreme helps owner-operators and fleets in 48 states, excluding Alaska and Hawaii.",
   alternates: {
     canonical: "/trucking-insurance",
   },
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     url: absoluteUrl("/trucking-insurance"),
     siteName,
-    title: "Trucking Insurance by State",
+    title: "Trucking Insurance by State and City",
     description:
       serviceAreaSummary,
     images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
@@ -27,7 +29,7 @@ export default function TruckingInsuranceStatesPage() {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Trucking Insurance by State",
+    name: "Trucking Insurance by State and City",
     itemListElement: servedStatePages.map((state, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -46,12 +48,12 @@ export default function TruckingInsuranceStatesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(breadcrumbs)} />
       <section className="section-shell warm-divider">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-          <span className="eyebrow mb-5">Trucking insurance by state</span>
+          <span className="eyebrow mb-5">Trucking insurance by location</span>
           <h1 className="max-w-4xl text-4xl font-black leading-tight text-[#2F261C] md:text-6xl">
-            Find trucking insurance help by state.
+            Trucking insurance by state and city.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
-            {serviceAreaSummary} Choose your state to start with owner-operator, fleet, new authority, cargo, and physical damage insurance information.
+            {serviceAreaSummary} Find your business location for owner-operator, fleet, new authority, cargo, and physical damage insurance information.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -69,6 +71,8 @@ export default function TruckingInsuranceStatesPage() {
           </div>
         </div>
       </section>
+
+      <LocationDirectory entries={locationDirectory} />
 
       <section className="py-14 md:py-16">
         <div className="mx-auto max-w-6xl px-4">
@@ -101,30 +105,6 @@ export default function TruckingInsuranceStatesPage() {
         </div>
       </section>
 
-      <section className="section-soft py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <span className="eyebrow mb-4">48 states served</span>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {servedStatePages.map((state) => (
-              <Link
-                key={state.slug}
-                href={`/trucking-insurance/${state.slug}`}
-                className="card-premium rounded-[1.15rem] px-4 py-4 transition-all hover:-translate-y-1 hover:border-[#f97316]/35"
-              >
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f97316]">
-                  {state.abbreviation}
-                </p>
-                <h2 className="mt-1 text-lg font-black text-[#2F261C]">
-                  {state.name}
-                </h2>
-                <p className="mt-2 text-sm leading-5 text-[#5A4B3B]">
-                  Trucking insurance for owner-operators, fleets, cargo, and new authority.
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   );
 }

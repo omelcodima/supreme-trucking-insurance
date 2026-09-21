@@ -8,6 +8,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import { quoteHrefForPath } from "./quoteContext.ts";
+import { cityPages, cityPagePath } from "./cityPages.ts";
 
 const require = createRequire(import.meta.url);
 const cache = new Map<string, Record<string, unknown>>();
@@ -83,4 +84,34 @@ test("public crawling stays allowed without opening private admin routes", () =>
   assert.ok(!result.rules.disallow.includes("/"));
   for (const path of ["/admin", "/api/admin", "/api/owner-auth"]) assert.ok(result.rules.disallow.includes(path));
   assert.equal(result.sitemap, "https://supremetruckinginsurance.com/sitemap.xml");
+});
+
+test("city guides have self-canonicals, accurate local schema and no invented branch offices", async () => {
+  const page = load("src/app/trucking-insurance/[state]/[city]/page.tsx");
+  type Props = { params: Promise<{ state: string; city: string }> };
+  const renderPage = page.default as (props: Props) => Promise<React.ReactElement>;
+  const metadataFor = page.generateMetadata as (props: Props) => Promise<{ title: string; description: string; alternates: { canonical: string } }>;
+  const staticParams = page.generateStaticParams as () => { state: string; city: string }[];
+  assert.equal(page.dynamicParams, false);
+  assert.deepEqual(JSON.parse(JSON.stringify(staticParams())), cityPages.map(city => ({ state: city.state, city: city.slug })));
+  for (const city of cityPages) {
+    const props = { params: Promise.resolve({ state: city.state, city: city.slug }) };
+    const html = renderToStaticMarkup(await renderPage(props));
+    const metadata = await metadataFor(props);
+    assert.equal(metadata.alternates.canonical, cityPagePath(city));
+    assert.ok(metadata.title.length <= 60);
+    assert.equal(metadata.description, city.description);
+    assert.equal([...html.matchAll(/<h1\b/g)].length, 1);
+    assert.match(html, /href="\/quote"/);
+    assert.match(html, /href="\/quote-checklist"/);
+    const schemas = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
+    assert.deepEqual(schemas.map(schema => schema["@type"]).sort(), ["BreadcrumbList", "FAQPage", "Service"]);
+    const service = schemas.find(schema => schema["@type"] === "Service");
+    assert.equal(service.areaServed.name, city.name);
+    assert.equal(service.provider["@id"], "https://supremetruckinginsurance.com/#insurance-agency");
+    assert.equal(service.address, undefined);
+    const faq = schemas.find(schema => schema["@type"] === "FAQPage");
+    assert.equal(faq.mainEntity.length, [...html.matchAll(/<details\b/g)].length);
+  }
+  await assert.rejects(renderPage({ params: Promise.resolve({ state: "maine", city: "portland" }) }));
 });

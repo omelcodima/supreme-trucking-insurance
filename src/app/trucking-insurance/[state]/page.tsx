@@ -5,6 +5,7 @@ import { absoluteUrl, breadcrumbJsonLd, defaultOgImage, faqJsonLd, jsonLdScript,
 import { featuredStatePages, getStatePage, statePages, unservedStateSlugs } from "@/lib/statePages";
 import { serviceAreaSummary } from "@/lib/serviceArea";
 import { classPages } from "@/lib/classPages";
+import StateCityCoverage from "@/components/StateCityCoverage";
 
 type Props = {
   params: Promise<{ state: string }>;
@@ -175,6 +176,8 @@ export default async function StateInsurancePage({ params }: Props) {
           </aside>
         </div>
       </section>
+
+      <StateCityCoverage stateSlug={state.slug} />
 
       <section className="section-soft py-16 md:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[1fr_0.9fr]">
