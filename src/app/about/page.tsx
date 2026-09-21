@@ -189,7 +189,16 @@ export default function AboutPage() {
               rel="noopener noreferrer"
             >
               <strong>
-                Carrierlens
+                <Image
+                  src="/images/carrierlens-connect.svg"
+                  alt=""
+                  width={54}
+                  height={38}
+                  className="about-tool-logo"
+                />
+                <span className="about-carrierlens-name">
+                  Carrier<span>lens</span>
+                </span>
                 <ExternalLink size={16} aria-hidden="true" />
               </strong>
               <p>
