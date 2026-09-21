@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { isLeadFormId, trackLeadForm } from "@/lib/leadAnalytics";
 import { ANALYTICS_SETTINGS_EVENT, analyticsEventForLink, analyticsPageContext, clearAnalyticsCookies, readAnalyticsConsent, saveAnalyticsConsent, subscribeAnalyticsConsent } from "@/lib/analyticsPrivacy";
+import { readClarityConsent, saveClarityConsent, subscribeClarityConsent } from "@/lib/clarityPrivacy";
 
 declare global {
   interface Window {
@@ -22,16 +23,16 @@ const deniedConsent = { analytics_storage: "denied", ad_storage: "denied", ad_us
 export default function Analytics() {
   const pathname = usePathname();
   const consent = useSyncExternalStore(subscribeAnalyticsConsent, readAnalyticsConsent, () => "pending" as const);
+  const clarityConsent = useSyncExternalStore(subscribeClarityConsent, readClarityConsent, () => "pending" as const);
   const hydrated = useSyncExternalStore(subscribeAnalyticsConsent, () => true, () => false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const initialized = useRef(false);
   const previousPage = useRef<string | null>(null);
   const banner = useRef<HTMLElement>(null);
   const trigger = useRef<HTMLElement | null>(null);
-  const showBanner = Boolean(measurementId && hydrated && (consent === "pending" || settingsOpen));
+  const showBanner = hydrated && (Boolean(measurementId && consent === "pending") || clarityConsent === "pending" || settingsOpen);
 
   useEffect(() => {
-    if (!measurementId) return;
     const open = () => {
       trigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setSettingsOpen(true);
@@ -121,31 +122,39 @@ export default function Analytics() {
     };
   }, []);
 
-  if (!measurementId) return null;
-
   const closeSettings = () => { setSettingsOpen(false); trigger.current?.focus(); };
-  const choose = (choice: "granted" | "denied") => {
-    if (choice === "denied") window[`ga-disable-${measurementId}`] = true;
-    saveAnalyticsConsent(choice);
+  const choose = (analytics: "granted" | "denied", heatmaps: "granted" | "denied") => {
+    if (measurementId && analytics === "denied") window[`ga-disable-${measurementId}`] = true;
+    if (measurementId) saveAnalyticsConsent(analytics);
+    saveClarityConsent(heatmaps);
     closeSettings();
   };
+  const blocked = consent === "blocked" || clarityConsent === "blocked";
 
   return (
     <>
-      {consent === "granted" && <Script
+      {measurementId && consent === "granted" && <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
         strategy="afterInteractive"
       />}
-      {showBanner && <section ref={banner} tabIndex={-1} className="analytics-consent" aria-label="Google Analytics preferences">
+      {showBanner && <section ref={banner} tabIndex={-1} className="analytics-consent" aria-label="Analytics preferences">
         <div className="site-container analytics-consent-inner">
           <div>
-            <h2>Google Analytics preferences</h2>
-            <p>{consent === "blocked" ? "Google Analytics is off because your browser sends a privacy signal." : "Allow Google Analytics cookies to help us understand visits and completed requests? Your application answers are not included. You can change this choice in the footer."} <Link href="/privacy-policy#google-analytics">Privacy details</Link></p>
+            <h2>Analytics preferences</h2>
+            <p>{blocked ? "Optional analytics are off because your browser sends a privacy signal." : "Choose optional analytics. Change your choice anytime in the footer."} <Link href="/privacy-policy#website-analytics">Privacy details</Link></p>
+            {!blocked && <form id="analytics-choices" key={`${consent}-${clarityConsent}`} className="analytics-choices" onSubmit={event => {
+              event.preventDefault();
+              const data = new FormData(event.currentTarget);
+              choose(data.has("google-analytics") ? "granted" : "denied", data.has("clarity-heatmaps") ? "granted" : "denied");
+            }}>
+              {measurementId && <label><input type="checkbox" name="google-analytics" defaultChecked={consent === "granted"} /><span>Google Analytics: visits and completed requests, without application answers.</span></label>}
+              <label><input type="checkbox" name="clarity-heatmaps" defaultChecked={clarityConsent === "granted"} /><span>Microsoft Clarity: clicks, scrolling and masked session recordings on selected public pages. No applications or chat.</span></label>
+            </form>}
           </div>
           <div className="analytics-consent-actions">
-            {consent === "blocked" ? <button type="button" onClick={closeSettings}>Close</button> : <>
-              <button type="button" onClick={() => choose("denied")}>Decline</button>
-              <button type="button" onClick={() => choose("granted")}>Allow analytics</button>
+            {blocked ? <button type="button" onClick={closeSettings}>Close</button> : <>
+              <button type="button" onClick={() => choose("denied", "denied")}>Decline all</button>
+              <button type="submit" form="analytics-choices">Save choices</button>
             </>}
           </div>
         </div>

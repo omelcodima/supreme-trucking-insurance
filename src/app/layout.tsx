@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import Analytics from "@/components/Analytics";
+import ClarityAnalytics from "@/components/ClarityAnalytics";
 import OpenAIAdsEvents from "@/components/OpenAIAdsEvents";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -87,7 +88,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} data-clarity-mask="true">
         <Script id="openai-ads-measurement-pixel" strategy="beforeInteractive">
           {`
             (function (w, d, s, u) {
@@ -112,6 +113,7 @@ export default function RootLayout({
         />
         <OpenAIAdsEvents />
         <Analytics />
+        <ClarityAnalytics />
         <SiteHeader />
         <main id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter />

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Calculator, FileText, LoaderCircle, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
 import { assistantLinks, type AssistantMessage, type AssistantTopic } from "@/lib/assistantLinks";
 import { buildAssistantConversation } from "@/lib/assistantConversation";
+import { stopClarityForPrivateInteraction } from "@/lib/clarityPrivacy";
 import AssistantIntake from "./AssistantIntake";
 import styles from "./WebsiteAssistant.module.css";
 
@@ -35,7 +36,7 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
     return () => { document.body.style.overflow = previous; };
   }, [open]);
 
-  function show() { dialog.current?.showModal(); setOpen(true); }
+  function show() { stopClarityForPrivateInteraction(); dialog.current?.showModal(); setOpen(true); }
   function close() { dialog.current?.close(); setOpen(false); }
   function reset() {
     request.current?.abort();
@@ -80,7 +81,7 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
     <button type="button" className={`${styles.launcher} ${formPage ? styles.formPage : ""}`} onClick={show} aria-haspopup="dialog" aria-expanded={open} aria-controls="supreme-assistant">
       <MessageCircle size={21} aria-hidden="true" /><span>Chat with us</span>
     </button>
-    <dialog ref={dialog} id="supreme-assistant" className={styles.dialog} aria-labelledby="assistant-title" onClose={() => setOpen(false)}
+    <dialog ref={dialog} id="supreme-assistant" data-clarity-mask="true" className={styles.dialog} aria-labelledby="assistant-title" onClose={() => setOpen(false)}
       onClick={event => { if (event.target === dialog.current) close(); }}>
       <div className={styles.panel}>
         <header className={styles.header}>

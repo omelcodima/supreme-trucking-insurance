@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
               We respect your privacy and are committed to protecting the information you share with us when you request a quote, upload documents, or contact our team.
             </p>
             <div className="mt-6 inline-flex items-center rounded-full border border-[#DED3C4] bg-white/70 px-4 py-2 text-sm text-[#7B6B59]">
-              Updated: September 17, 2026
+              Updated: September 20, 2026
             </div>
           </div>
         </div>
@@ -106,11 +106,21 @@ export default function PrivacyPolicyPage() {
                     <li>General analytics and diagnostic information</li>
                   </ul>
                 </div>
+                <div id="website-analytics" className="scroll-mt-28">
+                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">D. Optional Website Analytics</h3>
+                  <p>Google Analytics and Microsoft Clarity have separate, optional choices in Analytics preferences in the footer. Both choices start off for new visitors. Permission previously given for Google Analytics does not enable Clarity. Global Privacy Control or Do Not Track keeps both off.</p>
+                </div>
                 <div id="google-analytics" className="scroll-mt-28">
-                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">D. Google Analytics</h3>
+                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">Google Analytics</h3>
                   <p>With your permission, we use Google Analytics to measure website visits and whether requests are successfully submitted. This uses analytics cookies. Our Google Analytics events do not include your application answers, contact details, DOT number, or VIN. We remove URL query parameters and fragments from the page addresses sent to Google Analytics and do not enable Google advertising personalization.</p>
                   <p>Google Analytics does not load until you allow it. You can decline or withdraw permission using Analytics preferences in the footer. We also keep Google Analytics off when your browser sends Global Privacy Control or Do Not Track. This preference applies to Google Analytics, not to the information you submit to request our services or to other third-party services on the site.</p>
                   <p>Learn more about <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="underline">how Google uses data from partner sites</a>.</p>
+                </div>
+                <div id="microsoft-clarity" className="scroll-mt-28">
+                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">Microsoft Clarity Heatmaps</h3>
+                  <p>Only after your separate permission, we use Microsoft Clarity to understand clicks, scrolling, device/browser information and interactions through heatmaps and masked session replays on selected public marketing landing pages. Clarity may use analytics cookies; we do not grant advertising storage permission. Clarity does not load when permission is declined or missing.</p>
+                  <p>We mask page text and do not install Clarity on quote, application, contact, upload, account or administrative pages. Recording ends before you open the assistant, follow a link, enter a text field, or navigate within the site, and does not restart in that document. We also exclude visits with query parameters, fragments, or potentially private referring page addresses. This intentionally limits the journeys shown in Clarity.</p>
+                  <p>You can withdraw permission in Analytics preferences. We then stop recording and remove Clarity first-party cookies; this does not erase information already sent to Microsoft. Learn about Microsoft&apos;s processing and retention in the <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener noreferrer" className="underline">Microsoft Privacy Statement</a>.</p>
                 </div>
               </Section>
 
@@ -122,7 +132,7 @@ export default function PrivacyPolicyPage() {
               </div>
               <Section title="Regional Homepage">
                 <p>Our hosting provider may supply an approximate country and state based on your connection. We use only that coarse region to suggest a homepage scene and wording. This feature does not request GPS access, store your IP address in our lead database, or determine your business location, insurance eligibility, or pricing. Network routing and VPNs can make the suggestion inaccurate.</p>
-                <p>You can choose a different state or the national view. We save only a state you explicitly select in this tab&apos;s session storage; the automatic location suggestion is not saved there. Regional pictures are hosted by us, so this feature does not send your visit to an external image provider.</p>
+                <p>The homepage scene is automatic. When a region is unavailable, we show the national view. We do not save a manual homepage state selection. Regional pictures are hosted by us, so this feature does not send your visit to an external image provider.</p>
               </Section>
               <div id="website-assistant" className="scroll-mt-28">
                 <Section title="Website AI Assistant">
