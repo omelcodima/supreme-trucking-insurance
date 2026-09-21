@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LockKeyhole } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import AnalyticsPreferences from "./AnalyticsPreferences";
 import { classPages } from "@/lib/classPages";
@@ -109,7 +110,10 @@ export default function SiteFooter() {
             <Link href="/careers">Careers</Link>
             {/* Full navigation keeps owner access outside the analytics layout. */}
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/admin/login">Owner sign in</a>
+            <a href="/admin" className="footer-owner-login" rel="nofollow">
+              <LockKeyhole size={16} aria-hidden="true" />
+              Owner login
+            </a>
           </div>
         </div>
       </div>
