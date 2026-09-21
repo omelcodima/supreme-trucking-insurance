@@ -1,7 +1,7 @@
 .launcher { position: fixed; right: 22px; bottom: 22px; z-index: 42; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 18px; border: 1px solid #d4dedb; border-radius: 8px; background: #fff; color: #18372c; box-shadow: 0 4px 20px #18372c1a; font-size: 14px; font-weight: 700; cursor: pointer; }
 .launcher svg { color: var(--cta); }
 .launcher:hover { border-color: var(--cta); }
-:global(body:has(.analytics-consent)) .launcher { visibility: hidden; }
+:global(body:has(.analytics-consent)) .launcher { bottom: calc(min(var(--analytics-banner-height, 60svh), 60svh) + 12px); }
 .dialog { position: fixed; inset: auto 18px 18px auto; width: min(448px, calc(100vw - 36px)); height: min(760px, calc(100dvh - 36px)); max-width: none; max-height: none; padding: 0; margin: 0; border: 1px solid #d4dedb; border-radius: 8px; background: #fff; color: #20382f; box-shadow: 0 20px 80px #16282033; overflow: hidden; }
 .dialog::backdrop { background: #12231d35; }
 .panel { display: flex; flex-direction: column; height: 100%; min-height: 0; }

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
+import postcss from "postcss";
 import { buildAssistantConversation } from "./assistantConversation.ts";
 import { validateAssistantMessages, assistantInstructions } from "./websiteAssistant.ts";
 import type { AssistantMessage } from "./assistantLinks.ts";
@@ -43,4 +45,18 @@ test("quote guidance offers an application without demanding personal details or
   assert.match(assistantInstructions, /NO tools, CRM access, email access or upload capability/);
   assert.match(assistantInstructions, /Chat details are not copied into it/);
   assert.match(assistantInstructions, /Never offer or claim to prepare, create, prefill, complete or submit an application yourself/);
+});
+
+test("chat remains available above the analytics banner without depending on consent", () => {
+  const css = postcss.parse(readFileSync("src/components/WebsiteAssistant.module.css", "utf8"));
+  const offsets: string[] = [];
+  css.walkRules(rule => {
+    if (!rule.selector.includes(".launcher")) return;
+    rule.walkDecls(declaration => {
+      assert.ok(!(declaration.prop === "visibility" && declaration.value === "hidden"));
+      assert.ok(!(declaration.prop === "display" && declaration.value === "none"));
+      if (rule.selector.includes(".analytics-consent") && declaration.prop === "bottom") offsets.push(declaration.value);
+    });
+  });
+  assert.deepEqual(offsets, ["calc(min(var(--analytics-banner-height, 60svh), 60svh) + 12px)"]);
 });

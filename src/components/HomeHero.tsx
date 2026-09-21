@@ -2,19 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import PromoPlayer from "./PromoPlayer";
 import HeroScene from "./HeroScene";
 import { serviceAreaSummary } from "@/lib/serviceArea";
 import type { HomepageVariant } from "@/lib/homepageDesignValues";
-import { regionScenes, regionalHeadline, regionIsServed } from "@/lib/regionalHero";
+import { regionalHeadline } from "@/lib/regionalHero";
 import useRegionalHero, { regionalForeground } from "./useRegionalHero";
 import styles from "./RegionalHero.module.css";
 
 export default function HomeHero({ variant }: { variant: HomepageVariant }) {
   const cinematic = variant === "cinematic";
-  const { choice, choose, scene } = useRegionalHero();
-  const available = !scene || regionIsServed(scene);
+  const { scene } = useRegionalHero();
   return (
     <>
       <section className={`home-hero ${styles.root}${cinematic ? " home-hero--cinematic" : ""}`} data-homepage-design={variant} data-region={scene?.code || "national"}>
@@ -36,18 +35,9 @@ export default function HomeHero({ variant }: { variant: HomepageVariant }) {
               <span className="hero-brand-category">Trucking Insurance.</span>
             </h1>
             <p>Independent agents. Trucking-focused markets. Clear answers for owner operators, fleets, and new authority.</p>
-            <div className={styles.location}>
-              <label htmlFor="hero-business-state"><MapPin size={15} aria-hidden="true" />Business state</label>
-              <select id="hero-business-state" value={choice} onChange={event => choose(event.target.value)}>
-                <option value="auto">Automatic (approximate)</option>
-                <option value="national">National view</option>
-                {regionScenes.map(state => <option key={state.code} value={state.code}>{state.name}</option>)}
-              </select>
-            </div>
-            {!available && <p className={styles.unavailable}>We do not currently write policies for businesses based in {scene!.name}.</p>}
             <div className="hero-buttons">
-              <Link href={available ? "/quote" : "/contact"} className="button-primary">
-                {available ? "Get a Free Quote" : "Ask About Availability"} <ArrowRight size={18} aria-hidden="true" />
+              <Link href="/quote" className="button-primary">
+                Get a Free Quote <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <a href="tel:+13609367196" className="hero-call">
                 <Phone size={17} aria-hidden="true" /> (360) 936-7196
