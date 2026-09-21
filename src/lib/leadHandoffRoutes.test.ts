@@ -5,6 +5,8 @@ import * as crypto from "node:crypto";
 import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import * as smsConsent from "./smsConsent.ts";
+import * as quotePrivacy from "./quotePrivacy.ts";
+import type { OwnerLeadInput } from "./ownerData.ts";
 import * as instantIndication from "./instantIndication.ts";
 import { deliverLeadWithFallback } from "./leadDelivery.ts";
 import type { GrakbotHandoff } from "./grakbotHandoff.ts";
@@ -13,7 +15,8 @@ import { validateAssistantMessages } from "./websiteAssistant.ts";
 // Execute the actual route handlers with all persistence/network edges replaced.
 // No environment keys, customer emails, CRM writes or live API calls are used.
 function routeHarness(route: string, failEmail = false) {
-  const sent: Array<{ grakbot: GrakbotHandoff; attachments?: unknown[] }> = [];
+  const sent: Array<{ grakbot: GrakbotHandoff; text?: string; attachments?: unknown[] }> = [];
+  const captured: OwnerLeadInput[] = [];
   let customerMessages = 0;
   let stored = 0;
   let modelCalls = 0;
@@ -21,12 +24,14 @@ function routeHarness(route: string, failEmail = false) {
   const mocks: Record<string, unknown> = {
     "next/server": { NextResponse: Response, userAgent: () => ({ isBot: false, device: {}, browser: { name: "Test browser" }, os: { name: "Test OS" } }) },
     "node:crypto": crypto,
-    "@/lib/ownerDatabase": { captureOwnerLead: async (data: { smsConsent: smsConsent.SmsConsentRecord }) => {
+    "@/lib/ownerDatabase": { captureOwnerLead: async (data: OwnerLeadInput) => {
       stored++;
+      captured.push(data);
       return { ...data.smsConsent, reference: "11111111-1111-4111-8111-111111111111", receivedAt: "2026-09-10T12:00:00.000Z" };
     } },
     "@/lib/ownerIntake": { guardOwnerIntake: async () => null, readLimitedText: (request: Request) => request.text(), RequestSizeError: class extends Error {} },
     "@/lib/smsConsent": smsConsent,
+    "@/lib/quotePrivacy": quotePrivacy,
     "../../../../lib/airtable": { getQuotesTable: () => ({ create: async () => ({ id: "test-record" }) }) },
     "../../../lib/leadDelivery": { deliverLeadWithFallback },
     "../../../lib/applicationPdf": { createApplicationPdf: async () => Buffer.from("%PDF-test-only") },
@@ -60,6 +65,7 @@ function routeHarness(route: string, failEmail = false) {
   });
   return {
     sent,
+    captured,
     get stored() { return stored; },
     get customerMessages() { return customerMessages; },
     get modelCalls() { return modelCalls; },
@@ -70,7 +76,8 @@ function routeHarness(route: string, failEmail = false) {
   };
 }
 
-const quickQuote = { firstName: "Test", lastName: "Only", phone: "2025550123", email: "test@example.invalid", company: "Test only", dot: "1234567", coverageType: "Cargo", notes: "Synthetic test", submissionId: "test-only" };
+const quickQuote = { firstName: "Test", lastName: "Only", phone: "2025550123", email: "test@example.invalid", company: "Test only", dot: "1234567", coverageType: "Cargo", notes: "Synthetic test", submissionId: "test-only",
+  privacyAcknowledgement: { accepted: true, version: quotePrivacy.quotePrivacyNotice.version } };
 const fullApplication = { summary: "Synthetic test application", form: { legalName: "Test only", contactName: "Test Only", email: "test@example.invalid", phone: "2025550123", usdot: "1234567", eldProvider: "Test ELD", garagingStreet: "Test address" }, equipment: [{ vin: "TESTONLY" }], submissionId: "test-only" };
 
 for (const [route, payload] of [["quote", quickQuote], ["full-application", fullApplication]] as const) {
@@ -124,7 +131,7 @@ test("indication without follow-up sends a record-only handoff and no customer e
 
 test("assistant callback requires contact confirmation and sends no quote follow-up sequence", async () => {
   const harness = routeHarness("quote");
-  const payload = { ...quickQuote, entryPoint: "website_assistant", contactMode: "callback" };
+  const payload = { ...quickQuote, privacyAcknowledgement: undefined, entryPoint: "website_assistant", contactMode: "callback" };
   assert.equal((await harness.submit(payload)).status, 400);
   assert.equal(harness.stored, 0);
   assert.equal((await harness.submit({ ...payload, assistantContactConsent: true })).status, 200);
@@ -132,6 +139,32 @@ test("assistant callback requires contact confirmation and sends no quote follow
   assert.equal(harness.sent[0].grakbot.consent.status, "not_provided");
   assert.equal(harness.followUps, 0);
   assert.equal(harness.customerMessages, 1);
+});
+
+test("quick quote rejects missing or outdated privacy acknowledgement before saving or emailing", async () => {
+  const harness = routeHarness("quote");
+  for (const privacyAcknowledgement of [undefined, { accepted: false }, { accepted: true, version: "old" }]) {
+    assert.equal((await harness.submit({ ...quickQuote, privacyAcknowledgement })).status, 400);
+  }
+  assert.equal(harness.stored, 0);
+  assert.equal(harness.sent.length, 0);
+  assert.equal(harness.customerMessages, 0);
+  assert.equal(harness.followUps, 0);
+});
+
+test("quick quote stores privacy evidence separately and cannot opt a number into marketing SMS", async () => {
+  const harness = routeHarness("quote");
+  assert.equal((await harness.submit({ ...quickQuote,
+    smsConsent: { accepted: true, mobile: "2025550123", version: smsConsent.smsDisclosure.version },
+  })).status, 200);
+  assert.equal(harness.captured[0].request.privacyVersion, quotePrivacy.quotePrivacyNotice.version);
+  assert.equal(harness.captured[0].request.privacyNotice, "By submitting this form, you agree to our Privacy Policy.");
+  assert.equal(harness.captured[0].request.privacyPolicy, "https://supremetruckinginsurance.com/privacy-policy");
+  assert.equal(harness.captured[0].smsConsent.status, "not_provided");
+  assert.equal(harness.captured[0].smsConsent.mobile, "");
+  assert.equal(harness.sent[0].grakbot.consent.status, "not_provided");
+  assert.match(harness.sent[0].text || "", /PRIVACY POLICY ACKNOWLEDGEMENT/);
+  assert.match(harness.sent[0].text || "", /Marketing SMS: NOT GRANTED/);
 });
 
 test("assistant answers without writing a lead or sending emails", async () => {

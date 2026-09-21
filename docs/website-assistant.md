@@ -1,6 +1,7 @@
 # Website assistant
 
-The public site has a manually opened Ask Supreme dialog. It does not appear on
+The public site has a manually opened Chat with us dialog, labeled as a Supreme
+AI assistant inside the header. It does not appear on
 the private owner dashboard. Instant Indication remains available inside the
 dialog and in site navigation. The mobile quote/call bar is preserved.
 
@@ -50,6 +51,21 @@ that is not proof of inbox delivery or Grakbot processing.
 No marketing SMS permission is inferred. Callback requests receive a transactional
 receipt but do not enter the quote follow-up sequence. Quote requests retain the
 existing quote receipt/follow-up behavior. Neither sends the AI conversation.
+
+## Quick quote privacy acknowledgement
+
+The main `/quote` quick request asks for one phone number. Its required,
+initially unchecked checkbox displays only "By submitting this form, you agree
+to our Privacy Policy." The policy opens in a new tab without losing the form.
+The server validates the acknowledgement and notice version before persistence
+or email. The server-owned notice, version and policy URL are stored with the
+lead and included in the agency notification and Airtable notes. An older open
+form without the checkbox must refresh before submitting.
+
+Neither quick quote nor assistant intake accepts marketing SMS opt-ins through
+`/api/quote`, even if a caller includes an SMS consent payload. Privacy acceptance
+is not marketing permission. The separate full application and instant indication
+SMS opt-ins, existing consent history and suppression records are unchanged.
 
 ## Still separate
 

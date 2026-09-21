@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { captureOwnerLead } from "@/lib/ownerDatabase";
 import { guardOwnerIntake, readLimitedText, RequestSizeError } from "@/lib/ownerIntake";
-import { createSmsConsentRecord, formatSmsConsent, validateSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
+import { createSmsConsentRecord, emptySmsConsent, formatSmsConsent, type SmsConsentRecord } from "@/lib/smsConsent";
+import { formatQuotePrivacy, validateQuotePrivacy, type QuotePrivacyAcknowledgement } from "@/lib/quotePrivacy";
 import { getQuotesTable } from "../../../../lib/airtable";
 import {
   leadNotificationEmail,
@@ -24,6 +25,7 @@ type QuotePayload = {
   coverageType: string;
   notes: string;
   smsConsent: SmsConsentRecord;
+  privacyAcknowledgement?: QuotePrivacyAcknowledgement;
   entryPoint?: "website_assistant";
   contactMode?: "quote" | "callback";
 };
@@ -39,7 +41,7 @@ async function saveQuoteToAirtable(data: QuotePayload) {
     Company: data.company,
     "DOT Number": data.dot || "",
     "Coverage Type": data.coverageType,
-    Notes: [`Notification email: ${leadNotificationEmail}`, data.notes || "", formatSmsConsent(data.smsConsent)].filter(Boolean).join("\n\n"),
+    Notes: [`Notification email: ${leadNotificationEmail}`, data.notes || "", formatQuotePrivacy(data.privacyAcknowledgement), formatSmsConsent(data.smsConsent)].filter(Boolean).join("\n\n"),
   } as Record<string, string>);
 
   return record;
@@ -60,7 +62,7 @@ async function sendWebhook(data: QuotePayload) {
         "Content-Type": "application/json",
       },
       // Keep consent evidence with the agency, not the generic lead webhook.
-      body: JSON.stringify({ ...data, smsConsent: undefined, notificationEmail: leadNotificationEmail }),
+      body: JSON.stringify({ ...data, smsConsent: undefined, privacyAcknowledgement: undefined, notificationEmail: leadNotificationEmail }),
     });
 
     if (!webhookResponse.ok) {
@@ -89,6 +91,7 @@ function formatQuoteEmail(data: QuotePayload) {
     "",
     `Submitted from: supremetruckinginsurance.com/quote`,
     "",
+    ...(data.privacyAcknowledgement ? [formatQuotePrivacy(data.privacyAcknowledgement), ""] : []),
     formatSmsConsent(data.smsConsent),
   ].join("\n");
 }
@@ -150,13 +153,15 @@ export async function POST(request: Request) {
   const limited = await guardOwnerIntake(request);
   if (limited) return limited;
   try {
-    const json = JSON.parse(await readLimitedText(request, 65536)) as Partial<QuotePayload> & { submissionId?: unknown; assistantContactConsent?: unknown };
+    const json = JSON.parse(await readLimitedText(request, 65536)) as Partial<Omit<QuotePayload, "privacyAcknowledgement">> & { submissionId?: unknown; assistantContactConsent?: unknown; privacyAcknowledgement?: unknown };
     if (json.entryPoint === "website_assistant" && (json.assistantContactConsent !== true || !["quote", "callback"].includes(json.contactMode || ""))) {
       return NextResponse.json({ detail: "Please confirm that you want our team to contact you about this request." }, { status: 400 });
     }
-    let smsConsent;
-    try { smsConsent = validateSmsConsent(json?.smsConsent); } catch (error) {
-      return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the SMS consent." }, { status: 400 });
+    let privacyAcknowledgement;
+    try {
+      if (json.entryPoint !== "website_assistant") privacyAcknowledgement = validateQuotePrivacy(json.privacyAcknowledgement);
+    } catch (error) {
+      return NextResponse.json({ detail: error instanceof Error ? error.message : "Please review the Privacy Policy." }, { status: 400 });
     }
     const data: QuotePayload = {
       firstName: String(json.firstName || "").trim(),
@@ -167,7 +172,9 @@ export async function POST(request: Request) {
       dot: String(json.dot || "").trim(),
       coverageType: String(json.coverageType || "").trim(),
       notes: String(json.notes || "").trim(),
-      smsConsent: createSmsConsentRecord(smsConsent, "quick_quote", randomUUID(), new Date().toISOString()),
+      // Neither quick intake surface displays a marketing SMS opt-in.
+      smsConsent: createSmsConsentRecord(emptySmsConsent, "quick_quote", randomUUID(), new Date().toISOString()),
+      privacyAcknowledgement,
       ...(json.entryPoint === "website_assistant" ? { entryPoint: "website_assistant" as const, contactMode: json.contactMode } : {}),
     };
 
@@ -186,7 +193,15 @@ export async function POST(request: Request) {
     data.smsConsent = await captureOwnerLead({ source: "quick_quote",
       submissionId: typeof json.submissionId === "string" ? json.submissionId.slice(0,100) : data.smsConsent.reference,
       name: `${data.firstName} ${data.lastName}`, company: data.company, phone: data.phone, email: data.email,
-      dot: data.dot, state: "", contactRequested: true, request: { coverage: data.coverageType, notes: data.notes, ...(data.entryPoint ? { entryPoint: data.entryPoint, contactMode: data.contactMode || "quote" } : {}) }, smsConsent: data.smsConsent,
+      dot: data.dot, state: "", contactRequested: true, request: {
+        coverage: data.coverageType, notes: data.notes,
+        ...(data.privacyAcknowledgement ? {
+          privacyNotice: data.privacyAcknowledgement.statement,
+          privacyVersion: data.privacyAcknowledgement.version,
+          privacyPolicy: data.privacyAcknowledgement.policyUrl,
+        } : {}),
+        ...(data.entryPoint ? { entryPoint: data.entryPoint, contactMode: data.contactMode || "quote" } : {}),
+      }, smsConsent: data.smsConsent,
     });
     await deliverLeadWithFallback([
       { name: "airtable", deliver: () => saveQuoteToAirtable(data) },

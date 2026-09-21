@@ -78,14 +78,14 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
 
   return <>
     <button type="button" className={`${styles.launcher} ${formPage ? styles.formPage : ""}`} onClick={show} aria-haspopup="dialog" aria-expanded={open} aria-controls="supreme-assistant">
-      <MessageCircle size={21} aria-hidden="true" /><span>Ask Supreme</span>
+      <MessageCircle size={21} aria-hidden="true" /><span>Chat with us</span>
     </button>
     <dialog ref={dialog} id="supreme-assistant" className={styles.dialog} aria-labelledby="assistant-title" onClose={() => setOpen(false)}
       onClick={event => { if (event.target === dialog.current) close(); }}>
       <div className={styles.panel}>
         <header className={styles.header}>
           <MessageCircle size={23} aria-hidden="true" />
-          <div><h2 id="assistant-title">Supreme Assistant</h2><p>AI assistant · Agent support available</p></div>
+          <div><h2 id="assistant-title">Chat with us</h2><p>Supreme AI assistant · Agent support available</p></div>
           <button type="button" className={styles.iconButton} title="Close assistant" aria-label="Close assistant" onClick={close}><X size={21} /></button>
         </header>
         <div className={styles.tabs} aria-label="Assistant options">

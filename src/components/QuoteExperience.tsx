@@ -15,8 +15,7 @@ import { coverageOptions, validCoverage } from "@/lib/quoteContext";
 import QuickDotLookup from "@/components/QuickDotLookup";
 import { clearConfirmedCompany, type QuickCarrier } from "@/lib/quickDotLookup";
 import { trackLeadForm } from "@/lib/leadAnalytics";
-import SmsConsent from "@/components/SmsConsent";
-import { emptySmsConsent, validateSmsConsent } from "@/lib/smsConsent";
+import { quotePrivacyNotice, validateQuotePrivacy } from "@/lib/quotePrivacy";
 
 export default function QuoteExperience({
   coverage,
@@ -37,7 +36,7 @@ export default function QuoteExperience({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-  const [smsConsent, setSmsConsent] = useState({ ...emptySmsConsent });
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [confirmedCarrier, setConfirmedCarrier] = useState<QuickCarrier | null>(null);
   const submissionLock = useRef(false);
   const ownerSubmissionId = useRef<string | null>(null);
@@ -91,8 +90,9 @@ export default function QuoteExperience({
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (submissionLock.current) return;
-    try { validateSmsConsent(smsConsent); } catch (error) {
-      setError(error instanceof Error ? error.message : "Please review the SMS consent.");
+    const privacyAcknowledgement = { accepted: privacyAccepted, version: quotePrivacyNotice.version };
+    try { validateQuotePrivacy(privacyAcknowledgement); } catch (error) {
+      setError(error instanceof Error ? error.message : "Please review the Privacy Policy.");
       return;
     }
     submissionLock.current = true;
@@ -106,7 +106,7 @@ export default function QuoteExperience({
         body: JSON.stringify({
           ...form,
           submissionId: ownerSubmissionId.current ??= crypto.randomUUID(),
-          smsConsent: validateSmsConsent(smsConsent),
+          privacyAcknowledgement,
           notes: [
             operationName ? `Operation: ${operationName}` : "",
             form.notes,
@@ -319,7 +319,20 @@ export default function QuoteExperience({
                       />
                     </div>
                   </fieldset>
-                  <SmsConsent id="quote-sms" value={smsConsent} onChange={setSmsConsent} disabled={submitting} />
+                  <label className="quote-privacy" htmlFor="quote-privacy">
+                    <input
+                      id="quote-privacy"
+                      name="privacyAcknowledgement"
+                      type="checkbox"
+                      required
+                      checked={privacyAccepted}
+                      disabled={submitting}
+                      onChange={event => setPrivacyAccepted(event.target.checked)}
+                    />
+                    <span>{quotePrivacyNotice.prefix}{" "}
+                      <a href={quotePrivacyNotice.policyPath} target="_blank" rel="noopener noreferrer">{quotePrivacyNotice.linkText}</a>.
+                    </span>
+                  </label>
                   {error && (
                     <div className="form-error" role="alert">
                       <strong>Request not sent</strong>
@@ -335,10 +348,7 @@ export default function QuoteExperience({
                     <ArrowRight size={18} aria-hidden="true" />
                   </button>
                   <p className="form-note mt-4">
-                    Requesting a quote does not bind coverage.{" "}
-                    <a href="/privacy-policy" className="underline">
-                      Privacy policy
-                    </a>
+                    Requesting a quote does not bind coverage.
                   </p>
                 </form>
                 <aside className="quote-support">

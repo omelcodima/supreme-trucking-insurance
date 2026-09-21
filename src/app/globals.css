@@ -452,6 +452,10 @@ body {
 .quote-form h2, .quote-support h2 { font-size: 22px; line-height: 1.4; font-weight: 700; }
 .form-note { color: var(--text-subtle); font-size: 12px; line-height: 1.65; }
 .quote-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; min-width: 0; }
+.quote-privacy { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 20px; padding-block: 8px; color: var(--text-muted); font-size: 13px; line-height: 1.6; cursor: pointer; }
+.quote-privacy input { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--cta); }
+.quote-privacy a { text-decoration: underline; text-underline-offset: 3px; }
+.quote-privacy :is(input, a):focus-visible { outline: 2px solid var(--cta); outline-offset: 3px; }
 .form-field { min-width: 0; }
 .form-field label { display: block; font-size: 13px; font-weight: 650; margin-bottom: 8px; }
 .form-field input, .form-field select, .form-field textarea, .filter-input { width: 100%; padding: 12px; font: inherit; font-size: 15px; line-height: 1.45; border: 1px solid var(--border-strong); border-radius: 5px; background: #fff; color: var(--text-primary); min-height: 46px; }
