@@ -64,6 +64,7 @@ export default function SiteFooter() {
               ["/reviews", "Reviews"],
               ["/contact", "Contact"],
               ["/trucking-insurance", "States & cities"],
+              ["/careers", "Careers / Join our team"],
             ].map(([href, label]) => (
               <Link key={href} href={href}>
                 {label}
@@ -106,6 +107,9 @@ export default function SiteFooter() {
             <AnalyticsPreferences />
             <Link href="/sms-terms-and-conditions">SMS Terms</Link>
             <Link href="/careers">Careers</Link>
+            {/* Full navigation keeps owner access outside the analytics layout. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a href="/admin/login">Owner sign in</a>
           </div>
         </div>
       </div>

@@ -40,8 +40,11 @@ export default function OwnerLogin({ configured }: { configured: boolean }) {
             ? "The code could not be accepted. Check it or request a new code."
             : "Unable to send a code. Check your owner email or try again later.",
         );
-      if (sent) window.location.assign(new URLSearchParams(window.location.search).get("next") === "assessments" ? "/admin/assessments" : "/admin");
-      else setSent(true);
+      if (sent) {
+        const assessments = new URLSearchParams(window.location.search).get("next") === "assessments";
+        const application = /^#WS-\d{13}-[A-F0-9]{20}$/.test(window.location.hash) ? window.location.hash : "";
+        window.location.assign(assessments ? `/admin/assessments${application}` : "/admin");
+      } else setSent(true);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Sign-in unavailable.");
     } finally {
@@ -65,6 +68,7 @@ export default function OwnerLogin({ configured }: { configured: boolean }) {
         />
         <LockKeyhole size={24} />
         <h1>Owner sign in</h1>
+        <p>Use your approved owner email. Sign in with an 8-digit code sent to your inbox; no password is needed.</p>
         {!configured ? (
           <p role="status">
             Private access is not connected yet. The owner database and sign-in

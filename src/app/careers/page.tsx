@@ -1,3 +1,4 @@
+/* Full navigation keeps applications outside the public analytics layout. */
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/careers" },
   title: "Careers | Supreme Trucking Insurance",
   description:
-    "Careers and partnership opportunities with Supreme Trucking Insurance for licensed agents, producers, service staff, and trucking insurance specialists.",
+    "Apply to Supreme Trucking Insurance with your PDF resume and a required 20-question assessment. Applications are reviewed personally by the agency owner.",
 };
 
 const roles = [
@@ -39,17 +40,17 @@ export default function CareersPage() {
           <div>
             <span className="eyebrow mb-5">Careers</span>
             <h1 className="text-4xl font-black leading-tight tracking-tight text-[#2F261C] md:text-6xl">
-              Build with a trucking insurance team that moves fast.
+              Careers at Supreme Trucking Insurance.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#5A4B3B] md:text-xl">
               We are interested in people who understand trucking, communicate clearly, and care about getting clients handled without unnecessary delay.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
-                href="mailto:info@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
+                href="/team-assessment?apply=1"
                 className="rounded-xl bg-[#f97316] px-8 py-4 text-center text-lg font-bold text-white shadow-lg transition-colors hover:bg-orange-600"
               >
-                Send Your Info
+                Apply / Resume Application
               </a>
               <a
                 href="tel:+13609367196"
@@ -73,13 +74,26 @@ export default function CareersPage() {
         </div>
       </section>
 
+      <section className="site-section">
+        <div className="site-container">
+          <p className="section-kicker">Your application</p>
+          <h2 className="section-heading">Resume, assessment, personal review.</h2>
+          <ol className="careers-process">
+            <li><strong>Contact details and resume</strong><p>Your name, email, role and PDF resume. Phone and introduction are optional.</p></li>
+            <li><strong>Required assessment</strong><p>18 situations and 2 written answers. All 20 answers are required before submission.</p></li>
+            <li><strong>Owner review</strong><p>Your resume and answers stay together in a private application. No automatic hiring decision.</p></li>
+          </ol>
+          <p className="section-description">No account is needed. Saved drafts remain available in the same browser for seven days after starting. The pilot assessment supports an interview, not a validated hiring decision. For an accessible alternative, <a href="mailto:info@supremetruckinginsurance.com" className="text-link">contact our team</a>.</p>
+        </div>
+      </section>
+
       <section className="section-soft py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="max-w-2xl">
             <span className="eyebrow mb-4">Opportunities</span>
             <h2 className="text-3xl font-black text-[#2F261C] md:text-5xl">Who should reach out.</h2>
             <p className="mt-4 text-lg leading-relaxed text-[#5A4B3B]">
-              We are not listing a long corporate job board. If you fit one of these areas, send a short introduction and your background.
+              We welcome introductions from people in these areas. Submitting an application does not imply a current opening or an offer of employment.
             </p>
           </div>
 
@@ -119,14 +133,14 @@ export default function CareersPage() {
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="mb-4 text-3xl font-black md:text-4xl">Interested in working together?</h2>
           <p className="mb-8 text-lg text-white/90">
-            Send your resume, license details if applicable, and a few lines about your trucking insurance experience.
+            Add your resume and complete the required assessment. We review your experience and answers together.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <a
-              href="mailto:info@supremetruckinginsurance.com?subject=Careers%20at%20Supreme%20Trucking%20Insurance"
+              href="/team-assessment?apply=1"
               className="rounded-xl bg-white px-8 py-4 font-bold text-[#2F261C] transition-colors hover:bg-[#FFF3E8]"
             >
-              Email Dmitri
+              Apply / Resume Application
             </a>
             <Link href="/contact" className="rounded-xl border-2 border-white px-8 py-4 font-bold text-white transition-colors hover:bg-white/10">
               Contact Page

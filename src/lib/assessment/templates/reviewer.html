@@ -5,13 +5,13 @@
 .language-control{display:flex;align-items:center;gap:8px;font-size:12px;margin-left:auto}.language-control select{font:inherit;color:inherit;background:white;border:1px solid #cdd8d1;border-radius:9px;padding:8px 10px;min-height:38px;max-width:145px}.language-control select:focus-visible{outline:3px solid #82bda6;outline-offset:2px}header{flex-wrap:wrap}.language-control select:disabled{opacity:.6}@media(max-width:480px){.language-control{font-size:11px}.language-control>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}header .badge{display:none}}
 </style></head><body>
 <header><div class="brand"><span>Supreme Trucking Insurance</span> <span class="tag" data-i18n>Кабинет владельца</span></div><button id="logout" hidden data-i18n>Выйти</button><label class="language-control"><span data-i18n>Язык</span><select id="language-switch" aria-label="Language"><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></label></header>
-<main class="wrap"><a href="/admin" data-i18n>Кабинет владельца</a> · <a href="/team-assessment?new=1" target="_blank" rel="noopener" data-i18n>Открыть тест для сотрудника</a><div id="message" role="alert"></div>
-<section id="workspace" hidden><div class="toolbar"><div><h1 data-i18n>Сотрудники</h1><div class="muted" data-i18n>Три направления · факты из ответов · вопросы для проверки</div></div><button id="refresh" data-i18n>Обновить</button></div><div class="layout"><aside id="sidebar"><div id="sessionList" class="sessions"></div></aside><article id="detail" class="card"><div class="empty" data-i18n>Выберите сессию, чтобы открыть отчёт.</div></article></div></section>
+<main class="wrap"><a href="/admin" data-i18n>Кабинет владельца</a> · <a href="/team-assessment?new=1" target="_blank" rel="noopener" data-i18n>Открыть тест для сотрудника</a> · <a href="/team-assessment?apply=1" target="_blank" rel="noopener">Job application</a><div id="message" role="alert"></div>
+<section id="workspace" hidden><div class="toolbar"><div><h1>Applications &amp; assessments</h1><div class="muted" data-i18n>Три направления · факты из ответов · вопросы для проверки</div></div><button id="refresh" data-i18n>Обновить</button></div><div class="layout"><aside id="sidebar"><div id="sessionList" class="sessions"></div></aside><article id="detail" class="card"><div class="empty" data-i18n>Выберите сессию, чтобы открыть отчёт.</div></article></div></section>
 <footer data-i18n>Пилотная версия. Оценка относится к выбранным ответам. Решение о найме принимает человек.</footer></main>
 <script src="/team-assessment/i18n.js"></script>
 <script>
 'use strict';
-const $=s=>document.querySelector(s);let current=null;let selectedId=null;const noteDrafts={};
+const $=s=>document.querySelector(s);let current=null;let selectedId=/^#WS-\d{13}-[A-F0-9]{20}$/.test(location.hash)?location.hash.slice(1):null;const noteDrafts={};
 const labels={questions:'Основные вопросы',followups:'Пояснения',completed:'Завершено'};
 function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n}
 function clear(n){n.replaceChildren()}
@@ -23,7 +23,31 @@ function date(s){return new Date(s).toLocaleString(language==='ru'?'ru-RU':langu
 async function refresh(){message();try{const data=await api('/api/admin/sessions');showWorkspace();const root=$('#sessionList');clear(root);if(!data.sessions.length){root.append(el('div',tr('Здесь появятся сохранённые ответы.'),'empty'));clear($('#detail'));$('#detail').append(el('div',tr('Пока нет сессий. Откройте страницу кандидата, чтобы пройти тест.'),'empty'));return}for(const s of data.sessions){const b=el('button',undefined,'session'+(s.id===selectedId?' active':''));b.append(el('strong',s.name||tr('Без имени')),el('span',s.id,'small muted'),el('span',tr(labels[s.status])||s.status,'small'),el('span',date(s.updated_at),'small muted'));b.onclick=()=>load(s.id);root.append(b)}if(selectedId&&data.sessions.some(s=>s.id===selectedId))await load(selectedId);else await load(data.sessions[0].id)}catch(e){message(e.message)}}
 async function load(id){try{current=await api('/api/admin/session/'+encodeURIComponent(id));selectedId=id;render();for(const b of document.querySelectorAll('.session'))b.classList.toggle('active',b.textContent.includes(id))}catch(e){message(e.message)}}
 function sectionTitle(root,title){root.append(el('h2',title))}
+function candidateDetails(root,s){
+  const a=s.application;if(!a)return;
+  const t=(en,ru,es)=>language==='ru'?ru:language==='es'?es:en;
+  sectionTitle(root,t('Job application','Заявка на работу','Solicitud de empleo'));
+  const box=el('section');box.style.overflowWrap='anywhere';
+  box.append(el('p',a.submitted_at?t('Submitted: ','Отправлено: ','Enviada: ')+date(a.submitted_at):t('Draft: assessment not yet completed.','Черновик: тест ещё не завершён.','Borrador: evaluación sin completar.')));
+  box.append(el('p',t('Role: ','Направление: ','Puesto: ')+a.role));
+  const email=el('a',a.email);email.href='mailto:'+encodeURIComponent(a.email);box.append(email);
+  if(a.phone)box.append(el('p',t('Phone: ','Телефон: ','Teléfono: ')+a.phone));
+  if(a.introduction)box.append(el('blockquote',a.introduction));
+  const resume=el('a',t('Download resume PDF','Скачать резюме PDF','Descargar currículum PDF'));
+  resume.href='/api/team-assessment/admin/resume/'+encodeURIComponent(s.id);
+  box.append(el('p',a.resume.name+' · '+Math.ceil(a.resume.size/1024)+' KB'),resume);
+  box.append(el('p',t('Consent recorded: ','Согласие сохранено: ','Consentimiento registrado: ')+date(a.consent_at),'small muted'));
+  if(a.submitted_at&&!a.notification_sent){
+    box.append(el('p',t('Application saved; owner email notification is pending.','Заявка сохранена; email владельцу пока не отправлен.','Solicitud guardada; notificación al propietario pendiente.'),'notice warning'));
+    const retry=el('button',t('Retry email notification','Повторить email-уведомление','Reintentar notificación'));
+    retry.onclick=async()=>{retry.disabled=true;try{await api('/api/admin/notify/'+encodeURIComponent(s.id),'POST',{});await load(s.id)}catch(e){message(e.message);retry.disabled=false}};
+    box.append(retry);
+  }
+  box.append(el('p',t('Review the resume, relevant experience and answers together. Do not use the pilot score as a standalone hiring decision.','Рассматривайте резюме, релевантный опыт и ответы вместе. Балл предварительного теста не должен самостоятельно определять решение о найме.','Revisa el currículum, la experiencia relevante y las respuestas en conjunto. La puntuación piloto no debe determinar por sí sola una contratación.'),'notice'));
+  root.append(box);
+}
 function render(){const {session:s,report:r,bank}=current;const root=$('#detail');clear(root);root.append(el('div',s.id+' · '+tr(labels[s.status]),'small muted'),el('h1',s.name||tr('Кандидат без имени')));const meta=el('div',undefined,'meta muted small');meta.append(el('span',tr('Начало: ')+date(s.created_at)),el('span',tr('Банк: ')+r.bank_version),el('span',tr('Правила: ')+r.rule_version));root.append(meta);if(s.status!=='completed')root.append(el('p',tr('Сессия ещё не завершена. Ответы и оценки могут измениться.'),'notice warning'));
+candidateDetails(root,s);
 const scores=el('div',undefined,'scores');for(const [key,t]of Object.entries(r.traits)){const c=el('div',undefined,'score');c.append(el('h3',t.label));const v=el('div',t.score===null?'—':String(t.score),'value');v.append(el('small',' / 100'));c.append(v,el('span',t.level===null?tr('Недостаточно данных'):tr('Уровень ответов ')+t.level,'level'));c.append(el('div',t.answered+tr(' из 6 · ')+t.raw_sum+tr(' баллов по ключу'),'small muted'));const meter=el('meter');meter.min=0;meter.max=100;meter.value=t.score??0;meter.style.width='100%';meter.setAttribute('aria-label',t.label);if(t.score!==null)c.append(meter);if(t.mixed)c.append(el('p',tr('Есть выборы на 1 и на 3 балла. Смотрите контекст.'),'small'));scores.append(c)}root.append(scores);
 root.append(el('p',r.notice,'notice'));const overall=r.overall===null?tr('Общий score недоступен: есть пропущенные оцениваемые вопросы.'):tr('Общий score: ')+r.overall+tr('/100. Три направления имеют равные веса.');root.append(el('p',overall,'small muted'));
 const explanation=el('details');explanation.append(el('summary',tr('Как читать баллы и уровни')));explanation.append(el('p',tr('Каждый выбор получает 1–3 балла. По шести вопросам: score = (сумма − 6) / 12 × 100. Уровень — ближайший якорь среднего балла: сумма 6–8 → 1; 9–14 → 2; 15–18 → 3. Это предварительные правила пилота, их точность ещё не проверена.'),'small'));explanation.append(el('p',tr('1 — в выбранных действиях больше опоры на заданный порядок. 2 — самостоятельные действия в рамках роли. 3 — действия с более сложными зависимостями и последствиями. Для ambition оцениваются самостоятельность и последовательность развития. Уровень не означает готовность к определённой должности.'),'small'));root.append(explanation);

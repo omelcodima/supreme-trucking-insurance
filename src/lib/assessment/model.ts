@@ -1,4 +1,5 @@
 import { randomBytes, randomInt } from "node:crypto";
+import { applicationSummary, requireCompleteApplication, type CandidateApplication } from "./application.ts";
 
 export const BANK_VERSION = "3.4-everyday-20";
 export const TRAITS = ["ownership", "ambition", "decision"] as const;
@@ -19,6 +20,7 @@ export type State = {
   created_at: string; updated_at: string; completed_at?: string;
   review_note: string; bank_version: string; language: Language;
   answer_languages: Record<string, Language>; followup_languages: Record<string, Language>;
+  application?: CandidateApplication;
 };
 export class AssessmentError extends Error {
   status: number;
@@ -37,8 +39,8 @@ export function publicBank(bank: Bank) {
   return { version: bank.version, title: bank.title, followup_count: bank.experience_questions.length, warmups: [], visuals: [], questions: bank.questions.map(q => ({ id: q.id, prompt: q.prompt, ...(q.kind ? { kind: q.kind } : {}), options: q.options.map(o => ({ id: o.id, text: o.text, ...(o.image ? { image: o.image.replace('/assets/', '/team-assessment/assets/'), image_position: o.image_position } : {}) })) })) };
 }
 export function publicState(state: State, bank: Bank, lang: Language, privateView = false) {
-  const { review_note, ...rest } = state;
-  return { ...rest, ...(privateView ? { review_note } : {}), display_language: lang, followups: state.followups.length ? bank.experience_questions : [] };
+  const { review_note, application, ...rest } = state;
+  return { ...rest, ...(application ? { application: applicationSummary(application) } : {}), ...(privateView ? { review_note } : {}), display_language: lang, followups: state.followups.length ? bank.experience_questions : [] };
 }
 export function updateState(state: State, bank: Bank, path: string, method: string, body: Record<string, unknown>, lang: Language) {
   if (path === "session" && method === "PATCH") {
@@ -46,21 +48,26 @@ export function updateState(state: State, bank: Bank, path: string, method: stri
     const q = bank.questions.find(q => q.id === body.question_id);
     if (!q || !Object.hasOwn(body, "answer")) throw new AssessmentError(400, "Неизвестный вопрос или нет ответа.");
     if (body.answer !== null && !q.options.some(o => o.id === body.answer)) throw new AssessmentError(400, "Неизвестный вариант ответа.");
+    if (state.application && body.answer === null) throw new AssessmentError(400, "Choose an answer for every application question.");
     const note = body.note ?? "";
     if (typeof note !== "string" || note.length > 1500) throw new AssessmentError(400, "Пояснение должно быть не длиннее 1500 символов.");
     state.answers[q.id] = body.answer as string | null; state.notes[q.id] = note; state.answer_languages[q.id] = lang;
   } else if (path === "followups" && method === "POST") {
     if (state.status !== "questions") return;
     if (!state.question_order.every(q => Object.hasOwn(state.answers, q))) throw new AssessmentError(409, "Ответьте на основные вопросы или отметьте пропуски.");
+    if (state.application && !bank.questions.every(q => q.options.some(o => o.id === state.answers[q.id]))) throw new AssessmentError(409, "Complete every assessment question.");
     state.followups = structuredClone(bank.experience_questions); state.status = "followups";
   } else if (path === "followups" && method === "PATCH") {
     if (state.status !== "followups") throw new AssessmentError(409, "Сейчас нельзя изменять пояснения.");
     if (typeof body.id !== "string" || !state.followups.some(f => f.id === body.id) || typeof body.answer !== "string" || body.answer.length > 3000) throw new AssessmentError(400, "Неизвестное пояснение или текст длиннее 3000 символов.");
+    if (state.application && !body.answer.trim()) throw new AssessmentError(400, "Add a written answer. If you have no example, write that instead.");
     state.followup_answers[body.id] = body.answer; state.followup_languages[body.id] = lang;
   } else if (path === "submit" && method === "POST") {
     if (state.status === "completed") return;
     if (state.status !== "followups" || !state.followups.every(f => Object.hasOwn(state.followup_answers, f.id))) throw new AssessmentError(409, "Завершите пояснения или отметьте пропуски.");
+    requireCompleteApplication(state, bank.questions.map(q => q.id));
     state.status = "completed"; state.completed_at = new Date().toISOString();
+    if (state.application) state.application.submitted_at = state.completed_at;
   } else throw new AssessmentError(405, "Метод не поддерживается.");
   state.updated_at = new Date().toISOString();
 }

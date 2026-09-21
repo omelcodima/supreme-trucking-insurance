@@ -39,6 +39,20 @@ export async function createSession(state: State) {
   await put(sessionPath(state.id), JSON.stringify(record), { access: "private", addRandomSuffix: false, allowOverwrite: false, contentType: "application/json" });
   return token;
 }
+export async function storeResume(id: string, file: { bytes: Buffer; name: string; size: number }) {
+  if (!validId(id)) throw new Error("Invalid resume session");
+  const sha256 = createHash("sha256").update(file.bytes).digest("hex");
+  const pathname = `${prefix}resumes/${id}/${sha256}.pdf`;
+  await put(pathname, file.bytes, { access: "private", addRandomSuffix: false, allowOverwrite: false, contentType: "application/pdf" });
+  return { pathname, name: file.name, size: file.size, sha256 };
+}
+export async function readResume(state: State) {
+  const resume = state.application?.resume;
+  if (!resume || resume.pathname !== `${prefix}resumes/${state.id}/${resume.sha256}.pdf` || !/^[a-f0-9]{64}$/.test(resume.sha256)) throw new AssessmentError(404, "Resume not found.");
+  const file = await get(resume.pathname, { access: "private", useCache: false, abortSignal: AbortSignal.timeout(10000) });
+  if (!file || file.statusCode !== 200) throw new AssessmentError(404, "Resume not found.");
+  return { file, name: resume.name };
+}
 export async function mutateSession(id: string, transform: (record: StoredSession) => Promise<void> | void) {
   for (let attempt = 0; attempt < 4; attempt++) {
     const stored = await readSession(id);

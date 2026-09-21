@@ -370,7 +370,7 @@ export default function OwnerDashboard({
           ))}
           <button onClick={() => window.location.assign("/admin/assessments")}>
             <ExternalLink size={18} />
-            Employee assessments
+            Applications & assessments
           </button>
           <button onClick={() => window.location.assign("/admin/design")}>
             <ExternalLink size={18} />

@@ -1,6 +1,20 @@
 # Employee assessment
 
-Employee entry: `/team-assessment`. Owner results: `/admin/assessments`, using the existing exact-email owner sign-in. The owner dashboard includes an Employee assessments link. The sign-in page accepts only the fixed `next=assessments` destination.
+Employee entry: `/team-assessment`. Owner results: `/admin/assessments`, using the existing exact-email owner sign-in. The owner dashboard includes an Applications & assessments link. The sign-in page accepts only the fixed `next=assessments` destination and preserves a validated application ID fragment.
+
+## Job applications
+
+Public discovery: **Resources > Careers / Join our team**, and Careers in the footer. Apply or resume at `/team-assessment?apply=1`. Owner sign-in is linked in the footer; **Applications & assessments** in the owner workspace includes applicants and existing employee sessions.
+
+Candidates provide name, email, role, explicit recruitment consent, and one PDF resume up to 3 MB / 50 pages. Phone and introduction are optional. The normal file picker and drag-and-drop share the same client validation; the server enforces a streamed request-size cap, PDF parsing, page limit, encrypted-file rejection, and rejection of document-level actions, scripts and embedded attachments. This is format validation, not a malware-scanning service. Resume downloads are authenticated attachments, never public links or embedded previews.
+
+The application extends the existing private session, and its resume stays in the same private Blob store under `employee-assessment/resumes/`. Application questions and both written responses are mandatory; existing employee-only sessions retain their skip behavior. Answers save at each step. The seven-day participant cookie permits draft resumption in the same browser. Unsubmitted drafts are visible to the owner and clearly marked; only completion sets `submitted_at`.
+
+After submission, the existing email provider notifies the configured `OWNER_EMAILS` with a reference and protected owner link. No resume, contact details or answers are included in that email. Notifications use an application-specific idempotency key. Provider failures leave the application intact, show a pending notice, and can be retried by the candidate or the owner. Owner downloads and notification retries are audited. No automated hiring ranking, pass/fail threshold or rejection was added. Scores remain preliminary and should not determine hiring without relevant experience and human review.
+
+No applicant data is sent to website analytics, Clarity or the AI assistant. Drafts, completed sessions and resume files are retained privately until owner-managed removal; there is no automatic deletion job. A storage failure between resume upload and session creation can leave an unreferenced private file; any cleanup must verify the session's absence before deleting that exact file, never bulk-delete the store.
+
+Tests: `src/lib/careerApplication.test.ts` runs the real request handler with in-memory storage and a stub email provider. `node --experimental-strip-types scripts/preview-careers.mts` starts a loopback-only disposable browser preview at port 3221 with synthetic questions, a generated PDF and a mock owner route. It never reads production records or sends real emails; stop it after verification.
 
 The assessment preserves version `3.4-everyday-20`: 18 situations (six per trait) and two written examples, with English, Russian and Spanish. Scoring is deterministic and matches the local Python assessment. Written examples are reviewed by a person and do not change scores. Clarification flags carry no score penalty and do not establish dishonesty. The pilot scores describe selected answers, not a validated measure of personality or readiness for promotion.
 

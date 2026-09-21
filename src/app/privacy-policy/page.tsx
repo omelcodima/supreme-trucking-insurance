@@ -60,6 +60,11 @@ export default function PrivacyPolicyPage() {
               </p>
 
               <Section title="1. Information We Collect">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#2F261C] mb-2">Recruitment applications</h3>
+                  <p>When you apply to work with Supreme, we collect your name, email, optional phone and introduction, the role you select, your PDF resume, and your assessment answers. Drafts and completed applications are stored privately for review by authorized agency owners. An essential browser cookie connects you to your saved draft for seven days; expiry of that cookie does not delete the application record. Drafts and submissions remain in agency records until removed through an owner-managed process. Contact info@supremetruckinginsurance.com with access or deletion requests.</p>
+                  <p>The assessment is a preliminary discussion tool, not a validated hiring test or an automated hiring decision. Resume and assessment pages are excluded from website analytics, heatmaps and AI chat processing. Private storage and email providers support this workflow; email notifications link to the protected owner workspace rather than including your resume or answers. Do not submit government identifiers, medical information or banking details.</p>
+                </div>
                 <p>We may collect the following categories of information:</p>
                 <div>
                   <h3 className="text-lg font-semibold text-[#2F261C] mb-2">A. Information You Provide</h3>

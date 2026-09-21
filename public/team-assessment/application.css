@@ -1,0 +1,22 @@
+.candidate-page{--paper:#f5f8f7;--radius:8px}
+.candidate-page h1,.candidate-page h2,.candidate-page .eyebrow{letter-spacing:0!important}
+.candidate-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:56px;align-items:start}
+.candidate-layout>section{min-width:0}.candidate-layout .help{overflow-wrap:anywhere}
+.candidate-layout h1{font-size:38px}.candidate-layout .help{font-size:13px;margin-top:18px}
+.candidate-panel h2{font-size:24px}.candidate-form{display:grid;gap:18px}
+.candidate-form input:not([type=checkbox]),.candidate-form textarea,.candidate-form select{width:100%;min-width:0;font:inherit;color:var(--ink);padding:11px 12px;border:1px solid #ced8d3;border-radius:6px;background:white}
+.candidate-form select:focus-visible,.candidate-form input:focus-visible{outline:3px solid #82bda6;outline-offset:3px}
+.candidate-form .wide{margin-top:0}.candidate-form .error{margin-top:0}
+.candidate-upload{border:1px dashed #829b90;border-radius:6px;background:#f5faf7;padding:18px;min-width:0}
+.candidate-upload.dragging{border:2px solid #24664e;background:#e5f2eb;padding:17px}
+.candidate-upload p{font-size:13px;margin:8px 0;overflow-wrap:anywhere}.candidate-upload input{font-size:13px}
+.candidate-upload input::file-selector-button{border:0;background:#e4ece7;padding:9px 12px;border-radius:4px;margin-right:8px;cursor:pointer}
+.candidate-consent{display:flex;align-items:flex-start;gap:10px;font-size:13px}.candidate-consent input{flex:none;margin-top:5px;width:18px;height:18px}
+.candidate-honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.candidate-steps{padding-left:23px;margin:24px 0}.candidate-steps li{padding:8px 0}
+.candidate-page a{color:#24664e;text-underline-offset:3px}.candidate-back{display:inline-block;margin-top:24px}
+.candidate-status{max-width:760px;margin:0 auto 24px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px;overflow-wrap:anywhere}
+.candidate-status p{margin:6px 0}.candidate-page .question-panel h1{font-size:26px!important}
+.candidate-page .actions{flex-wrap:wrap}.candidate-page .actions-right{flex-wrap:wrap}
+@media(max-width:760px){.candidate-layout{grid-template-columns:1fr;gap:28px}.candidate-layout h1{font-size:30px}.candidate-panel{padding:22px}.candidate-page .shell{padding:24px 16px 40px}.candidate-page header{padding:20px 16px}.candidate-page .brand{font-size:12px}}
+@media print{.candidate-status button,.candidate-back{display:none!important}}

@@ -35,6 +35,7 @@ const services: NavigationLink[] = [
   },
 ];
 const resources: NavigationLink[] = [
+  { href: "/careers", label: "Careers / Join our team" },
   { href: "/instant-indication", label: "Instant indication" },
   { href: "/blog", label: "Guides & news" },
   { href: "/reviews", label: "Reviews" },
