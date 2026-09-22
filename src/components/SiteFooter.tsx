@@ -110,7 +110,7 @@ export default function SiteFooter() {
             <Link href="/careers">Careers</Link>
             {/* Full navigation keeps owner access outside the analytics layout. */}
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/admin" className="footer-owner-login" rel="nofollow">
+            <a href="/admin/login" className="footer-owner-login" rel="nofollow">
               <LockKeyhole size={16} aria-hidden="true" />
               Owner login
             </a>

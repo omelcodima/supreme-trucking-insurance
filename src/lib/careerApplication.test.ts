@@ -95,7 +95,7 @@ test("candidate routes remain isolated from public analytics and expose a normal
   assert.match(ui, /type: "file"/); assert.match(ui, /selectFiles\(pick.files\)/); assert.match(ui, /selectFiles\(e.dataTransfer.files\)/);
   assert.match(template, /state.session.application\?null:button\(tr\('Пропустить'\)/);
   const footer = readFileSync("src/components/SiteFooter.tsx", "utf8");
-  assert.match(footer, /<a href="\/admin" className="footer-owner-login" rel="nofollow">/);
+  assert.match(footer, /<a href="\/admin\/login" className="footer-owner-login" rel="nofollow">/);
   assert.match(footer, /Owner login/);
   assert.doesNotMatch(footer, /<Link[^>]*href="\/admin/);
   const ownerRoute = readFileSync("src/pages/admin/index.tsx", "utf8");

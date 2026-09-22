@@ -10,6 +10,8 @@ let language=Object.hasOwn(languageNames,languageParam)?languageParam:Object.has
 function tr(source){return language==='ru'?source:(UI_CATALOGS[language]?.[source]??source)}
 function rememberLanguage(){document.cookie='supreme_assessment_language='+language+'; Path=/; Max-Age=31536000; SameSite=Lax';document.documentElement.lang=language}
 const staticText=new Map();
+// Called by the inline assessment and reviewer scripts loaded after this shared bundle.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function localizeChrome(){
   for(const node of document.querySelectorAll('[data-i18n]')){
     if(!staticText.has(node))staticText.set(node,node.textContent);
