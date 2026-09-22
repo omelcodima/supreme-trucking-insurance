@@ -9,20 +9,28 @@ import process from "node:process";
 import sharp from "sharp";
 
 import {
-  buildHiggsfieldBlogPrompt,
+  OPENAI_BLOG_IMAGE_MODEL,
+  OPENAI_BLOG_IMAGE_PROVIDER,
+  OPENAI_BLOG_IMAGE_SIZE,
+  buildOpenAiBlogPrompt,
+  buildOpenAiImageRequest,
+  decodeOpenAiImageResponse,
   getStableBlogImagePath,
   getStableBlogImageUrl,
-  isScheduledHiggsfieldUpgrade,
-  needsHiggsfieldUpgrade,
-} from "../src/lib/blogHiggsfield.ts";
+  isRepositoryBackedBlogImage,
+  isScheduledOpenAiUpgrade,
+  needsOpenAiUpgrade,
+} from "../src/lib/blogHero.ts";
 import { parseOptionalSlugArg } from "../src/lib/blogWorkerArgs.ts";
 
 const MAX_INPUT_BYTES = 64 * 1024;
-const MAX_DOWNLOAD_BYTES = 30 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 30 * 1024 * 1024;
+const MAX_GATEWAY_RESPONSE_BYTES = 48 * 1024 * 1024;
 const MAX_AIRTABLE_RESPONSE_BYTES = 10 * 1024 * 1024;
-const DOWNLOAD_TIMEOUT_MS = 90_000;
+const IMAGE_GENERATION_TIMEOUT_MS = 5 * 60_000;
 const AIRTABLE_TIMEOUT_MS = 45_000;
-const USER_AGENT = "Supreme-Trucking-Insurance-Higgsfield-Worker/1.0";
+const USER_AGENT = "Supreme-Trucking-Insurance-OpenAI-Image-Worker/1.0";
+const IMAGE_GATEWAY_URL = "https://ai-gateway.vercel.sh/v1/images/generations";
 
 function requiredEnvironment(name) {
   const value = process.env[name]?.trim();
@@ -148,8 +156,8 @@ function recordCandidate(record) {
     return null;
   }
 
-  candidate.needsUpgrade = needsHiggsfieldUpgrade(candidate);
-  candidate.generationPrompt = buildHiggsfieldBlogPrompt(candidate);
+  candidate.needsUpgrade = needsOpenAiUpgrade(candidate);
+  candidate.generationPrompt = buildOpenAiBlogPrompt(candidate);
   return candidate;
 }
 
@@ -180,7 +188,7 @@ async function discover(args) {
   const currentDate = currentPacificDate();
   const candidate = requestedSlug
     ? candidates.find((item) => item.slug === requestedSlug)
-    : candidates.find((item) => isScheduledHiggsfieldUpgrade(item, currentDate));
+    : candidates.find((item) => isScheduledOpenAiUpgrade(item, currentDate));
 
   if (!candidate) {
     const latest = candidates[0];
@@ -189,7 +197,7 @@ async function discover(args) {
       action: "none",
       reason: requestedSlug
         ? "published slug not found"
-        : "no Published post dated today needs a Higgsfield upgrade",
+        : "no Published post dated today needs an OpenAI image upgrade",
       currentDate,
       latest: latest
         ? {
@@ -220,70 +228,107 @@ async function readJsonStdin() {
   return JSON.parse(raw);
 }
 
-function validateGenerationInput(input) {
-  const required = ["recordId", "slug", "title", "resultUrl", "generationPrompt"];
+function validatePublishedImageInput(input) {
+  const required = ["recordId", "slug", "title", "generationPrompt", "sha256"];
   for (const name of required) {
     if (typeof input[name] !== "string" || !input[name].trim()) {
-      throw new Error(`Missing required generation field: ${name}`);
+      throw new Error(`Missing required image field: ${name}`);
     }
   }
 
   const expectedPath = getStableBlogImagePath(input.slug);
   const expectedUrl = getStableBlogImageUrl(input.slug);
-  const resultUrl = new URL(input.resultUrl);
-  if (resultUrl.protocol !== "https:" || resultUrl.username || resultUrl.password) {
-    throw new Error("Higgsfield result URL must be an HTTPS URL without embedded credentials.");
-  }
+  if (input.stableUrl && input.stableUrl !== expectedUrl) throw new Error("Stable image URL does not match the article slug.");
+  if (!/^[a-f0-9]{64}$/.test(input.sha256.trim())) throw new Error("Expected a lowercase SHA-256 image hash.");
+  if (input.modelId && input.modelId !== OPENAI_BLOG_IMAGE_MODEL) throw new Error("Unexpected OpenAI image model.");
 
   return {
     ...input,
     recordId: input.recordId.trim(),
     slug: input.slug.trim(),
     title: input.title.trim(),
-    resultUrl: resultUrl.toString(),
     generationPrompt: input.generationPrompt.trim().slice(0, 10_000),
-    modelId: typeof input.modelId === "string" ? input.modelId.trim().slice(0, 200) : "",
-    modelName: typeof input.modelName === "string" ? input.modelName.trim().slice(0, 200) : "",
+    modelId: OPENAI_BLOG_IMAGE_MODEL,
+    modelName: "OpenAI GPT Image 2 (ChatGPT image)",
+    sha256: input.sha256.trim(),
     stablePath: expectedPath,
     stableUrl: expectedUrl,
   };
 }
 
-async function downloadImage(url) {
-  const response = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT, Accept: "image/*" },
-    redirect: "follow",
-    signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS),
-  });
-
-  if (!response.ok) {
-    await response.body?.cancel().catch(() => undefined);
-    throw new Error(`Higgsfield image download failed with status ${response.status}.`);
-  }
-
+async function readBoundedResponse(response, maximumBytes) {
   const contentLength = Number(response.headers.get("content-length") || 0);
-  if (contentLength > MAX_DOWNLOAD_BYTES) {
+  if (contentLength > maximumBytes) {
     await response.body?.cancel().catch(() => undefined);
-    throw new Error("Higgsfield image exceeds the maximum download size.");
+    throw new Error("Image provider response exceeded the maximum size.");
   }
 
-  const input = Buffer.from(await response.arrayBuffer());
-  if (!input.length || input.length > MAX_DOWNLOAD_BYTES) {
-    throw new Error("Higgsfield image payload is empty or too large.");
+  const chunks = [];
+  let bytes = 0;
+  if (!response.body) throw new Error("Image provider returned an empty response body.");
+  for await (const chunk of response.body) {
+    const buffer = Buffer.from(chunk);
+    bytes += buffer.length;
+    if (bytes > maximumBytes) {
+      await response.body.cancel().catch(() => undefined);
+      throw new Error("Image provider response exceeded the maximum size.");
+    }
+    chunks.push(buffer);
   }
-
-  return input;
+  return Buffer.concat(chunks);
 }
 
-async function stage() {
-  const input = validateGenerationInput(await readJsonStdin());
-  const source = await downloadImage(input.resultUrl);
-  const sourceMetadata = await sharp(source).metadata();
-  if (!sourceMetadata.width || !sourceMetadata.height || sourceMetadata.width < 768 || sourceMetadata.height < 432) {
-    throw new Error("Higgsfield image dimensions are below the minimum quality threshold.");
+async function generateOpenAiImage(args) {
+  const config = airtableConfig();
+  const requestedSlug = parseOptionalSlugArg(args);
+  const candidates = (await listAirtableRecords(config))
+    .map(recordCandidate)
+    .filter(Boolean)
+    .sort((a, b) => candidateTimestamp(b) - candidateTimestamp(a));
+  const currentDate = currentPacificDate();
+  const candidate = requestedSlug
+    ? candidates.find((item) => item.slug === requestedSlug)
+    : candidates.find((item) => isScheduledOpenAiUpgrade(item, currentDate));
+  if (!candidate) throw new Error(requestedSlug ? "Published slug not found." : "No Published post dated today needs an OpenAI image upgrade.");
+  if (candidate.date !== currentDate) throw new Error("Historical image generation is disabled for scheduled runs.");
+  if (!candidate.needsUpgrade) {
+    jsonOutput({ ok: true, action: "none", reason: "OpenAI image is already current", slug: candidate.slug });
+    return;
   }
 
-  const outputPath = path.resolve(input.stablePath);
+  const apiKey = requiredEnvironment("AI_GATEWAY_API_KEY");
+  const requestBody = buildOpenAiImageRequest(candidate.generationPrompt);
+  const response = await fetch(IMAGE_GATEWAY_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "User-Agent": USER_AGENT,
+    },
+    body: JSON.stringify(requestBody),
+    signal: AbortSignal.timeout(IMAGE_GENERATION_TIMEOUT_MS),
+  });
+  const responseBuffer = await readBoundedResponse(response, MAX_GATEWAY_RESPONSE_BYTES);
+  let responseBody;
+  try {
+    responseBody = JSON.parse(responseBuffer.toString("utf8"));
+  } catch {
+    throw new Error(`OpenAI image generation returned invalid JSON with status ${response.status}. No automatic retry was attempted.`);
+  }
+  if (!response.ok) {
+    const providerMessage = typeof responseBody?.error?.message === "string"
+      ? responseBody.error.message.replace(/\s+/g, " ").trim().slice(0, 300)
+      : "provider rejected the request";
+    throw new Error(`OpenAI image generation failed with status ${response.status}: ${providerMessage}. No automatic retry was attempted.`);
+  }
+
+  const { bytes: source, revisedPrompt } = decodeOpenAiImageResponse(responseBody, MAX_IMAGE_BYTES);
+  const sourceMetadata = await sharp(source).metadata();
+  if (sourceMetadata.format !== "png" || sourceMetadata.width !== 2048 || sourceMetadata.height !== 1152) {
+    throw new Error(`OpenAI image must be a ${OPENAI_BLOG_IMAGE_SIZE} PNG before staging.`);
+  }
+
+  const outputPath = path.resolve(candidate.stablePath);
   const temporaryPath = `${outputPath}.tmp-${process.pid}`;
   await mkdir(path.dirname(outputPath), { recursive: true });
 
@@ -306,36 +351,27 @@ async function stage() {
 
   jsonOutput({
     ok: true,
-    action: "staged",
-    recordId: input.recordId,
-    slug: input.slug,
-    title: input.title,
-    modelId: input.modelId,
-    modelName: input.modelName,
-    generationPrompt: input.generationPrompt,
-    stablePath: input.stablePath,
-    stableUrl: input.stableUrl,
+    action: "generated-and-staged",
+    recordId: candidate.recordId,
+    slug: candidate.slug,
+    title: candidate.title,
+    provider: OPENAI_BLOG_IMAGE_PROVIDER,
+    modelId: OPENAI_BLOG_IMAGE_MODEL,
+    modelName: "OpenAI GPT Image 2 (ChatGPT image)",
+    generationPrompt: candidate.generationPrompt,
+    revisedPrompt,
+    stablePath: candidate.stablePath,
+    stableUrl: candidate.stableUrl,
+    sourceWidth: sourceMetadata.width,
+    sourceHeight: sourceMetadata.height,
     width: metadata.width,
     height: metadata.height,
     bytes: (await stat(outputPath)).size,
     sha256: createHash("sha256").update(output).digest("hex"),
+    gatewayRequestId: response.headers.get("x-vercel-ai-gateway-request-id")
+      || response.headers.get("x-request-id")
+      || "",
   });
-}
-
-async function verifyPublicImage(url) {
-  const response = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT, Accept: "image/webp,image/*" },
-    cache: "no-store",
-    signal: AbortSignal.timeout(30_000),
-  });
-  const contentType = response.headers.get("content-type") || "";
-  const length = Number(response.headers.get("content-length") || 0);
-  if (!response.ok || !contentType.toLowerCase().startsWith("image/") || length === 0) {
-    await response.body?.cancel().catch(() => undefined);
-    throw new Error(`Stable image URL is not ready (status ${response.status}, type ${contentType || "missing"}).`);
-  }
-  await response.body?.cancel().catch(() => undefined);
-  return { status: response.status, contentType, contentLength: length };
 }
 
 function decodeHtmlEntities(value) {
@@ -409,12 +445,12 @@ async function fetchPublicAsset(url, accept) {
     signal: AbortSignal.timeout(45_000),
   });
   const contentLength = Number(response.headers.get("content-length") || 0);
-  if (contentLength > MAX_DOWNLOAD_BYTES) {
+  if (contentLength > MAX_IMAGE_BYTES) {
     await response.body?.cancel().catch(() => undefined);
     throw new Error(`Public verification payload is too large: ${url}`);
   }
   const body = Buffer.from(await response.arrayBuffer());
-  if (body.length > MAX_DOWNLOAD_BYTES) throw new Error(`Public verification payload is too large: ${url}`);
+  if (body.length > MAX_IMAGE_BYTES) throw new Error(`Public verification payload is too large: ${url}`);
   return {
     status: response.status,
     contentType: response.headers.get("content-type") || "",
@@ -459,8 +495,9 @@ async function verifyLive(args) {
     .find((paragraph) => typeof paragraph === "string" && paragraph.trim().length >= 20) || "";
   if (!sectionHeading || !bodyParagraph) throw new Error("Airtable article has no substantive section body.");
 
-  const isHiggsfield = candidate.imageProvider.toLowerCase() === "higgsfield";
-  const expectedImageUrl = isHiggsfield ? candidate.stableUrl : candidate.imageUrl;
+  const repositoryBacked = isRepositoryBackedBlogImage(candidate);
+  const isOpenAi = candidate.imageProvider.toLowerCase() === OPENAI_BLOG_IMAGE_PROVIDER.toLowerCase();
+  const expectedImageUrl = repositoryBacked ? candidate.stableUrl : candidate.imageUrl;
   credentialFreeHttpsUrl(expectedImageUrl, "Airtable Image URL");
 
   const origin = canonicalBlogOrigin();
@@ -479,7 +516,7 @@ async function verifyLive(args) {
   const sitemapXml = sitemap.body.toString("utf8");
   const imageMetadata = await sharp(image.body).metadata();
   let localImage = null;
-  if (isHiggsfield) {
+  if (repositoryBacked) {
     try {
       localImage = await readFile(path.resolve(candidate.stablePath));
     } catch (error) {
@@ -493,8 +530,9 @@ async function verifyLive(args) {
     airtableStatusPublished: true,
     airtableProviderPresent: Boolean(candidate.imageProvider),
     airtableImageUrlPresent: Boolean(candidate.imageUrl),
-    higgsfieldModelPresent: !isHiggsfield || Boolean(candidate.imageModel),
-    higgsfieldStableImageUrl: !isHiggsfield || candidate.imageUrl === candidate.stableUrl,
+    repositoryImageModelPresent: !repositoryBacked || Boolean(candidate.imageModel),
+    repositoryStableImageUrl: !repositoryBacked || candidate.imageUrl === candidate.stableUrl,
+    openAiModelExpected: !isOpenAi || candidate.imageModel === OPENAI_BLOG_IMAGE_MODEL,
     articleStatus200: article.status === 200,
     articleCanonicalUrl: article.effectiveUrl.startsWith(articleUrl),
     articleTitlePresent: containsMeaningfulText(articleText, candidate.title),
@@ -514,11 +552,11 @@ async function verifyLive(args) {
       && imageMetadata.width >= 768
       && imageMetadata.height >= 432,
     imageHasBytes: image.body.length > 20_000,
-    higgsfieldImageContentTypeWebp: !isHiggsfield || image.contentType.toLowerCase().startsWith("image/webp"),
-    higgsfieldImageDimensions1600x900: !isHiggsfield
+    repositoryImageContentTypeWebp: !repositoryBacked || image.contentType.toLowerCase().startsWith("image/webp"),
+    repositoryImageDimensions1600x900: !repositoryBacked
       || (imageMetadata.format === "webp" && imageMetadata.width === 1600 && imageMetadata.height === 900),
-    higgsfieldLocalImagePresent: !isHiggsfield || Boolean(localImage),
-    higgsfieldLocalRemoteHashMatch: !isHiggsfield || (Boolean(localImage) && localHash === remoteHash),
+    repositoryLocalImagePresent: !repositoryBacked || Boolean(localImage),
+    repositoryLocalRemoteHashMatch: !repositoryBacked || (Boolean(localImage) && localHash === remoteHash),
   };
   const failedChecks = Object.entries(checks).filter(([, passed]) => !passed).map(([name]) => name);
   const ok = failedChecks.length === 0;
@@ -532,7 +570,7 @@ async function verifyLive(args) {
     provider: candidate.imageProvider,
     model: candidate.imageModel,
     imageUrl: expectedImageUrl,
-    stableUrl: isHiggsfield ? candidate.stableUrl : "",
+    stableUrl: repositoryBacked ? candidate.stableUrl : "",
     image: {
       status: image.status,
       contentType: image.contentType,
@@ -583,16 +621,43 @@ async function revalidateLive() {
 }
 
 async function publish() {
-  const input = validateGenerationInput(await readJsonStdin());
-  const publicImage = await verifyPublicImage(input.stableUrl);
+  const input = validatePublishedImageInput(await readJsonStdin());
+  const publicImage = await fetchPublicAsset(
+    cacheBustedUrl(input.stableUrl, Date.now().toString()),
+    "image/webp,image/*",
+  );
+  const publicMetadata = await sharp(publicImage.body).metadata();
+  const remoteHash = createHash("sha256").update(publicImage.body).digest("hex");
+  const localImage = await readFile(path.resolve(input.stablePath));
+  const localHash = createHash("sha256").update(localImage).digest("hex");
+  if (
+    publicImage.status !== 200
+    || !publicImage.contentType.toLowerCase().startsWith("image/webp")
+    || publicMetadata.format !== "webp"
+    || publicMetadata.width !== 1600
+    || publicMetadata.height !== 900
+    || publicImage.body.length <= 20_000
+    || remoteHash !== input.sha256
+    || localHash !== input.sha256
+  ) {
+    throw new Error("Deployed OpenAI hero failed content type, dimensions, bytes, or SHA-256 verification.");
+  }
+
   const config = airtableConfig();
-  const model = input.modelName || input.modelId || "Higgsfield top-quality image model";
+  const current = await airtableRequest(
+    airtableTableUrl(config, `/${encodeURIComponent(input.recordId)}`),
+    config,
+  );
+  if (field(current, "Status").toLowerCase() !== "published" || field(current, "Slug") !== input.slug) {
+    throw new Error("Airtable record changed before the OpenAI image could be published.");
+  }
+
   const fields = {
     "Image URL": input.stableUrl,
     "Image Alt": `${input.title} — premium editorial trucking photograph`,
     "Image Prompt": input.generationPrompt,
-    "Image Provider": "Higgsfield",
-    "Image Model": model,
+    "Image Provider": OPENAI_BLOG_IMAGE_PROVIDER,
+    "Image Model": OPENAI_BLOG_IMAGE_MODEL,
     "Image Generated At": new Date().toISOString(),
   };
 
@@ -608,23 +673,24 @@ async function publish() {
     recordId: updated.id,
     slug: input.slug,
     title: input.title,
-    provider: "Higgsfield",
-    model,
+    provider: OPENAI_BLOG_IMAGE_PROVIDER,
+    model: OPENAI_BLOG_IMAGE_MODEL,
     stableUrl: input.stableUrl,
     imageStatus: publicImage.status,
     imageContentType: publicImage.contentType,
-    imageBytes: publicImage.contentLength,
+    imageBytes: publicImage.body.length,
+    sha256: remoteHash,
   });
 }
 
 async function main() {
   const [command, ...args] = process.argv.slice(2);
   if (command === "discover") return discover(args);
+  if (command === "generate") return generateOpenAiImage(args);
   if (command === "verify") return verifyLive(args);
   if (command === "revalidate") return revalidateLive();
-  if (command === "stage") return stage();
   if (command === "publish") return publish();
-  throw new Error("Usage: blog-higgsfield-media.mjs <discover [<slug>|--slug <slug>]|verify [<slug>|--slug <slug>]|revalidate|stage|publish>");
+  throw new Error("Usage: blog-openai-image.mjs <discover [<slug>|--slug <slug>]|generate [<slug>|--slug <slug>]|verify [<slug>|--slug <slug>]|revalidate|publish>");
 }
 
 main().catch((error) => {
