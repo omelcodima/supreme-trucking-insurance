@@ -140,9 +140,13 @@ export default function Analytics() {
       {showBanner && <section ref={banner} tabIndex={-1} className="analytics-consent" aria-label="Analytics preferences">
         <div className="site-container analytics-consent-inner">
           <div>
-            <h2>Analytics preferences</h2>
-            <p>{blocked ? "Optional analytics are off because your browser sends a privacy signal." : "Choose optional analytics. Change your choice anytime in the footer."} <Link href="/privacy-policy#website-analytics">Privacy details</Link></p>
-            {!blocked && <form id="analytics-choices" key={`${consent}-${clarityConsent}`} className="analytics-choices" onSubmit={event => {
+            <h2>{settingsOpen ? "Analytics preferences" : "Optional analytics"}</h2>
+            <p>{blocked
+              ? "Optional analytics are off because your browser sends a privacy signal."
+              : settingsOpen
+                ? "Choose what to allow. You can change this anytime in the footer. Quotes work with either choice."
+                : "We use Google Analytics and Microsoft Clarity for visit statistics and masked recordings on public pages. No form answers or chat. Your choice is optional."} <Link href="/privacy-policy#website-analytics">Privacy details</Link></p>
+            {!blocked && settingsOpen && <form id="analytics-choices" key={`${consent}-${clarityConsent}`} className="analytics-choices" onSubmit={event => {
               event.preventDefault();
               const data = new FormData(event.currentTarget);
               choose(data.has("google-analytics") ? "granted" : "denied", data.has("clarity-heatmaps") ? "granted" : "denied");
@@ -153,8 +157,15 @@ export default function Analytics() {
           </div>
           <div className="analytics-consent-actions">
             {blocked ? <button type="button" onClick={closeSettings}>Close</button> : <>
+              {!settingsOpen && <button type="button" onClick={() => choose("granted", "granted")}>Accept all</button>}
               <button type="button" onClick={() => choose("denied", "denied")}>Decline all</button>
-              <button type="submit" form="analytics-choices">Save choices</button>
+              {settingsOpen
+                ? <button key="save" type="submit" form="analytics-choices">Save choices</button>
+                : <button key="settings" type="button" onClick={event => {
+                  // This click must not submit the form that replaces the compact notice.
+                  event.preventDefault();
+                  setSettingsOpen(true);
+                }}>Settings</button>}
             </>}
           </div>
         </div>

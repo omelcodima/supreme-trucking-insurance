@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
                 </div>
                 <div id="website-analytics" className="scroll-mt-28">
                   <h3 className="text-lg font-semibold text-[#2F261C] mb-2">D. Optional Website Analytics</h3>
-                  <p>Google Analytics and Microsoft Clarity have separate, optional choices in Analytics preferences in the footer. Both choices start off for new visitors. Permission previously given for Google Analytics does not enable Clarity. Global Privacy Control or Do Not Track keeps both off.</p>
+                  <p>Our optional analytics notice lets you accept both Google Analytics and Microsoft Clarity, decline both, or open Settings to choose each separately. You can change or withdraw your choices using Analytics preferences in the footer. Both choices start off for new visitors. Permission previously given for Google Analytics does not enable Clarity. Requesting a quote does not grant analytics permission. Global Privacy Control or Do Not Track keeps both off.</p>
                 </div>
                 <div id="google-analytics" className="scroll-mt-28">
                   <h3 className="text-lg font-semibold text-[#2F261C] mb-2">Google Analytics</h3>
@@ -123,7 +123,7 @@ export default function PrivacyPolicyPage() {
                 </div>
                 <div id="microsoft-clarity" className="scroll-mt-28">
                   <h3 className="text-lg font-semibold text-[#2F261C] mb-2">Microsoft Clarity Heatmaps</h3>
-                  <p>Only after your separate permission, we use Microsoft Clarity to understand clicks, scrolling, device/browser information and interactions through heatmaps and masked session replays on selected public marketing landing pages. Clarity may use analytics cookies; we do not grant advertising storage permission. Clarity does not load when permission is declined or missing.</p>
+                  <p>Only after you allow Clarity through Accept all or its individual setting, we use Microsoft Clarity to understand clicks, scrolling, device/browser information and interactions through heatmaps and masked session replays on selected public marketing landing pages. Clarity may use analytics cookies; we do not grant advertising storage permission. Clarity does not load when permission is declined or missing.</p>
                   <p>We mask page text and do not install Clarity on quote, application, contact, upload, account or administrative pages. Recording ends before you open the assistant, follow a link, enter a text field, or navigate within the site, and does not restart in that document. We also exclude visits with query parameters, fragments, or potentially private referring page addresses. This intentionally limits the journeys shown in Clarity.</p>
                   <p>You can withdraw permission in Analytics preferences. We then stop recording and remove Clarity first-party cookies; this does not erase information already sent to Microsoft. Learn about Microsoft&apos;s processing and retention in the <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener noreferrer" className="underline">Microsoft Privacy Statement</a>.</p>
                 </div>
