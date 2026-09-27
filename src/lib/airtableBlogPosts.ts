@@ -47,16 +47,19 @@ export const AIRTABLE_BLOG_CACHE_SECONDS = 21_600;
 export const AIRTABLE_BLOG_CACHE_TAG = "airtable-blog-posts";
 export const AIRTABLE_BLOG_REQUEST_TIMEOUT_MS = 5_000;
 export const AIRTABLE_RATE_LIMIT_RETRY_MS = 30_000;
+export const AIRTABLE_BILLING_LIMIT_ERROR_CODE = "PUBLIC_API_BILLING_LIMIT_EXCEEDED";
 
 export class AirtableBlogFetchError extends Error {
   readonly status: number;
   readonly retryAfterMs?: number;
+  readonly code?: string;
 
-  constructor(status: number, retryAfterMs?: number) {
-    super(`Airtable blog request failed with status ${status}.`);
+  constructor(status: number, retryAfterMs?: number, code?: string) {
+    super(`Airtable blog request failed with status ${status}${code ? ` (${code})` : ""}.`);
     this.name = "AirtableBlogFetchError";
     this.status = status;
     this.retryAfterMs = retryAfterMs;
+    this.code = code;
   }
 }
 
@@ -86,6 +89,25 @@ function retryAfterMilliseconds(value: string | null) {
   return Number.isNaN(retryAt) ? undefined : Math.max(0, retryAt - Date.now());
 }
 
+async function knownAirtableErrorCode(response: Response) {
+  try {
+    const payload = (await response.json()) as {
+      error?: unknown;
+      errors?: { error?: unknown }[];
+    };
+    const candidate =
+      typeof payload.error === "string"
+        ? payload.error
+        : Array.isArray(payload.errors) && typeof payload.errors[0]?.error === "string"
+          ? payload.errors[0].error
+          : undefined;
+
+    return candidate === AIRTABLE_BILLING_LIMIT_ERROR_CODE ? candidate : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function retryAirtableRead<T>(
   operation: () => Promise<T>,
   options: AirtableReadRetryOptions = {},
@@ -98,7 +120,10 @@ export async function retryAirtableRead<T>(
       return await operation();
     } catch (error) {
       const timedOut = error instanceof Error && error.name === "TimeoutError";
-      const rateLimited = error instanceof AirtableBlogFetchError && error.status === 429;
+      const rateLimited =
+        error instanceof AirtableBlogFetchError &&
+        error.status === 429 &&
+        error.code !== AIRTABLE_BILLING_LIMIT_ERROR_CODE;
 
       if (attempt === maxAttempts || (!timedOut && !rateLimited)) {
         throw error;
@@ -305,10 +330,11 @@ export async function listAirtableBlogRecords(options: AirtableFetchOptions = {}
     );
 
     if (!response.ok) {
-      await response.body?.cancel().catch(() => undefined);
+      const code = await knownAirtableErrorCode(response);
       throw new AirtableBlogFetchError(
         response.status,
         retryAfterMilliseconds(response.headers.get("retry-after")),
+        code,
       );
     }
 
@@ -355,10 +381,11 @@ export async function createAirtableBlogPost(
   );
 
   if (!response.ok) {
-    await response.body?.cancel().catch(() => undefined);
+    const code = await knownAirtableErrorCode(response);
     throw new AirtableBlogFetchError(
       response.status,
       retryAfterMilliseconds(response.headers.get("retry-after")),
+      code,
     );
   }
 

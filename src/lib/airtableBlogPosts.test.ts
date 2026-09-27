@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   AIRTABLE_BLOG_CACHE_SECONDS,
   AIRTABLE_BLOG_CACHE_TAG,
+  AIRTABLE_BILLING_LIMIT_ERROR_CODE,
   AIRTABLE_BLOG_REQUEST_TIMEOUT_MS,
   AIRTABLE_RATE_LIMIT_RETRY_MS,
   AirtableBlogFetchError,
@@ -179,6 +180,53 @@ test("automation retries one rate-limited Airtable read after Retry-After", asyn
   assert.equal(result, "recovered");
   assert.equal(attempts, 2);
   assert.deepEqual(delays, [1_250]);
+});
+
+test("monthly Airtable billing exhaustion is identified and never retried", async () => {
+  let fetchAttempts = 0;
+  let operationAttempts = 0;
+
+  await assert.rejects(
+    retryAirtableRead(
+      async () => {
+        operationAttempts += 1;
+        return await listAirtableBlogRecords({
+          cache: "no-store",
+          environment: testEnvironment,
+          fetch: asFetch(async () => {
+            fetchAttempts += 1;
+            return new Response(
+              JSON.stringify({
+                errors: [
+                  {
+                    error: AIRTABLE_BILLING_LIMIT_ERROR_CODE,
+                    message: "workspace billing detail that must not enter the thrown message",
+                  },
+                ],
+              }),
+              { status: 429, headers: { "content-type": "application/json" } },
+            );
+          }),
+        });
+      },
+      {
+        sleep: async () => {
+          throw new Error("billing exhaustion must not be retried");
+        },
+      },
+    ),
+    (error: unknown) => {
+      if (!(error instanceof AirtableBlogFetchError)) return false;
+      assert.equal(error.status, 429);
+      assert.equal(error.code, AIRTABLE_BILLING_LIMIT_ERROR_CODE);
+      assert.match(error.message, new RegExp(AIRTABLE_BILLING_LIMIT_ERROR_CODE));
+      assert.doesNotMatch(error.message, /workspace billing detail/);
+      return true;
+    },
+  );
+
+  assert.equal(operationAttempts, 1);
+  assert.equal(fetchAttempts, 1);
 });
 
 test("automation retries one timed-out Airtable read with a bounded delay", async () => {
