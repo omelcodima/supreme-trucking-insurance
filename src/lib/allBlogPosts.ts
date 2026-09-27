@@ -17,15 +17,6 @@ type BlogPostFetchOptions = {
   revalidate?: number;
 };
 
-const getCachedPublishedAirtableBlogPosts = unstable_cache(
-  () => getPublishedAirtableBlogPosts({ cache: "no-store" }),
-  ["published-airtable-blog-posts-v1"],
-  {
-    revalidate: AIRTABLE_BLOG_CACHE_SECONDS,
-    tags: [AIRTABLE_BLOG_CACHE_TAG],
-  },
-);
-
 function isSnapshotBlogPost(value: unknown): value is BlogPost {
   if (!value || typeof value !== "object") return false;
 
@@ -50,6 +41,25 @@ function publishedSnapshotFallback(reason: string) {
   );
   return fallbackPublishedBlogPosts;
 }
+
+const getCachedPublishedAirtableBlogPosts = unstable_cache(
+  async () => {
+    try {
+      const posts = await getPublishedAirtableBlogPosts({ cache: "no-store" });
+      return posts.length > 0
+        ? posts
+        : publishedSnapshotFallback("Airtable returned no published blog posts");
+    } catch (error) {
+      const status = error instanceof AirtableBlogFetchError ? `status ${error.status}` : "unknown error";
+      return publishedSnapshotFallback(`Airtable blog posts unavailable (${status})`);
+    }
+  },
+  ["published-airtable-blog-posts-v2"],
+  {
+    revalidate: AIRTABLE_BLOG_CACHE_SECONDS,
+    tags: [AIRTABLE_BLOG_CACHE_TAG],
+  },
+);
 
 function uniqueBySlug(posts: BlogPost[]) {
   const seen = new Set<string>();
