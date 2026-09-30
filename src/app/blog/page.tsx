@@ -25,7 +25,7 @@ const getLibraryPosts = cache(async () => {
   const guideSlugs = new Set(guides.map((post) => post.slug));
   return (await getAllBlogPosts()).map((post) => ({
     ...post,
-    kind: guideSlugs.has(post.slug) ? ("guides" as const) : ("news" as const),
+    kind: post.kind ?? (guideSlugs.has(post.slug) ? ("guides" as const) : ("news" as const)),
   }));
 });
 

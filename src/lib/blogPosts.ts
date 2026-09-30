@@ -3,6 +3,7 @@ export type BlogPost = {
   title: string;
   description: string;
   category: string;
+  kind?: "guides" | "news";
   date: string;
   readTime: string;
   sourceTitle?: string;
@@ -24,6 +25,75 @@ export type BlogPost = {
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "fmcsa-denies-broad-paper-log-eld-exemption-2026",
+    title: "FMCSA Denies Broad Paper-Log Exemption",
+    description:
+      "FMCSA denied a request to let professional drivers choose paper logs instead of ELDs. Here is what the decision means for fleets and owner-operators.",
+    category: "Regulatory News",
+    kind: "news",
+    date: "2026-09-30",
+    readTime: "6 min read",
+    sourceTitle:
+      "Electronic Logging Device Requirements: Application for Exemption; Federation of Professional Truckers",
+    sourceUrl: "https://public-inspection.federalregister.gov/2026-20043.pdf",
+    sourcePublishedAt: "2026-09-30",
+    tags: [
+      "FMCSA ELD rule",
+      "electronic logging devices",
+      "paper logs",
+      "hours of service",
+      "fleet compliance",
+    ],
+    imageUrl:
+      "https://images.pexels.com/photos/6720534/pexels-photo-6720534.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=1600",
+    imageAltText:
+      "Truck driver reviewing paperwork inside a blue truck cab — photo by Gustavo Fring (Pexels).",
+    imageLabel: "FMCSA ELD decision",
+    imageCue: "Paper-log exemption denied",
+    intro:
+      "FMCSA has denied a request that would have let professional drivers choose paper records of duty status instead of electronic logging devices. The September 30 decision leaves the existing ELD framework in place. For carriers, the practical message is not that the hours-of-service rules changed; it is that a broad return to paper logs was not approved.",
+    sections: [
+      {
+        heading: "What FMCSA decided",
+        body: [
+          "The Federation of Professional Truckers asked FMCSA for an exemption that would allow professional drivers to record their records of duty status manually rather than use an ELD. FMCSA received 901 comments, including 890 unique comments, and said most individual commenters supported the request.",
+          "The agency still denied the application. FMCSA said Congress directed the agency through MAP-21 to require ELDs for commercial vehicles operated by drivers who must keep records of duty status. It also found that the application did not establish that the proposed alternative would deliver a level of safety equal to or greater than the current requirement.",
+          "This is a denial of a requested exemption, not a new hours-of-service rule. The decision does not add driving time, reduce driving time, or replace the existing exceptions already written into the ELD rules.",
+        ],
+      },
+      {
+        heading: "Paper logs did not disappear completely",
+        body: [
+          "The decision itself points to an existing exception: a carrier may allow manual records when a driver needs a record of duty status on no more than eight days within any 30-day period. FMCSA also maintains other limited ELD exceptions and exemptions for specific operations and equipment.",
+          "That does not mean a fleet should assume an exception applies. The operating facts matter, and the carrier should be able to identify the exact rule or exemption it relies on. A driver who normally needs an ELD cannot switch to paper simply because paper feels easier or an electronic clock is inconvenient.",
+          "The ELD requirement also does not rewrite the underlying hours-of-service limits. It changes how covered drivers record driving time and duty status. Route planning, lawful dispatch, rest, parking contingencies, and accurate edits remain operating responsibilities whether a record is electronic or manual.",
+        ],
+      },
+      {
+        heading: "A practical ELD check for fleets",
+        body: [
+          "Start with the device itself. FMCSA says motor carriers are responsible for checking that their ELD is registered and for periodically checking the revoked-device list. Keep the vendor information and current software version in the safety file so the company can respond quickly if a device is removed from the registry.",
+          "Then review the process around the device: how drivers report malfunctions, when backup paper logs are used, who reviews unidentified driving events and edits, and how dispatch handles a driver who is out of available hours. FMCSA guidance says carriers must retain records of duty status and supporting documents for six months, with a backup copy of ELD records on a separate device.",
+          "The strongest review is a small sample, not a policy sitting unread in a folder. Compare several logs with fuel, toll, dispatch, and location records; document corrections; and coach repeat issues. That creates a clearer safety trail without pretending the ELD itself solves fatigue or parking problems.",
+        ],
+      },
+      {
+        heading: "What this means for insurance conversations",
+        body: [
+          "FMCSA's decision does not automatically change an insurance policy or premium. Underwriting varies by carrier. But hours-of-service violations, roadside inspection history, crashes, and the way a fleet manages drivers can all become part of an underwriter's view of the operation.",
+          "Before renewal, be ready to explain which ELD platform the fleet uses, who audits logs, how malfunctions are handled, and what corrective action follows repeated violations. A short written procedure plus a few completed audit examples is more useful than saying the company has never had a problem.",
+          "If the operation relies on a short-haul exception or another ELD exemption, keep the legal basis and supporting records with the compliance file and make sure the insurance application describes the operation accurately. Questions about whether a specific exemption applies should go to a qualified transportation compliance or legal professional.",
+        ],
+      },
+    ],
+    takeaway:
+      "FMCSA rejected a broad option to replace ELDs with paper logs, so covered fleets should keep their devices, records, and audit procedures current. Existing exceptions remain fact-specific. This article is general information, not legal, safety, or insurance advice; coverage and underwriting decisions depend on the actual operation and carrier.",
+    googleBusinessPost:
+      "FMCSA denied a request that would have let professional drivers choose paper logs instead of ELDs. Our new update explains what changed, what did not, and the ELD records fleets should review before renewal. General information only; not legal or insurance advice.",
+    socialPost:
+      "FMCSA denied a broad request to let professional drivers choose paper logs instead of ELDs. The HOS limits did not change, and existing exceptions remain fact-specific. We broke down the decision and a practical ELD compliance checklist for fleets. General information only; not legal or insurance advice.",
+  },
   {
     slug: "how-much-are-truckers-making-right-now",
     title: "How Much Are Truckers Making Right Now?",
