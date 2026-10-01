@@ -9,6 +9,7 @@ import {
   AIRTABLE_RATE_LIMIT_RETRY_MS,
   AirtableBlogFetchError,
   createAirtableBlogPost,
+  getPublishedAirtableBlogPosts,
   listAirtableBlogRecords,
   retryAirtableRead,
 } from "./airtableBlogPosts.ts";
@@ -156,6 +157,42 @@ test("automation can limit duplicate checks to source identity fields", async ()
 
   const params = new URL(observedUrl).searchParams;
   assert.deepEqual(params.getAll("fields[]"), ["Source URL", "Slug"]);
+});
+
+test("published posts normalize escaped newlines from Airtable section JSON", async () => {
+  const posts = await getPublishedAirtableBlogPosts({
+    environment: testEnvironment,
+    fetch: asFetch(async () =>
+      new Response(
+        JSON.stringify({
+          records: [
+            {
+              id: "recEscapedNewlines",
+              fields: {
+                Status: "Published",
+                Slug: "ucr-checklist",
+                Title: "UCR checklist",
+                Intro: "Current registration guidance.",
+                Takeaway: "Verify the filing.",
+                "Sections JSON": JSON.stringify([
+                  {
+                    heading: "Checklist",
+                    body: ["1. Open the portal.\\n2. Confirm the vehicle count.\\n3. Save the receipt."],
+                  },
+                ]),
+              },
+            },
+          ],
+        }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      )),
+  });
+
+  assert.deepEqual(posts[0]?.sections[0]?.body, [
+    "1. Open the portal.",
+    "2. Confirm the vehicle count.",
+    "3. Save the receipt.",
+  ]);
 });
 
 test("automation retries one rate-limited Airtable read after Retry-After", async () => {

@@ -11,12 +11,18 @@ export function normalizeGeneratedBlogParagraph(value: unknown): string {
     .trim();
 }
 
+function splitGeneratedBlogParagraphs(value: string): string[] {
+  return value
+    .replace(/\\r\\n|\\n|\\r/g, "\n")
+    .split(/\r?\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
+
 export function normalizeGeneratedBlogSectionBody(value: unknown): string[] {
-  const paragraphs = Array.isArray(value)
-    ? value
-    : typeof value === "string"
-      ? value.split(/\n{2,}/)
-      : [];
+  const paragraphs = (Array.isArray(value) ? value : [value]).flatMap((paragraph) =>
+    typeof paragraph === "string" ? splitGeneratedBlogParagraphs(paragraph) : [],
+  );
 
   return paragraphs.map(normalizeGeneratedBlogParagraph).filter(Boolean);
 }

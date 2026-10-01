@@ -1,4 +1,5 @@
 import type { BlogPost } from "@/lib/blogPosts";
+import { normalizeGeneratedBlogSectionBody } from "./blogText.ts";
 
 type AirtableRecord = {
   id: string;
@@ -245,14 +246,7 @@ function parseSections(fields: Record<string, unknown>): BlogPost["sections"] {
         const sections = parsed
           .map((section) => {
             const heading = typeof section?.heading === "string" ? section.heading.trim() : "";
-            const body = Array.isArray(section?.body)
-              ? section.body.filter((paragraph): paragraph is string => typeof paragraph === "string")
-              : typeof section?.body === "string"
-                ? section.body
-                    .split(/\n{2,}/)
-                    .map((paragraph) => paragraph.trim())
-                    .filter(Boolean)
-                : [];
+            const body = normalizeGeneratedBlogSectionBody(section?.body);
 
             return { heading, body };
           })
@@ -270,10 +264,7 @@ function parseSections(fields: Record<string, unknown>): BlogPost["sections"] {
   return [1, 2, 3]
     .map((number) => ({
       heading: stringField(fields, `Section ${number} Heading`),
-      body: stringField(fields, `Section ${number} Body`)
-        .split(/\n{2,}/)
-        .map((paragraph) => paragraph.trim())
-        .filter(Boolean),
+      body: normalizeGeneratedBlogSectionBody(stringField(fields, `Section ${number} Body`)),
     }))
     .filter((section) => section.heading && section.body.length);
 }

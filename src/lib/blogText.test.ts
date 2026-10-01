@@ -34,3 +34,19 @@ test("accepts either paragraph arrays or a plain-text section body", () => {
   );
   assert.deepEqual(normalizeGeneratedBlogSectionBody({ text: "unsupported" }), []);
 });
+
+test("splits escaped and real newlines into separate rendered paragraphs", () => {
+  assert.deepEqual(
+    normalizeGeneratedBlogSectionBody([
+      "Checklist:\\n- Confirm the filing\\n- Refresh the certificate",
+      "Final note\r\nSecond line",
+    ]),
+    [
+      "Checklist:",
+      "- Confirm the filing",
+      "- Refresh the certificate",
+      "Final note",
+      "Second line",
+    ],
+  );
+});
