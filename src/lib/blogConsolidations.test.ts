@@ -31,3 +31,11 @@ test("consolidation mappings cannot redirect a slug to itself", () => {
     assert.notEqual(source, destination);
   }
 });
+
+test("redirects the duplicate Operation Saturday Night Fever sweep post to the canonical article", () => {
+  assert.equal(
+    getConsolidatedBlogSlug("fmcsa-southeast-sweep-saturday-night-fever-2026-10-02"),
+    "dot-operation-saturday-night-fever-truckers",
+  );
+  assert.equal(getConsolidatedBlogSlug("dot-operation-saturday-night-fever-truckers"), null);
+});

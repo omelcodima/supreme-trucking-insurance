@@ -1,6 +1,8 @@
 export const BLOG_CONSOLIDATIONS = Object.freeze({
   "english-proficiency-fmcsa-safety-rule-trucking-insurance-angle":
     "fmcsa-english-language-out-of-service-rule-truck-drivers",
+  "fmcsa-southeast-sweep-saturday-night-fever-2026-10-02":
+    "dot-operation-saturday-night-fever-truckers",
 } as const);
 
 export function getConsolidatedBlogSlug(slug: string) {

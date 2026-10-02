@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Explicit HTTP 301 (not Next's default 308) for the duplicate Operation Saturday Night Fever post.
+      // Listed before the consolidation spread so it matches first; the slug also lives in
+      // BLOG_CONSOLIDATIONS so the duplicate is filtered out of blog listings/sitemap.
+      {
+        source: "/blog/fmcsa-southeast-sweep-saturday-night-fever-2026-10-02",
+        destination: "/blog/dot-operation-saturday-night-fever-truckers",
+        statusCode: 301,
+      },
       ...Object.entries(BLOG_CONSOLIDATIONS).map(([source, destination]) => ({
         source: `/blog/${source}`,
         destination: `/blog/${destination}`,
