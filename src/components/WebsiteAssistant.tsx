@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Calculator, FileText, LoaderCircle, MessageCircle, Phone, RotateCcw, Send, X } from "lucide-react";
+import { Calculator, FileText, LoaderCircle, MessageCircle, Mic, Phone, RotateCcw, Send, X } from "lucide-react";
+import dynamic from "next/dynamic";
 import { assistantLinks, type AssistantMessage, type AssistantTopic } from "@/lib/assistantLinks";
 import { buildAssistantConversation } from "@/lib/assistantConversation";
 import { stopClarityForPrivateInteraction } from "@/lib/clarityPrivacy";
@@ -9,15 +10,16 @@ import AssistantIntake from "./AssistantIntake";
 import styles from "./WebsiteAssistant.module.css";
 
 type ChatMessage = AssistantMessage & { topic?: AssistantTopic };
+const VoiceAssistant = dynamic(() => import("./VoiceAssistant"), { ssr: false, loading: () => <p role="status">Loading voice...</p> });
 
-export default function WebsiteAssistant({ formPage = false }: { formPage?: boolean }) {
+export default function WebsiteAssistant({ formPage = false, voiceEnabled = false }: { formPage?: boolean; voiceEnabled?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const scroll = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
   const request = useRef<AbortController | null>(null);
   const lock = useRef(false);
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<"chat" | "quote" | "callback">("chat");
+  const [mode, setMode] = useState<"chat" | "voice" | "quote" | "callback">("chat");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [question, setQuestion] = useState("");
   const [consent, setConsent] = useState(false);
@@ -89,8 +91,9 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
           <div><h2 id="assistant-title">Chat with us</h2><p>Supreme AI assistant · Agent support available</p></div>
           <button type="button" className={styles.iconButton} title="Close assistant" aria-label="Close assistant" onClick={close}><X size={21} /></button>
         </header>
-        <div className={styles.tabs} aria-label="Assistant options">
+        <div className={`${styles.tabs} ${voiceEnabled ? styles.withVoice : ""}`} aria-label="Assistant options">
           <button type="button" aria-pressed={mode === "chat"} onClick={() => setMode("chat")}><MessageCircle size={15} aria-hidden="true" />Ask AI</button>
+          {voiceEnabled && <button type="button" aria-pressed={mode === "voice"} onClick={() => setMode("voice")}><Mic size={15} aria-hidden="true" />Talk to AI</button>}
           <button type="button" aria-pressed={mode === "quote"} onClick={() => setMode("quote")}><FileText size={15} aria-hidden="true" />Start a quote</button>
           <button type="button" aria-pressed={mode === "callback"} onClick={() => setMode("callback")}><Phone size={15} aria-hidden="true" />Request a call</button>
         </div>
@@ -114,7 +117,8 @@ export default function WebsiteAssistant({ formPage = false }: { formPage?: bool
             {pending && <p className={styles.pending} role="status"><LoaderCircle size={17} className={styles.spinner} aria-hidden="true" />Preparing an answer...</p>}
             {error && <p className={styles.error} role="alert">{error}</p>}
           </div>
-          <div hidden={mode === "chat"}><AssistantIntake mode={mode === "callback" ? "callback" : "quote"} /></div>
+          {open && mode === "voice" && voiceEnabled && <VoiceAssistant />}
+          <div hidden={mode === "chat" || mode === "voice"}><AssistantIntake mode={mode === "callback" ? "callback" : "quote"} /></div>
         </div>
         {mode === "chat" && <form className={styles.composer} onSubmit={ask}>
           {!consent ? <label className={styles.checkbox}><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />

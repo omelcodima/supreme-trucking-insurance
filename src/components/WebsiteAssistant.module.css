@@ -20,6 +20,18 @@
 .tabs button { display: flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 5px; padding: 10px 4px; min-height: 40px; background: transparent; color: #42594f; font-size: 12px; line-height: 1.4; font-weight: 650; }
 .tabs button[aria-pressed=true] { background: #eaf3ef; color: #174733; }
 .tabs svg { flex: none; }
+.withVoice { grid-template-columns: 1fr 1fr; }
+.voice { display: grid; gap: 16px; }
+.voiceStatus { display: flex; align-items: center; gap: 12px; min-height: 76px; padding-block: 16px; color: #1d684d; border-block: 1px solid #e3eae6; font-size: 15px; }
+.voiceStatus svg { flex: none; }
+.voiceNotice { font-size: 12px; line-height: 1.65; color: #52665c; margin: 0; }
+.voiceControls { display: flex; gap: 12px; }
+.voiceControls button, .voiceSecondary { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid #c8d6ce; border-radius: 5px; background: #fff; color: #20382f; font-size: 13px; }
+.voiceControls button { flex: 1; }
+.voiceControls button:last-child { border-color: #ac3a30; color: #a02e26; }
+.voiceTranscript summary, .voiceExtras summary { font-size: 13px; font-weight: 650; cursor: pointer; padding-block: 10px; }
+.voiceExtras > div { display: grid; gap: 12px; padding-block: 10px; }
+.voice .intake > p { margin-bottom: 16px; }
 .body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 20px; scrollbar-gutter: stable; }
 .greeting h3, .intake h3, .success h3 { font-size: 21px; line-height: 1.35; font-weight: 750; margin: 0 0 8px; letter-spacing: 0; }
 .greeting p { font-size: 14px; line-height: 1.6; color: #5b6c64; margin: 0; }

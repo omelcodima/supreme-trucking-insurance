@@ -146,6 +146,13 @@ export default function PrivacyPolicyPage() {
                   <p>The separate quote and callback forms send the information you confirm to our agency and its intake systems, not to the AI model. Asking a chat question alone does not submit a quote request, authorize a callback, or give marketing SMS permission. Document uploads and customer portal access are not available inside this chat. We use temporary, pseudonymous request counters to limit abuse and AI usage.</p>
                 </Section>
               </div>
+              <div id="voice-assistant" className="scroll-mt-28">
+                <Section title="Optional AI Voice Assistant">
+                  <p>Where available, choosing Start talking authorizes microphone audio and the details you speak to be sent directly to xAI for AI voice processing. This is an AI assistant, not a human insurance agent. It cannot quote or bind coverage. Do not share Social Security numbers, driver licenses, payment information, passwords or documents. You may instead use the website forms or call our team.</p>
+                  <p>Our website does not store audio recordings or full voice transcripts in its lead database or analytics. Conversation text and draft details are held in the open voice panel and cleared when you leave it or reload. xAI may process and retain information under its own terms and privacy practices. Voice does not require permission for website analytics; session replay is stopped before the assistant opens.</p>
+                  <p>The assistant may prepare a short editable request containing your name, phone or email, optional company, DOT and business state, and a summary of your needs. Only choosing Send request sends the reviewed details to our agency inbox and lead intake systems for follow-up. Spoken approval alone does not submit a lead. This does not authorize marketing texts, automated marketing calls or an insurance purchase. We keep versioned confirmation information with the submitted request and use temporary pseudonymous counters to limit abuse.</p>
+                </Section>
+              </div>
               <Section title="2. How We Use Your Information">
                 <p>We may use your information to:</p>
                 <ul className="list-disc pl-6 space-y-1">

@@ -117,7 +117,7 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter />
-        <SiteActions />
+        <SiteActions voiceEnabled={process.env.WEBSITE_VOICE_ENABLED === "true" && Boolean(process.env.XAI_API_KEY)} />
       </body>
     </html>
   );
