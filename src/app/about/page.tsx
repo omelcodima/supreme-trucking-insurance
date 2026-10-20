@@ -162,16 +162,30 @@ export default function AboutPage() {
       <section className="site-section">
         <div className="site-container about-tools">
           <div>
-            <p className="section-kicker">Tools we built</p>
+            <p className="section-kicker">Tools and resources we built</p>
             <h2 className="section-heading">
               Better tools for the work behind the policy.
             </h2>
             <p className="section-description">
               Running a trucking book taught us where better software could
-              help. These are two tools our agency built.
+              help. Explore our agency&apos;s tools and insurance resources.
             </p>
           </div>
           <div>
+            <a
+              href="https://truckinginsurancesaver.com/learn?utm_source=supreme_trucking_insurance&utm_medium=referral&utm_campaign=our_network"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <strong>
+                Trucking Insurance Saver
+                <ExternalLink size={16} aria-hidden="true" />
+              </strong>
+              <p>
+                Quote preparation checklists and coverage guides for truckers,
+                from our agency&apos;s insurance comparison website.
+              </p>
+            </a>
             <a
               href="https://www.renewrig.com"
               target="_blank"
