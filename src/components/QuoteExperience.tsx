@@ -339,17 +339,22 @@ export default function QuoteExperience({
                       <p>{error}</p>
                     </div>
                   )}
+                  <p id="quote-disclaimer" className="my-4 text-sm leading-6 text-[#515c59]">
+                    Requesting a quote does not bind coverage. Rates and
+                    eligibility require review and are not guaranteed.{" "}
+                    <a href="/website-disclaimer#quotes-and-estimates" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+                      Website disclaimer
+                    </a>.
+                  </p>
                   <button
                     type="submit"
                     className="button-primary w-full"
                     disabled={submitting}
+                    aria-describedby="quote-disclaimer"
                   >
                     {submitting ? "Sending request..." : "Submit Quote Request"}
                     <ArrowRight size={18} aria-hidden="true" />
                   </button>
-                  <p className="form-note mt-4">
-                    Requesting a quote does not bind coverage.
-                  </p>
                 </form>
                 <aside className="quote-support">
                   <p className="section-kicker">What happens next</p>

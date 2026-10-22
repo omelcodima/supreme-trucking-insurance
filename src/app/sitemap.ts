@@ -29,6 +29,7 @@ const staticRoutes = [
   "/services",
   "/sms-terms-and-conditions",
   "/trucking-insurance",
+  "/website-disclaimer",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

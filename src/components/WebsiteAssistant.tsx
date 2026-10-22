@@ -123,7 +123,11 @@ export default function WebsiteAssistant({ formPage = false, voiceEnabled = fals
         {mode === "chat" && <form className={styles.composer} onSubmit={ask}>
           {!consent ? <label className={styles.checkbox}><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} />
             <span>I agree to send my questions to the AI service. No sensitive documents or personal identifiers. <a href="/privacy-policy#website-assistant" target="_blank" rel="noopener noreferrer">Privacy</a>.</span>
-          </label> : <p className={styles.disclaimer}>AI can make mistakes. An agent must confirm pricing and coverage.</p>}
+          </label> : null}
+          <p className={styles.disclaimer}>
+            AI can make mistakes. An agent must confirm pricing and coverage.{" "}
+            <a href="/website-disclaimer#information-and-ai" target="_blank" rel="noopener noreferrer">Website disclaimer</a>.
+          </p>
           <div className={styles.inputRow}>
             <textarea ref={input} aria-label="Your question" placeholder="Your trucking insurance question..." rows={2} maxLength={1000} value={question} disabled={pending}
               onChange={event => setQuestion(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} />

@@ -113,6 +113,7 @@ export default function SiteFooter() {
           <p>© 2026 Supreme Trucking Insurance</p>
           <div>
             <Link href="/privacy-policy">Privacy</Link>
+            <Link href="/website-disclaimer">Website disclaimer</Link>
             <AnalyticsPreferences />
             <Link href="/sms-terms-and-conditions">SMS Terms</Link>
             <Link href="/careers">Careers</Link>

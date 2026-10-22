@@ -82,6 +82,40 @@ test("the site-wide footer links to the referral disclosure without promising ca
   assert.match(footer, /href="\/about#how-this-website-works"/);
 });
 
+test("website disclaimer explains limitations without overriding policies or non-waivable rights", () => {
+  const page = load("src/app/website-disclaimer/page.tsx");
+  const html = renderToStaticMarkup(React.createElement(page.default as React.ComponentType));
+  const metadata = page.metadata as { title: string; description: string; alternates: { canonical: string } };
+  assert.equal(metadata.alternates.canonical, "/website-disclaimer");
+  assert.ok(metadata.title.length <= 60);
+  assert.ok(metadata.description.length <= 160);
+  assert.equal([...html.matchAll(/<h1\b/g)].length, 1);
+  for (const id of ["website-role", "requests-and-coverage", "quotes-and-estimates", "information-and-ai", "carrier-references", "timely-requests", "your-rights"]) {
+    assert.ok(html.includes(`id="${id}"`), id);
+  }
+  assert.match(html, /Supreme Insurance Agency LLC/);
+  assert.match(html, /does not by itself bind, change, cancel, renew, or reinstate insurance/);
+  assert.match(html, /We do not guarantee the lowest price/);
+  assert.match(html, /AI can make mistakes and cannot approve coverage/);
+  assert.match(html, /does not amend or invalidate an insurance policy, valid binder, endorsement, or signed agreement/);
+  assert.match(html, /cannot lawfully be excluded or waived/);
+  assert.match(html, /does not grant marketing consent/);
+  assert.doesNotMatch(html, /you waive|waive your right|not liable for any|immune from|guaranteed protection/i);
+  assert.match(readFileSync("src/components/SiteFooter.tsx", "utf8"), /href="\/website-disclaimer"/);
+  assert.match(readFileSync("src/app/sitemap.ts", "utf8"), /"\/website-disclaimer"/);
+});
+
+test("quote and AI notices link to relevant disclaimer sections without adding consent requirements", () => {
+  const quote = readFileSync("src/components/QuoteExperience.tsx", "utf8");
+  assert.match(quote, /href="\/website-disclaimer#quotes-and-estimates"/);
+  assert.match(quote, /aria-describedby="quote-disclaimer"/);
+  assert.ok(quote.indexOf('id="quote-disclaimer"') < quote.indexOf('aria-describedby="quote-disclaimer"'));
+  assert.equal([...quote.matchAll(/type="checkbox"/g)].length, 1);
+  const assistant = readFileSync("src/components/WebsiteAssistant.tsx", "utf8");
+  assert.match(assistant, /href="\/website-disclaimer#information-and-ai"/);
+  assert.equal([...assistant.matchAll(/type="checkbox"/g)].length, 1);
+});
+
 test("quote checklist is discoverable and does not masquerade as a quote submission", () => {
   for (const file of ["src/app/sitemap.ts", "src/components/SiteFooter.tsx", "src/components/QuoteExperience.tsx", "src/components/CoverageGuide.tsx"]) assert.ok(readFileSync(file, "utf8").includes('"/quote-checklist"'), file);
 });
