@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title,
     description: page.metaDescription,
     keywords: [
-      `best truck insurance agency in ${page.stateName}`,
+      `choosing a truck insurance agency in ${page.stateName}`,
       `${page.stateName} commercial truck insurance agency`,
       `${page.stateName} trucking insurance agency`,
       `${page.stateName} owner operator truck insurance`,
@@ -94,7 +94,7 @@ export default async function BestTruckInsuranceAgencyStatePage({ params }: Prop
   };
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
-    { name: "Best Truck Insurance Agency", path: "/best-truck-insurance-agency" },
+    { name: "Choosing an agency", path: "/best-truck-insurance-agency" },
     { name: `${page.stateName} Truck Insurance Agency`, path: `/best-truck-insurance-agency/${page.slug}` },
   ]);
 
@@ -107,7 +107,7 @@ export default async function BestTruckInsuranceAgencyStatePage({ params }: Prop
       <section className="section-shell warm-divider">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:py-20 lg:grid-cols-[1fr_0.8fr]">
           <div>
-            <span className="eyebrow mb-5">{page.abbreviation} best truck insurance agency</span>
+            <span className="eyebrow mb-5">{page.abbreviation} agency selection guide</span>
             <h1 className="text-4xl font-black leading-tight text-[#2F261C] md:text-6xl">
               {page.title}
             </h1>
@@ -131,7 +131,7 @@ export default async function BestTruckInsuranceAgencyStatePage({ params }: Prop
             <p className="mt-4 text-base leading-7 text-[#5A4B3B]">{page.freightContext}</p>
             <div className="mt-6 rounded-2xl border border-[#E7DED2] bg-[#F7F3EC] p-4">
               <p className="text-sm leading-6 text-[#5A4B3B]">
-                Final availability depends on licensing, filings, drivers, cargo, losses, state requirements, and underwriting review.
+                This guide is not a ranking or a confirmation of insurer appointments. Final availability depends on licensing, authorized access, filings, drivers, cargo, losses, state requirements, and underwriting review.
               </p>
             </div>
           </aside>
@@ -242,7 +242,7 @@ export default async function BestTruckInsuranceAgencyStatePage({ params }: Prop
       <section className="section-soft py-12">
         <div className="mx-auto max-w-6xl px-4">
           <p className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-[#7B6B59]">
-            More best-agency guides
+            More agency selection guides
           </p>
           <div className="flex flex-wrap gap-2">
             {relatedPages.map((item) => (

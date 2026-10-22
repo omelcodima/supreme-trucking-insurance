@@ -3,9 +3,12 @@ import test from "node:test";
 import { googleReviewSnapshot } from "./googleReviews.ts";
 import { googleReviewUrl } from "./socialProfiles.ts";
 
-test("review snapshot is dated and includes both checked source reviews", () => {
+test("review snapshot preserves the source total while showing selected verbatim excerpts", () => {
   assert.equal(googleReviewSnapshot.checkedAt, "2026-09-06");
-  assert.equal(googleReviewSnapshot.count, googleReviewSnapshot.reviews.length);
+  assert.equal(googleReviewSnapshot.count, 2);
+  assert.ok(googleReviewSnapshot.count >= googleReviewSnapshot.reviews.length);
+  assert.equal(googleReviewSnapshot.reviews.length, 1);
+  assert.equal(googleReviewSnapshot.reviews[0].excerpt, "They explained everything in a way that actually made sense");
   assert.equal(googleReviewSnapshot.rating, "5.0");
   for (const review of googleReviewSnapshot.reviews) {
     assert.equal(review.rating, 5);

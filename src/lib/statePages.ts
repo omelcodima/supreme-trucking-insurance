@@ -42,7 +42,7 @@ const priorityStatePages: StatePage[] = [
     slug: "california",
     name: "California",
     abbreviation: "CA",
-    headline: "California commercial truck insurance with trucking-market access.",
+    headline: "California commercial truck insurance information and quote requests.",
     description:
       "California trucking insurance can be sensitive to radius, filings, freight type, ports, and driver history. We help owner-operators and fleets package the details carriers need to review the risk.",
     marketNotes: [
@@ -54,7 +54,7 @@ const priorityStatePages: StatePage[] = [
     faqs: [
       {
         q: "Can you help with California cargo and liability?",
-        a: "Yes. We can help arrange primary liability, motor truck cargo, physical damage, and supporting coverages based on the operation.",
+        a: "You can request a review of primary liability, cargo, physical damage, and related needs. Any options depend on licensing, authorized insurer access, the operation, and underwriting; a request does not assure placement.",
       },
       {
         q: "Is California harder for trucking insurance?",
@@ -68,11 +68,11 @@ const priorityStatePages: StatePage[] = [
     abbreviation: "FL",
     headline: "Florida trucking insurance for growing carriers and independent truckers.",
     description:
-      "Florida trucking accounts often need clear handling around interstate routes, cargo value, garaging, and driver details. Supreme helps organize the file and shop trucking-focused markets where available.",
+      "Florida trucking accounts often need clear handling around interstate routes, cargo value, garaging, and driver details. Supreme helps organize a request for licensed professional review; insurer access and eligibility must be confirmed.",
     marketNotes: [
       "Common needs include general freight, reefer, cargo, physical damage, and new venture support.",
       "A clean DOT profile and complete driver information can help the review process.",
-      "We keep follow-up clear as carrier markets respond.",
+      "A licensed professional must confirm available options through authorized channels.",
     ],
     operationFocus: ["New venture", "Owner operators", "Reefer", "General freight", "Cargo", "Regional"],
     faqs: [
@@ -174,7 +174,7 @@ const priorityStatePages: StatePage[] = [
     faqs: [
       {
         q: "Can you write Pennsylvania new authorities?",
-        a: "Where markets are available, yes. New authorities need clean DOT, driver, vehicle, garaging, and freight information.",
+        a: "New authorities can submit DOT, driver, vehicle, garaging, and freight information for review. A licensed professional must confirm authorized insurer access and eligibility; no policy issuance is assured.",
       },
       {
         q: "What affects Pennsylvania trucking insurance pricing?",
@@ -188,7 +188,7 @@ const priorityStatePages: StatePage[] = [
     abbreviation: "OH",
     headline: "Ohio commercial truck insurance for Midwest trucking operations.",
     description:
-      "Ohio sits on major freight lanes, so truckers often need coverage built for interstate routes, cargo requirements, and fleet growth. We help shop trucking-focused markets with a cleaner submission.",
+      "Ohio sits on major freight lanes, so requests should describe interstate routes, cargo requirements, and fleet growth. We help organize those details for licensed professional review, subject to authorized access and underwriting.",
     marketNotes: [
       "Good fit for Midwest lanes, general freight, regional fleets, and owner-operators.",
       "Fleet files should include vehicles, drivers, loss runs, cargo, and radius.",
@@ -288,7 +288,7 @@ const priorityStatePages: StatePage[] = [
     marketNotes: [
       "Good fit for owner-operators, small fleets, cargo, physical damage, and new ventures.",
       "Port work, reefer, general freight, and interstate lanes should be described clearly.",
-      "We provide direct follow-up as markets respond.",
+      "Requests are reviewed by a licensed professional; insurer access and available terms require confirmation.",
     ],
     operationFocus: ["Port work", "Pacific Northwest", "Owner operators", "Fleets", "New authority", "Cargo"],
     faqs: [
@@ -361,7 +361,7 @@ function createStatePage([slug, name, abbreviation, freightProfile]: (typeof add
     faqs: [
       {
         q: `Can you help ${name} trucking companies?`,
-        a: `Yes, where licensed and where markets are available. We help ${name} truckers review liability, cargo, physical damage, filings, and the information needed for carrier review.`,
+        a: `${name} truckers can submit a request for licensed professional review of liability, cargo, physical damage, and filing needs. Licensing, authorized insurer access, eligibility, and available terms must be confirmed; a request does not assure a quote or placement.`,
       },
       {
         q: `What should ${name} truckers prepare for a quote?`,

@@ -99,9 +99,9 @@ export default async function HomePage() {
                 Working with us shouldn&apos;t be.
               </h2>
               <p className="section-description">
-                Tell us about your operation. We organize the submission,
-                approach suitable markets, and keep you updated as options come
-                back.
+                Tell us about your operation. We organize your request for
+                follow-up by a licensed insurance professional. Available
+                options depend on authorized access and underwriting.
               </p>
               <ul className="trust-list">
                 {[
@@ -127,8 +127,8 @@ export default async function HomePage() {
                   "Start with your DOT number and the coverage you need.",
                 ],
                 [
-                  "We shop suitable markets",
-                  "We compare options around your equipment, drivers, and routes.",
+                  "Your request is reviewed",
+                  "A licensed professional reviews possible next steps; quotes and acceptance are not assured.",
                 ],
                 [
                   "Choose with clear answers",

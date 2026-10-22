@@ -2,7 +2,7 @@ export const agencyFacts = {
   name: "Supreme Trucking Insurance",
   legalName: "Supreme Insurance Agency LLC",
   description:
-    "Independent trucking insurance agency in Vancouver, Washington, helping owner-operators, fleets, and new authorities compare coverage options.",
+    "Operator of a trucking insurance quote-request and referral website in Vancouver, Washington. Requests are subject to licensed professional review.",
   telephone: "+1-360-936-7196",
   email: "info@supremetruckinginsurance.com",
   address: {

@@ -94,7 +94,7 @@ export function ClassInsurancePage({ slug }: { slug: string }) {
         ctaButtonLabel="Get a Free Quote"
         extraSideCard={
           <div className="card-premium rounded-[1.4rem] p-6">
-            <h3 className="text-xl font-black text-[#2F261C] mb-3">Which carriers write this?</h3>
+            <h3 className="text-xl font-black text-[#2F261C] mb-3">Research insurance markets</h3>
             <p className="text-[#5A4B3B] text-sm leading-6">
               Market appetite for {page.eyebrow.toLowerCase()} changes by state and by year. Carrierlens is the free
               directory of trucking insurance markets our agency built: carriers, MGAs, and wholesalers, with the
@@ -107,7 +107,8 @@ export function ClassInsurancePage({ slug }: { slug: string }) {
               See markets for {page.carrierlensQuery} on Carrierlens →
             </a>
 
-            <h3 className="text-lg font-black text-[#2F261C] mt-7 mb-2">Other operations we insure</h3>
+            <p className="mt-3 text-sm leading-6 text-[#5A4B3B]">Directory listings are informational, not a list of Supreme appointments, partners, or available quotes. Confirm access and eligibility with the licensed professional handling your request.</p>
+            <h3 className="text-lg font-black text-[#2F261C] mt-7 mb-2">Other operation guides</h3>
             <ul className="space-y-1 text-sm">
               {otherClasses.map((item) => (
                 <li key={item.slug}>

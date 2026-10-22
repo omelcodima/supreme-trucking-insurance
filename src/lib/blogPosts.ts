@@ -151,69 +151,66 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "how-much-does-commercial-truck-insurance-cost",
-    title: "Commercial Truck Insurance Cost in 2026: Rates by Operation",
+    title: "Commercial Truck Insurance Cost: What Affects Your Quote",
     description:
-      "What commercial truck insurance costs in 2026: typical annual and monthly ranges for owner-operators, new authority, box trucks, hotshot, and fleets, and what moves the number.",
+      "Understand truck insurance pricing factors, compare proposed terms, and prepare a quote request. No fixed rate, savings, or acceptance is promised.",
     category: "Pricing",
     date: "2026-09-02",
-    readTime: "9 min read",
+    readTime: "6 min read",
     intro:
-      "Commercial truck insurance does not price like a personal auto policy. The same truck can get indications thousands of dollars apart depending on the driver’s record, years of authority, radius, freight, the state, and the loss runs. This guide gives the ranges we see and markets publish, then explains what moves your number — so you know whether a quote is high, low, or about right for your operation. None of it is a quote; your file decides.",
+      "Commercial truck insurance pricing depends on the actual operation and the terms offered after underwriting. This guide explains information to prepare and questions to ask; it does not predict your premium or promise a quote. Any options must be confirmed by the licensed professional handling your request through authorized placement channels.",
     sections: [
       {
         heading: "How much is commercial truck insurance per year and per month?",
         body: [
-          "For a single tractor-trailer on its own authority, most files land somewhere between $9,000 and $20,000 a year for the core stack — primary liability, motor truck cargo, and physical damage — which is roughly $750 to $1,700 a month. Established operators with clean records and a few years of authority sit at the lower end; first-year authorities and drivers with violations sit at the top, and some new ventures see indications above that.",
-          "Those are ranges, not prices. A quote is built from your DOT profile, driver MVRs, the freight, the lanes, the equipment values, and the loss runs. Two operators with identical trucks routinely get numbers 40 percent apart.",
+          "There is no single annual or monthly price that applies to every trucking operation. The drivers, business location, operating radius, freight, equipment values, loss history, limits, deductibles, and available insurers can all affect a proposal.",
+          "Ask for the total policy cost and payment schedule, not just an advertised monthly amount. Down payments, installment or financing charges, exclusions, and deductibles can make two offers materially different. An initial indication may change or be withdrawn after review.",
         ],
       },
       {
-        heading: "Commercial truck insurance rates by operation",
+        heading: "Pricing questions by operation",
         body: [
-          "Owner-operator, own authority, established: primary liability is usually the largest line at $6,000–$12,000 a year; cargo at a $100,000 limit adds a few hundred to about $1,500; physical damage runs roughly 3–5 percent of the truck’s insured value each year. Together, $9,000–$16,000 is typical.",
-          "New authority (first 12–24 months): expect $12,000–$20,000 or more for the same stack, because fewer markets will quote a new venture and the ones that do price the unknown. Rates usually step down at the first and second renewal if the record stays clean.",
-          "Leased-on owner-operator: the motor carrier carries liability and cargo under dispatch; you buy bobtail or non-trucking liability plus physical damage, typically $2,000–$5,000 a year depending on the truck’s value.",
-          "Box truck (non-CDL, local): $4,000–$10,000 a year for liability, cargo, and physical damage; contracts that require $1,000,000 in liability and general liability push toward the top.",
-          "Hotshot (pickup and gooseneck): $7,000–$15,000 a year on own authority; the $1,000,000 liability and $100,000 cargo that brokers require are most of it.",
-          "Small fleets (5–25 units): roughly $8,000–$12,000 per power unit, with a wide spread — fleet safety scores, driver turnover, and radius move it more than truck count.",
+          "Owner-operator with own authority: discuss primary auto liability, motor truck cargo, physical damage, and any contract-specific requirements. Not every coverage is included in one policy.",
+          "New authority: provide driving experience, previous insurance and loss history if available, and a realistic operating plan. Time in business or a clean record does not assure acceptance or lower renewal pricing.",
+          "Leased-on owner-operator: review the lease and actual policies to identify which responsibilities belong to the motor carrier and which remain with you. Do not assume dispatch status alone determines coverage.",
+          "Box truck or hotshot: describe the truck and trailer, local or long-distance work, delivery contracts, and freight. Vehicle size or a non-CDL classification does not establish a particular price or eligibility.",
+          "Fleet: prepare a complete vehicle and driver schedule, loss history, garaging locations, and safety procedures. A larger fleet does not automatically receive a discount or broader terms.",
         ],
       },
       {
         heading: "How much is cargo insurance?",
         body: [
-          "Motor truck cargo at the $100,000 limit most brokers require typically costs $400–$1,500 a year for general freight. Reefer freight with breakdown coverage, high-value loads, and auto haulers pay more, and a $250,000 or $1,000,000 cargo limit is priced on what you haul, not just the number — a $1,000,000 limit on general dry freight can be surprisingly reasonable, while the same limit on electronics or pharmaceuticals is not.",
+          "Cargo pricing depends on the commodities, load values, limits, deductible, routes, loss history, and proposed policy terms. Refrigerated freight, vehicles, electronics, and other specialized loads may raise additional underwriting questions. A cargo limit alone does not establish that a specific commodity or cause of loss is covered.",
         ],
       },
       {
-        heading: "What makes the number go up",
+        heading: "Information that can affect underwriting",
         body: [
-          "Driver record: a serious violation or an at-fault loss in the last three years is the single biggest multiplier. Years of CDL experience and years of authority come next.",
-          "Radius and lanes: long-haul over-the-road costs more than a 100-mile radius; certain states and metro areas — parts of California, Georgia, Florida, New Jersey, and Louisiana — carry higher liability rates because of jury verdicts and claim frequency.",
-          "Freight: hazmat, auto hauling, refrigerated, and household goods each narrow the markets and raise the price. General dry freight is the baseline.",
-          "Equipment: newer, higher-value tractors cost more to insure for physical damage but often less for liability, because markets read newer equipment as better-maintained.",
-          "Filings and limits: a $1,000,000 liability limit (what nearly every broker requires) costs more than the $750,000 federal minimum; adding the MCS-90 for for-hire authority narrows the market further.",
-          "Loss history and the DOT profile: open claims, a bad inspection history, or a DOT snapshot that does not match the application slow the file and shrink the list of willing markets.",
+          "Drivers and history: disclose relevant experience, driving records, prior insurance, claims, and open losses accurately. An insurer decides how it evaluates those facts.",
+          "Routes and freight: describe operating radius, states traveled, commodities, load values, storage, and any special handling. Do not describe a narrower operation solely to obtain a lower indication.",
+          "Equipment and locations: provide vehicle values, use, garaging addresses, maintenance information, and lender requirements. Newer equipment does not automatically reduce a premium.",
+          "Filings and contracts: have the licensed professional review applicable requirements and actual proposed terms. Meeting a stated limit is not proof that every contract requirement is satisfied or that a filing will be accepted.",
         ],
       },
       {
-        heading: "What brings it down",
+        heading: "Compare terms without assuming savings",
         body: [
-          "A clean, complete submission: DOT and MC numbers, driver list with MVRs, vehicle schedule with values, garaging address, freight description, radius, the current dec page, and loss runs. Markets price uncertainty; a clean file removes it.",
-          "Shopping the right markets: trucking-focused carriers and MGAs price the class every day; a generic commercial carrier either declines or loads the rate. An independent trucking agency shops several markets on one submission.",
-          "Time: most operators see meaningful reductions at the second and third renewal if the record stays clean. The expensive year is the first one.",
-          "Structure: higher physical-damage deductibles, stated-value on older equipment, and not over-buying cargo limits you do not need all trim the premium without weakening the coverage that matters.",
+          "A complete submission can reduce missing-information questions, but it does not assure a quote, a lower premium, or acceptance. Ask which authorized placement channels are actually available for your operation.",
+          "Compare proposed limits, exclusions, covered causes of loss, valuation, deductibles, fees, and payment terms. A lower premium can come with narrower coverage or more out-of-pocket risk.",
+          "Review renewal terms each year. A clean record or another year in business does not assure that the premium will decrease or that coverage will be renewed.",
+          "Changes to deductibles, limits, or valuation can materially change your protection. Discuss the tradeoffs with a licensed professional rather than assuming a lower-cost structure provides equivalent coverage.",
         ],
       },
       {
         heading: "How to prepare before shopping",
         body: [
           "Have the DOT or MC number, driver list, vehicle schedule with VINs and values, garaging address, cargo type, radius, current declarations page, and loss runs if available. Owner-operators can work through the prep list in our owner-operator insurance checklist.",
-          "If you do not have everything yet, start with the basics. A good trucking agency can tell you what is missing before the file goes to market — and which markets will actually look at it.",
+          "If you do not have everything yet, start with the basics and ask what additional documents are needed. The professional handling the request must confirm any available insurer access and eligibility.",
         ],
       },
     ],
     takeaway:
-      "The goal is not only the lowest number this year. It is a clean file that the right trucking markets will quote, at limits your brokers accept, with a record that earns a lower rate at the next renewal. Send the DOT number and we will tell you where your operation lands.",
+      "Prepare accurate information and compare any proposed terms, not just the price. Supreme collects requests for licensed professional review; it does not guarantee a quote, the lowest premium, renewal savings, acceptance, or coverage. Submitting a request does not bind insurance.",
   },
   {
     slug: "owner-operator-truck-insurance-checklist",

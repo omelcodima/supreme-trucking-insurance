@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Phone } from "lucide-react";
-import PromoPlayer from "./PromoPlayer";
 import HeroScene from "./HeroScene";
 import { serviceAreaSummary } from "@/lib/serviceArea";
 import type { HomepageVariant } from "@/lib/homepageDesignValues";
@@ -34,7 +33,7 @@ export default function HomeHero({ variant }: { variant: HomepageVariant }) {
               <span className="hero-brand-name">Supreme</span>
               <span className="hero-brand-category">Trucking Insurance.</span>
             </h1>
-            <p>Independent agents. Trucking-focused markets. Clear answers for owner operators, fleets, and new authority.</p>
+            <p>Trucking-focused quote requests and referrals for owner operators, fleets, and new authority. Options are subject to review.</p>
             <div className="hero-buttons">
               <Link href="/quote" className="button-primary">
                 Get a Free Quote <ArrowRight size={18} aria-hidden="true" />
@@ -44,7 +43,6 @@ export default function HomeHero({ variant }: { variant: HomepageVariant }) {
               </a>
             </div>
             <p className="hero-service-area">{serviceAreaSummary}</p>
-            <PromoPlayer />
           </div>
         </div>
         {scene && <a className={styles.credit} href={`/image-credits#${scene.code}`} aria-label={`${scene.name}: ${scene.landmark}. View photo credits`}>{scene.name} · {scene.landmark}</a>}

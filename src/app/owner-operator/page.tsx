@@ -19,9 +19,9 @@ export default function OwnerOperatorPage() {
       sectionTitle="Built for the solo trucker"
       intro={[
         "Start with one important distinction: do you run under your own authority or lease to another motor carrier? That changes which responsibilities you insure yourself and which you need to confirm in a lease.",
-        "Bring your lease or customer requirements, truck details, driver history, and the freight you haul. Supreme reviews available markets and explains the differences between liability, cargo, physical damage, and any supporting coverage.",
+        "Bring your lease or customer requirements, truck details, driver history, and the freight you haul. We organize your request for licensed professional review of liability, cargo, physical damage, and supporting coverage needs. Availability must be confirmed.",
       ]}
-      listTitle="Coverage we arrange"
+      listTitle="Coverage to discuss"
       listItems={[
         "Primary liability for your operation",
         "Physical damage for your truck and equipment",
@@ -32,7 +32,7 @@ export default function OwnerOperatorPage() {
       ]}
       faqs={[
         { q: "Do I need insurance if I'm leased to a carrier?", a: "Review the lease and the carrier's policy first. You may need non-trucking liability, bobtail, or physical damage separately, but these are not interchangeable. Off dispatch does not automatically mean personal use." },
-        { q: "How fast can you get me covered?", a: "Timing depends on the market and file quality. We move quickly and keep you updated." },
+        { q: "How long does a quote review take?", a: "Timing depends on the complete information, insurer review, and any additional requirements. No response time or effective date is assured. Confirm coverage with the authorized professional before operating." },
         { q: "What's the minimum required?", a: "Requirements depend on your authority, vehicles, freight, state, and contracts. Send those details so we can help compare the applicable requirements with the proposed policy." },
         { q: "What should I send for a quote?", a: "Start with your DOT or MC number if issued, VINs and values, garaging address, drivers, freight, routes, and desired start date. Include your current policy and available loss runs if you have been insured before." },
       ]}

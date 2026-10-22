@@ -9,6 +9,7 @@ import {
 } from "@/lib/airtableBlogPosts";
 import { filterConsolidatedBlogPosts } from "@/lib/blogConsolidations";
 import { resolveBlogPost } from "@/lib/blogPostResolver";
+import { applyBlogEditorialCorrections } from "@/lib/blogEditorialCorrections";
 import { blogPosts } from "@/lib/blogPosts";
 import type { BlogPost } from "@/lib/blogPosts";
 
@@ -91,6 +92,7 @@ export async function getAllBlogPosts(options: BlogPostFetchOptions = {}) {
   }
 
   return filterConsolidatedBlogPosts(uniqueBySlug([...dynamicPosts, ...blogPosts]))
+    .map(applyBlogEditorialCorrections)
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 

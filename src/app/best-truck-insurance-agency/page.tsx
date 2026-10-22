@@ -5,12 +5,12 @@ import { featuredBestAgencyPages } from "@/lib/bestAgencyPages";
 import { servedStateAreas } from "@/lib/serviceArea";
 
 export const metadata: Metadata = {
-  title: "Best Truck Insurance Agency for Owner-Operators, Fleets & New Authorities",
+  title: "Choosing a Truck Insurance Agency | Supreme",
   description:
-    "How truckers should choose the best trucking insurance agency for commercial truck insurance, cargo, filings, owner-operators, fleets, and new authorities.",
+    "Questions to ask when comparing trucking insurance agencies: licensing, authorized access, policy terms, cargo, filings, and quote preparation.",
   keywords: [
-    "best truck insurance agency",
-    "best trucking insurance agency",
+    "choosing a truck insurance agency",
+    "comparing trucking insurance agencies",
     "commercial truck insurance agency",
     "owner operator truck insurance agency",
     "new authority truck insurance agency",
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     type: "website",
     url: absoluteUrl("/best-truck-insurance-agency"),
     siteName,
-    title: "Best Truck Insurance Agency for Truckers",
+    title: "Choosing a Truck Insurance Agency",
     description:
       "A practical guide for choosing a trucking-focused insurance agency for owner-operators, fleets, cargo, filings, and new authorities.",
     images: [{ url: defaultOgImage, width: 1200, height: 630, alt: siteName }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Best Truck Insurance Agency for Truckers",
+    title: "Choosing a Truck Insurance Agency",
     description:
       "How to choose a trucking-focused agency for owner-operators, fleets, new authorities, cargo, and filings.",
     images: [defaultOgImage],
@@ -48,7 +48,7 @@ const criteria = [
   },
   {
     title: "Owner-operator and fleet fit",
-    text: "The best agency can handle solo owner-operators, new authorities, and growing fleets without treating every account like generic business auto.",
+    text: "Ask whether the professional has experience reviewing operations like yours, including owner-operators, new authorities, or fleets. Confirm authorized access for the specific request.",
   },
   {
     title: "Cargo and certificate awareness",
@@ -68,7 +68,7 @@ export default function BestTruckInsuranceAgencyHubPage() {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Best Truck Insurance Agency Guides by State",
+    name: "Truck Insurance Agency Selection Guides by State",
     itemListElement: featuredBestAgencyPages.map((page, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -94,7 +94,7 @@ export default function BestTruckInsuranceAgencyHubPage() {
   };
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", path: "/" },
-    { name: "Best Truck Insurance Agency", path: "/best-truck-insurance-agency" },
+    { name: "Choosing an agency", path: "/best-truck-insurance-agency" },
   ]);
 
   return (
@@ -106,12 +106,12 @@ export default function BestTruckInsuranceAgencyHubPage() {
       <section className="section-shell warm-divider">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:py-20 lg:grid-cols-[1fr_0.8fr]">
           <div>
-            <span className="eyebrow mb-5">Best truck insurance agency</span>
+            <span className="eyebrow mb-5">Agency selection guide</span>
             <h1 className="text-4xl font-black leading-tight text-[#2F261C] md:text-6xl">
-              How truckers should choose the best trucking insurance agency.
+              How to compare trucking insurance agencies.
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-[#5A4B3B] md:text-xl md:leading-9">
-              The best agency for a trucking company is not always the one with the loudest ad. It is the agency that understands DOT profiles, filings, cargo, drivers, radius, certificates, and how carrier markets actually review trucking risks.
+              Ask about trucking experience, licensing, authorized insurer access, and how proposed terms are explained. This guide is not a ranking or a promise of pricing, coverage, or access to a particular insurer.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="/quote" className="rounded-xl bg-[#f97316] px-7 py-4 text-center text-base font-bold text-white shadow-lg transition-colors hover:bg-orange-600">
@@ -163,10 +163,10 @@ export default function BestTruckInsuranceAgencyHubPage() {
             <div>
               <span className="eyebrow mb-4">By state</span>
               <h2 className="text-3xl font-black leading-tight text-[#2F261C] md:text-5xl">
-                Start with the states where search demand is strongest.
+                Compare agencies for your operating state.
               </h2>
               <p className="mt-5 text-base leading-8 text-[#5A4B3B]">
-                These guides target recommendation-style searches while staying useful: how to choose an agency, what documents matter, what mistakes to avoid, and when Supreme is a strong fit.
+                Review questions to ask, documents to prepare, and policy details to compare. A location page does not confirm licensing or an appointment with a particular insurer; verify those details with the professional handling your request.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">

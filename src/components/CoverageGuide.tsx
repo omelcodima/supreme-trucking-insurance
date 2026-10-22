@@ -28,6 +28,7 @@ export default function CoverageGuide({ title, sections, documents, related, sou
           {sources.length > 0 ? (
             <div className="mt-8 text-sm text-[#515c59]">
               <p className="font-semibold">Further reading</p>
+              <p className="mt-2">External sources are informational, not evidence of an insurer appointment, partnership, or product availability through Supreme.</p>
               <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-3">
                 {sources.map((source) => (
                   <li key={source.href}><a href={source.href} className="underline underline-offset-4" target="_blank" rel="noopener noreferrer">{source.label}</a></li>
@@ -51,7 +52,7 @@ export default function CoverageGuide({ title, sections, documents, related, sou
             </Link>
           </div>
           <nav aria-label="Related insurance coverage" className="md:border-l md:border-[#dce3df] md:pl-10">
-            <h2 className="text-2xl font-bold">Complete your coverage picture</h2>
+            <h2 className="text-2xl font-bold">Related coverage information</h2>
             <ul className="mt-5">
               {related.map((link) => (
                 <li key={link.href} className="border-b border-[#dce3df]">

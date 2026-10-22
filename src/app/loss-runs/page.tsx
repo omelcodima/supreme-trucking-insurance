@@ -2,7 +2,7 @@ import SubpageLayout from "@/components/SubpageLayout";
 
 export const metadata = {
   title: "Loss Run Assistance | Supreme Trucking Insurance",
-  description: "Need your loss runs? We help truckers request, read, and use loss run reports to get better insurance rates.",
+  description: "Prepare loss run reports for a trucking insurance review. Learn how to request records and explain claims history; pricing depends on underwriting.",
 };
 
 export default function LossRunsPage() {
@@ -15,7 +15,7 @@ export default function LossRunsPage() {
       sectionTitle="What are loss runs?"
       intro={[
         "Loss runs are reports from your current or former insurer showing claims history, paid amounts, and whether claims are open or closed.",
-        "A clean report helps rates. A messy one does not automatically ruin a file, but it does need to be handled properly. That is where Supreme helps.",
+        "Loss history is one underwriting factor, not an assurance of lower rates or acceptance. Accurate reports help a licensed professional understand the file and identify questions for review.",
       ]}
       listTitle="How we help"
       listItems={[
@@ -23,7 +23,7 @@ export default function LossRunsPage() {
         "Explain the report in plain English",
         "Spot issues that may need correction",
         "Present claims history more effectively",
-        "Find markets aligned with your profile",
+        "Prepare questions for a licensed professional's review",
         "Help improve your file over time",
       ]}
       faqs={[

@@ -32,13 +32,13 @@ export default function FleetPage() {
       ]}
       faqs={[
         { q: "What size fleet do you work with?", a: "We focus on fleets starting around 11 trucks, up to 25 trucks and more, where policy structure and renewal strategy start to matter more." },
-        { q: "Can you beat my current rate?", a: "A lower premium is not guaranteed. We request available market options and compare coverage, deductibles, and terms so you can make an informed decision." },
+        { q: "Can you beat my current rate?", a: "A lower premium is not guaranteed. Ask the licensed professional reviewing your request to compare any available terms, including coverage, deductibles, and exclusions. Insurer access and eligibility must be confirmed." },
         { q: "What if I add or remove trucks mid-term?", a: "Tell your agent before the change takes effect. We can request the appropriate endorsement and confirm the insurer's response; sending a request alone does not change coverage." },
         { q: "What helps a fleet submission?", a: "Prepare a current unit and driver schedule, available loss runs, your existing policy, annual mileage, garaging locations, commodities, and projected unit count. Include ELD, dash-cam, maintenance, and driver-training details for the carrier to review." },
       ]}
       primaryCtaLabel="Get your fleet quote"
-      ctaTitle="Let's shop your fleet coverage"
-      ctaDescription="Tell us about the fleet and we’ll shop the right markets with clear follow-up."
+      ctaTitle="Request a fleet insurance review"
+      ctaDescription="Tell us about the fleet for follow-up by a licensed professional. Available quotes and terms depend on authorized access and underwriting."
       ctaButtonLabel="Get a Free Quote"
       canonicalPath="/fleet"
       serviceType="Commercial Truck Fleet Insurance"

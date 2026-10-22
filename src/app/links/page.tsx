@@ -55,7 +55,7 @@ export default function LinksPage() {
             <BrandLogo />
           </div>
           <p className="mt-6 text-xs font-black uppercase tracking-[0.22em] text-[#f97316]">
-            Fast quotes • Multiple carriers • Trucking-focused
+            Quote requests • Licensed professional review • Trucking-focused
           </p>
           <h1 className="mt-4 text-4xl font-black leading-tight text-[#2F261C] md:text-5xl">
             Supreme Trucking Insurance quick links

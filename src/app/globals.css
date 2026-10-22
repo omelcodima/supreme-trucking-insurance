@@ -254,11 +254,6 @@ body {
 .hero-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; margin-top: 28px; }
 .hero-call { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 650; }
 .hero-call:hover { text-decoration: underline; }
-.hero-play { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; padding-block: 8px; font-size: 12px; color: #e6eee8; }
-.promo-dialog { position: fixed; inset: 0; margin: auto; width: min(900px, calc(100% - 32px)); max-height: 85dvh; background: #fff; color: var(--text-primary); border: 1px solid var(--border-soft); border-radius: 8px; overflow: auto; }
-.promo-dialog::backdrop { background: #101713ba; }
-.promo-dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px 8px 20px; font-size: 14px; font-weight: 650; }
-.promo-dialog iframe { display: block; width: 100%; aspect-ratio: 16/10; border: 0; }
 .market-band { border-bottom: 1px solid var(--border-soft); padding: 20px 0; text-align: center; }
 .market-band p { font-size: 11px; font-weight: 650; color: var(--text-subtle); text-transform: uppercase; }
 .market-heading-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; }
@@ -426,7 +421,6 @@ body {
   .hero-kicker { margin-bottom: 14px; }
   .home-hero-copy > p:not(.hero-kicker) { font-size: 15px; line-height: 1.65; margin-top: 18px; }
   .hero-buttons { gap: 16px; margin-top: 22px; }
-  .hero-play { margin-top: 16px; }
   .market-list { gap: 32px; padding-right: 32px; }
   .market-logo { width: 144px; height: 56px; }
   .market-logo img { width: 144px; height: 48px; }
@@ -693,7 +687,6 @@ body:has(.analytics-consent) :is(.mobile-actions, .indication-shortcut) { visibi
 .home-hero--cinematic .hero-kicker { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
 .home-hero--cinematic .home-hero-copy > p.hero-service-area { font-size: 12px; line-height: 1.6; color: #d9dfdf; margin-top: 20px; max-width: 410px; }
 .home-hero--cinematic .hero-buttons { gap: 18px; }
-.home-hero--cinematic .hero-play { margin-top: 17px; }
 .hero-operation-strip { background: #f8f5ef; border-bottom: 1px solid var(--border-soft); }
 .hero-operation-strip > div { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; }
 .hero-operation-strip span { font-size: 13px; color: var(--text-muted); }

@@ -37,14 +37,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Dump trucks",
     title: "Dump truck insurance for haulers who work the site, not the interstate.",
     description:
-      "Aggregate, asphalt, demolition, and construction hauling carry different risks than freight — and different markets. We place dump trucks with carriers that write local and intrastate work.",
+      "Aggregate, asphalt, demolition, and construction hauling have distinct insurance needs. Describe your local or intrastate operation for review by a licensed insurance professional.",
     image: "/images/hero-premium.jpg",
     sectionTitle: "Built for site work",
     intro: [
       "Dump trucks spend their day backing, tipping, and loading in places a freight truck never sees: quarries, job sites, plants, and residential streets. Underwriters price that exposure — rollover on uneven ground, overloads, backing incidents, and the wear on brakes and tires — and the markets that understand it are a shorter list.",
-      "We help you present the operation clearly: radius, what you haul, whether you work for a contractor or on your own authority, and the sites you serve. That is what turns a dump truck submission into real quotes.",
+      "We help organize your request: radius, what you haul, whether you work for a contractor or on your own authority, and the sites you serve. A complete request supports review but does not assure a quote or acceptance.",
     ],
-    listTitle: "Coverage we arrange for dump trucks",
+    listTitle: "Coverage to discuss for dump trucks",
     listItems: [
       "Auto liability at the limits your contracts and filings require",
       "Physical damage — collision and comprehensive on the truck and dump body",
@@ -61,7 +61,7 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "Do I need cargo insurance on a dump truck?",
-        a: "Often not for your own aggregate loads, but many contractors and brokers require a cargo limit before they will dispatch you. We check the contract and quote it only if it is needed.",
+        a: "Cargo needs depend on ownership of the load, the operation, and your contracts. Ask the licensed professional reviewing your request about applicable requirements and any available terms; do not assume aggregate hauling is automatically covered or exempt.",
       },
       {
         q: "Why is dump truck insurance priced differently than freight?",
@@ -69,15 +69,15 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "I am new to dump truck hauling. Can I get covered?",
-        a: "Usually yes. New ventures have fewer markets and higher rates in the first year. Clean MVRs, a realistic radius, and a described customer base help a new dump truck operation get quoted.",
+        a: "You can submit a request for review. Availability and pricing depend on the operation, state, driver history, and underwriting. A new business is not assured of a quote or acceptance.",
       },
       {
         q: "Does intrastate vs. interstate matter?",
-        a: "Yes. Most dump work is intrastate and local, which changes the filings, the minimum limits, and the carriers that will quote. We confirm which filings your state and your contracts require.",
+        a: "You can submit a request for local work. Describe the state, radius, loads, and contracts so a licensed professional can review requirements and possible options. A request does not assure insurer access or acceptance.",
       },
     ],
     ctaTitle: "Get a dump truck quote",
-    ctaDescription: "Tell us the truck, the radius, and what you haul. We will tell you which markets fit and what they need.",
+    ctaDescription: "Tell us the truck, the radius, and what you haul so a licensed professional can review your request and possible next steps.",
     carrierlensQuery: "dump truck",
   },
   {
@@ -89,14 +89,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Hotshot",
     title: "Hotshot insurance for the pickup and the trailer behind it.",
     description:
-      "Hotshot (hot shot) operators run a heavy-duty pickup with a gooseneck or flatbed trailer — often under CDL weight, often on their own authority. We quote the whole rig, not just the truck.",
+      "Hotshot operators use pickups and trailers for a range of freight. Include both vehicles, the cargo, and your operating arrangement when requesting an insurance review.",
     image: "/images/owner-operator-premium.jpg",
     sectionTitle: "Commercial coverage for a pickup that hauls for hire",
     intro: [
       "Hotshot trucking looks like a pickup to a personal-lines company and like a freight truck to the FMCSA. Once you haul for hire across state lines you need operating authority, primary liability at commercial limits, and usually the cargo limit your brokers ask for — and a personal auto policy will not respond.",
-      "We work with markets that write hotshot: Class 3 to 5 pickups, gooseneck and flatbed trailers, expedited and LTL freight, oilfield and equipment moves. The submission covers the truck, the trailer, the freight, and where you run.",
+      "A hotshot submission should describe the pickup, gooseneck or flatbed trailer, expedited or LTL freight, equipment moves, and routes. A licensed professional can assess which options, if any, are available through their authorized channels.",
     ],
-    listTitle: "Coverage we arrange for hotshot operators",
+    listTitle: "Coverage to discuss for hotshot operators",
     listItems: [
       "Primary auto liability — most brokers ask for $1,000,000 even when the federal minimum is lower",
       "Motor truck cargo, typically $100,000 for broker load boards",
@@ -117,19 +117,19 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "How much liability do brokers require for hotshot?",
-        a: "Most brokers and load boards ask for $1,000,000 in auto liability and $100,000 in cargo, even though the federal minimum for general freight is lower. We quote to what your brokers actually require.",
+        a: "Brokers may request limits such as $1,000,000 in auto liability and $100,000 in cargo, but contracts and legal requirements vary. Provide the actual requirements for review; proposed limits do not assure contract acceptance or coverage for a loss.",
       },
       {
         q: "Will my personal auto policy cover the pickup?",
-        a: "Not for for-hire hauling. Personal policies exclude commercial use, and a claim while loaded can be denied. A commercial auto policy written for hotshot covers the truck, the trailer, and the freight.",
+        a: "Personal auto policies may exclude for-hire hauling. Ask a licensed professional to review your use and policy terms. Commercial auto, physical damage, and motor truck cargo address different exposures; one policy label does not establish coverage for all three.",
       },
       {
         q: "Can a brand-new hotshot authority get insurance?",
-        a: "Yes. New ventures have fewer markets and pay more in the first year; a clean MVR and a realistic plan for freight and radius make the difference. Rates usually improve at the first renewal.",
+        a: "Some insurers consider new ventures, subject to their underwriting criteria. Driver records, freight, radius, and other details affect the review. Neither acceptance nor a lower renewal premium is assured.",
       },
     ],
     ctaTitle: "Get a hotshot quote",
-    ctaDescription: "Send us the truck, the trailer, and the freight you plan to haul. We will quote the rig to what your brokers require.",
+    ctaDescription: "Send the truck, trailer, planned freight, and broker requirements for a quote-request review. Available terms depend on underwriting.",
     carrierlensQuery: "hotshot",
   },
   {
@@ -141,14 +141,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Box trucks",
     title: "Box truck insurance for delivery, moving, and final-mile work.",
     description:
-      "Straight trucks do local, repetitive work — many stops, tight streets, loading docks, and contracts with their own insurance requirements. We match the policy to the work and the contract.",
+      "Straight trucks encounter frequent stops, tight streets, and loading docks. Include your contracts and delivery work in a request for review; policy terms and acceptance require insurer approval.",
     image: "/images/highway-premium.jpg",
     sectionTitle: "Coverage shaped by the route, not the mileage",
     intro: [
       "A box truck's risk is the day: dozens of stops, backing into docks, residential streets, and drivers who are in and out of the cab. Underwriters look at the radius, the number of stops, the freight, and whether you run under contract for a retailer, a carrier, or a moving company.",
-      "We quote box trucks from 16 to 26 feet — non-CDL straight trucks and CDL units — for owner-operators and small fleets, and we read the contract first so the certificate matches what the customer requires.",
+      "For a box truck request, include vehicle size, driver qualifications, delivery routes, and customer contracts. Ask the servicing professional to review requested certificate wording against the actual policy; a certificate cannot add coverage.",
     ],
-    listTitle: "Coverage we arrange for box trucks",
+    listTitle: "Coverage to discuss for box trucks",
     listItems: [
       "Auto liability at the limit your contracts require",
       "Motor truck cargo, including household goods where you move residential customers",
@@ -169,19 +169,19 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "What does a delivery contract usually require?",
-        a: "Commonly $1,000,000 auto liability, cargo, and general liability, with the customer named as additional insured or certificate holder. Send us the contract and we will quote to it.",
+        a: "Contracts may specify liability, cargo, general liability, or additional-insured requirements. Send the actual contract for licensed professional review. A certificate holder is not automatically an additional insured, and a certificate cannot add coverage absent from the policy.",
       },
       {
         q: "Does moving household goods need different coverage?",
-        a: "Yes. Household goods cargo has its own valuation rules and exclusions, and interstate movers need specific authority. We arrange cargo that matches how you move and what you are liable for.",
+        a: "Household goods moving has distinct valuation rules, exclusions, and authority requirements. Describe the work and ask a licensed professional to review the applicable cargo forms and contracts. Availability is subject to underwriting.",
       },
       {
         q: "Can I insure one box truck without a fleet?",
-        a: "Yes. Single-unit box trucks are one of the most common policies we write, for new ventures and established operators alike.",
+        a: "You can request review for a single box truck. The business does not need to be a fleet to submit a request, but an insurer must determine eligibility and terms.",
       },
     ],
     ctaTitle: "Get a box truck quote",
-    ctaDescription: "Tell us the truck, the route, and the contract you are working under. We quote to the certificate the customer wants.",
+    ctaDescription: "Tell us the truck, route, and contract requirements for review. Coverage and certificate wording must be confirmed by the authorized professional handling the policy.",
     carrierlensQuery: "box truck",
   },
   {
@@ -191,16 +191,16 @@ export const classPages: ClassPage[] = [
     metaDescription:
       "Explore reefer truck insurance for refrigerated freight. Discuss cargo, breakdown, spoilage, liability, and physical damage options with Supreme.",
     eyebrow: "Refrigerated freight",
-    title: "Reefer truck insurance that covers the load when the unit fails.",
+    title: "Reefer truck insurance for temperature-controlled freight.",
     description:
-      "Refrigerated freight is the cargo that can spoil in your trailer while nothing else goes wrong. The right cargo policy pays for that — the wrong one excludes it.",
+      "Refrigerated freight can spoil after equipment failure or a temperature error. Whether a loss is covered depends on the cargo policy, endorsements, exclusions, and facts of the claim.",
     image: "/images/hero-premium.jpg",
     sectionTitle: "Cargo coverage written for temperature-controlled loads",
     intro: [
       "Produce, meat, dairy, frozen goods, and pharmaceuticals all ride on a refrigeration unit that can fail, run out of fuel, or be set to the wrong temperature. Standard motor truck cargo often excludes spoilage unless reefer breakdown coverage is added, and shippers will ask for it by name.",
-      "We place reefer operations with carriers that write temperature-controlled freight, and we check the cargo form for what is actually covered: mechanical breakdown, driver error on temperature, contamination, and the high-value theft exposure of a loaded reefer.",
+      "Include temperature-controlled freight in your request and ask the licensed professional handling it about mechanical breakdown, temperature-setting errors, contamination, and theft. These exposures may have different conditions, exclusions, and limits.",
     ],
-    listTitle: "Coverage we arrange for reefer operations",
+    listTitle: "Coverage to discuss for reefer operations",
     listItems: [
       "Motor truck cargo with reefer breakdown / spoilage coverage",
       "Cargo limits sized to your loads — often $100,000 to $250,000 for refrigerated freight",
@@ -217,23 +217,23 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "Is spoilage covered by regular cargo insurance?",
-        a: "Frequently not. Many cargo forms exclude temperature-related loss unless reefer breakdown coverage is endorsed. We confirm it is on the policy before you haul refrigerated loads.",
+        a: "Not necessarily. Cargo forms may exclude temperature-related loss or require a specific endorsement. Check the actual policy and ask the servicing agent or insurer to confirm the terms before relying on coverage.",
       },
       {
         q: "Does reefer breakdown cover driver error?",
-        a: "It depends on the form. Some cover a unit that fails mechanically but exclude a unit set to the wrong temperature or never turned on. We read the wording and tell you what you have.",
+        a: "It depends on the actual form, endorsements, exclusions, and facts of the loss. Mechanical failure, incorrect settings, and failure to operate the unit may be treated differently. Ask the servicing professional or insurer to explain the applicable terms.",
       },
       {
         q: "Why do carriers ask about the age of the reefer trailer?",
-        a: "Older units fail more often, and some markets limit reefer breakdown to trailers under a certain age. Maintenance records and a newer unit widen your options.",
+        a: "Insurers may consider equipment age and maintenance, and some forms restrict reefer breakdown by unit age. Maintenance records support the review but do not assure eligibility or broader coverage.",
       },
       {
         q: "What cargo limit do I need for reefer freight?",
-        a: "Most brokers require at least $100,000; high-value loads such as meat or pharmaceuticals often need $250,000 or more. We size the limit to the loads you actually haul.",
+        a: "Provide the actual contract requirements and your typical and maximum load values for review. The limit alone does not establish that a commodity or cause of loss is covered; available terms depend on underwriting and policy wording.",
       },
     ],
     ctaTitle: "Get a reefer quote",
-    ctaDescription: "Tell us what you haul, the trailer and unit, and your typical load value. We quote cargo that actually covers spoilage.",
+    ctaDescription: "Include your freight, trailer, refrigeration unit, and load values. Ask for a review of spoilage conditions and exclusions; a request does not establish coverage.",
     carrierlensQuery: "reefer",
   },
   {
@@ -245,14 +245,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Hazardous materials",
     title: "Hazmat trucking insurance at the limits the federal rules require.",
     description:
-      "Hazardous materials haulers carry higher federal minimums, pollution exposure, and a short list of willing carriers. We know which markets write hazmat and what they need to see.",
+      "Hazardous materials hauling can involve additional financial-responsibility requirements and pollution exposures. Eligibility and limits require review of the materials, operation, and applicable rules.",
     image: "/images/highway-premium.jpg",
     sectionTitle: "Higher limits, fewer markets, more documentation",
     intro: [
       "Federal financial responsibility rules set higher minimum liability for hazardous materials — $1,000,000 for many hazmat and hazardous-waste loads and $5,000,000 for the most dangerous materials in bulk — and the MCS-90 endorsement puts the insurer on the hook for the public. Most trucking markets simply do not write it.",
-      "We work with carriers that do: fuel and petroleum, chemicals, gases, hazardous waste, and other regulated classes. The submission includes your hazmat classes, safety permit, driver endorsements, and loss history, because that is what the underwriter decides on.",
+      "A request should identify fuel, chemicals, gases, hazardous waste, or other materials, plus permits, driver endorsements, and loss history. A licensed professional must confirm whether an authorized placement option is available.",
     ],
-    listTitle: "Coverage we arrange for hazmat carriers",
+    listTitle: "Coverage to discuss for hazmat carriers",
     listItems: [
       "Auto liability at $1,000,000 or $5,000,000 to match your hazmat classes and filings",
       "MCS-90 endorsement and federal filings",
@@ -277,15 +277,15 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "Why is hazmat insurance hard to get?",
-        a: "Fewer carriers write it, the limits are high, and a single loss can be severe. A clean safety record, current permits, endorsed drivers, and good documentation are what get a hazmat account quoted.",
+        a: "Specialized exposures and potential loss severity can restrict insurer appetite. Safety records, permits, driver qualifications, and documentation inform underwriting; they do not assure a quote or acceptance.",
       },
       {
-        q: "Do you insure hazardous waste haulers?",
-        a: "Yes, with markets that write hazardous and industrial waste. Waste haulers also need to show their EPA and state registrations and the facilities they serve.",
+        q: "Can a hazardous waste hauler submit a request?",
+        a: "You may submit details for review, including materials, EPA and state registrations, and facilities served. This website does not confirm insurer access, eligibility, or coverage for a hazardous waste operation.",
       },
     ],
     ctaTitle: "Get a hazmat quote",
-    ctaDescription: "Send us your hazmat classes, permits, and equipment list. We will tell you which markets will look at the account and at what limits.",
+    ctaDescription: "Send your hazmat classes, permits, and equipment list for a licensed professional to review. Available options and limits depend on underwriting and authorized access.",
     carrierlensQuery: "hazmat",
   },
   {
@@ -297,14 +297,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Towing & recovery",
     title: "Tow truck insurance for the vehicle on the hook and the one in your yard.",
     description:
-      "Towing has two exposures a freight policy never sees — the customer's vehicle while you tow it, and the customer's vehicle while you store it. We write both, plus the truck.",
+      "Towing and vehicle storage create different exposures from hauling freight. Ask about on-hook towing, garagekeepers, and coverage for the tow truck itself.",
     image: "/images/owner-operator-premium.jpg",
     sectionTitle: "Coverage for other people's vehicles",
     intro: [
-      "A tow operator is liable for other people's vehicles: on the hook, on the bed, and on the lot. On-hook towing coverage pays for the vehicle in tow; garagekeepers pays for vehicles stored at your yard. Neither is part of ordinary trucking insurance, and motor clubs, police rotation lists, and repo clients each have their own certificate requirements.",
-      "We work with markets that write towing and recovery — light-duty rollbacks, heavy wreckers, roadside assistance, and repossession — and we build the policy around the contracts you hold.",
+      "On-hook towing and garagekeepers coverage may address different losses involving customer vehicles. Limits, exclusions, deductibles, and legal-liability or direct-coverage terms matter. Motor clubs, rotation lists, and repossession contracts may have additional requirements.",
+      "Describe light-duty rollbacks, heavy wreckers, roadside assistance, storage, and repossession work in your request. The licensed professional reviewing it must confirm available terms through authorized channels.",
     ],
-    listTitle: "Coverage we arrange for tow operators",
+    listTitle: "Coverage to discuss for tow operators",
     listItems: [
       "Auto liability for the tow trucks",
       "On-hook towing coverage for customer vehicles in tow",
@@ -325,19 +325,19 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "Do I need garagekeepers if I store vehicles overnight?",
-        a: "Yes, if you want the vehicles in your yard covered for fire, theft, vandalism, or collision while stored. Garagekeepers is the coverage for that, and rotation and repo contracts usually require it.",
+        a: "Garagekeepers coverage may be relevant to customer vehicles stored in your care. Review covered causes of loss, exclusions, deductibles, limits, and contract requirements with a licensed professional; storage alone does not establish coverage.",
       },
       {
         q: "Can you insure a new towing business?",
-        a: "Yes. New tow operations have fewer markets, and the contracts you plan to hold, your yard, and your driving record decide the options. Rates usually improve after the first clean year.",
+        a: "A new towing business can submit a request. Contracts, storage arrangements, driver history, state, and insurer criteria affect eligibility. Acceptance and future premium reductions are not assured.",
       },
       {
         q: "Does repo work change the policy?",
-        a: "It does. Repossession carries its own liability exposures and some carriers exclude it. Tell us before you take repo assignments so the policy is written to include it.",
+        a: "Repossession can create additional exposures and may be excluded. Disclose it before taking assignments and ask the servicing professional or insurer whether the policy covers the work; an endorsement may be required or unavailable.",
       },
     ],
     ctaTitle: "Get a tow truck quote",
-    ctaDescription: "Tell us the trucks, the kinds of towing you do, and the contracts you hold. We quote on-hook and garagekeepers alongside the truck.",
+    ctaDescription: "Tell us the trucks, towing work, storage arrangements, and contracts so your request can include questions about on-hook and garagekeepers coverage.",
     carrierlensQuery: "towing",
   },
   {
@@ -349,14 +349,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Non-emergency medical transportation",
     title: "NEMT insurance for wheelchair vans, ambulettes, and medical transport fleets.",
     description:
-      "Non-emergency medical transportation is passenger work with contracts that dictate the limits. We place NEMT operators with the carriers that write it and match the certificate to the broker.",
+      "Non-emergency medical transportation involves passenger exposures and contract-specific insurance requirements. A request requires review before any insurer access, terms, or certificate can be confirmed.",
     image: "/images/hero-premium.jpg",
     sectionTitle: "Passenger coverage written to the contract",
     intro: [
       "NEMT operators carry patients — wheelchair, stretcher, and ambulatory — under contracts with transportation brokers, Medicaid programs, hospitals, and dialysis centers. Those contracts set the insurance: commonly $1,000,000 to $1,500,000 in auto liability, general liability, and specific endorsements, before you can accept a single trip.",
-      "Few auto markets write passenger transportation, and fewer write medical transport. We know which do, what they charge, and what they need to see: vehicles and lifts, driver screening, trip volume, and the contracts you hold.",
+      "Passenger transportation may require specialized underwriting. Include vehicles and lifts, driver screening, trip volume, and contracts. Availability and pricing are determined during review, not by this website.",
     ],
-    listTitle: "Coverage we arrange for NEMT operators",
+    listTitle: "Coverage to discuss for NEMT operators",
     listItems: [
       "Commercial auto liability at the limit your broker or state program requires",
       "General liability, including patient loading and unloading",
@@ -373,7 +373,7 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "How much liability does NEMT need?",
-        a: "Most brokers and state Medicaid programs require $1,000,000 in auto liability, and some require $1,500,000 or more. General liability is usually required as well. We quote to the contract you are trying to sign.",
+        a: "Requirements vary by state, passenger capacity, operation, and contract. Provide the actual broker or program requirements for licensed professional review. Neither a quote request nor a certificate assures enrollment or contract acceptance.",
       },
       {
         q: "Is NEMT the same as ambulance insurance?",
@@ -381,15 +381,15 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "Can a new NEMT company get insured?",
-        a: "Yes. New NEMT operations are placed regularly, with fewer markets and higher first-year rates. Clean driver records, a lift-equipped vehicle in good condition, and a signed or pending broker contract help.",
+        a: "A new NEMT business can request review, but acceptance is not assured. Insurers may consider drivers, vehicle and lift condition, contracts, state, and the services provided.",
       },
       {
         q: "What does the broker want on the certificate?",
-        a: "Usually the broker named as additional insured and certificate holder, the required limits, and sometimes endorsements such as waiver of subrogation. Send us the requirements and we handle the certificate.",
+        a: "Requirements may include specified limits, certificate-holder information, additional insured status, or endorsements. Send the written requirements to the servicing professional. A certificate reflects existing coverage and cannot create an endorsement or assure contract acceptance.",
       },
     ],
     ctaTitle: "Get an NEMT quote",
-    ctaDescription: "Send us the vehicles and the broker's insurance requirements. We quote to the certificate they need to see.",
+    ctaDescription: "Send the vehicles and written broker requirements for review. Eligibility, policy terms, and certificate wording must be confirmed by the authorized professional handling the policy.",
     carrierlensQuery: "NEMT",
   },
   {
@@ -397,18 +397,18 @@ export const classPages: ClassPage[] = [
     name: "Semi truck insurance",
     metaTitle: "Semi Truck Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Semi truck insurance for owner-operators and fleets: liability, physical damage, cargo, and bobtail for 18-wheelers. Multiple trucking markets, fast quotes.",
+      "Review semi truck insurance needs for owner-operators and fleets: liability, physical damage, cargo, and leased-operator coverage. Request an agent review.",
     eyebrow: "Semi trucks & 18-wheelers",
     title: "Semi truck insurance for the tractor, the trailer, and the freight.",
     description:
-      "Whether you run one 18-wheeler on your own authority or a fleet of tractors, the policy has to match the freight, the lanes, and the filings. We shop trucking markets that write semis.",
+      "Whether you run one tractor or a fleet, include the freight, routes, and filing requirements in your request. Available coverage depends on the operation and underwriting.",
     image: "/images/highway-premium.jpg",
-    sectionTitle: "The four policies every semi runs on",
+    sectionTitle: "Coverage considerations for a semi-truck operation",
     intro: [
       "A semi truck policy is a stack: primary auto liability at the limit the FMCSA and your shippers require, physical damage on a tractor that may be worth more than the house, motor truck cargo for what is on the trailer, and bobtail or non-trucking liability for the miles you run without a load. Underwriters price the stack on the driver's record, the radius, the freight, and the loss history.",
-      "We place semi trucks for owner-operators, leased-on drivers, and fleets — new authorities included — with carriers that write over-the-road and regional tractor-trailer operations, and we build the submission so the underwriter sees a clean file.",
+      "Owner-operators, leased-on drivers, fleets, and new authorities can submit details for review. The licensed professional handling the request must confirm insurer access, eligibility, and proposed terms; submission alone does not establish any of these.",
     ],
-    listTitle: "Coverage we arrange for semi trucks",
+    listTitle: "Coverage to discuss for semi trucks",
     listItems: [
       "Primary auto liability — $750,000 is the federal minimum for general freight; most brokers and shippers require $1,000,000",
       "Physical damage — collision and comprehensive on the tractor and trailer, at actual cash value or a stated amount",
@@ -425,7 +425,7 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "How much is semi truck insurance?",
-        a: "It depends on the driver's record, years of authority, radius, freight, equipment values, and loss history more than on the truck itself. New authorities and drivers with violations pay the most; leased-on operators who only need bobtail and physical damage pay far less. We quote from multiple markets so you can compare real numbers for your operation.",
+        a: "Premiums depend on driver history, years of authority, radius, freight, equipment values, limits, and losses. Request an individual review. The website does not provide a live carrier quote or assure a particular price or number of options.",
       },
       {
         q: "What is the minimum insurance for a semi truck?",
@@ -433,15 +433,15 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "Does a leased-on owner-operator need their own policy?",
-        a: "Usually the motor carrier covers liability while you are under dispatch. You still need bobtail or non-trucking liability for the rest of the time and physical damage on your own tractor — the carrier's policy does not pay for your truck.",
+        a: "Review the lease, the motor carrier's policy, and how the tractor is used with a licensed professional. Liability, non-trucking liability, bobtail, and physical damage address different exposures. Dispatch status alone does not determine coverage.",
       },
       {
         q: "Can a new authority get semi truck insurance?",
-        a: "Yes. New authorities have fewer markets and higher first-year premiums. A clean MVR, at least two years of CDL experience, a newer tractor, and a clear description of the freight and lanes get a new authority quoted.",
+        a: "Some insurers consider new authorities. Driver experience, equipment, freight, routes, state, and underwriting criteria affect eligibility. No particular combination of details assures a quote or policy.",
       },
     ],
     ctaTitle: "Get a semi truck quote",
-    ctaDescription: "Send us the tractor, the trailer, the freight, and the driver's record. We quote the whole stack from trucking markets.",
+    ctaDescription: "Send the tractor, trailer, freight, and driver information for a review of your requested coverage. Options depend on underwriting and authorized placement channels.",
     carrierlensQuery: "trucking",
   },
   {
@@ -449,7 +449,7 @@ export const classPages: ClassPage[] = [
     name: "Bobtail & non-trucking liability",
     metaTitle: "Bobtail Insurance | Supreme Trucking Insurance",
     metaDescription:
-      "Bobtail and non-trucking liability insurance for owner-operators leased to a carrier: what each covers, what your lease requires, and how to get it quoted fast.",
+      "Review bobtail and non-trucking liability for leased owner-operators: policy differences, lease requirements, and information to prepare for an agent review.",
     eyebrow: "Bobtail & non-trucking liability",
     title: "Bobtail and non-trucking liability insurance",
     description:
@@ -460,7 +460,7 @@ export const classPages: ClassPage[] = [
       "Bobtail generally describes liability coverage for a tractor operated without a trailer. Non-trucking liability generally addresses personal, non-business use. They are not the same coverage: an empty truck or an off-dispatch trip can still serve a business purpose.",
       "Send Supreme the lease and explain your actual trips, including travel between loads and for maintenance. We help review the required coverage and the available policy forms rather than assuming the carrier's policy stops at a particular dispatch status.",
     ],
-    listTitle: "Coverage we arrange for leased-on owner-operators",
+    listTitle: "Coverage to discuss for leased-on owner-operators",
     listItems: [
       "Bobtail liability — driving the tractor without a trailer",
       "Non-trucking liability for eligible personal, non-business use",
@@ -485,7 +485,7 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "How much does bobtail insurance cost?",
-        a: "Bobtail and non-trucking liability are among the least expensive trucking coverages because the exposure is limited. The tractor's value, the driver's record, and the limits the lease requires set the premium; we quote it together with the physical damage so you see the whole cost.",
+        a: "Premiums depend on the actual use, driver record, limits, insurer, and policy terms. Physical damage is a separate consideration. Ask for an itemized review; no fixed price or savings is promised.",
       },
       {
         q: "I run under my own authority — do I need bobtail?",
@@ -493,7 +493,7 @@ export const classPages: ClassPage[] = [
       },
     ],
     ctaTitle: "Get a bobtail quote",
-    ctaDescription: "Send us the lease and the tractor. We quote bobtail, non-trucking liability, and physical damage together.",
+    ctaDescription: "Send your lease and tractor details for a review of non-trucking liability, bobtail, and physical damage needs, subject to available policy terms.",
     carrierlensQuery: "trucking",
   },
   {
@@ -510,9 +510,9 @@ export const classPages: ClassPage[] = [
     sectionTitle: "Why car haulers are a class of their own",
     intro: [
       "The cargo on a car hauler is high-value, exposed, and handled at every stop: loading damage, chipped windshields, hail on an open trailer, and the occasional total loss of a vehicle that came off a ramp. Standard motor truck cargo forms often limit or exclude vehicles in transit, and dealers, auctions, and brokers require a specific per-vehicle and per-load limit before they hand over the keys.",
-      "We work with the markets that write auto haulers — single-car hotshot rigs, wedge trailers, and multi-car stingers — and build the submission around the equipment, the lanes, and the contracts you haul under.",
+      "Describe the single-car rig, wedge trailer, or multi-car transporter, plus lanes and contracts. Your request can then be reviewed by a licensed professional for available options through authorized channels.",
     ],
-    listTitle: "Coverage we arrange for car haulers",
+    listTitle: "Coverage to discuss for car haulers",
     listItems: [
       "Motor truck cargo written for vehicles in transit, with per-vehicle and per-load limits",
       "Auto liability at the limits your brokers and auction contracts require",
@@ -529,15 +529,15 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "What cargo limit does a car hauler need?",
-        a: "It depends on what you carry: a single luxury vehicle can exceed the limit that covers eight economy cars. Brokers and auctions commonly require $100,000 to $250,000 or more per load, and some want a per-vehicle limit. We size the limit to your typical and your highest-value loads.",
+        a: "Discuss both per-vehicle and per-load values, including your highest-value loads and any contract requirements. A stated limit is not a promise that every vehicle or loss is covered; review valuation, exclusions, and endorsements in the actual policy.",
       },
       {
         q: "Does regular cargo insurance cover vehicles I haul?",
-        a: "Frequently not, or only with sub-limits and exclusions for loading damage, hail, or theft. Auto hauler cargo is a specific form. We confirm the wording before you accept loads.",
+        a: "Policy forms may restrict vehicles in transit or apply sublimits and exclusions for loading, hail, or theft. Review the actual cargo form with the servicing professional before relying on coverage.",
       },
       {
         q: "Can I start car hauling with a pickup and a wedge trailer?",
-        a: "Yes — this is the common hotshot auto-hauler setup. You still need operating authority for interstate for-hire work, liability at commercial limits, and cargo written for vehicles. Markets exist for new entrants with clean records.",
+        a: "You can submit that setup for review. Include the pickup, trailer, vehicle values, radius, and planned operations. Applicable authority, insurance requirements, insurer access, and underwriting eligibility must be confirmed; a clean record does not assure acceptance.",
       },
       {
         q: "Why is car hauler insurance harder to place?",
@@ -545,7 +545,7 @@ export const classPages: ClassPage[] = [
       },
     ],
     ctaTitle: "Get a car hauler quote",
-    ctaDescription: "Tell us the trailer, the typical load values, and the lanes. We match you with markets that write auto transport.",
+    ctaDescription: "Tell us the trailer, load values, and lanes for an auto-transport insurance request. A licensed professional must confirm available options and terms.",
     carrierlensQuery: "auto hauler",
   },
   {
@@ -557,14 +557,14 @@ export const classPages: ClassPage[] = [
     eyebrow: "Cargo vans & Sprinters",
     title: "Cargo van insurance for expediting, courier, and delivery work.",
     description:
-      "A Sprinter or Transit hauling for hire is a commercial truck to the FMCSA and to your customers. We write the van, the freight, and the certificate the contract asks for.",
+      "For-hire van work can have commercial insurance and contract requirements. Describe the van, freight, routes, and contracts for a licensed professional to review.",
     image: "/images/highway-premium.jpg",
     sectionTitle: "Commercial coverage for a van that works for hire",
     intro: [
       "Cargo vans and Sprinters do expedited freight, medical courier runs, final-mile delivery, and contract routes for carriers and retailers. The moment the van hauls for pay, personal auto is out, and most contracts ask for $1,000,000 in liability, a cargo limit, and sometimes general liability — before the first load.",
-      "We place cargo vans for owner-operators and small fleets: expediters on load boards, couriers, delivery contractors, and leased-on van operators. The submission covers the van, the freight, the radius, and the contract.",
+      "Expediters, couriers, delivery contractors, and leased-on van operators can include their vehicle, freight, radius, and contract details in a request. Availability depends on the operation, state, and underwriting; no specific insurer access is represented.",
     ],
-    listTitle: "Coverage we arrange for cargo vans",
+    listTitle: "Coverage to discuss for cargo vans",
     listItems: [
       "Commercial auto liability at contract limits",
       "Motor truck cargo for expedited freight and packages",
@@ -585,19 +585,19 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "What do expedite carriers require from a leased-on van?",
-        a: "Usually physical damage on your van, non-trucking liability, and occupational accident coverage, with the carrier providing liability and cargo under dispatch. Check the lease; we quote to it.",
+        a: "Ask a licensed professional to review the lease and the motor carrier's actual policies. Physical damage, liability, cargo, and occupational accident needs depend on that arrangement and your use of the van; do not assume coverage from dispatch status alone.",
       },
       {
         q: "How much cargo coverage does a courier need?",
-        a: "Medical and pharmaceutical couriers and expediters commonly need $100,000; some contracts ask for less and some for more. We match the limit to your contracts rather than a default.",
+        a: "Requirements depend on the contracts, commodities, and load values. Provide those details for licensed professional review; a requested limit does not establish that specialized freight or a particular loss is covered.",
       },
       {
         q: "Is a cargo van cheaper to insure than a box truck?",
-        a: "Usually, because the vehicle value and the loads are smaller, but the driver's record, the radius, and the contract limits matter more than the vehicle. We quote the van from markets that write light commercial vehicles for hire.",
+        a: "Not necessarily. Vehicle value, driver history, freight, radius, limits, and insurer criteria affect the premium. Compare actual terms for your operation rather than assuming a van will cost less.",
       },
     ],
     ctaTitle: "Get a cargo van quote",
-    ctaDescription: "Send us the van, the work you do, and any contract requirements. We quote the van as the commercial vehicle it is.",
+    ctaDescription: "Send your van, work description, and contract requirements for review. A quote or coverage is not assured by submitting the request.",
     carrierlensQuery: "delivery",
   },
   {
@@ -609,17 +609,17 @@ export const classPages: ClassPage[] = [
     eyebrow: "Guide",
     title: "The MCS-90 endorsement: what it is and what it actually covers.",
     description:
-      "The MCS-90 is the federal endorsement on your liability policy that promises the public will be paid — even when your policy would not. Here is what that means for your premium and your risk.",
+      "The MCS-90 addresses specified public-liability obligations under federal financial-responsibility rules. It is not a promise that every claim is covered or paid.",
     image: "/images/highway-premium.jpg",
     sectionTitle: "What the MCS-90 does",
     intro: [
-      "Federal rules (49 CFR Part 387) require for-hire motor carriers to prove financial responsibility. The MCS-90 endorsement attached to your auto liability policy is how the insurer certifies it: if a member of the public is injured or their property damaged by your operation and the policy would otherwise not pay — an excluded vehicle, a driver not on the schedule, a lapsed premium — the insurer pays up to the federal minimum anyway, and then has the right to recover that money from you.",
-      "It is a guarantee to the public, not extra coverage for you. The limits it certifies are $750,000 for general freight, $1,000,000 for oil and most hazardous materials, and $5,000,000 for the highest-hazard materials in bulk. Your BMC-91 or BMC-91X filing with the FMCSA tells the government the endorsement exists; the endorsement itself sits on the policy.",
+      "The MCS-90 endorsement concerns qualifying final judgments for public liability from negligence involving operations subject to federal financial-responsibility requirements. Its obligations, limits, exclusions, and reimbursement provisions depend on the endorsement and applicable law. It is not a substitute for reviewing your policy.",
+      "The MCS-90 is an endorsement, while BMC-91 or BMC-91X is an insurer filing used as evidence of financial responsibility. Required limits vary with the operation and materials hauled. Ask the authorized professional handling your policy to confirm the requirements and documents that apply.",
     ],
     listTitle: "What the MCS-90 is — and is not",
     listItems: [
       "Required on the liability policy of every for-hire interstate carrier subject to FMCSA financial-responsibility rules",
-      "Pays the public up to the certified limit even when the policy has an exclusion or lapse that would otherwise apply",
+      "Addresses certain qualifying final judgments, subject to the endorsement's conditions and limits; not every loss or judgment qualifies",
       "Gives the insurer a right of reimbursement from you for anything it paid that the policy did not cover",
       "Does not cover your own truck, your cargo, or your drivers' injuries",
       "Does not raise your policy limits — it certifies a minimum, and most brokers still require $1,000,000",
@@ -633,7 +633,7 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "Does the MCS-90 mean I am always covered?",
-        a: "No. It means the injured public is paid. If the loss was excluded under your policy, the insurer pays the claimant and then bills you for it. Keep your drivers scheduled, your vehicles listed, and your premium current so the policy itself responds.",
+        a: "No. The endorsement addresses specified public-liability obligations and may require reimbursement of some insurer payments. It does not make every loss covered, and it is not an assurance that a particular claim will be paid. Review the endorsement and policy with a qualified professional.",
       },
       {
         q: "What is the difference between MCS-90 and BMC-91?",
@@ -645,11 +645,11 @@ export const classPages: ClassPage[] = [
       },
       {
         q: "Why did my premium change when the MCS-90 was added?",
-        a: "Because the insurer is taking on a guarantee beyond the policy terms. Markets price that exposure, and some will not write it at all — which is why for-hire authority narrows the list of carriers that will quote a new operation.",
+        a: "Insurers evaluate the obligations associated with the endorsement as part of underwriting. Pricing and eligibility depend on the account and insurer criteria; the website cannot confirm acceptance or a particular premium.",
       },
     ],
     ctaTitle: "Need liability with the MCS-90 and filings done right?",
-    ctaDescription: "We place for-hire carriers with markets that file the BMC-91 promptly and quote at the limits your brokers require.",
+    ctaDescription: "Include your operating authority and filing requirements in your request. Confirm eligibility, insurer filings, and effective dates with the authorized professional handling your policy.",
     carrierlensQuery: "trucking",
   },
   {
@@ -666,7 +666,7 @@ export const classPages: ClassPage[] = [
     sectionTitle: "What Amazon Relay checks",
     intro: [
       "Amazon Relay onboarding asks for a certificate of insurance showing commercial auto liability of at least $1,000,000 per occurrence covering owned, hired, and non-owned vehicles, commercial general liability, cargo coverage of at least $100,000, and — for carriers with employees — workers compensation as your state requires. Amazon must be listed as certificate holder and additional insured where the portal says so, and the coverage has to stay active: a lapse suspends your Relay account.",
-      "Requirements change and vary by program; Amazon's carrier portal is the source of truth, and we read the current requirement with you before we quote. Then we place the policy with a market that writes Relay carriers and issue a certificate that matches what the portal asks for, wording included.",
+      "Requirements change and vary by program; check Amazon's current carrier portal. Share those requirements with the licensed professional reviewing your request. Insurer eligibility, policy terms, certificate wording, and Amazon's acceptance are separate decisions and are not assured by this website.",
     ],
     listTitle: "Coverage Amazon Relay typically requires",
     listItems: [
@@ -685,15 +685,15 @@ export const classPages: ClassPage[] = [
     faqs: [
       {
         q: "Does a new authority qualify for Amazon Relay insurance?",
-        a: "Amazon sets its own eligibility rules, including how long your authority must be active; those rules are separate from insurance. On the insurance side, new authorities can be placed at Relay limits with fewer markets and higher first-year premiums.",
+        a: "Amazon sets its own eligibility rules, separately from insurer underwriting. A new authority may request an insurance review, but neither insurer acceptance nor Amazon onboarding is assured.",
       },
       {
         q: "Is general liability really required for a trucking carrier?",
-        a: "For Amazon Relay, yes — it is the requirement that catches carriers used to a liability-and-cargo-only policy. We add truckers general liability to the submission so the certificate passes.",
+        a: "Check the current Relay requirements and ask the servicing professional about general liability and any required endorsements. A request or certificate does not assure Amazon's approval.",
       },
       {
         q: "What if my certificate is rejected?",
-        a: "Usually the limits, the additional-insured wording, or the certificate holder are wrong. Send us the rejection notice; correcting the certificate is routine when the policy itself meets the requirement.",
+        a: "Ask the servicing professional to review the rejection notice, program requirements, and actual policy. An endorsement or other change may be needed, may be unavailable, or may still not satisfy the platform. A corrected certificate does not guarantee acceptance.",
       },
       {
         q: "Can I use a box truck for Amazon Relay?",
@@ -701,7 +701,7 @@ export const classPages: ClassPage[] = [
       },
     ],
     ctaTitle: "Get a Relay-ready quote",
-    ctaDescription: "Tell us the trucks and whether you are onboarding or renewing. We quote to Amazon's limits and issue the certificate the portal wants.",
+    ctaDescription: "Send your truck details and current Relay requirements for review. The servicing professional must confirm policy terms and any certificate; Amazon decides whether its requirements are met.",
     carrierlensQuery: "delivery",
   },
 ];

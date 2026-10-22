@@ -4,7 +4,7 @@ const googleBusinessUrl =
   "https://www.google.com/search?kgmid=/g/11z72w_0z4&q=Supreme+Trucking+Insurance+Agency";
 
 const trustItems = [
-  ["Most", "states licensed", "Built for truckers who run across state lines."],
+  ["Review", "state eligibility", "Licensing, authorized access, and underwriting must be confirmed."],
   ["4", "languages", "English, Russian, Ukrainian, and Romanian."],
   ["DOT", "first review", "We use DOT details to understand the account faster."],
   ["COI", "support", "Certificate requests have their own intake flow."],
@@ -18,7 +18,7 @@ export default function TrustSignals() {
           <div>
             <span className="eyebrow mb-4">Trust signals</span>
             <h2 className="text-3xl font-extrabold leading-tight text-[#2F261C] md:text-5xl">
-              A real trucking insurance agency, not a generic quote page.
+              Trucking-focused quote preparation and referrals.
             </h2>
             <p className="mt-4 text-lg leading-8 text-[#5A4B3B]">
               Supreme focuses on trucking accounts: owner-operators, fleets, new authority,

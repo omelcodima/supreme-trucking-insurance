@@ -28,7 +28,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Texas operations we insure",
+      heading: "Common Texas operation examples",
       paragraphs: [
         "Long-haul and regional dry van and reefer out of DFW and Houston, cross-border drayage in Laredo and El Paso, oilfield hauling in West and South Texas, dump trucks and aggregate around the metros, hotshot rigs on the energy routes, and new authorities — Texas issues more new USDOT numbers than any other state, and first-year pricing is where a clean submission matters most.",
       ],
@@ -49,7 +49,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common California operations we insure",
+      heading: "Common California operation examples",
       paragraphs: [
         "Port drayage and intermodal in Los Angeles, Long Beach, and Oakland; refrigerated produce out of the Central Valley and Salinas; regional dry van and LTL in the Inland Empire; owner-operators leased to carriers statewide; and new authorities that need a clean first year in an expensive state.",
       ],
@@ -66,11 +66,11 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
     {
       heading: "Florida cargo and coverage requirements",
       paragraphs: [
-        "Interstate for-hire carriers file BMC-91 with the FMCSA; intrastate registration and insurance requirements differ, and we confirm which apply. Cargo is the coverage Florida operators ask about most: produce and seafood need reefer breakdown coverage, brokers require $100,000 as a floor, and high-value loads out of the ports often need more. Motor truck cargo written for the freight you actually haul is the difference between a covered claim and a denied one.",
+        "Interstate and intrastate operations can have different filing and insurance requirements. Describe produce, seafood, refrigerated freight, and high-value port loads accurately. Ask a licensed professional to review contract limits, reefer-related terms, and exclusions. Matching the freight description does not by itself establish that a claim is covered or will be paid.",
       ],
     },
     {
-      heading: "Common Florida operations we insure",
+      heading: "Common Florida operation examples",
       paragraphs: [
         "Refrigerated haulers out of South Florida, port drayage in Jacksonville and Miami, box trucks and final-mile delivery across the I-4 corridor, dump trucks and aggregate for construction, auto haulers serving the dealer auctions, and new authorities starting in a state where first-year rates run high.",
       ],
@@ -91,7 +91,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Illinois operations we insure",
+      heading: "Common Illinois operation examples",
       paragraphs: [
         "Intermodal and container drayage in Chicagoland, regional dry van and LTL on the interstates, grain and agricultural hauling downstate, dump trucks and construction hauling around the metro, and owner-operators leased to carriers who need bobtail and physical damage.",
       ],
@@ -102,7 +102,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       heading: "What Georgia trucking looks like to an underwriter",
       paragraphs: [
         "Atlanta sits at the junction of I-75, I-85, and I-20 and is the distribution hub of the Southeast; the Port of Savannah is one of the fastest-growing container ports in the country. Georgia trucking is warehouse freight out of the metro, port drayage on I-16, and long-haul in every direction. Poultry, carpet out of Dalton, and agriculture round out the state’s freight.",
-        "Georgia liability verdicts are among the highest in the Southeast, and markets price the state accordingly. A described safety program, clean MVRs, and a realistic radius earn better numbers here.",
+        "Provide safety procedures, driving records, loss history, and a realistic operating radius for underwriting review. Those details can affect an insurer's assessment but do not assure acceptance or better pricing.",
       ],
     },
     {
@@ -112,7 +112,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Georgia operations we insure",
+      heading: "Common Georgia operation examples",
       paragraphs: [
         "Port drayage in Savannah, distribution and regional freight out of Atlanta, long-haul dry van and reefer, dump trucks for the construction boom around the metro, and new authorities — Georgia is one of the busiest states for new trucking companies, and the first-year submission decides the rate.",
       ],
@@ -129,11 +129,11 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
     {
       heading: "Truck insurance for a small fleet in North Carolina",
       paragraphs: [
-        "A five-truck fleet is quoted as a fleet, not as five owner-operators: one policy with a vehicle schedule, a driver list with MVRs, fleet safety practices, and loss runs for every year. Interstate carriers file BMC-91 with the FMCSA; intrastate registration and insurance requirements differ, and we confirm which apply. The cleaner the schedule and the driver file, the more markets will look at the account.",
+        "Prepare a vehicle schedule, driver list, safety procedures, and available loss history for fleet review. Interstate and intrastate filing requirements may differ. A complete file helps explain the operation but does not assure a particular policy structure, additional insurer options, or acceptance.",
       ],
     },
     {
-      heading: "Common North Carolina operations we insure",
+      heading: "Common North Carolina operation examples",
       paragraphs: [
         "Regional dry van and LTL out of Charlotte and Greensboro, refrigerated and livestock haulers in the east, port drayage in Wilmington, dump trucks and aggregate for the building boom around the Triangle, and small fleets renewing across the I-85 corridor.",
       ],
@@ -154,7 +154,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Pennsylvania operations we insure",
+      heading: "Common Pennsylvania operation examples",
       paragraphs: [
         "Regional and long-haul dry van on I-80 and I-81, warehouse and distribution freight in the Lehigh Valley, port drayage in Philadelphia, tankers and heavy haul in the gas fields, dump trucks and aggregate statewide, and owner-operators leased to carriers.",
       ],
@@ -175,7 +175,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Ohio operations we insure",
+      heading: "Common Ohio operation examples",
       paragraphs: [
         "Regional dry van and dedicated routes out of Columbus and Cincinnati, auto-industry and parts freight in the north, intermodal drayage at Rickenbacker, dump trucks and aggregate statewide, box trucks and final-mile delivery in the metros, and owner-operators across the I-70/I-71 corridors.",
       ],
@@ -196,7 +196,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Arizona operations we insure",
+      heading: "Common Arizona operation examples",
       paragraphs: [
         "Refrigerated produce haulers out of Nogales, long-haul dry van on I-10 and I-40, distribution and regional freight around Phoenix, dump trucks and aggregate for the metro’s construction, hotshot rigs serving the mines and solar projects, and new authorities starting in the Valley.",
       ],
@@ -217,7 +217,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Nevada operations we insure",
+      heading: "Common Nevada operation examples",
       paragraphs: [
         "Dump trucks and aggregate for Las Vegas construction, box trucks and final-mile delivery across the Valley, distribution and regional freight out of Reno and Sparks, long-haul dry van on I-15 and I-80, tow trucks serving the interstates, and new authorities starting in Clark County.",
       ],
@@ -234,11 +234,11 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
     {
       heading: "Oregon filings and requirements",
       paragraphs: [
-        "Oregon is unusual: motor carriers pay a weight-mile tax and register with the Oregon Department of Transportation’s Commerce and Compliance Division, which also handles intrastate authority and insurance filings. Interstate carriers file BMC-91 with the FMCSA on top of that. We make sure the insurance filings match what ODOT and the FMCSA each expect, because a mismatch stops the truck.",
+        "Oregon operations may need to address ODOT registration, weight-mile tax, authority, and insurance filing requirements, as well as applicable federal requirements. Confirm the requirements and accepted filings with the relevant authorities and the authorized professional handling them. A website request does not assure filing approval or permission to operate.",
       ],
     },
     {
-      heading: "Common Oregon operations we insure",
+      heading: "Common Oregon operation examples",
       paragraphs: [
         "Regional dry van and reefer on I-5, port drayage and intermodal in Portland, log trucks and forest-products hauling, agricultural and nursery freight in the valley, dump trucks and aggregate for the metro, and owner-operators leased to carriers across the Northwest.",
       ],
@@ -259,7 +259,7 @@ export const stateDeepDives: Record<string, StateDeepDive[]> = {
       ],
     },
     {
-      heading: "Common Washington operations we insure",
+      heading: "Common Washington operation examples",
       paragraphs: [
         "Port drayage in Seattle and Tacoma, regional dry van and LTL on I-5, refrigerated apples and produce out of Yakima and Wenatchee, forest-products and log trucks, dump trucks and aggregate around Puget Sound and Clark County, and owner-operators across the state — many of them our neighbors.",
       ],

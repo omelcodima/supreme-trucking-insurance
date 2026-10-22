@@ -370,8 +370,8 @@ export default function QuoteExperience({
                     <li>
                       <span>2</span>
                       <div>
-                        <strong>We shop suitable markets</strong>
-                        <p>Options that fit your trucking business.</p>
+                        <strong>Your request is reviewed</strong>
+                        <p>A licensed professional checks possible options, subject to authorized access and underwriting.</p>
                       </div>
                     </li>
                     <li>

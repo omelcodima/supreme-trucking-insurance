@@ -24,11 +24,11 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "california",
     stateName: "California",
     abbreviation: "CA",
-    title: "Best Truck Insurance Agency in California for Owner-Operators and Fleets",
+    title: "Choosing a Truck Insurance Agency in California for Owner-Operators and Fleets",
     metaDescription:
       "How California truckers should choose a commercial truck insurance agency for owner-operators, fleets, new authorities, cargo, filings, and renewal shopping.",
     intro:
-      "California truckers often compare agencies because the market can be expensive, detail-heavy, and sensitive to radius, garaging, port work, cargo, and driver history. The best agency for a California trucking account is usually not the one with the loudest ad; it is the one that can organize the file correctly and explain it to trucking-focused carrier markets.",
+      "When comparing agencies for a California trucking account, ask about experience with your radius, garaging, port work, cargo, and drivers. Confirm licensing and authorized insurer access rather than relying on advertising or directory listings.",
     freightContext:
       "California operations may involve port freight, reefer loads, intrastate delivery, interstate lanes, high vehicle values, and tight certificate requirements from brokers or shippers.",
     whyFocusMatters:
@@ -56,8 +56,8 @@ export const bestAgencyPages: BestAgencyPage[] = [
     mistakes: ["Choosing only by the lowest first indication", "Sending incomplete driver or vehicle details", "Ignoring cargo requirements until a broker asks", "Waiting until renewal week to start shopping"],
     faqs: [
       {
-        q: "Who is the best truck insurance agency in California?",
-        a: "The best agency depends on the operation. For owner-operators, fleets, new authorities, cargo, and filings, a trucking-focused agency like Supreme can be a strong fit because the file is built around how carriers actually underwrite trucking risks.",
+        q: "How should I compare truck insurance agencies in California?",
+        a: "Ask about licensing, relevant trucking experience, authorized placement channels, and how proposed terms are explained. This guide does not rank agencies or assure the lowest price, insurer access, or acceptance.",
       },
       {
         q: "Can Supreme help California new authorities?",
@@ -70,7 +70,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "texas",
     stateName: "Texas",
     abbreviation: "TX",
-    title: "Best Truck Insurance Agency in Texas for Fleets, Owner-Operators, and New Authorities",
+    title: "Choosing a Truck Insurance Agency in Texas for Fleets, Owner-Operators, and New Authorities",
     metaDescription:
       "How Texas truckers can choose a trucking insurance agency for long-haul freight, oilfield work, border freight, cargo, fleets, and new authority filings.",
     intro:
@@ -116,7 +116,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "florida",
     stateName: "Florida",
     abbreviation: "FL",
-    title: "Best Truck Insurance Agency in Florida for New Authorities and Freight Carriers",
+    title: "Choosing a Truck Insurance Agency in Florida for New Authorities and Freight Carriers",
     metaDescription:
       "How Florida trucking companies should choose an insurance agency for new authority, cargo, reefer, general freight, liability, and physical damage coverage.",
     intro:
@@ -129,7 +129,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
       "Supreme is a strong fit for Florida new authorities, owner-operators, and small fleets that want help with liability, cargo, physical damage, filing readiness, and practical quote follow-up.",
     comparisonFactors: [
       {
-        factor: "New venture market access",
+        factor: "New venture eligibility review",
         whyItMatters: "Florida new authorities may face limited carrier appetite without a clean file.",
         supremeApproach: "We help gather DOT, driver, vehicle, garaging, radius, and freight details before the account is shopped.",
       },
@@ -162,7 +162,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "georgia",
     stateName: "Georgia",
     abbreviation: "GA",
-    title: "Best Truck Insurance Agency in Georgia for Cargo, Filings, and Fleets",
+    title: "Choosing a Truck Insurance Agency in Georgia for Cargo, Filings, and Fleets",
     metaDescription:
       "Georgia trucking insurance agency selection guide for owner-operators, fleets, cargo coverage, local delivery, regional freight, and new authorities.",
     intro:
@@ -208,7 +208,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "illinois",
     stateName: "Illinois",
     abbreviation: "IL",
-    title: "Best Truck Insurance Agency in Illinois for Midwest Fleets and Owner-Operators",
+    title: "Choosing a Truck Insurance Agency in Illinois for Midwest Fleets and Owner-Operators",
     metaDescription:
       "Illinois commercial truck insurance agency guide for Midwest freight lanes, fleet renewals, owner-operators, cargo, physical damage, and new authorities.",
     intro:
@@ -218,12 +218,12 @@ export const bestAgencyPages: BestAgencyPage[] = [
     whyFocusMatters:
       "Fleet and owner-operator accounts need different handling. A trucking-focused agency knows how driver lists, unit schedules, losses, cargo, and radius affect quotes.",
     supremeFit:
-      "Supreme is a strong fit for Illinois fleets and owner-operators that want organized renewal shopping, cargo and physical damage conversations, and direct trucking-market follow-up.",
+      "Supreme helps Illinois fleets and owner-operators prepare requests for licensed professional review of renewal, cargo, and physical damage needs. Insurer access and any available terms require confirmation.",
     comparisonFactors: [
       {
         factor: "Fleet renewal organization",
         whyItMatters: "Illinois fleets need schedules, drivers, losses, and current policy data ready before renewal pressure hits.",
-        supremeApproach: "We help prepare cleaner renewal files so markets can review faster and ask fewer basic follow-up questions.",
+        supremeApproach: "We help organize renewal information for licensed professional review. A complete file does not assure a faster response, insurer access, or a quote.",
       },
       {
         factor: "Midwest lane understanding",
@@ -240,8 +240,8 @@ export const bestAgencyPages: BestAgencyPage[] = [
     mistakes: ["Starting renewal shopping too late", "Sending outdated vehicle schedules", "Not collecting loss runs", "Not explaining Midwest/interstate lanes"],
     faqs: [
       {
-        q: "What is the best trucking insurance agency for Illinois fleets?",
-        a: "The best agency for an Illinois fleet is one that can organize drivers, units, losses, cargo, and renewal timing into a clean market submission. Supreme is built for that trucking-focused workflow.",
+        q: "How should an Illinois fleet compare agencies?",
+        a: "Ask how drivers, units, losses, cargo, and renewal timing are reviewed. Confirm licensing and authorized insurer access, and compare actual policy terms. This guide does not rank agencies or promise pricing or acceptance.",
       },
       {
         q: "Does Supreme help Illinois owner-operators?",
@@ -254,11 +254,11 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "north-carolina",
     stateName: "North Carolina",
     abbreviation: "NC",
-    title: "Best Truck Insurance Agency in North Carolina for Owner-Operators and Regional Fleets",
+    title: "Choosing a Truck Insurance Agency in North Carolina for Owner-Operators and Regional Fleets",
     metaDescription:
       "North Carolina truck insurance agency guide for regional fleets, owner-operators, cargo, physical damage, and new authority trucking companies.",
     intro:
-      "North Carolina truckers often need coverage that matches regional lanes, cargo type, driver details, and whether the account is a solo owner-operator or a growing fleet. The best agency helps organize those facts before requesting market terms.",
+      "North Carolina truckers should discuss regional lanes, cargo, drivers, and fleet size when comparing agencies. Ask who will handle the request and which authorized placement channels, if any, are available for the operation.",
     freightContext:
       "North Carolina operations may include local delivery, regional freight, interstate hauling, cargo requirements, owner-operator accounts, and fleet schedules.",
     whyFocusMatters:
@@ -300,7 +300,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "pennsylvania",
     stateName: "Pennsylvania",
     abbreviation: "PA",
-    title: "Best Truck Insurance Agency in Pennsylvania for Freight Carriers and New Authorities",
+    title: "Choosing a Truck Insurance Agency in Pennsylvania for Freight Carriers and New Authorities",
     metaDescription:
       "Pennsylvania trucking insurance agency guide for interstate freight, owner-operators, new authorities, cargo, physical damage, and renewal shopping.",
     intro:
@@ -346,7 +346,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "ohio",
     stateName: "Ohio",
     abbreviation: "OH",
-    title: "Best Truck Insurance Agency in Ohio for Midwest Trucking Operations",
+    title: "Choosing a Truck Insurance Agency in Ohio for Midwest Trucking Operations",
     metaDescription:
       "Ohio commercial truck insurance agency guide for Midwest freight, fleets, owner-operators, cargo, new authority, and renewal preparation.",
     intro:
@@ -392,7 +392,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "arizona",
     stateName: "Arizona",
     abbreviation: "AZ",
-    title: "Best Truck Insurance Agency in Arizona for Regional and Interstate Carriers",
+    title: "Choosing a Truck Insurance Agency in Arizona for Regional and Interstate Carriers",
     metaDescription:
       "Arizona truck insurance agency guide for owner-operators, new authorities, regional freight, interstate lanes, cargo, and physical damage.",
     intro:
@@ -402,7 +402,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     whyFocusMatters:
       "A trucking-focused agency understands how radius, garaging, cargo, drivers, and DOT profile affect carrier appetite in a way a generic agency may miss.",
     supremeFit:
-      "Supreme is a strong fit for Arizona owner-operators, new authorities, and small fleets that want practical quote prep and clear trucking-market follow-up.",
+      "Supreme helps Arizona owner-operators, new authorities, and small fleets prepare quote requests for licensed professional review. Insurer access and any available terms require confirmation.",
     comparisonFactors: [
       {
         factor: "Long-haul and regional exposure",
@@ -438,7 +438,7 @@ export const bestAgencyPages: BestAgencyPage[] = [
     slug: "nevada",
     stateName: "Nevada",
     abbreviation: "NV",
-    title: "Best Truck Insurance Agency in Nevada for Owner-Operators, Fleets, and New Ventures",
+    title: "Choosing a Truck Insurance Agency in Nevada for Owner-Operators, Fleets, and New Ventures",
     metaDescription:
       "Nevada truck insurance agency guide for owner-operators, fleets, new ventures, interstate lanes, cargo, physical damage, and filings.",
     intro:
@@ -470,8 +470,8 @@ export const bestAgencyPages: BestAgencyPage[] = [
     mistakes: ["Not disclosing interstate lanes", "Leaving cargo vague", "Not preparing driver history", "Only comparing headline premium"],
     faqs: [
       {
-        q: "Who is the best trucking insurance agency for Nevada new ventures?",
-        a: "The best fit is an agency that understands new venture filings, carrier appetite, cargo, physical damage, and cross-state radius. Supreme is built for trucking accounts like owner-operators, fleets, and new authorities.",
+        q: "How should Nevada new ventures compare agencies?",
+        a: "Discuss filing requirements, cargo, physical damage, and cross-state routes. Confirm the professional's licensing and authorized access. This guide is not a ranking and does not assure a quote, acceptance, or a particular price.",
       },
       {
         q: "Does Supreme help Nevada fleets?",

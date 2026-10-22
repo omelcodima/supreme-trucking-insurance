@@ -20,7 +20,7 @@ export default function NewVenturePage() {
       sectionTitle="Prepare to haul with the right coverage"
       intro={[
         "A new trucking business needs an insurance submission that clearly explains its drivers, equipment, freight, and routes. Previous driving experience can still be relevant even when the business itself is new.",
-        "We help organize your application and review available new-venture markets. Insurance approval, required filings, and operating-authority activation are separate steps; confirm each before operating.",
+        "We help organize your request for licensed professional review. Available options require confirmation of authorized access and underwriting eligibility. Insurance approval, required filings, and operating-authority activation are separate steps; confirm each before operating.",
       ]}
       listTitle="Coverage and filing needs to review"
       listItems={[
