@@ -9,7 +9,7 @@ import { serviceAreaSummary } from "@/lib/serviceArea";
 export const metadata = {
   title: "Meet Dmitri Omelco | Supreme Trucking Insurance",
   description:
-    "Meet Dmitri Omelco at Supreme Trucking Insurance. Independent trucking insurance guidance for owner operators, fleets, and new authority.",
+    "Meet Dmitri Omelco and learn how Supreme Trucking Insurance collects quote requests and connects trucking businesses with insurance partners.",
   alternates: { canonical: "/about" },
 };
 
@@ -28,7 +28,7 @@ export default function AboutPage() {
       <section className="site-section">
         <div className="site-container">
           <p className="section-kicker">About Supreme</p>
-          <h1 className="section-heading">The people behind your policy.</h1>
+          <h1 className="section-heading">The people behind your request.</h1>
           <div className="about-profile">
             <div className="about-portrait">
               <Image
@@ -48,8 +48,8 @@ export default function AboutPage() {
               </p>
               <p>
                 At Supreme, we focus on owner operators, fleets, and new
-                authority. We help organize your submission, shop suitable
-                markets, and explain the options as they come back.
+                authority. We help organize your request and connect you with
+                insurance partners to explore available quote options.
               </p>
               <div className="about-contact">
                 <a href="tel:+13609367196">
@@ -72,17 +72,34 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <section className="site-section border-t border-[#dce1df]">
+      <section id="how-this-website-works" className="site-section border-t border-[#dce1df] scroll-mt-24">
         <div className="site-container grid gap-10 md:grid-cols-2">
           <div>
-            <p className="section-kicker">Our agency</p>
-            <h2 className="text-3xl font-bold">Supreme Trucking Insurance</h2>
-            <p className="mt-5 leading-7 text-[#515c59]">{agencyFacts.description}</p>
+            <p className="section-kicker">How this website works</p>
+            <h2 className="text-3xl font-bold">Quote requests and insurance referrals</h2>
+            <p className="mt-5 leading-7 text-[#515c59]">
+              Supreme Trucking Insurance is a lead-generation and referral
+              website operated by {agencyFacts.legalName}. The website helps
+              owner operators, fleets, and new authorities submit requests for
+              follow-up by licensed insurance professionals.
+            </p>
             <p className="mt-4 leading-7 text-[#515c59]">
-              Supreme Trucking Insurance is the brand of {agencyFacts.legalName}.
-              We are an insurance agency, not an insurance carrier. We help prepare
-              your submission and compare available options; the insurer determines
-              eligibility, pricing, and policy terms.
+              This website is not an insurance carrier and does not itself
+              underwrite, issue, or bind insurance. Quotes and policies must be
+              arranged through the licensed agent or agency handling your request
+              and the applicable insurer. Submitting a request does not create
+              insurance coverage.
+            </p>
+            <p className="mt-4 leading-7 text-[#515c59]">
+              Our goal is to help you explore suitable quotes through our
+              insurance partners. We do not guarantee the lowest price,
+              acceptance, or access to any particular insurer. Eligibility,
+              pricing, and policy terms depend on the insurer and underwriting.
+            </p>
+            <p className="mt-4 leading-7 text-[#515c59]">
+              Any mention of an insurer on this website is informational and
+              does not, by itself, indicate an appointment, affiliation,
+              endorsement, or sponsorship by that insurer.
             </p>
             <p className="mt-4 leading-7 text-[#515c59]">
               {serviceAreaSummary} Availability depends on the operation, state,
@@ -140,15 +157,15 @@ export default function AboutPage() {
             {[
               [
                 "Clear communication",
-                "Updates as markets respond and straight answers about the next step.",
+                "A reachable contact for your request and a clear explanation of the next step.",
               ],
               [
                 "Relevant options",
-                "Coverage shaped around your trucks, drivers, freight, and routes.",
+                "Requests organized around your trucks, drivers, freight, and routes for partner review.",
               ],
               [
                 "Ongoing support",
-                "Help with certificates, policy changes, and the next renewal.",
+                "Connection to the licensed professional handling quotes, policy questions, and renewals.",
               ],
             ].map(([title, body]) => (
               <div key={title}>

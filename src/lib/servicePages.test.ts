@@ -52,18 +52,34 @@ test("service pages retain quote context and emit one visible FAQ schema", () =>
   }
 });
 
-test("agency identity is visible and matches the shared structured facts", () => {
+test("About explains the referral website while preserving its legal operator and contact facts", () => {
   const page = load("src/app/about/page.tsx");
   const html = renderToStaticMarkup(React.createElement(page.default as React.ComponentType));
   const { agencyFacts } = load("src/lib/agencyFacts.ts") as { agencyFacts: { legalName: string; hours: string; visits: string; address: { streetAddress: string; postalCode: string } } };
   for (const value of [agencyFacts.legalName, agencyFacts.address.streetAddress, agencyFacts.address.postalCode, agencyFacts.hours, agencyFacts.visits]) assert.ok(html.includes(value), value);
-  assert.match(html, /insurance agency, not an insurance carrier/);
+  assert.match(html, /lead-generation and referral website operated by Supreme Insurance Agency LLC/);
+  assert.match(html, /licensed insurance professionals/);
+  assert.match(html, /not an insurance carrier/);
+  assert.match(html, /does not itself underwrite, issue, or bind insurance/);
+  assert.match(html, /Submitting a request does not create insurance coverage/);
+  assert.match(html, /We do not guarantee the lowest price, acceptance, or access to any particular insurer/);
+  assert.match(html, /does not, by itself, indicate an appointment, affiliation, endorsement, or sponsorship/);
+  assert.doesNotMatch(html, /We are an insurance agency, not an insurance carrier/);
+  assert.match(html, /id="how-this-website-works"/);
   assert.match(html, /href="\/quote-checklist"/);
   const layout = readFileSync("src/app/layout.tsx", "utf8");
   assert.match(layout, /legalName: agencyFacts.legalName/);
   assert.match(layout, /address: agencyFacts.address/);
   assert.match(layout, /availableLanguage: agencyFacts.languages/);
   assert.doesNotMatch(layout, /taxID|vatID|aggregateRating/);
+});
+
+test("the site-wide footer links to the referral disclosure without promising carrier appointments", () => {
+  const footer = readFileSync("src/components/SiteFooter.tsx", "utf8").replace(/\s+/g, " ");
+  assert.match(footer, /This website collects requests for insurance referrals/);
+  assert.match(footer, /submitting a request does not bind coverage/);
+  assert.match(footer, /references do not establish appointments or endorsements/);
+  assert.match(footer, /href="\/about#how-this-website-works"/);
 });
 
 test("quote checklist is discoverable and does not masquerade as a quote submission", () => {

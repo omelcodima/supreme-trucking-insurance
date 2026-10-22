@@ -101,6 +101,14 @@ export default function SiteFooter() {
             ))}
           </div>
         </details>
+        <p className="py-5 text-sm leading-6">
+          This website collects requests for insurance referrals. It is not an
+          insurer, and submitting a request does not bind coverage. Carrier
+          references do not establish appointments or endorsements.{" "}
+          <Link href="/about#how-this-website-works" className="underline underline-offset-4">
+            How this website works
+          </Link>
+        </p>
         <div className="footer-legal">
           <p>© 2026 Supreme Trucking Insurance</p>
           <div>
