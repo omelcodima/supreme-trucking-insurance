@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 import GoogleReviews from "@/components/GoogleReviews";
 import StateFinder from "@/components/StateFinder";
-import MarketMarquee from "@/components/MarketMarquee";
 import HomeHero from "@/components/HomeHero";
 import { publicHomepageVariant } from "@/lib/homepageDesign";
 import { featuredBlogPosts } from "@/lib/blogPosts";
@@ -42,7 +41,6 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero variant={variant} />
-      <MarketMarquee />
       <section className="site-section">
         <div className="site-container">
           <div className="section-header">
